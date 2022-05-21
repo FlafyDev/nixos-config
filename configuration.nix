@@ -4,6 +4,13 @@ let
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
 in
 {
+  nix = {
+    package = pkgs.nixFlakes; # or versioned attributes like nixVersions.nix_2_8
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+   };
+
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -66,8 +73,14 @@ in
     enable = true;
 
     # Enable the Plasma 5 Desktop Environment.
-    displayManager.sddm.enable = true;
-    desktopManager.plasma5.enable = true;
+    # displayManager.sddm.enable = true;
+    # desktopManager.plasma5.enable = true;
+
+    displayManager.gdm = {
+      enable = true;
+      wayland = false;
+    };
+    desktopManager.gnome.enable = true;
 
     # Configure keymap in X11
     # layout = "us";
@@ -81,7 +94,12 @@ in
         accelProfile = "flat";
       };
     };
+
+    # videoDrivers = [ "nvidia" ];
   };
+
+  # hardware.opengl.enable = true;
+  # hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -89,6 +107,25 @@ in
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
+
+  environment.gnome.excludePackages = (with pkgs; [
+    gnome-photos
+    gnome-tour
+  ]) ++ (with pkgs.gnome; [
+    cheese # webcam tool
+    gnome-music
+    # gnome-terminal
+    gedit # text editor
+    epiphany # web browser
+    geary # email reader
+    evince # document viewer
+    gnome-characters
+    totem # video player
+    tali # poker game
+    iagno # go game
+    hitori # sudoku game
+    atomix # puzzle game
+  ]);
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.flafydev = {
@@ -98,6 +135,11 @@ in
 
   home-manager.users.flafydev = {pkgs, ...}: {
     nixpkgs.config = import ./nixpkgs-config.nix;
+    
+    # nixpkgs.overlays = [
+    #   (import (builtins.fetchTarball "https://github.com/PolyMC/PolyMC/archive/develop.tar.gz")).overlay
+    # ];
+
     home.packages = with pkgs; [
       syncplay
       qbittorrent
@@ -107,7 +149,10 @@ in
       google-chrome # For Flutter's web debugger
       krita
       scrcpy
-    ];
+      nodejs-16_x
+      yarn
+      # polymc
+   ];
 
     programs.git = {
       enable = true;
@@ -126,6 +171,14 @@ in
         mpv-playlistmanager
       ];
     };
+
+    #programs.gnome-shell = {
+    #  enable = true;
+    #  extensions = with pkgs.gnomeExtensions; [
+    #    # { package = app-icons-taskbar; }
+    #    { package = hide-activities-button; }
+    #  ];
+    #};
   };
 
   # List packages installed in system profile. To search, run:
@@ -139,15 +192,32 @@ in
     dig
     vscode
     btop
-    woeusb
+    # woeusb
     git
     qbittorrent
     neofetch
     pfetch
     unzip
-    cmake
-    gnome.gtk
+    # cmake
+    # gnome.gtk
+    gh
+    # libsForQt5.kwalletmanager
+    ulauncher
+    filezilla
+    gnome.gnome-tweaks
+    gnome.dconf-editor
+    # gnomeExtensions.dash-to-dock
+    # gnomeExtensions.app-icons-taskbar
+    # gnomeExtensions.hide-activities-button
   ];
+
+  services.gnome = {
+    gnome-keyring.enable = true;
+    gnome-online-accounts.enable = true;
+    gnome-online-miners.enable = true;
+    tracker.enable = true;
+    tracker-miners.enable = true;
+  };
 
   # fonts.fonts = with pkgs; [
   #   segoe-ui
