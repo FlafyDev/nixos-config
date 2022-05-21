@@ -1,9 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, unstable, home-manager, ... }:
 
-let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-in
 {
+  boot.isContainer = true;
   nix = {
     package = pkgs.nixFlakes; # or versioned attributes like nixVersions.nix_2_8
     extraOptions = ''
