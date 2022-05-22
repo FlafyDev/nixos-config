@@ -1,19 +1,25 @@
-{ config, pkgs, unstable, home-manager, ... }:
+{ config, pkgs, lib, ... }:
 
+let
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+  unstable = import (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixos-unstable){ config = import ./nixpkgs-config.nix; };
+  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export __VK_LAYER_NV_optimus=NVIDIA_only
+    exec -a "$0" "$@"
+  '';
+in
 {
-  boot.isContainer = true;
   nix = {
-    package = pkgs.nixFlakes; # or versioned attributes like nixVersions.nix_2_8
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-   };
+    extraOptions = '''';
+  };
 
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      (import "${home-manager}/nixos")
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    (import "${home-manager}/nixos")
+  ];
 
   boot.loader = {
     efi = {
@@ -51,20 +57,32 @@
     CHROME_EXECUTABLE = "google-chrome-stable";
   };
 
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
+  # specialisation = {
+  #   external-display.configuration = {
+  #     system.nixos.tags = [ "external-display" ];
+  #     hardware.nvidia.prime.offload.enable = lib.mkForce false;
+  #     hardware.nvidia.powerManagement.enable = lib.mkForce false;
+  #   };
+  # };
+
+
+  networking = {
+    hostName = "nixos";
+    networkmanager.enable = true;
+
+    useDHCP = false;
+    interfaces.enp4s0.useDHCP = true;
+    # networking.interfaces.wlp3s0.useDHCP = true;
+  };
+
   hardware.bluetooth.enable = true;
   hardware.opentabletdriver.enable = true;
+  hardware.nvidia.modesetting.enable = true;
 
   nixpkgs.config = import ./nixpkgs-config.nix;
 
   # Set your time zone.
   time.timeZone = "Israel";
-
-  networking.useDHCP = false;
-  networking.interfaces.enp4s0.useDHCP = true;
-  # networking.interfaces.wlp3s0.useDHCP = true;
-
   
   services.xserver = {
     # Enable the X11 windowing system.
@@ -74,11 +92,20 @@
     # displayManager.sddm.enable = true;
     # desktopManager.plasma5.enable = true;
 
-    displayManager.gdm = {
-      enable = true;
-      wayland = false;
-    };
+    # displayManager.gdm = {
+    #   enable = true;
+    #   wayland = true;
+    #   debug = true;
+    # };
     desktopManager.gnome.enable = true;
+    displayManager = {
+      # gdm.enable = false;
+      lightdm.enable = true;
+      # gdm = {
+      #   enable = true;
+      #   wayland = false;
+      # };
+    };
 
     # Configure keymap in X11
     # layout = "us";
@@ -93,7 +120,7 @@
       };
     };
 
-    # videoDrivers = [ "nvidia" ];
+    videoDrivers = [ "nvidia" ];
   };
 
   # hardware.opengl.enable = true;
@@ -131,7 +158,7 @@
     extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
   };
 
-  home-manager.users.flafydev = {pkgs, ...}: {
+ home-manager.users.flafydev = {pkgs, ...}: {
     nixpkgs.config = import ./nixpkgs-config.nix;
     
     # nixpkgs.overlays = [
@@ -142,15 +169,27 @@
       syncplay
       qbittorrent
       android-studio
-      flutter
+      unstable.flutter
       discord
       google-chrome # For Flutter's web debugger
       krita
       scrcpy
       nodejs-16_x
       yarn
-      # polymc
+      unstable.polymc
    ];
+
+   dconf.settings = {
+    "org/gnome/desktop/input-sources" = {
+      per-window = "false";
+      sources = "[('xkb', 'il'), ('xkb', 'us')]";
+      xkb-options = "['terminate:ctrl_alt_bksp', 'grp:caps_toggle']";
+    };
+    "org/gnome/shell" = {
+      disable-user-extensions = "false";
+      enabled-extensions = "['aztaskbar@aztaskbar.gitlab.com', 'Hide_Activities@shay.shayel.org']";
+    };
+   };
 
     programs.git = {
       enable = true;
@@ -169,14 +208,16 @@
         mpv-playlistmanager
       ];
     };
+  };
 
-    #programs.gnome-shell = {
-    #  enable = true;
-    #  extensions = with pkgs.gnomeExtensions; [
-    #    # { package = app-icons-taskbar; }
-    #    { package = hide-activities-button; }
-    #  ];
-    #};
+  hardware.nvidia.prime = {
+    sync.enable = true;
+
+    # Bus ID of the Intel GPU. You can find it using lspci, either under 3D or VGA
+    intelBusId = "PCI:0:2:0";
+
+    # Bus ID of the NVIDIA GPU. You can find it using lspci, either under 3D or VGA
+    nvidiaBusId = "PCI:1:0:0";
   };
 
   # List packages installed in system profile. To search, run:
@@ -204,18 +245,25 @@
     filezilla
     gnome.gnome-tweaks
     gnome.dconf-editor
+    xclip
+    fish
+    pciutils
+    nvidia-offload
     # gnomeExtensions.dash-to-dock
     # gnomeExtensions.app-icons-taskbar
     # gnomeExtensions.hide-activities-button
-  ];
+  ] ++ (with unstable.gnomeExtensions; [
+    app-icons-taskbar
+    hide-activities-button
+  ]);
 
-  services.gnome = {
-    gnome-keyring.enable = true;
-    gnome-online-accounts.enable = true;
-    gnome-online-miners.enable = true;
-    tracker.enable = true;
-    tracker-miners.enable = true;
-  };
+  # services.gnome = {
+  #   gnome-keyring.enable = true;
+  #   gnome-online-accounts.enable = true;
+  #   gnome-online-miners.enable = true;
+  #   tracker.enable = true;
+  #   tracker-miners.enable = true;
+  # };
 
   # fonts.fonts = with pkgs; [
   #   segoe-ui
