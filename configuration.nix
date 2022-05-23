@@ -198,7 +198,7 @@ in
   };
 
   fonts.fonts = with pkgs; [
-    segoe-ui
+    # segoe-ui
   ];
 
   environment.systemPackages = with pkgs; [
