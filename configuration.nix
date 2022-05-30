@@ -10,6 +10,7 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec -a "$0" "$@"
   '';
+  secrets = (import ./secrets.nix);
 in
 {
   nix = {
@@ -50,7 +51,7 @@ in
   };
 
   environment.sessionVariables = rec {
-    CHROME_EXECUTABLE = "google-chrome-stable";
+    CHROME_EXECUTABLE = "chromium"; # For Flutter
   };
   
   networking = {
@@ -90,6 +91,7 @@ in
   services = {
     openssh.enable = true;
     printing.enable = true;
+    flatpak.enable = true;
 
     xserver = {
       enable = true;
@@ -101,7 +103,7 @@ in
       libinput = {
         enable = true;
         mouse = {
-          accelSpeed = "-0.6";
+          accelSpeed = "-0.78";
           accelProfile = "flat";
         };
       };
@@ -144,16 +146,22 @@ in
       syncplay
       qbittorrent
       android-studio
-      unstable.flutter
-      discord
-      google-chrome # For Flutter's web debugger
+      discord 
       krita
       scrcpy
       nodejs-16_x
       yarn
-      unstable.polymc
-      unstable.gotktrix
-    ];
+    ] ++ (with unstable; [
+      chromedriver
+      google-chrome
+      chromium # For Flutter's web debugger
+      dart
+      flutter
+      polymc
+      element-desktop
+      gimp
+      hplip
+    ]);
     
     dconf = {
       enable = true;
@@ -167,7 +175,19 @@ in
         };
         "org/gnome/shell" = {
           disable-user-extensions = false;
-          enabled-extensions = ["aztaskbar@aztaskbar.gitlab.com" "Hide_Activities@shay.shayel.org"];
+          enabled-extensions = [
+            "aztaskbar@aztaskbar.gitlab.com"
+            "Hide_Activities@shay.shayel.org"
+            "blur-my-shell@aunetx"
+            "sound-output-device-chooser@kgshank.net"
+          ];
+        };
+        "org/gnome/desktop/peripherals/mouse" = {
+          accel-profile = "flat";
+          speed = -0.78;
+        };
+        "org/gnome/desktop/peripherals/touchpad" = {
+          two-finger-scrolling-enabled = true;
         };
       };
     };
@@ -177,17 +197,17 @@ in
         enable = true;
         userName  = "FlafyDev";
         userEmail = "flafyarazi@gmail.com";
-        extraConfig = ''
-          [safe]
-              directory = *
-        '';
+        extraConfig = {
+          safe.directory = "*";
+          credential.helper = "${pkgs.git.override { withLibsecret = true; }}/bin/git-credential-libsecret";
+        };
       };
       
       mpv = {
         enable = true;
         scripts = with pkgs.mpvScripts; [
           mpris
-          mpv-playlistmanager
+          autoload
         ];
       };
     };
@@ -195,6 +215,13 @@ in
 
   programs = {
     dconf.enable = true;
+    kdeconnect.enable = true;
+
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    };
   };
 
   fonts.fonts = with pkgs; [
@@ -224,6 +251,8 @@ in
     fish
     pciutils
     nvidia-offload
+    xdotool
+    dotnet-sdk
     # woeusb
     # cmake
     # gnome.gtk
@@ -231,6 +260,8 @@ in
   ] ++ (with unstable.gnomeExtensions; [
     app-icons-taskbar
     hide-activities-button
+    blur-my-shell
+    sound-output-device-chooser
   ]);
 
   system.stateVersion = "21.11";
