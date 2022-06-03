@@ -47,7 +47,7 @@ in
         version = 2;
       };
     };
-    # supportedFilesystems = [ "ntfs" ];
+    supportedFilesystems = [ "ntfs" ];
   };
 
   environment.sessionVariables = rec {
@@ -161,6 +161,7 @@ in
       element-desktop
       gimp
       hplip
+      vlc
     ]);
     
     dconf = {
@@ -205,6 +206,12 @@ in
       
       mpv = {
         enable = true;
+        config = {
+          profile = "gpu-hq";
+          force-window = true;
+          ytdl-format = "bestvideo+bestaudio";
+          cache-default = 4000000;
+        };
         scripts = with pkgs.mpvScripts; [
           mpris
           autoload
@@ -235,7 +242,7 @@ in
     parted
     gparted
     dig
-    vscode
+    vscode-fhs
     btop
     git
     qbittorrent
@@ -253,11 +260,38 @@ in
     nvidia-offload
     xdotool
     dotnet-sdk
-    # woeusb
-    # cmake
+    guake
+    woeusb
+
     # gnome.gtk
     # libsForQt5.kwalletmanager
-  ] ++ (with unstable.gnomeExtensions; [
+
+
+    # support both 32- and 64-bit applications
+    wineWowPackages.stable
+
+    # support 32-bit only
+    # wine
+
+    # support 64-bit only
+    # (wine.override { wineBuild = "wine64"; })
+
+    # wine-staging (version with experimental features)
+    # wineWowPackages.staging
+
+    # winetricks and other programs depending on wine need to use the same wine version
+    # (winetricks.override { wine = wineWowPackages.staging; })
+
+    # native wayland support (unstable)
+    # wineWowPackages.waylandFull
+
+  ] ++ (with unstable; [
+    cmake
+    clang
+    ninja
+    pkg-config
+    gtk3
+  ]) ++ (with unstable.gnomeExtensions; [
     app-icons-taskbar
     hide-activities-button
     blur-my-shell
