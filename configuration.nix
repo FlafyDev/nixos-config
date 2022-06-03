@@ -14,9 +14,12 @@ let
 in
 {
   nix = {
-    extraOptions = '''';
+    package = pkgs.nixFlakes; # or versioned attributes like nixVersions.nix_2_8
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
   };
-
+  
   nixpkgs.config = import ./nixpkgs-config.nix;
 
   imports = [
@@ -91,7 +94,6 @@ in
   services = {
     openssh.enable = true;
     printing.enable = true;
-    flatpak.enable = true;
 
     xserver = {
       enable = true;
@@ -148,13 +150,13 @@ in
       android-studio
       discord 
       krita
-      scrcpy
       nodejs-16_x
       yarn
     ] ++ (with unstable; [
+      # Flutter
       chromedriver
       google-chrome
-      chromium # For Flutter's web debugger
+      chromium 
       dart
       flutter
       polymc
@@ -163,7 +165,7 @@ in
       hplip
       vlc
     ]);
-    
+
     dconf = {
       enable = true;
       settings = let 
@@ -194,6 +196,11 @@ in
     };
         
     programs = {
+      vscode = {
+        enable = true;
+        package = pkgs.vscode-fhs;
+      };
+
       git = {
         enable = true;
         userName  = "FlafyDev";
@@ -223,12 +230,6 @@ in
   programs = {
     dconf.enable = true;
     kdeconnect.enable = true;
-
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    };
   };
 
   fonts.fonts = with pkgs; [
@@ -242,7 +243,6 @@ in
     parted
     gparted
     dig
-    vscode-fhs
     btop
     git
     qbittorrent
@@ -262,29 +262,7 @@ in
     dotnet-sdk
     guake
     woeusb
-
-    # gnome.gtk
-    # libsForQt5.kwalletmanager
-
-
-    # support both 32- and 64-bit applications
     wineWowPackages.stable
-
-    # support 32-bit only
-    # wine
-
-    # support 64-bit only
-    # (wine.override { wineBuild = "wine64"; })
-
-    # wine-staging (version with experimental features)
-    # wineWowPackages.staging
-
-    # winetricks and other programs depending on wine need to use the same wine version
-    # (winetricks.override { wine = wineWowPackages.staging; })
-
-    # native wayland support (unstable)
-    # wineWowPackages.waylandFull
-
   ] ++ (with unstable; [
     cmake
     clang
