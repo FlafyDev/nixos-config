@@ -2,7 +2,6 @@
 
 let
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-  unstable = import (builtins.fetchTarball https://github.com/nixos/nixpkgs/tarball/nixos-unstable){ config = import ./nixpkgs-config.nix; };
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -93,7 +92,12 @@ in
 
   services = {
     openssh.enable = true;
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = [
+        pkgs.hplip
+      ];
+    };
 
     xserver = {
       enable = true;
@@ -144,36 +148,39 @@ in
  home-manager.users.flafydev = {pkgs, lib, ...}: {
     nixpkgs.config = import ./nixpkgs-config.nix;
 
+    home.stateVersion = "21.11";
+
     home.packages = with pkgs; [
+      proton-caller
+      sqlitebrowser
+      libreoffice
       syncplay
       qbittorrent
-      android-studio
       discord 
       krita
       nodejs-16_x
       yarn
-    ] ++ (with unstable; [
+      polymc
+      element-desktop
+      gimp
+      vlc
+      libsForQt5.kdenlive
+      libstrangle
       # Flutter
       chromedriver
       google-chrome
       chromium 
       dart
-      flutter
-      polymc
-      element-desktop
-      gimp
-      hplip
-      vlc
-    ]);
+    ];
 
     dconf = {
       enable = true;
       settings = let 
-        inherit (lib.hm.gvariant) mkTuple;
+        inherit (lib.hm.gvariant) mkTuple mkUint32;
       in {
         "org/gnome/desktop/input-sources" = {
           per-window = false;
-          sources = [ (mkTuple ["xkb" "il"]) (mkTuple ["xkb" "us"]) ];
+          sources = [ (mkTuple ["xkb" "us"]) (mkTuple ["xkb" "il"]) ];
           xkb-options = ["terminate:ctrl_alt_bksp" "grp:caps_toggle"];
         };
         "org/gnome/shell" = {
@@ -183,6 +190,11 @@ in
             "Hide_Activities@shay.shayel.org"
             "blur-my-shell@aunetx"
             "sound-output-device-chooser@kgshank.net"
+            "gtktitlebar@velitasali.github.io"
+            "clipboard-indicator@tudmotu.com"
+            "windowIsReady_Remover@nunofarruca@gmail.com"
+            "mprisindicatorbutton@JasonLG1979.github.io"
+            "bluetooth-quick-connect@bjarosze.gmail.com"
           ];
         };
         "org/gnome/desktop/peripherals/mouse" = {
@@ -191,6 +203,24 @@ in
         };
         "org/gnome/desktop/peripherals/touchpad" = {
           two-finger-scrolling-enabled = true;
+        };
+        "org/gnome/desktop/background" = {
+          picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/adwaita-l.jpg";
+          picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/adwaita-d.jpg";
+          primary-color = "#3465a4";
+        };
+        "org/gnome/desktop/interface" = {
+          gtk-theme = "Adwaita-dark";
+          color-scheme = "prefer-dark";
+        };
+        "apps/guake/general" = {
+          gtk-prefer-dark-theme = true;
+        };
+        "apps/guake/style/background" = {
+          transparency = 90;
+        };
+        "org/gnome/desktop/peripherals/keyboard" = {
+          delay = mkUint32 226;
         };
       };
     };
@@ -214,10 +244,24 @@ in
       mpv = {
         enable = true;
         config = {
+          vo = "gpu";
           profile = "gpu-hq";
+          hwdec = "auto";
           force-window = true;
           ytdl-format = "bestvideo+bestaudio";
           cache-default = 4000000;
+          volume-max = 200;
+          fs = true;
+          screen = 0;
+          save-position-on-quit = true;
+        };
+        bindings = {
+          UP = "add volume 2";
+          DOWN = "add volume -2";
+          WHEEL_UP = "add volume 2";
+          WHEEL_DOWN = "add volume -2";
+          "ctrl+pgup" = "playlist-next";
+          "ctrl+pgdwn" = "playlist-prev"; 
         };
         scripts = with pkgs.mpvScripts; [
           mpris
@@ -229,7 +273,13 @@ in
 
   programs = {
     dconf.enable = true;
+    adb.enable = true;
     kdeconnect.enable = true;
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    };
   };
 
   fonts.fonts = with pkgs; [
@@ -262,18 +312,22 @@ in
     dotnet-sdk
     guake
     woeusb
-    wineWowPackages.stable
-  ] ++ (with unstable; [
     cmake
     clang
     ninja
     pkg-config
     gtk3
-  ]) ++ (with unstable.gnomeExtensions; [
+    python3
+  ] ++ (with pkgs.gnomeExtensions; [
+    gtk-title-bar
     app-icons-taskbar
     hide-activities-button
     blur-my-shell
     sound-output-device-chooser
+    clipboard-indicator
+    window-is-ready-remover
+    mpris-indicator-button
+    bluetooth-quick-connect
   ]);
 
   system.stateVersion = "21.11";
