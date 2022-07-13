@@ -1,22 +1,12 @@
 { config, lib, pkgs, specialArgs, ... }:
 
-let
-  packages = import ./packages.nix;
-  inherit (args) localOverlay;
-in
 [
   (import ./system.nix)
-  (import ../modules/gnome.nix)
-  (import ../modules/vscode.nix)
+  (import ../modules/gnome-xserver.nix)
   (import ../modules/home-printer.nix)
+  (import ../modules/nix.nix)
+  (import ../config/nixpkgs.nix)
   {
-    nix = {
-      package = nixpkgs.nixFlakes; # or versioned attributes like nixVersions.nix_2_8
-      extraOptions = ''
-        experimental-features = nix-command flakes
-      '';
-    };
-
     services.xserver.libinput = {
       enable = true;
       mouse = {
@@ -27,11 +17,7 @@ in
 
     imports = [
       ./hardware-configuration.nix
-      home-manger.nixosModule
     ];
-
-    nixpkgs.config.allowUnfree = true;
-    nixpkgs.overlays = [ localOverlay ];
 
     time.timeZone = "Israel";
 
@@ -39,10 +25,52 @@ in
       CHROME_EXECUTABLE = "chromium"; # For Flutter
     };
 
-    programs.home-manager.enable = true;
-
-    home = {
-
+    programs = {
+      adb.enable = true;
+      kdeconnect.enable = true;
+      steam = {
+        enable = true;
+        remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+        dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+      };
     };
+
+    fonts.fonts = with pkgs; [
+      # segoe-ui
+    ];
+
+    environment.systemPackages = with pkgs; [
+      nano
+      wget
+      firefox
+      parted
+      gparted
+      dig
+      btop
+      git
+      qbittorrent
+      neofetch
+      pfetch
+      unzip
+      gh
+      ulauncher
+      filezilla
+      gnome.gnome-tweaks
+      gnome.dconf-editor
+      xclip
+      fish
+      pciutils
+      nvidia-offload
+      xdotool
+      dotnet-sdk
+      guake
+      woeusb
+      cmake
+      clang
+      ninja
+      pkg-config
+      gtk3
+      python3
+    ];
   }
 ]
