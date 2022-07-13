@@ -1,5 +1,7 @@
+{ config, lib, pkgs, modulesPath, ... }:
+
 let 
-  nvidia-offload = nixpkgs.writeShellScriptBin "nvidia-offload" ''
+  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
     export __GLX_VENDOR_LIBRARY_NAME=nvidia
@@ -70,18 +72,18 @@ in
     };
   };
 
+  environment.systemPackages = [
+    nvidia-offload
+  ];
+
   services = {
     openssh.enable = true;
-    printing = {
-      enable = true;
-      drivers = [
-        nixpkgs.hplip
-      ];
-    };
 
     xserver = {
       enable = true;
       videoDrivers = [ "nvidia" ];
     };
   };
+
+  system.stateVersion = "21.11";
 }

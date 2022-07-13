@@ -1,11 +1,6 @@
 { config, lib, pkgs, specialArgs, ... }:
 
-[
-  (import ./system.nix)
-  (import ../modules/gnome-xserver.nix)
-  (import ../modules/home-printer.nix)
-  (import ../modules/nix.nix)
-  (import ../config/nixpkgs.nix)
+(
   {
     services.xserver.libinput = {
       enable = true;
@@ -17,12 +12,22 @@
 
     imports = [
       ./hardware-configuration.nix
+      ./system.nix
+      ../modules/gnome-xserver.nix
+      ../modules/home-printer.nix
+      ../modules/nix.nix
+      ../configs/nixpkgs.nix
     ];
 
     time.timeZone = "Israel";
 
     environment.sessionVariables = rec {
       CHROME_EXECUTABLE = "chromium"; # For Flutter
+    };
+
+    users.users.flafydev = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" "networkmanager" ];
     };
 
     programs = {
@@ -60,7 +65,6 @@
       xclip
       fish
       pciutils
-      nvidia-offload
       xdotool
       dotnet-sdk
       guake
@@ -73,4 +77,4 @@
       python3
     ];
   }
-]
+)

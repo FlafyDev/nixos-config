@@ -1,3 +1,5 @@
+{ config, lib, pkgs, modulesPath, ... }:
+
 {
   programs.dconf.enable = true;
 
@@ -56,7 +58,7 @@
   environment.systemPackages = with pkgs.gnomeExtensions; [
     gtk-title-bar
     app-icons-taskbar
-    hide-activities-button
+    hide-activities-button # TODO check why doesn't download this
     blur-my-shell
     sound-output-device-chooser
     clipboard-indicator

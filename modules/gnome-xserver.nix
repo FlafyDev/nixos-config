@@ -1,3 +1,5 @@
+{ config, lib, pkgs, modulesPath, ... }:
+
 {
   services.xserver = {
     desktopManager.gnome.enable = true;
@@ -6,10 +8,10 @@
     };
   };
 
-  environment.gnome.excludePackages = (with nixpkgs; [
+  environment.gnome.excludePackages = (with pkgs; [
     gnome-photos
     gnome-tour
-  ]) ++ (with nixpkgs.gnome; [
+  ]) ++ (with pkgs.gnome; [
     cheese # webcam tool
     gnome-music
     # gnome-terminal

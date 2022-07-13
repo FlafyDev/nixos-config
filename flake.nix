@@ -28,15 +28,15 @@
           system = "x86_64-linux";
           modules = [
             ./laptop/config.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.flafy = import ./users/flafy.nix;
+            # home-manager.nixosModules.home-manager
+            # {
+            #   home-manager.useGlobalPkgs = true;
+            #   home-manager.useUserPackages = true;
+            #   home-manager.users.flafy = import ./users/flafy.nix;
 
-              # Optionally, use home-manager.extraSpecialArgs to pass
-              # arguments to home.nix
-            }
+            #   # Optionally, use home-manager.extraSpecialArgs to pass
+            #   # arguments to home.nix
+            # }
           ];
         };
       };

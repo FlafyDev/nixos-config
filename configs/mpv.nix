@@ -1,3 +1,5 @@
+{ config, lib, pkgs, modulesPath, ... }:
+
 {
   home.programs.mpv = {
     enable = true;

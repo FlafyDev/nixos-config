@@ -1,6 +1,8 @@
+{ config, lib, pkgs, modulesPath, ... }:
+
 {
   nix = {
-    package = nixpkgs.nixFlakes;
+    package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
