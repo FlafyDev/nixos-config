@@ -9,33 +9,41 @@
   };
 
   outputs = { self, utils, nixpkgs, home-manager }: 
-    let
-      localOverlay = prev: final: {};
+    # let
+    #   mkHomeConfiguration = { username, configuratio, localOverlay }: home-manager.lib.homeManagerConfiguration (rec {
+    #     system = "x86_64-linux";
+    #     homeDirectory = "/home/" + username;
+    #     username = username;
+    #     configuration = configuration;
+    #     pkgs = nixpkgs.legacyPackages.${system};
+    #     args = {
+    #       localOverlay = localOverlay;
+    #     };
+    #   });
 
-      pkgsForSystem = system: import nixpkgs {
-        overlays = [
-          localOverlay
-        ];
-        inherit system;
-      };
+    # in 
+    {
+      nixosConfigurations = {
+        laptop = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./laptop/config.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.flafy = import ./users/flafy.nix;
 
-      mkHomeConfiguration = { username, configuratio, systemm, localOverlay }: home-manager.lib.homeManagerConfiguration (rec {
-        system = systemm || "x86_64-linux";
-        homeDirectory = "/home/" + username;
-        username = username;
-        configuration = configuration;
-        pkgs = nixpkgs.legacyPackages.${system};
-        args = {
-          localOverlay = localOverlay;
+              # Optionally, use home-manager.extraSpecialArgs to pass
+              # arguments to home.nix
+            }
+          ];
         };
-      });
-
-    in utils.lib.eachSystem [ "x86_64-linux" ] {
-      nixosConfigurations.laptop = mkHomeConfiguration {
-        username = "flafy";
-        configuration = import ./config.nix;
-        localOverlay = localOverlay;
       };
-      inherit home-manager;
+      # homeConfigurations.laptop = mkHomeConfiguration {
+      #   username = "flafy";
+      #   configuration = import ./config.nix;
+      #   localOverlay = localOverlay;
+      # };
     };
 }
