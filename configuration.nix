@@ -1,8 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, nixpkgs, home-manager, ...}:
 
 let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+  # home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+  nvidia-offload = nixpkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
     export __GLX_VENDOR_LIBRARY_NAME=nvidia
@@ -13,7 +13,7 @@ let
 in
 {
   nix = {
-    package = pkgs.nixFlakes; # or versioned attributes like nixVersions.nix_2_8
+    package = nixpkgs.nixFlakes; # or versioned attributes like nixVersions.nix_2_8
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
@@ -23,7 +23,8 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    (import "${home-manager}/nixos")
+    # (import "${home-manager}/nixos")
+    home-manger.nixosModule
   ];
 
   boot = {
@@ -95,7 +96,7 @@ in
     printing = {
       enable = true;
       drivers = [
-        pkgs.hplip
+        nixpkgs.hplip
       ];
     };
 
@@ -121,10 +122,10 @@ in
   sound.enable = true;
   time.timeZone = "Israel";
   
-  environment.gnome.excludePackages = (with pkgs; [
+  environment.gnome.excludePackages = (with nixpkgs; [
     gnome-photos
     gnome-tour
-  ]) ++ (with pkgs.gnome; [
+  ]) ++ (with nixpkgs.gnome; [
     cheese # webcam tool
     gnome-music
     # gnome-terminal
