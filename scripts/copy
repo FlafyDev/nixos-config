@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+cp -r $(dirname $(realpath "$0"))/../* /etc/nixos/

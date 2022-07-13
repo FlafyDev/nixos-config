@@ -1,9 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  programs.dconf.enable = true;
-
-  home.dconf = {
+  dconf = {
     enable = true;
     settings = let 
       inherit (lib.hm.gvariant) mkTuple mkUint32;
@@ -55,7 +53,7 @@
     };
   };
 
-  environment.systemPackages = with pkgs.gnomeExtensions; [
+  home.packages = with pkgs.gnomeExtensions; [
     gtk-title-bar
     app-icons-taskbar
     hide-activities-button # TODO check why doesn't download this

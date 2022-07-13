@@ -1,5 +1,7 @@
+{ config, lib, pkgs, modulesPath, ... }:
+
 {
-  home.programs.git = {
+  programs.git = {
     enable = true;
     userName  = "FlafyDev";
     userEmail = "flafyarazi@gmail.com";

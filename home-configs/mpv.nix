@@ -1,7 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  home.programs.mpv = {
+  programs.mpv = {
     enable = true;
     config = {
       vo = "gpu";
