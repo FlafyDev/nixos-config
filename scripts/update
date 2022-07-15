@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+$(dirname $(realpath "$0"))/copy && nixos-rebuild switch --flake /etc/nixos/#laptop

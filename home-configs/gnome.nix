@@ -56,7 +56,7 @@
   home.packages = with pkgs.gnomeExtensions; [
     gtk-title-bar
     app-icons-taskbar
-    hide-activities-button # TODO check why doesn't download this
+    hide-activities-button
     blur-my-shell
     sound-output-device-chooser
     clipboard-indicator

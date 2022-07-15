@@ -29,9 +29,11 @@ mkHome username {
       };
     };
 
-    fonts.fonts = with pkgs; [
-      # segoe-ui
-    ];
+    users.defaultUserShell = pkgs.fish;
+
+    environment.sessionVariables = {
+      fish_greeting = "";
+    };
 
     environment.systemPackages = with pkgs; [
       nano
@@ -39,24 +41,18 @@ mkHome username {
       firefox
       parted
       gparted
-      btop
       git
       neofetch
       unzip
       gh
-      gnome.gnome-tweaks
-      gnome.dconf-editor
       xclip
-      fish
       guake
       python3
     ];
   };
 
-  home =
-  ({ config, lib, pkgs, ... }: {
+  home = ({ config, lib, pkgs, ... }: {
     imports = [
-      ../nixpkgs.nix
       ../home-configs/git.nix
       ../home-configs/gnome.nix 
       ../home-configs/mpv.nix

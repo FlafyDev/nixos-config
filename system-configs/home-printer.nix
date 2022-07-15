@@ -4,8 +4,8 @@
 {
   services.printing = {
     enable = true;
-    drivers = [
-      pkgs.hplip
+    drivers = with pkgs; [
+      hplip
     ];
   };
 }
