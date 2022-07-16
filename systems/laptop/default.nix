@@ -5,7 +5,6 @@ modules:
   modules = [
     {
       imports = [
-        ../../nixpkgs.nix
         ./hardware-configuration.nix
         ./system.nix
         ../../system-configs/nix.nix

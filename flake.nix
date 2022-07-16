@@ -6,10 +6,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nix-dart = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:tadfisher/nix-dart";
-    };
   };
 
   outputs = { self, utils, nixpkgs, home-manager, ... }@inputs: 

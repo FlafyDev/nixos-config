@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-$(dirname $(realpath "$0"))/copy && nixos-rebuild switch --flake /etc/nixos/#laptop
+current_dir=$(dirname $(realpath "$0"))/..
+nix_dir=/etc/nixos
+
+rm -r $nix_dir/*
+cp -r $current_dir/* $nix_dir
+nixos-rebuild switch --flake $nix_dir/#laptop

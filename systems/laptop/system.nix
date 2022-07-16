@@ -12,6 +12,8 @@ in
 {
   sound.enable = true;
 
+  nixpkgs.config.allowUnfree = true;
+
   boot = {
     loader = {
       efi = {

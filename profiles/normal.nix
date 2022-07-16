@@ -29,25 +29,19 @@ mkHome username {
       };
     };
 
-    users.defaultUserShell = pkgs.fish;
+    users.defaultUserShell = pkgs.zsh;
 
-    environment.sessionVariables = {
-      fish_greeting = "";
-    };
+    environment.pathsToLink = [ "/share/zsh" ];
 
     environment.systemPackages = with pkgs; [
       nano
       wget
-      firefox
       parted
-      gparted
       git
       neofetch
       unzip
       gh
       xclip
-      guake
-      python3
     ];
   };
 
@@ -57,6 +51,8 @@ mkHome username {
       ../home-configs/gnome.nix 
       ../home-configs/mpv.nix
       ../home-configs/vscode.nix
+      ../home-configs/direnv.nix
+      ../home-configs/zsh.nix
     ];
 
     home.packages = with pkgs; [
@@ -72,6 +68,10 @@ mkHome username {
       libstrangle
       yt-dlp
       termusic
+      godot
+      guake
+      gparted
+      firefox
     ];
 
     home.stateVersion = "21.11";
