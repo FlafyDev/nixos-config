@@ -10,6 +10,7 @@
     shellAliases = {
       ll = "ls -l";
       update = "sudo ~/.dotfiles/system/scripts/update";
+      reset-bluetooth = "nix-shell -p service-wrapper --run \"service bluetooth restart\"";
     };
     history = {
       size = 10000;

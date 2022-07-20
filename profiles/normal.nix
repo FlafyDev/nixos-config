@@ -72,6 +72,10 @@ mkHome username {
       guake
       gparted
       firefox
+      gnome.eog
+      gnome.nautilus
+      mate.engrampa
+      chromium
     ];
 
     home.stateVersion = "21.11";
