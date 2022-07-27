@@ -59,7 +59,7 @@
       "ctrl+pgdwn" = "playlist-prev"; 
     };
     scripts = with pkgs.mpvScripts; [
-      mytestt
+      modern-x-compact
     ];
   };
 }

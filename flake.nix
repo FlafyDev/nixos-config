@@ -17,7 +17,7 @@
         inherit (prev) callPackage;
       in {
         mpvScripts = prev.mpvScripts // {
-          mytestt = callPackage ./packages/mpv/scripts/modern-x-compact.nix { };
+          modern-x-compact = callPackage ./packages/mpv/scripts/modern-x-compact.nix { };
         };
       })
     ];
