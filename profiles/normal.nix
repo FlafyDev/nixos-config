@@ -23,6 +23,11 @@ mkHome username {
 
     services.xserver.libinput = {
       enable = true;
+
+      touchpad = {
+        tapping = true;
+      };
+
       mouse = {
         accelSpeed = "-0.78";
         accelProfile = "flat";
@@ -53,6 +58,7 @@ mkHome username {
       ../home-configs/vscode.nix
       ../home-configs/direnv.nix
       ../home-configs/zsh.nix
+      ../home-configs/wine.nix
     ];
 
     home.packages = with pkgs; [
@@ -74,7 +80,7 @@ mkHome username {
       firefox
       gnome.eog
       gnome.nautilus
-      mate.engrampa
+      gnome.file-roller
       chromium
     ];
 
