@@ -60,6 +60,8 @@
     };
     scripts = with pkgs.mpvScripts; [
       modern-x-compact
+      mpris
+      autoload
     ];
   };
 }
