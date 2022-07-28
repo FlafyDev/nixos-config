@@ -3,40 +3,34 @@ let
   username = "flafydev";
 in
 mkHome username {
-  system = { config, lib, pkgs, ... }: {
-    imports = [
-      ../system-configs/home-printer.nix
-      ../system-configs/gnome-xserver.nix
-    ];
+  configs = [
+    /direnv
+    /git
+    /gnome
+    /mpv
+    /nix
+    /printer
+    /vscode
+    /wine
+    /zsh
+    /steam
+    /mouse-g502
+  ];
 
+  system = { pkgs, ... }: {
     time.timeZone = "Israel";
 
     programs = {
       adb.enable = true;
       kdeconnect.enable = true;
-      steam = {
-        enable = true;
-        remotePlay.openFirewall = true;
-        dedicatedServer.openFirewall = true;
-      };
     };
 
     services.xserver.libinput = {
       enable = true;
-
       touchpad = {
         tapping = true;
       };
-
-      mouse = {
-        accelSpeed = "-0.78";
-        accelProfile = "flat";
-      };
     };
-
-    users.defaultUserShell = pkgs.zsh;
-
-    environment.pathsToLink = [ "/share/zsh" ];
 
     environment.systemPackages = with pkgs; [
       nano
@@ -47,20 +41,11 @@ mkHome username {
       unzip
       gh
       xclip
+      service-wrapper
     ];
   };
 
-  home = ({ config, lib, pkgs, ... }: {
-    imports = [
-      ../home-configs/git.nix
-      ../home-configs/gnome.nix 
-      ../home-configs/mpv.nix
-      ../home-configs/vscode.nix
-      ../home-configs/direnv.nix
-      ../home-configs/zsh.nix
-      ../home-configs/wine.nix
-    ];
-
+  home = ({ pkgs, ... }: {
     home.packages = with pkgs; [
       libreoffice
       syncplay
@@ -82,8 +67,7 @@ mkHome username {
       gnome.nautilus
       gnome.file-roller
       chromium
+      qdirstat
     ];
-
-    home.stateVersion = "21.11";
   });
 }

@@ -5,4 +5,4 @@ nix_dir=/etc/nixos
 
 rm -r $nix_dir/*
 cp -r $current_dir/* $nix_dir
-nixos-rebuild switch --flake $nix_dir/#laptop --show-trace
+nixos-rebuild switch --flake $nix_dir/#laptop

@@ -11,21 +11,12 @@
 
   outputs = { self, utils, nixpkgs, home-manager, nur, ... }@inputs: 
   let
-    overlays = [
-      nur.overlay
-      (final: prev: let 
-        inherit (prev) callPackage;
-      in {
-        mpvScripts = prev.mpvScripts // {
-          modern-x-compact = callPackage ./packages/mpv/scripts/modern-x-compact.nix { };
-        };
-      })
-    ];
+    overlays = (import ./overlays.nix).system inputs;
   in {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (
         import ./systems/laptop
-          ((import ./profiles/normal.nix home-manager) ++ [
+          ((import ./profiles/normal.nix inputs) ++ [
             ({ ... }: { nixpkgs.overlays = overlays; })
           ])
       );
