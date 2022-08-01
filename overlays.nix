@@ -1,6 +1,5 @@
 {
-  system = { nur, ... }: [
-    nur.overlay
+  system = { ... }: [
     (final: prev:
       let 
         inherit (prev) callPackage;

@@ -9,12 +9,13 @@ mkHome username {
     /gnome
     /mpv
     /nix
-    /printer
+    /printer-4500
     /vscode
     /wine
     /zsh
     /steam
     /mouse-g502
+    /neovim
   ];
 
   system = { pkgs, ... }: {

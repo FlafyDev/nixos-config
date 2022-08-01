@@ -10,7 +10,7 @@ in (flatten [
   {
     users.users.${username} = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "adbusers" ];
+      extraGroups = [ "wheel" "networkmanager" "adbusers" "scanner" "lp" ];
     };
   }
   home-manager.nixosModules.home-manager

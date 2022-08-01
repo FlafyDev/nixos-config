@@ -17,8 +17,10 @@
       gnome-tour
     ];
 
-    environment.systemPackages = with pkgs; [
-      gnome.gnome-tweaks
+    environment.systemPackages = with pkgs.gnome; [
+      gnome-tweaks
+      simple-scan
+      evince
     ];
   };
 
