@@ -24,6 +24,8 @@
         WHEEL_DOWN = "add volume -2";
         "ctrl+pgup" = "playlist-next";
         "ctrl+pgdwn" = "playlist-prev"; 
+        RIGHT = "seek 5 exact";
+        LEFT = "seek -5 exact";
       };
       scripts = with pkgs.mpvScripts; [
         modern-x-compact
