@@ -9,7 +9,7 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: 
   let
-    overlays = (import ./overlays.nix).system inputs;
+    overlays = (import ./additions.nix).overlays inputs;
   in {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (

@@ -1,5 +1,5 @@
 {
-  system = { ... }: [
+  overlays = { ... }: [
     (final: prev:
       let 
         inherit (prev) callPackage;
@@ -11,9 +11,7 @@
     )
   ];
 
-  home = { ... }: {
-    imports = [
-      ./modules/mpv/hm-mpv-fonts.nix
-    ];
-  };
+  home-modules = [
+    ./modules/mpv/hm-mpv-fonts.nix
+  ];
 }

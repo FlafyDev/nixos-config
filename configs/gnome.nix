@@ -21,6 +21,7 @@
       gnome-tweaks
       simple-scan
       evince
+      gnome-system-monitor
     ];
   };
 

@@ -19,7 +19,9 @@ in (flatten [
     home-manager.useUserPackages = true;
     home-manager.users.${username} = { ... }: {
       imports = (flatten [
-        (import ../overlays.nix).home
+        ({ ... }: {
+          imports = (import ../additions.nix).home-modules;
+        })
         (if (profile ? home) then profile.home else [])
         homeModules
       ]);
