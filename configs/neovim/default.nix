@@ -16,6 +16,11 @@
       enable = true;
 
       plugins = import ./plugins pkgs;
+      extraConfig = ''
+        lua<<EOF
+          ${builtins.readFile ./keybindings.lua}
+        EOF
+      '';
     };
   };
   
