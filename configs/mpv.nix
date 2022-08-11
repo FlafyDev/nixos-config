@@ -7,10 +7,9 @@
       config = {
         vo = "gpu";
         profile = "gpu-hq";
-        hwdec = "auto";
+        hwdec = "no";
         force-window = true;
         ytdl-format = "bestvideo+bestaudio";
-        cache-default = 4000000;
         volume-max = 200;
         fs = true;
         screen = 0;

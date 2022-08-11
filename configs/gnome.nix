@@ -34,7 +34,7 @@
         "org/gnome/desktop/input-sources" = {
           per-window = false;
           sources = [ (mkTuple ["xkb" "us"]) (mkTuple ["xkb" "il"]) ];
-          xkb-options = ["terminate:ctrl_alt_bksp" "grp:caps_toggle"];
+          xkb-options = ["terminate:ctrl_alt_bksp" "caps:escape"];
         };
         "org/gnome/shell" = {
           disable-user-extensions = false;
