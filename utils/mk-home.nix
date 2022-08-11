@@ -1,7 +1,7 @@
 username: profile: { home-manager, nixpkgs, ... }:
 with nixpkgs.lib;
 let
-  configs = (map (cfg: import (../configs + cfg + ".nix")) profile.configs);
+  configs = (map (cfg: import (../configs + cfg)) profile.configs);
   systemModules = (map (cfg: cfg.system) (filter (cfg: cfg ? system) configs));
   homeModules = (map (cfg: cfg.home) (filter (cfg: cfg ? home) configs));
 in (flatten [

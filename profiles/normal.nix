@@ -4,17 +4,17 @@ let
 in
 mkHome username {
   configs = [
-    /direnv
-    /git
-    /gnome
-    /mpv
-    /nix
-    /printer-4500
-    /vscode
-    /wine
-    /zsh
-    /steam
-    /mouse-g502
+    /direnv.nix
+    /git.nix
+    /gnome.nix
+    /mpv.nix
+    /nix.nix
+    /printer-4500.nix
+    /vscode.nix
+    /wine.nix
+    /zsh.nix
+    /steam.nix
+    /mouse-g502.nix
     /neovim
   ];
 
@@ -51,7 +51,6 @@ mkHome username {
       libreoffice
       syncplay
       qbittorrent
-      discord 
       krita
       polymc
       element-desktop
@@ -70,5 +69,9 @@ mkHome username {
       chromium
       qdirstat
     ];
+
+    programs.betterdiscord = {
+      enable = true;
+    };
   });
 }
