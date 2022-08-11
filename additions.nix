@@ -8,6 +8,9 @@
         mpvScripts = prev.mpvScripts // {
           modern-x-compact = callPackage ./modules/mpv/scripts/modern-x-compact.nix { };
         };
+        betterdiscordThemes = {
+          solana = callPackage ./modules/betterdiscord/themes/solana.nix { };
+        };
       }
     )
     inputs.npm-buildpackage.overlays.default

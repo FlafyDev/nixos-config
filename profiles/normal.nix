@@ -72,6 +72,9 @@ mkHome username {
 
     programs.betterdiscord = {
       enable = true;
+      themes = with pkgs.betterdiscordThemes; [
+        solana
+      ];
     };
   });
 }
