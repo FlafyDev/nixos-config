@@ -1,3 +1,9 @@
+# TODO
+# make 2 different profiles for gnome and i3vm.
+# done - get eww bar to work and think of a way to do the scripts.
+# get transparency and blur for terminal (please picom work)
+# set background
+
 let
   mkHome = import ../utils/mk-home.nix;
   username = "flafydev";
@@ -16,6 +22,11 @@ mkHome username {
     /steam.nix
     /mouse-g502.nix
     /neovim
+    /i3.nix
+    /alacritty.nix
+    /picom.nix
+    /keyboard.nix
+    /betterdiscord.nix
   ];
 
   system = { pkgs, ... }: {
@@ -46,7 +57,7 @@ mkHome username {
     ];
   };
 
-  home = ({ pkgs, ... }: {
+  home = ({ pkgs, lib, ... }: {
     home.packages = with pkgs; [
       libreoffice
       syncplay
@@ -68,13 +79,14 @@ mkHome username {
       gnome.file-roller
       chromium
       qdirstat
+      rofi
+      htop
+      wmctrl
     ];
 
-    programs.betterdiscord = {
+    programs.eww = {
       enable = true;
-      themes = with pkgs.betterdiscordThemes; [
-        solana
-      ];
+      configDir = ./eww;
     };
   });
 }

@@ -10,3 +10,7 @@ vim.g.mapleader = ' '
 
 map("n", "<leader>n", ":NvimTreeToggle<CR>")
 map("n", "<leader>f", ":Telescope find_files<CR>")
+
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true

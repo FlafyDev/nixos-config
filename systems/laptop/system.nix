@@ -10,7 +10,7 @@ let
   '';
 in 
 {
-  sound.enable = true;
+  sound.enable = false;
 
   nixpkgs.config.allowUnfree = true;
 
@@ -61,7 +61,7 @@ in
     bluetooth.enable = true;
     opentabletdriver.enable = true;
     opengl.enable = true;
-    pulseaudio.enable = true;
+    pulseaudio.enable = false;
     
     nvidia = {
       modesetting.enable = true;
@@ -84,9 +84,21 @@ in
     nvidia-offload
   ];
 
-  services = {
-    openssh.enable = true;
+  security.rtkit.enable = true;
 
+  services = {
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      # If you want to use JACK applications, uncomment this
+      #jack.enable = true;
+    };
+
+    openssh.enable = true;
+    blueman.enable = true;
+    
     xserver = {
       enable = true;
       videoDrivers = [ "nvidia" ];

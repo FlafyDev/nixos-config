@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+getWorkspaceSymbol() {
+  symbol=$(wmctrl -d \
+    | awk '{ print $2 " " $9 }' | grep $number | awk '{ print $1 }')
+
+  case $symbol in
+    "-")
+      echo "◈";;
+    "*")
+      echo "◆";;
+    *)
+      echo "◇";;
+  esac
+}
+
+workspaces() {
+  buffered=""
+
+  for number in {1..9}; do
+    symbol=$(getWorkspaceSymbol);
+
+    buffered+="(button :class	\"test\"	\"$symbol\")"
+  done
+
+	echo "(box	:class \"ws\" :orientation \"v\"	:halign \"start\"	:valign \"center\"	 :space-evenly \"false\" :spacing \"-5\" $buffered)"
+}
+
+workspaces
+xprop -spy -root _NET_CURRENT_DESKTOP | while read -r; do
+  workspaces
+done
+

@@ -1,0 +1,85 @@
+// GENERAL STUFF 
+* {
+  all: unset;
+}
+
+$bg: #0b0f10;
+$black: #151a1c;
+$altbg: #2c3436;
+
+$fg: #c5c8c9;
+$fg2: #6e7071;
+$gray: #b2b2b2;
+
+$red: #df5b61;
+$altgreen: #5cb37f;
+$green: #87c7a1;
+$yellow: #ffb29b;
+$altyellow: #de8f78;
+$blue: #7ba5dd;
+$altblue: #bac8ef;
+$magenta: #bc83e3;
+$cyan: #7d91f5;
+
+$altfont: "JetBrainsMono Nerd Font";
+
+tooltip {
+  color: $bg;
+  background-color: $altblue;
+  font-weight: bolder;
+}
+
+// BAR 
+.eww-bar {
+  padding: 0.7rem;
+  margin: 0.7rem;
+  background-color: $bg;
+  border-radius: 5px;
+}
+.lang-container {
+  &:hover {
+    background-color: $black;
+  }
+
+  border-radius: 10px;
+  padding: 0.55em;
+
+  .lang-icon {
+    font-size: 3em;
+    color: white;
+  }
+}
+
+.time {
+  background-color: $black;
+
+  border-radius: 10px;
+  padding: 0.55em;
+}
+.hour {
+  font-size: 1.4em;
+  font-weight: bolder;
+}
+.min {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.full {
+  font-size: 0.7em;
+  padding-top: 5px;
+}
+
+.panel-icon {
+  color: $yellow;
+  font-size: 24px;
+  font-family: $altfont;
+}
+
+.ws {
+  background-color: $black;
+  border-radius: 20px;
+  padding: 0.2em 0.5em;
+  font-size: 1.5em;
+  font-family: $altfont;
+}
+
