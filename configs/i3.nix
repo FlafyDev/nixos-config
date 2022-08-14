@@ -17,8 +17,9 @@
   };
 
   home = { pkgs, lib, ... }: with lib; {
-    home.packages = [
-      pkgs.feh
+    home.packages = with pkgs; [
+      feh
+      imagemagick
     ];
 
     xsession.windowManager.i3 = {
@@ -28,7 +29,7 @@
       extraConfig = ''
         for_window [class="^.*"] border pixel 0
       '';
-
+      
       # window.border = 0;
 
       config = rec {
@@ -51,10 +52,16 @@
           size = 13.5;
         };
 
-        gaps = {
-	  smartGaps = true;
+        gaps = let
+          houter = 16;
+          vouter = 16;
+        in {
+          left = 25+houter; # for eww
+      	  # smartGaps = true;
           inner = 16;
-          outer = -16;
+          # outer = 16;
+          horizontal = houter - 16;
+          vertical = vouter - 16;
         };
 
         bars = [ ];
@@ -94,6 +101,8 @@
             "${modifier}+u" = "resize grow height 10 px or 10 ppt";
             "${modifier}+i" = "resize shrink height 10 px or 10 ppt";
             "${modifier}+o" = "resize grow width 10 px or 10 ppt";
+
+            "--release Print" = "exec ${pkgs.imagemagick}/bin/import ~/screenshot.png";
           }
           (mkMerge (map (num: let strNum = builtins.toString num; in {
             "${modifier}+${strNum}" = "workspace ${strNum}";

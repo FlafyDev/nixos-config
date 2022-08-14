@@ -9,8 +9,12 @@
       activeOpacity = 1.0;
       inactiveOpacity = 0.8;
 
+      # fade = true;
+      # fadeDelta = 1;
+      # fadeSteps = [ 0.01 0.01 ];
+
       backend = "glx";
-      # vSync = true;
+      vSync = true;
       settings = {
         # "unredir-if-possible" = true;
         # "dbe" = true;
@@ -26,8 +30,12 @@
         blur-background-exclude = [
           "class_g = 'firefox'"
         ];
-
-        # corner-radius = 10;
+        
+        round-borders = 0;
+        corner-radius = 10;
+        rounded-corners-exclude = [
+          "class_g = 'eww-bar'"
+        ];
       };
       opacityRules = [
         # "85:class_g = 'Code'"
