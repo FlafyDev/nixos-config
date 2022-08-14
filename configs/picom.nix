@@ -9,9 +9,12 @@
       activeOpacity = 1.0;
       inactiveOpacity = 0.8;
 
-      # fade = true;
-      # fadeDelta = 1;
-      # fadeSteps = [ 0.01 0.01 ];
+      fade = true;
+      fadeDelta = 1;
+      fadeSteps = [ 0.01 0.01 ];
+      fadeExclude = [
+        "class_g != 'Rofi'"
+      ];
 
       backend = "glx";
       vSync = true;
@@ -35,6 +38,7 @@
         corner-radius = 10;
         rounded-corners-exclude = [
           "class_g = 'eww-bar'"
+          "class_g = 'Rofi'"
         ];
       };
       opacityRules = [

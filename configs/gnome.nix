@@ -19,9 +19,6 @@
 
     environment.systemPackages = with pkgs.gnome; [
       gnome-tweaks
-      simple-scan
-      evince
-      gnome-system-monitor
     ];
   };
 

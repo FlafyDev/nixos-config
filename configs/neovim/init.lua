@@ -10,6 +10,9 @@ vim.g.mapleader = ' '
 
 map("n", "<leader>n", ":NvimTreeToggle<CR>")
 map("n", "<leader>f", ":Telescope find_files<CR>")
+map("n", "<leader>p", ":Telescope oldfiles<CR>")
+map("v", "<leader>r", ":SnipRun<CR>")
+map("n", "<leader>r", ":SnipClose<CR>")
 
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2

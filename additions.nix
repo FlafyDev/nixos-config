@@ -13,6 +13,13 @@
           float = callPackage ./modules/betterdiscord/themes/float.nix { };
           frosted-glass-green = callPackage ./modules/betterdiscord/themes/frosted-glass-green { };
         };
+        rofiThemes = {
+          sideNavy = callPackage (import ./utils/mk-rofi-theme.nix {
+            type = 3;
+            style = 9;
+            colorScheme = "navy";
+          }) { };
+        };
       }
     )
     inputs.npm-buildpackage.overlays.default

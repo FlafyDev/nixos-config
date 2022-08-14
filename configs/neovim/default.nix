@@ -18,7 +18,7 @@
       plugins = import ./plugins pkgs;
       extraConfig = ''
         lua<<EOF
-          ${builtins.readFile ./keybindings.lua}
+          ${builtins.readFile ./init.lua}
         EOF
       '';
     };

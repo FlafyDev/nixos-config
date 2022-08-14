@@ -2,6 +2,7 @@ pkgs: (map (plugin: (import plugin) pkgs) [
   ./nvim-tree-lua
   ./telescope-nvim
   ./which-key-nvim
+  ./sniprun
 ]) ++ (with pkgs.vimPlugins; [
   nvim-web-devicons
   

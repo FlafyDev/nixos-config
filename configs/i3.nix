@@ -20,6 +20,7 @@
     home.packages = with pkgs; [
       feh
       imagemagick
+      jq
     ];
 
     xsession.windowManager.i3 = {
@@ -77,7 +78,24 @@
             always = true;
             notification = false;
           }
+          {
+            command = (builtins.replaceStrings ["\n"] [" "] ''
+              i3-msg -t subscribe -m '[ "window" ]' | while read -r arg; do
+                if [ $(${pkgs.jq}/bin/jq '.container.fullscreen_mode' <<< $arg) == '1' ]; then
+                  eww close bar;
+                else
+                  eww open bar;
+                fi;
+              done 
+            '');
+            always = true;
+            notification = false;
+          }
         ];
+
+        assigns = {
+          "9" = [{ class = "^qBittorrent$"; }];
+        };
 	
         keybindings = mkMerge [{
             # "${modifier}+r" = ''mode "resize"'';

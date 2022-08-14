@@ -12,7 +12,7 @@ mkHome username {
   configs = [
     /direnv.nix
     /git.nix
-    /gnome.nix
+    # /gnome.nix
     /mpv.nix
     /nix.nix
     /printer-4500.nix
@@ -28,6 +28,9 @@ mkHome username {
     /keyboard.nix
     /betterdiscord.nix
     /eww
+    /rofi
+    /gtk.nix
+    /utility-software.nix
   ];
 
   system = { pkgs, ... }: {
@@ -60,14 +63,10 @@ mkHome username {
 
   home = ({ pkgs, lib, ... }: {
     home.packages = with pkgs; [
-      libreoffice
       syncplay
       qbittorrent
-      krita
       polymc
       element-desktop
-      gimp
-      libsForQt5.kdenlive
       libstrangle
       yt-dlp
       termusic
@@ -75,14 +74,11 @@ mkHome username {
       guake
       gparted
       firefox
-      gnome.eog
-      gnome.nautilus
-      gnome.file-roller
       chromium
       qdirstat
-      rofi
       htop
-      wmctrl
+      scrcpy
     ];
+    home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
   });
 }
