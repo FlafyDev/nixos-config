@@ -10,6 +10,8 @@
         };
         betterdiscordThemes = {
           solana = callPackage ./modules/betterdiscord/themes/solana.nix { };
+          float = callPackage ./modules/betterdiscord/themes/float.nix { };
+          frosted-glass-green = callPackage ./modules/betterdiscord/themes/frosted-glass-green { };
         };
       }
     )
