@@ -72,7 +72,12 @@
             always = true;
             notification = false;
           }
-	];
+          {
+            command = "${pkgs.eww}/bin/eww open bar";
+            always = true;
+            notification = false;
+          }
+        ];
 	
         keybindings = mkMerge [{
             # "${modifier}+r" = ''mode "resize"'';
