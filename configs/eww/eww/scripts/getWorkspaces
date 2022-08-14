@@ -31,7 +31,7 @@ workspaces() {
 }
 
 workspaces
-xprop -spy -root _NET_CURRENT_DESKTOP | while read -r; do
+i3-msg -t subscribe -m '[ "workspace" ]' | while read -r; do
   workspaces
 done
 
