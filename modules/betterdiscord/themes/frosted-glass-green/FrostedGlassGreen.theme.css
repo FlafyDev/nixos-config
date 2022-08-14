@@ -1,5 +1,5 @@
 /**
- * @name frostedGlassGreen
+ * @name FrostedGlassGreen
  * @author Gibbu#1211
  * @version 2.0.0
  * @description Display your picture of choice with adjustable blur and brightness.
@@ -31,7 +31,7 @@
   --right-brightness: 0.16;
   --popout-modal-brightness: 0.24;
   --gradient-primary: 0,150,92;
-  --gradient-secondary: 0,106,113;
+  --gradient-secondary: 0, 172, 184;
   --link-colour: #B2B970;
   --scrollbar-colour: rgba(255,255,255,0.05);
   --gradient-direction: 24deg;
