@@ -11,30 +11,24 @@ $fg: #c5c8c9;
 $fg2: #6e7071;
 $gray: #b2b2b2;
 
-$red: #df5b61;
-$altgreen: #5cb37f;
 $green: #87c7a1;
-$yellow: #ffb29b;
-$altyellow: #de8f78;
-$blue: #7ba5dd;
-$altblue: #bac8ef;
-$magenta: #bc83e3;
-$cyan: #7d91f5;
 
 $altfont: "JetBrainsMono Nerd Font";
 
 tooltip {
-  color: $bg;
-  background-color: $altblue;
+  background-color: $green;
   font-weight: bolder;
+  border-radius: 5px;
 }
 
 // BAR 
 .eww-bar {
-  padding: 0.7rem;
-  margin: 0.7rem;
-  background-color: $bg;
-  border-radius: 5px;
+  // padding: 0.7rem;
+  // margin: 0.7rem;
+  // background-color: $bg;
+  // border-radius: 5px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .lang-container {
   &:hover {
@@ -46,12 +40,12 @@ tooltip {
 
   .lang-icon {
     font-size: 3em;
-    color: white;
+    color: black;
   }
 }
 
 .time {
-  background-color: $black;
+  // background-color: $green;
 
   border-radius: 10px;
   padding: 0.55em;
@@ -66,17 +60,13 @@ tooltip {
 }
 .full {
   font-size: 0.7em;
-  padding-top: 5px;
+  padding-top: 3px;
 }
-
-.panel-icon {
-  color: $yellow;
-  font-size: 24px;
-  font-family: $altfont;
+.unselected {
+  opacity: 0.7;
 }
-
 .ws {
-  background-color: $black;
+  // background-color: $green;
   border-radius: 20px;
   padding: 0.2em 0.5em;
   font-size: 1.5em;

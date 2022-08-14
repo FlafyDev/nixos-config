@@ -5,12 +5,11 @@
 	:monitor 0 
   :stacking "bg"
   :anchor "top left"
-  :reserve (struts :distance "40px" :side "left")
 	(bar))
 
 (defwidget bar []
 	(box :class "eww-bar" :orientation "v"
-		(top)
+		;; (top)
 		(center)
 		(bottom)))
 

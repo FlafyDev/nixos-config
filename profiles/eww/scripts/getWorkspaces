@@ -19,8 +19,12 @@ workspaces() {
 
   for number in {1..9}; do
     symbol=$(getWorkspaceSymbol);
+    class="unselected";
+    if [ $symbol == "◆" ]; then
+      class="selelcted";
+    fi
 
-    buffered+="(button :class	\"test\"	\"$symbol\")"
+    buffered+="(button :class	\"$class\" \"$symbol\")"
   done
 
 	echo "(box	:class \"ws\" :orientation \"v\"	:halign \"start\"	:valign \"center\"	 :space-evenly \"false\" :spacing \"-5\" $buffered)"
