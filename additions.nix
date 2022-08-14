@@ -20,6 +20,7 @@
             colorScheme = "navy";
           }) { };
         };
+        i3-alternating-layout = callPackage ./modules/i3-alternating-layout.nix { };
       }
     )
     inputs.npm-buildpackage.overlays.default

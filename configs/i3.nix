@@ -21,6 +21,7 @@
       feh
       imagemagick
       jq
+      i3-alternating-layout
     ];
 
     xsession.windowManager.i3 = {
@@ -70,6 +71,11 @@
         startup = [
           {
             command = "${pkgs.feh}/bin/feh --bg-scale ${../assets/background.png}";
+            always = true;
+            notification = false;
+          }
+          {
+            command = "${pkgs.i3-alternating-layout}/bin/i3-alternating-layout";
             always = true;
             notification = false;
           }
