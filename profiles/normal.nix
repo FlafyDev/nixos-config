@@ -27,6 +27,7 @@ mkHome username {
     /picom.nix
     /keyboard.nix
     /betterdiscord.nix
+    /eww
   ];
 
   system = { pkgs, ... }: {
@@ -83,10 +84,5 @@ mkHome username {
       htop
       wmctrl
     ];
-
-    programs.eww = {
-      enable = true;
-      configDir = ./eww;
-    };
   });
 }
