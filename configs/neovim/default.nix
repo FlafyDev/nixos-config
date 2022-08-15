@@ -7,7 +7,6 @@
 
   home = { pkgs, ... }: {
     home.packages = with pkgs; [
-      # telescope-nvim
       ripgrep
       fd
     ];
