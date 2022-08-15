@@ -1,17 +1,27 @@
 pkgs: (map (plugin: (import plugin) pkgs) [
-  ./nvim-tree-lua
   ./telescope-nvim
-  ./which-key-nvim
-  ./sniprun
+  ./lualine-nvim
 ]) ++ (with pkgs.vimPlugins; [
+  vim-nix
   nvim-web-devicons
-  
-  # nvim-tree-lua
-  # flutter-tools-nvim
-  # nvim-web-devicons
-  # copilot-vim
   nvim-treesitter
+  nvim-base16  
+  {
+    plugin = nvim-tree-lua;
+    config = "lua require('nvim-tree').setup()";
+  } 
+  {
+    plugin = sniprun;
+    config = "lua require('sniprun').setup()";
+  } 
+  {
+    plugin = which-key-nvim;
+    config = "lua require('which-key').setup({})";
+  } 
+
+
+  # flutter-tools-nvim
+  # copilot-vim
   # nvim-autopairs
   # luasnip
-  # which-key-nvim
 ])

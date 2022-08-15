@@ -1,5 +1,6 @@
 pkgs: {
   type = "lua";
-  plugin = pkgs.vimPlugins.which-key-nvim;
+  plugin = pkgs.vimPlugins.lualine-nvim;
   config = builtins.readFile ./config.lua;
 }
+

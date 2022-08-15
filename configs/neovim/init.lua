@@ -17,3 +17,11 @@ map("n", "<leader>r", ":SnipClose<CR>")
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
+vim.opt.number = true
+vim.opt.relativenumber = true;
+
+vim.cmd('highlight LineNr ctermfg=grey');
+vim.cmd('highlight VertSplit cterm=NONE');
+vim.cmd('highlight StatusLine cterm=NONE');
+vim.cmd('set fillchars+=vert:\\ " ');
+
