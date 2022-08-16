@@ -11,15 +11,22 @@
       fd
     ];
 
+    imports = [
+      ./plugins
+    ];
+
     programs.neovim = {
       enable = true;
 
-      plugins = import ./plugins pkgs;
       extraConfig = ''
         lua<<EOF
           ${builtins.readFile ./init.lua}
         EOF
       '';
+
+      extraPackages = with pkgs; [
+        rnix-lsp
+      ];
     };
   };
   

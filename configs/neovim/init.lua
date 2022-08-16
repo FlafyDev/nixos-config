@@ -9,8 +9,12 @@ end
 vim.g.mapleader = ' '
 
 map("n", "<leader>n", ":NvimTreeToggle<CR>")
+
 map("n", "<leader>f", ":Telescope find_files<CR>")
 map("n", "<leader>p", ":Telescope oldfiles<CR>")
+map("n", "<leader>s", ":Telescope live_grep<CR>")
+map("n", "<leader>N", ":Telescope file_browser<CR>")
+
 map("v", "<leader>r", ":SnipRun<CR>")
 map("n", "<leader>r", ":SnipClose<CR>")
 

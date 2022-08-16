@@ -1,8 +1,8 @@
 pkgs: with pkgs.vimPlugins; [
-  telescope-file-browser-nvim
+  cmp-nvim-lsp
   {
     type = "lua";
-    plugin = telescope-nvim;
+    plugin = nvim-lspconfig;
     config = builtins.readFile ./config.lua;
   }
 ]
