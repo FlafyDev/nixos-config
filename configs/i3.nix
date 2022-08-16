@@ -35,7 +35,7 @@
       # window.border = 0;
 
       config = rec {
-        modifier = "Mod1";
+        modifier = "Mod4";
 
         # modes = {
         #   resize = {
