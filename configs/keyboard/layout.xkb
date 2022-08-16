@@ -1,0 +1,14 @@
+xkb_keymap {
+	xkb_keycodes  {
+    include "evdev+aliases(qwerty)"	
+  };
+	xkb_types     { include "complete"	};
+	xkb_compat    { include "complete"	};
+	xkb_symbols   {
+    include "pc+us+il:2+inet(evdev)+group(rwin_toggle)"	
+    key.type = "ONE_LEVEL";
+    key <CAPS> { [ Escape ] };
+    key <LALT> { [ Shift_L ] };
+  };
+	xkb_geometry  { include "pc(pc104)"	};
+};

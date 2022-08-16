@@ -25,7 +25,7 @@ mkHome username {
     /i3.nix
     /alacritty.nix
     /picom.nix
-    /keyboard.nix
+    /keyboard
     /betterdiscord.nix
     /eww
     /rofi
