@@ -6,7 +6,7 @@ let
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
     export __GLX_VENDOR_LIBRARY_NAME=nvidia
     export __VK_LAYER_NV_optimus=NVIDIA_only
-    exec -a "$0" "$@"
+    exec "$@"
   '';
 in 
 {
@@ -60,7 +60,6 @@ in
   hardware = {
     bluetooth.enable = true;
     opentabletdriver.enable = true;
-    opengl.enable = true;
     pulseaudio.enable = false;
     
     nvidia = {
@@ -70,7 +69,23 @@ in
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
       };
-      # package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
+    };
+
+    opengl = {
+      enable = true;
+      # driSupport = true;
+      # driSupport32Bit = true;
+      # extraPackages = with pkgs; [
+      #   vaapiVdpau
+      #   libvdpau-va-gl
+      #   nvidia-vaapi-driver
+      # ];
+      # extraPackages32 = with pkgs.pkgsi686Linux; [
+      #   vaapiVdpau
+      #   libvdpau-va-gl
+      #   nvidia-vaapi-driver
+      # ];
     };
   };
 
@@ -79,6 +94,14 @@ in
     echo enabled > /sys/bus/usb/devices/usb1/power/wakeup
     echo enabled > /sys/bus/usb/devices/usb2/power/wakeup
   '';
+  
+  # specialisation = {
+  #   external-display.configuration = {
+  #     system.nixos.tags = [ "external-display" ];
+  #     hardware.nvidia.prime.offload.enable = lib.mkForce false;
+  #     hardware.nvidia.powerManagement.enable = lib.mkForce false;
+  #   };
+  # };
 
   environment.systemPackages = [
     nvidia-offload

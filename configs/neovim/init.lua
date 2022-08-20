@@ -28,5 +28,6 @@ vim.cmd('highlight LineNr ctermfg=grey');
 vim.cmd('highlight VertSplit cterm=NONE');
 vim.cmd('highlight StatusLine cterm=NONE');
 vim.cmd('highlight StatusLineNC cterm=NONE');
+vim.cmd('highlight SignColumn ctermbg=NONE');
 vim.cmd('set fillchars+=vert:\\ " ');
 

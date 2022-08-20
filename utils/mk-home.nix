@@ -1,4 +1,4 @@
-username: profile: { home-manager, nixpkgs, ... }:
+username: profile: { home-manager, nixpkgs, ... }@inputs:
 with nixpkgs.lib;
 let
   configs = (map (cfg: import (../configs + cfg)) profile.configs);
@@ -20,7 +20,7 @@ in (flatten [
     home-manager.users.${username} = { ... }: {
       imports = (flatten [
         ({ ... }: {
-          imports = (import ../additions.nix).home-modules;
+          imports = (import ../additions.nix).homeModules inputs;
         })
         (if (profile ? home) then profile.home else [])
         homeModules

@@ -16,21 +16,23 @@ mkHome username {
     /mpv.nix
     /nix.nix
     /printer-4500.nix
-    /vscode.nix
-    /wine.nix
+    # /vscode.nix
+    # /wine.nix
     /zsh.nix
-    /steam.nix
-    /mouse-g502.nix
+    # /steam.nix
+    # /mouse-g502-xserver.nix
     /neovim
-    /i3.nix
-    /alacritty.nix
-    /picom.nix
-    /keyboard
+    # /i3.nix
+    # /alacritty.nix
+    # /picom.nix
+    # /keyboard/xserver.nix
     /betterdiscord.nix
     /eww
     /rofi
     /gtk.nix
     /utility-software.nix
+    /hyprland.nix
+    /foot.nix
   ];
 
   system = { pkgs, ... }: {
@@ -41,12 +43,12 @@ mkHome username {
       kdeconnect.enable = true;
     };
 
-    services.xserver.libinput = {
-      enable = true;
-      touchpad = {
-        tapping = true;
-      };
-    };
+    # services.xserver.libinput = {
+    #   enable = true;
+    #   touchpad = {
+    #     tapping = true;
+    #   };
+    # };
 
     environment.systemPackages = with pkgs; [
       nano
@@ -59,9 +61,13 @@ mkHome username {
       xclip
       service-wrapper
     ];
+
+    fonts.fonts = with pkgs; [
+      (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    ];
   };
 
-  home = ({ pkgs, lib, ... }: {
+  home = ({ pkgs, lib, inputs, ... }: {
     home.packages = with pkgs; [
       syncplay
       qbittorrent
@@ -78,7 +84,11 @@ mkHome username {
       qdirstat
       htop
       scrcpy
+      pavucontrol
+      kitty
+      mpvpaper
     ];
+
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
   });
 }

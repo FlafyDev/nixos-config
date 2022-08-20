@@ -1,5 +1,6 @@
-{
+let 
   overlays = { ... }@inputs: [
+    inputs.nur.overlay 
     (final: prev:
       let 
         inherit (prev) callPackage;
@@ -21,12 +22,21 @@
           }) { };
         };
         i3-alternating-layout = callPackage ./modules/i3-alternating-layout.nix { };
+        mpvpaper = callPackage ./modules/mpvpaper.nix { };
       }
     )
     inputs.npm-buildpackage.overlays.default
   ];
+in {
+  modules = { ... }@inputs: [
+    inputs.hyprland.nixosModules.default
+    ({ ... }: {
+      nixpkgs.overlays = overlays inputs; 
+    })
+  ];
 
-  home-modules = [
+  homeModules = { ... }@inputs: [
+    inputs.hyprland.homeManagerModules.default
     ./modules/mpv/hm-mpv-fonts.nix
     ./modules/betterdiscord/hm.nix
   ];

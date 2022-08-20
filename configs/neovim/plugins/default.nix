@@ -1,14 +1,17 @@
-{ pkgs, lib, ... }: {
+{ pkgs, lib, config, ... }: {
   programs.neovim.plugins = (lib.lists.flatten (map (plugin: (import plugin) pkgs) [
     ./telescope-nvim
     ./lualine-nvim
     ./lspconfig
     ./cmp
-  ])) ++ (with pkgs.vimPlugins; [
+  ])) ++ (with pkgs.vimPlugins; let
+    inherit (pkgs.nur.repos.m15a) vimExtraPlugins; 
+  in [
     vim-nix
     nvim-web-devicons
     nvim-base16  
     markdown-preview-nvim
+    vim-visual-multi
     {
       type = "lua";
       plugin = nvim-treesitter;
@@ -36,6 +39,8 @@
       plugin = which-key-nvim;
       config = "lua require('which-key').setup({})"; 
     } 
+    vim-hexokinase
+    vim-wayland-clipboard
     # {
     #   type = "lua";
     #   plugin = Shade-nvim;
