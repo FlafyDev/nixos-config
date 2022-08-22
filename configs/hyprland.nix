@@ -35,7 +35,7 @@
         workspace=DP-1,1
 
         input {
-            kb_file=~/.dotfiles/system/configs/keyboard/layout.xkb
+            kb_file=${./keyboard/layout.xkb}
 
             follow_mouse=1
             force_no_accel=1
@@ -101,16 +101,16 @@
         bind=SUPER,9,workspace,9
         bind=SUPER,0,workspace,10
 
-        bind=SUPERSHIFT,exclam,movetoworkspace,1
-        bind=SUPERSHIFT,at,movetoworkspace,2
-        bind=SUPERSHIFT,numbersign,movetoworkspace,3
-        bind=SUPERSHIFT,dollar,movetoworkspace,4
-        bind=SUPERSHIFT,percent,movetoworkspace,5
-        bind=SUPERSHIFT,asciicircum,movetoworkspace,6
-        bind=SUPERSHIFT,ampersand,movetoworkspace,7
-        bind=SUPERSHIFT,asterisk,movetoworkspace,8
-        bind=SUPERSHIFT,parenleft,movetoworkspace,9
-        bind=SUPERSHIFT,parenright,movetoworkspace,10
+        bind=SUPERSHIFT,1,movetoworkspace,1
+        bind=SUPERSHIFT,2,movetoworkspace,2
+        bind=SUPERSHIFT,3,movetoworkspace,3
+        bind=SUPERSHIFT,4,movetoworkspace,4
+        bind=SUPERSHIFT,5,movetoworkspace,5
+        bind=SUPERSHIFT,6,movetoworkspace,6
+        bind=SUPERSHIFT,7,movetoworkspace,7
+        bind=SUPERSHIFT,8,movetoworkspace,8
+        bind=SUPERSHIFT,9,movetoworkspace,9
+        bind=SUPERSHIFT,0,movetoworkspace,10
 
         bind=SUPER,mouse_down,workspace,e+1
         bind=SUPER,mouse_up,workspace,e-1
