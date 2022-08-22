@@ -1,32 +1,34 @@
-username: profile: { home-manager, nixpkgs, ... }@inputs:
+username: profile: system: { home-manager, nixpkgs, ... }@inputs:
 with nixpkgs.lib;
 let
-  configs = (map (cfg: import (../configs + cfg)) profile.configs);
+  additions = import ../additions.nix;
+  configs = (map (cfg: import (../configs + cfg)) profile.configs) ++ [ profile system ];
   systemModules = (map (cfg: cfg.system) (filter (cfg: cfg ? system) configs));
   homeModules = (map (cfg: cfg.home) (filter (cfg: cfg ? home) configs));
-in (flatten [
-  (if (profile ? system) then profile.system else [])
-  systemModules
-  {
-    users.users.${username} = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "adbusers" "scanner" "lp" ];
-    };
-  }
-  home-manager.nixosModules.home-manager
-  {
-    home-manager.useGlobalPkgs = true;
-    home-manager.useUserPackages = true;
-    home-manager.users.${username} = { ... }: {
-      imports = (flatten [
-        ({ ... }: {
-          imports = (import ../additions.nix).homeModules inputs;
-        })
-        (if (profile ? home) then profile.home else [])
-        homeModules
-      ]);
+in {
+  system = system.systemType;
+  modules = (flatten [
+    systemModules
+    {
+      users.users.${username} = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" "networkmanager" "adbusers" "scanner" "lp" ];
+      };
+    }
+    (additions.modules inputs)
+    home-manager.nixosModules.home-manager
+    {
+      home-manager.useGlobalPkgs = true;
+      home-manager.useUserPackages = true;
+      home-manager.users.${username} = { ... }: {
+        imports = (flatten [
+          ({ ... }: {
+            imports = additions.homeModules inputs;
+          })
+          homeModules
+        ]);
 
-      home.stateVersion = "21.11";
-    };
-  }
-])
+      };
+    }
+  ]);
+}

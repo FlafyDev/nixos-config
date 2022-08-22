@@ -17,6 +17,7 @@ map("n", "<leader>N", ":Telescope file_browser<CR>")
 
 map("v", "<leader>r", ":SnipRun<CR>")
 map("n", "<leader>r", ":SnipClose<CR>")
+map("n", "<esc>", ":w!<CR>")
 
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2

@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-nixos-rebuild switch --flake $(dirname $(realpath "$0"))/../#laptop
-

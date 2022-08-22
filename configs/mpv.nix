@@ -7,7 +7,8 @@
       config = {
         vo = "gpu";
         profile = "gpu-hq";
-        hwdec = "no";
+        hwdec = "yes";
+        gpu-context = "wayland";
         force-window = true;
         ytdl-format = "bestvideo+bestaudio";
         volume-max = 200;

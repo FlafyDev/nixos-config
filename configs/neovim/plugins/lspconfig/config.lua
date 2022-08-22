@@ -51,23 +51,23 @@ require('lspconfig')['rnix'].setup {
   capabilities = capabilities,
 }
 
-require('lspconfig')['ccls'].setup {
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-}
-
--- require('lspconfig')['clangd'].setup {
+-- require('lspconfig')['ccls'].setup {
 --   on_attach = on_attach,
 --   flags = lsp_flags,
 --   capabilities = capabilities,
 -- }
 
--- require('lspconfig')['pyright'].setup{
---     on_attach = on_attach,
---     flags = lsp_flags,
--- }
---
+require('lspconfig')['clangd'].setup {
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities,
+}
+
+require('lspconfig')['pyright'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
+
 -- require('lspconfig')['rust_analyzer'].setup{
 --     on_attach = on_attach,
 --     flags = lsp_flags,

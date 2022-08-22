@@ -17,9 +17,9 @@ mkHome username {
     /nix.nix
     /printer-4500.nix
     # /vscode.nix
-    # /wine.nix
+    /wine.nix
     /zsh.nix
-    # /steam.nix
+    /steam.nix
     # /mouse-g502-xserver.nix
     /neovim
     # /i3.nix
@@ -27,12 +27,15 @@ mkHome username {
     # /picom.nix
     # /keyboard/xserver.nix
     /betterdiscord.nix
-    /eww
+    # /eww
+    /eww2
     /rofi
     /gtk.nix
     /utility-software.nix
     /hyprland.nix
     /foot.nix
+    /utility-scripts.nix
+    /chromium.nix
   ];
 
   system = { pkgs, ... }: {
@@ -80,7 +83,6 @@ mkHome username {
       guake
       gparted
       firefox
-      chromium
       qdirstat
       htop
       scrcpy

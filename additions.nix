@@ -3,7 +3,7 @@ let
     inputs.nur.overlay 
     (final: prev:
       let 
-        inherit (prev) callPackage;
+        inherit (prev) callPackage fetchFromGitHub;
       in {
         betterdiscord-asar = callPackage ./modules/betterdiscord/asar.nix { };
         mpvScripts = prev.mpvScripts // {
@@ -23,6 +23,16 @@ let
         };
         i3-alternating-layout = callPackage ./modules/i3-alternating-layout.nix { };
         mpvpaper = callPackage ./modules/mpvpaper.nix { };
+        mpv-unwrapped-stable = prev.mpv-unwrapped;
+        mpv-unwrapped = prev.mpv-unwrapped.overrideAttrs (prev: {
+          version = "2022-08-21";
+          src = fetchFromGitHub {
+            owner = "mpv-player";
+            repo = "mpv";
+            rev = "37aea112c15958052bcc6d0582593edf3bfead8f";
+            sha256 = "tlti/usreOBYWgTMDNsdKOL4Xa3TPeqcx9hUkLdYmN0=";
+          };
+        });
       }
     )
     inputs.npm-buildpackage.overlays.default
@@ -39,5 +49,6 @@ in {
     inputs.hyprland.homeManagerModules.default
     ./modules/mpv/hm-mpv-fonts.nix
     ./modules/betterdiscord/hm.nix
+    ./modules/hm-custom-eww.nix
   ];
 }

@@ -21,12 +21,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: let
-    modules = (import ./additions.nix).modules inputs;
-  in {
+  outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (
-        import ./systems/laptop ((import ./profiles/normal.nix inputs) ++ modules)
+        (import ./profiles/normal.nix) (import ./systems/laptop) inputs
       );
     };
   };

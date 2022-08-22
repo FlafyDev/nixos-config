@@ -19,6 +19,10 @@
       '';
 
       extraPackages = with pkgs; [
+        nodePackages.pyright
+        clang
+        nodejs-18_x
+        tree-sitter
         rnix-lsp
         clang-tools
         ccls

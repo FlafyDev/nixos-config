@@ -12,6 +12,9 @@
     nvim-base16  
     markdown-preview-nvim
     vim-visual-multi
+    vim-parinfer
+    vim-hexokinase
+    vim-wayland-clipboard
     {
       type = "lua";
       plugin = nvim-treesitter;
@@ -39,8 +42,6 @@
       plugin = which-key-nvim;
       config = "lua require('which-key').setup({})"; 
     } 
-    vim-hexokinase
-    vim-wayland-clipboard
     # {
     #   type = "lua";
     #   plugin = Shade-nvim;

@@ -31,13 +31,13 @@
       xwayland = true;
       extraConfig = ''
         monitor=,preferred,auto,1
-        # monitor=eDP-1,disable
+        monitor=eDP-1,disable
         workspace=DP-1,1
 
         input {
             kb_file=~/.dotfiles/system/configs/keyboard/layout.xkb
 
-            follow_mouse=0
+            follow_mouse=1
             force_no_accel=1
             repeat_delay=200
 
@@ -70,7 +70,7 @@
             animation=windows,1,7,default,slide
             animation=border,1,10,default
             animation=fade,1,10,default
-            animation=workspaces,1,6,default
+            animation=workspaces,1,6,default,slidevert
         }
 
         dwindle {
@@ -82,7 +82,7 @@
         bind=SUPER,M,exit,
         bind=SUPER,E,exec,nautilus --new-window
         bind=SUPER,V,togglefloating,
-        bind=SUPER,R,exec,rofi --show drun -o DP-3
+        bind=SUPER,R,exec,${pkgs.wofi}/bin/wofi --show drun -o DP-3
         bind=SUPER,P,pseudo,
 
         bind=SUPER,L,movefocus,r

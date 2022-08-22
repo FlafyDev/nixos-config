@@ -15,7 +15,7 @@
         };
 
         colors = {
-          alpha=0.7;
+          alpha=0.5;
 
           regular0 = "29414f";
           regular1 = "0xec5f67";
