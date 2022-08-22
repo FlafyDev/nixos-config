@@ -1,9 +1,3 @@
-# TODO
-# make 2 different profiles for gnome and i3vm.
-# done - get eww bar to work and think of a way to do the scripts.
-# get transparency and blur for terminal (please picom work)
-# set background
-
 let
   mkHome = import ../utils/mk-home.nix;
   username = "flafydev";
@@ -27,8 +21,7 @@ mkHome username {
     # /picom.nix
     # /keyboard/xserver.nix
     /betterdiscord.nix
-    # /eww
-    /eww2
+    /eww
     /rofi
     /gtk.nix
     /utility-software.nix

@@ -2,7 +2,7 @@ import subprocess;
 from enum import Enum
 import json
 import socket
-from pprint import pprint
+import os
 
 WORKSPACES = 10
 
@@ -58,7 +58,7 @@ def printWidget():
 printWidget()
 
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-sock.connect("/tmp/hypr/_1661156521/.socket2.sock")
+sock.connect(f"/tmp/hypr/{os.environ.get('HYPRLAND_INSTANCE_SIGNATURE')}/.socket2.sock")
 
 while True:
     rawEvents = sock.recv(1024)
