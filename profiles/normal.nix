@@ -20,7 +20,7 @@ mkHome username {
     # /alacritty.nix
     # /picom.nix
     # /keyboard/xserver.nix
-    /betterdiscord.nix
+    # /betterdiscord.nix
     /eww
     /rofi
     /gtk.nix
@@ -82,6 +82,7 @@ mkHome username {
       pavucontrol
       kitty
       mpvpaper
+      webcord
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";

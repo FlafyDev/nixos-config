@@ -15,6 +15,7 @@
     vim-parinfer
     vim-hexokinase
     vim-wayland-clipboard
+    yuck-vim
     {
       type = "lua";
       plugin = nvim-treesitter;

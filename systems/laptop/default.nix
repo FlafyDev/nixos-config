@@ -129,13 +129,12 @@
         patchDesktop pkgs.chromium "chromium-browser"
         "^Exec=chromium" "Exec=nvidia-offload chromium -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder"
       )
-
       (
         patchDesktop pkgs.firefox "firefox"
         "^Exec=firefox" "Exec=env MOZ_ENABLE_WAYLAND=1 nvidia-offload firefox"
       )
-
       (patchDesktop pkgs.mpv-unwrapped "mpv" "^Exec=mpv" "Exec=nvidia-offload mpv")
+      (patchDesktop pkgs.webcord "webcord" "^Exec=webcord" "Exec=nvidia-offload webcord -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder")
     ];
 
     home.stateVersion = "21.11";

@@ -1,4 +1,6 @@
-import subprocess;
+#!/usr/bin/env python3
+
+import subprocess
 from enum import Enum
 import json
 import socket

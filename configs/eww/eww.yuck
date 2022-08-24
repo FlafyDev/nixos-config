@@ -1,0 +1,44 @@
+(defpoll hour :interval "1s" "date '+%H'")
+(defpoll min :interval "1s" "date '+%M'")
+(defpoll monthDay :interval "1s" "date '+%d.%m'")
+(defpoll fullDate :interval "1s" "date '+%A %B %T'")
+
+(deflisten workspace "getWorkspaces")
+
+;; BAR
+(defwindow bar
+  :geometry (geometry :height "100%" :anchor "left center")
+  :monitor 0 
+  :exclusive true
+  :focusable false
+  :stacking "fg"
+  (bar))
+
+(defwidget bar []
+  (box :class "eww-bar" :orientation "v"
+    (top)
+    (center)
+    (bottom)))
+
+(defwidget top []
+  (box :orientation "v" :halign "center" :valign "center" :space-evenly "false"
+    (progress :class "res_cpu" :value 10 :thickness 5)))
+
+(defwidget center []
+  (box :orientation "v" :halign "center" :valign "center" :space-evenly "false"
+    (workspaces)))
+
+(defwidget bottom []
+  (box :orientation "v" :halign "center" :valign "end" :space-evenly "false" :spacing "7"
+    (time)))
+
+;; BAR WIDGETS
+(defwidget workspaces []
+  (literal :content workspace))
+
+
+(defwidget time []
+  (box :class "time" :tooltip "It's ''${fullDate}" :orientation "v" :halign "center" :space-evenly "false"
+    (button :class "hour" hour)
+    (button :class "min" min)
+     (button :class "month" monthDay)))

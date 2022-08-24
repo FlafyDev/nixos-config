@@ -26,6 +26,14 @@
   };
 
   home = { pkgs, ... }: {
+    home.packages = [ pkgs.hyprpaper ];
+    xdg.configFile."hypr/hyprpaper.conf".text = let
+      background = ../assets/background2.png;
+    in ''
+      preload = ${background}
+      wallpaper = HDMI-A-1,${background}
+    '';
+
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland = true;
@@ -54,29 +62,35 @@
             gaps_out=20
             border_size=2
             col.active_border=0x6611ee8e
-            col.inactive_border=0x66333333
+            col.inactive_border=0x00333333
         }
 
         decoration {
             rounding=10
             blur=1
-            blur_size=5
-            blur_passes=3
+            blur_size=2
+            blur_passes=1
             blur_new_optimizations=1
         }
+
+        bezier=overshot,0.05,0.9,0.1,1.1
+        bezier=mycurve,0.4, 0, 0.6, 1
 
         animations {
             enabled=1
             animation=windows,1,7,default,slide
             animation=border,1,10,default
-            animation=fade,1,10,default
-            animation=workspaces,1,6,default,slidevert
+            #animation=fade,1,10,default
+            animation=workspaces,1,4,default,slidevert
         }
 
         dwindle {
             pseudotile=0 # enable pseudotiling on dwindle
         }
 
+        exec-once=${pkgs.hyprpaper}/bin/hyprpaper 
+ 
+        bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=SUPER,F,exec,${pkgs.foot}/bin/foot
         bind=SUPER,Q,killactive,
         bind=SUPER,M,exit,
