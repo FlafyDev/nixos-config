@@ -2,7 +2,7 @@
 (defpoll min :interval "1s" "date '+%M'")
 (defpoll monthDay :interval "1s" "date '+%d.%m'")
 (defpoll fullDate :interval "1s" "date '+%A %B %T'")
-
+(defpoll batteryPercentage :interval "1s" :initial 100 'getBatteryPercentage')
 (deflisten workspace "getWorkspaces")
 
 ;; BAR
@@ -22,7 +22,9 @@
 
 (defwidget top []
   (box :orientation "v" :halign "center" :valign "center" :space-evenly "false"
-    (progress :class "res_cpu" :value 10 :thickness 5)))
+    (box :halign "center" :valign "center"
+      (box :class "battery-top" :width 5 :height 2))
+    (box :class "battery progress-container" (progress :value batteryPercentage :flipped true :orientation "v"))))
 
 (defwidget center []
   (box :orientation "v" :halign "center" :valign "center" :space-evenly "false"
@@ -42,3 +44,4 @@
     (button :class "hour" hour)
     (button :class "min" min)
      (button :class "month" monthDay)))
+

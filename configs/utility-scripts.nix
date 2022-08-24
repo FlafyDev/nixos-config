@@ -8,6 +8,11 @@
         export __VK_LAYER_NV_optimus=NVIDIA_only
         exec "$@"
       '';
+      makeConfigEditable = pkgs.writeShellScriptBin "makeConfigEditable" ''
+        newName="$1-$(date +%s)"
+        mv ./$1 ./''${newName}
+        cat ''${newName} > ./$1
+      '';
       updateSystem = pkgs.writeShellScriptBin "updateSystem" ''
         case $2 in
           fast)
@@ -20,6 +25,7 @@
       '';
     in [
       nvidia-offload
+      makeConfigEditable
       updateSystem
     ];
   };

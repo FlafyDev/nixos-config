@@ -16,16 +16,13 @@
       (mkPyScript {
         name = "getWorkspaces";
       })
+      (mkPyScript {
+        name = "getBatteryPercentage";
+        pythonLibraries = ps: with ps; [
+          psutil
+        ];
+      })
     ];
-
-    yuck = callPackage ({ stdenv, lib, fetchFromGitHub }:
-      stdenv.mkDerivation rec {
-        name = "eww.yuck";
-        unpackPhase = "true";
-        installPhase = ''
-          cp ${./eww.yuck} $out
-        '';
-      }) { };
   in {
     programs.customEww = {
       enable = true;
@@ -34,7 +31,7 @@
         exec ${eww-wayland}/bin/eww "$@"
       '';
       scss = ./eww.scss;
-      yuck = yuck;
+      yuck = ./eww.yuck;
     };
   };
 }
