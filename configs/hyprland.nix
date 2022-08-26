@@ -37,10 +37,17 @@
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland = true;
-      extraConfig = ''
+      extraConfig = let 
+        playerctl = "${pkgs.playerctl}/bin/playerctl";
+        pulsemixer = "${pkgs.pulsemixer}/bin/pulsemixer";
+      in ''
         monitor=,preferred,auto,1
         monitor=eDP-1,disable
         workspace=DP-1,1
+
+        misc {
+          no_vfr = false;
+        }
 
         input {
             kb_file=${./keyboard/layout.xkb}
@@ -86,6 +93,8 @@
 
         dwindle {
             pseudotile=0 # enable pseudotiling on dwindle
+            force_split=2
+            no_gaps_when_only=1
         }
 
         exec-once=${pkgs.hyprpaper}/bin/hyprpaper 
@@ -98,6 +107,12 @@
         bind=SUPER,V,togglefloating,
         bind=SUPER,R,exec,${pkgs.wofi}/bin/wofi --show drun -o DP-3
         bind=SUPER,P,pseudo,
+        bind=,XF86AudioPlay,exec,${playerctl} play-pause
+        bind=,XF86AudioPrev,exec,${playerctl} previous
+        bind=,XF86AudioNext,exec,${playerctl} next
+        bind=,XF86AudioRaiseVolume,exec,${pulsemixer} --change-volume +2
+        bind=,XF86AudioLowerVolume,exec,${pulsemixer} --change-volume -2
+        bind=,XF86AudioMute,exec,${pulsemixer} --toggle-mute
 
         bind=SUPER,L,movefocus,r
         bind=SUPER,H,movefocus,l

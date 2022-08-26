@@ -65,7 +65,9 @@ sock.connect(f"/tmp/hypr/{os.environ.get('HYPRLAND_INSTANCE_SIGNATURE')}/.socket
 while True:
     rawEvents = sock.recv(1024)
     for rawEvent in rawEvents.splitlines():
-        onEvent(rawEvent.decode("utf-8"))
+        rawEventStr = rawEvent.decode("utf-8");
+        if (">>" in rawEventStr):
+            onEvent(rawEventStr)
 
     printWidget()
 
