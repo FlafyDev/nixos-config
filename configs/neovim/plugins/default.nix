@@ -13,9 +13,13 @@
     markdown-preview-nvim
     vim-visual-multi
     vim-parinfer
-    vim-hexokinase
+    # vim-hexokinase
     vim-wayland-clipboard
     yuck-vim
+    vim-surround
+    tokyonight-nvim
+    vimExtraPlugins.nvim-transparent
+    flutter-tools-nvim
     {
       type = "lua";
       plugin = nvim-treesitter;

@@ -56,6 +56,12 @@ require('lspconfig')['rnix'].setup {
 --   flags = lsp_flags,
 --   capabilities = capabilities,
 -- }
+--
+require('lspconfig')['csharp_ls'].setup {
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities,
+}
 
 require('lspconfig')['clangd'].setup {
   on_attach = on_attach,
@@ -63,10 +69,32 @@ require('lspconfig')['clangd'].setup {
   capabilities = capabilities,
 }
 
-require('lspconfig')['pyright'].setup{
+require('flutter-tools').setup {
+  lsp = {
+    color = { -- show the derived colours for dart variables
+      enabled = true, -- whether or not to highlight color variables at all, only supported on flutter >= 2.10
+      background = true, -- highlight the background
+      foreground = true, -- highlight the foreground
+      virtual_text = true, -- show the highlight using virtual text
+      virtual_text_str = "■", -- the virtual text character to highlight
+    },
     on_attach = on_attach,
     flags = lsp_flags,
+    capabilities = capabilities,
+  },
 }
+
+require('lspconfig')['pyright'].setup{
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities,
+}
+
+-- require('lspconfig')['dartls'].setup{
+--   on_attach = on_attach,
+--   flags = lsp_flags,
+--   capabilities = capabilities,
+-- }
 
 -- require('lspconfig')['rust_analyzer'].setup{
 --     on_attach = on_attach,

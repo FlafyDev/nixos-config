@@ -48,6 +48,17 @@ let
           ];
         };
         vimPlugins = prev.vimPlugins // {
+        flutter-tools-nvim = prev.vimUtils.buildVimPluginFrom2Nix {
+          pname = "flutter-tools.nvim";
+          version = "2022-08-26";
+          src = fetchFromGitHub {
+            owner = "FlafyDev";
+            repo = "flutter-tools.nvim";
+            rev = "1ea7eca2c88fd56bc64eaa71676b9290932ef2d4";
+            sha256 = "d/rbkNLVe42dSdb68AizGbZb7mfPscp6V2NI6yEqLe8=";
+          };
+          meta.homepage = "https://github.com/FlafyDev/flutter-tools.nvim/";
+        };
           yuck-vim = prev.vimUtils.buildVimPluginFrom2Nix {
             pname = "yuck-vim";
             version = "2022-06-20";

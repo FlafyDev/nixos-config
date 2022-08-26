@@ -3,6 +3,7 @@
 import sys
 import subprocess
 from typing import Iterable
+import time
 
 def execute(cmd):
     popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
@@ -42,6 +43,11 @@ def volumeChangeWidget():
     
 match sys.argv[1]:
     case "listen":
-        volumeChangeWidget()
+        while True:
+            try:
+                volumeChangeWidget()
+            except:
+                pass
+            time.sleep(2)
     case "add":
         addVolume(int(sys.argv[2]))

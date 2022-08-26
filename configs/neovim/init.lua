@@ -9,6 +9,7 @@ end
 vim.g.mapleader = ' '
 
 map("n", "<leader>n", ":NvimTreeToggle<CR>")
+map("n", "<leader>dn", ":FlutterOutlineToggle<CR>")
 
 map("n", "<leader>f", ":Telescope find_files<CR>")
 map("n", "<leader>p", ":Telescope oldfiles<CR>")
@@ -19,16 +20,22 @@ map("v", "<leader>r", ":SnipRun<CR>")
 map("n", "<leader>r", ":SnipClose<CR>")
 map("n", "<esc>", ":w!<CR>")
 
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
-vim.opt.number = true
+vim.opt.tabstop = 2;
+vim.opt.shiftwidth = 2;
+vim.opt.expandtab = true;
+vim.opt.number = true;
 vim.opt.relativenumber = true;
+vim.opt.laststatus = 3;
 
 vim.cmd('highlight LineNr ctermfg=grey');
 vim.cmd('highlight VertSplit cterm=NONE');
 vim.cmd('highlight StatusLine cterm=NONE');
 vim.cmd('highlight StatusLineNC cterm=NONE');
 vim.cmd('highlight SignColumn ctermbg=NONE');
+vim.cmd('highlight NvimTreeNormal guibg=NONE guifg=NONE');
+vim.cmd('highlight NvimTreeNormalNC guibg=NONE guifg=NONE');
 vim.cmd('set fillchars+=vert:\\ " ');
+vim.cmd('colorscheme tokyonight');
+vim.cmd(':set termguicolors');
+vim.g.transparent_enabled = true;
 
