@@ -15,11 +15,8 @@
         };
 
         colors = {
-<<<<<<< HEAD
           alpha=0.6;
-=======
           alpha=0.7;
->>>>>>> 8ce246f97d97e4577a3bec1180598e3612accc4a
 
           regular0 = "29414f";
           regular1 = "0xec5f67";

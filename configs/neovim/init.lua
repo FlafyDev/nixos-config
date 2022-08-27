@@ -27,7 +27,6 @@ vim.opt.number = true;
 vim.opt.relativenumber = true;
 vim.opt.laststatus = 3;
 
-<<<<<<< HEAD
 vim.cmd('set fillchars+=vert:\\ " ');
 vim.cmd('set nowrap');
 vim.cmd('colorscheme tokyonight');
@@ -40,17 +39,4 @@ vim.g.transparent_enabled = true;
 -- vim.cmd('highlight SignColumn ctermbg=NONE');
 -- vim.cmd('highlight NvimTreeNormal guibg=NONE guifg=NONE');
 -- vim.cmd('highlight NvimTreeNormalNC guibg=NONE guifg=NONE');
-=======
-vim.cmd('highlight LineNr ctermfg=grey');
-vim.cmd('highlight VertSplit cterm=NONE');
-vim.cmd('highlight StatusLine cterm=NONE');
-vim.cmd('highlight StatusLineNC cterm=NONE');
-vim.cmd('highlight SignColumn ctermbg=NONE');
-vim.cmd('highlight NvimTreeNormal guibg=NONE guifg=NONE');
-vim.cmd('highlight NvimTreeNormalNC guibg=NONE guifg=NONE');
-vim.cmd('set fillchars+=vert:\\ " ');
-vim.cmd('colorscheme tokyonight');
-vim.cmd(':set termguicolors');
-vim.g.transparent_enabled = true;
->>>>>>> 8ce246f97d97e4577a3bec1180598e3612accc4a
 
