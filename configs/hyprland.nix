@@ -69,18 +69,27 @@
             gaps_out=20
             border_size=2
             col.active_border=0x6611ee8e
+<<<<<<< HEAD
             col.inactive_border=0x2211ee8e
         }
 
         binds {
           workspace_back_and_forth=1
+=======
+            col.inactive_border=0x00333333
+>>>>>>> 8ce246f97d97e4577a3bec1180598e3612accc4a
         }
 
         decoration {
             rounding=10
             blur=1
+<<<<<<< HEAD
             blur_size=10
             blur_passes=2
+=======
+            blur_size=2
+            blur_passes=1
+>>>>>>> 8ce246f97d97e4577a3bec1180598e3612accc4a
             blur_new_optimizations=1
         }
 
@@ -102,8 +111,12 @@
         }
 
         exec-once=${pkgs.hyprpaper}/bin/hyprpaper 
+<<<<<<< HEAD
         exec-once=${pkgs.batsignal}/bin/batsignal 
 
+=======
+ 
+>>>>>>> 8ce246f97d97e4577a3bec1180598e3612accc4a
         bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=SUPER,F,exec,${pkgs.foot}/bin/foot
         bind=SUPER,Q,killactive,
@@ -115,8 +128,13 @@
         bind=,XF86AudioPlay,exec,${playerctl} play-pause
         bind=,XF86AudioPrev,exec,${playerctl} previous
         bind=,XF86AudioNext,exec,${playerctl} next
+<<<<<<< HEAD
         bind=,XF86AudioRaiseVolume,exec,${pulsemixer} --change-volume +5
         bind=,XF86AudioLowerVolume,exec,${pulsemixer} --change-volume -5
+=======
+        bind=,XF86AudioRaiseVolume,exec,${pulsemixer} --change-volume +2
+        bind=,XF86AudioLowerVolume,exec,${pulsemixer} --change-volume -2
+>>>>>>> 8ce246f97d97e4577a3bec1180598e3612accc4a
         bind=,XF86AudioMute,exec,${pulsemixer} --toggle-mute
 
         bind=SUPER,L,movefocus,r

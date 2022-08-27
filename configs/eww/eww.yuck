@@ -3,7 +3,7 @@
 (defpoll monthDay :interval "1s" "date '+%d.%m'")
 (defpoll fullDate :interval "1s" "date '+%A %B %T'")
 (defvar batterySaving "false")
-                                                 
+
 (defpoll batteryPercentage :interval "1s" :initial 100 'getBattery percentage')
 (defpoll batteryCharging :interval "1s" :initial false 'getBattery charging')
 (deflisten workspace "getWorkspaces")
