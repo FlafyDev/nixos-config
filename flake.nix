@@ -19,6 +19,22 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    webcord = {
+      url = "github:fufexan/webcord-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    discocss = {
+      url = "github:fufexan/discocss/flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    yuck-vim = {
+      url = "github:elkowar/yuck.vim"; 
+      flake = false;
+    };
+    hyprpaper = {
+      url = "github:hyprwm/hyprpaper";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {

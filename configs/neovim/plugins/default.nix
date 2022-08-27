@@ -4,6 +4,7 @@
     ./lualine-nvim
     ./lspconfig
     ./cmp
+    ./nvim-dap
   ])) ++ (with pkgs.vimPlugins; let
     inherit (pkgs.nur.repos.m15a) vimExtraPlugins; 
   in [
@@ -13,8 +14,47 @@
     markdown-preview-nvim
     vim-visual-multi
     vim-parinfer
-    vim-hexokinase
+    # vim-hexokinase
     vim-wayland-clipboard
+    yuck-vim
+    vim-surround
+    tokyonight-nvim
+    
+    flutter-tools-nvim
+    {
+      plugin = nvim-comment;
+      config = "lua require('nvim_comment').setup()";
+    }
+    {
+      type = "lua";
+      plugin = neoformat;
+      config = ''
+        -- vim.api.nvim_create_autocmd("BufWritePre", {
+        --   command = [[silent! undojoin | Neoformat]],
+        --   desc = "Format using neoformat on save.",
+        --   group = vim.api.nvim_create_augroup("neoformat_format_onsave", { clear = true }),
+        --   pattern = "*",
+        -- })
+      '';
+    }
+    {
+      type = "lua";
+      plugin = vimExtraPlugins.nvim-transparent;
+      config = ''
+        require("transparent").setup({
+          enable = true,
+          extra_groups = {
+            "LineNr",
+            "VertSplit",
+            "StatusLine",
+            "StatusLineNC",
+            "SignColumn",
+            "NvimTreeNormal",
+            "NvimTreeNormalNC",
+          },
+        })
+      '';
+    }
     {
       type = "lua";
       plugin = nvim-treesitter;

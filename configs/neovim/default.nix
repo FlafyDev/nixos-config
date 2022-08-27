@@ -27,6 +27,8 @@
         clang-tools
         ccls
         wl-clipboard
+        omnisharp-roslyn
+        netcoredbg
       ];
     };
   };

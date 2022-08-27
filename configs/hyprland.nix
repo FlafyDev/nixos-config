@@ -26,13 +26,28 @@
   };
 
   home = { pkgs, ... }: {
+    home.packages = [ pkgs.hyprpaper ];
+    xdg.configFile."hypr/hyprpaper.conf".text = let
+      background = ../assets/background2.png;
+    in ''
+      preload = ${background}
+      wallpaper = HDMI-A-1,${background}
+    '';
+
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland = true;
-      extraConfig = ''
+      extraConfig = let 
+        playerctl = "${pkgs.playerctl}/bin/playerctl";
+        pulsemixer = "${pkgs.pulsemixer}/bin/pulsemixer";
+      in ''
         monitor=,preferred,auto,1
         monitor=eDP-1,disable
         workspace=DP-1,1
+
+        misc {
+          no_vfr = false;
+        }
 
         input {
             kb_file=${./keyboard/layout.xkb}
@@ -50,33 +65,46 @@
             sensitivity=0.3
             main_mod=SUPER
 
-            gaps_in=5
+            gaps_in=15
             gaps_out=20
             border_size=2
             col.active_border=0x6611ee8e
-            col.inactive_border=0x66333333
+            col.inactive_border=0x2211ee8e
+        }
+
+        binds {
+          workspace_back_and_forth=1
         }
 
         decoration {
             rounding=10
             blur=1
-            blur_size=5
-            blur_passes=3
+            blur_size=10
+            blur_passes=2
             blur_new_optimizations=1
         }
+
+        bezier=overshot,0.05,0.9,0.1,1.1
+        bezier=mycurve,0.4, 0, 0.6, 1
 
         animations {
             enabled=1
             animation=windows,1,7,default,slide
             animation=border,1,10,default
-            animation=fade,1,10,default
-            animation=workspaces,1,6,default,slidevert
+            #animation=fade,1,10,default
+            animation=workspaces,1,4,default,slidevert
         }
 
         dwindle {
             pseudotile=0 # enable pseudotiling on dwindle
+            force_split=2
+            no_gaps_when_only=1
         }
 
+        exec-once=${pkgs.hyprpaper}/bin/hyprpaper 
+        exec-once=${pkgs.batsignal}/bin/batsignal 
+
+        bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=SUPER,F,exec,${pkgs.foot}/bin/foot
         bind=SUPER,Q,killactive,
         bind=SUPER,M,exit,
@@ -84,11 +112,27 @@
         bind=SUPER,V,togglefloating,
         bind=SUPER,R,exec,${pkgs.wofi}/bin/wofi --show drun -o DP-3
         bind=SUPER,P,pseudo,
+        bind=,XF86AudioPlay,exec,${playerctl} play-pause
+        bind=,XF86AudioPrev,exec,${playerctl} previous
+        bind=,XF86AudioNext,exec,${playerctl} next
+        bind=,XF86AudioRaiseVolume,exec,${pulsemixer} --change-volume +5
+        bind=,XF86AudioLowerVolume,exec,${pulsemixer} --change-volume -5
+        bind=,XF86AudioMute,exec,${pulsemixer} --toggle-mute
 
         bind=SUPER,L,movefocus,r
         bind=SUPER,H,movefocus,l
         bind=SUPER,K,movefocus,u
         bind=SUPER,J,movefocus,d
+
+        bind=SUPERCTRL,L,resizeactive,50 0
+        bind=SUPERCTRL,H,resizeactive,-50 0
+        bind=SUPERCTRL,K,resizeactive,0 -50
+        bind=SUPERCTRL,J,resizeactive,0 50
+
+        bind=SUPERSHIFT,L,movewindow,r
+        bind=SUPERSHIFT,H,movewindow,l
+        bind=SUPERSHIFT,K,movewindow,u
+        bind=SUPERSHIFT,J,movewindow,d
 
         bind=SUPER,1,workspace,1
         bind=SUPER,2,workspace,2

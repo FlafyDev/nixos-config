@@ -5,7 +5,7 @@
       settings = {
         main = {
           term = "xterm-256color";
-          font = "FuraCode Nerd Font:size=11";
+          font = "FiraCode Nerd Font Mono:size=11";
           dpi-aware = "yes";
           pad="10x10";
         };
@@ -15,7 +15,7 @@
         };
 
         colors = {
-          alpha=0.5;
+          alpha=0.6;
 
           regular0 = "29414f";
           regular1 = "0xec5f67";

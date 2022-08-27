@@ -27,7 +27,6 @@ in {
           })
           homeModules
         ]);
-
       };
     }
   ]);

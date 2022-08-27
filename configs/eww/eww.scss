@@ -16,6 +16,29 @@ $green: #87c7a1;
 $font: "JetBrainsMono Nerd Font";
 $altfont: "FuraCode Nerd Font";
 
+.battery-top {
+  background-color: white;
+  border-radius: 1px 1px 0 0;
+}
+
+.battery.progress-container {
+  $radius: 4px;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: $radius $radius 0 0;
+  progress {
+    background-color: lightgreen;
+  }
+  trough {
+    min-height: 15px;
+    border: 1px solid black;
+    border-radius: $radius $radius 0 0;
+  }
+  progress, trough {
+    min-width: 6px;
+  }
+}
+
 tooltip {
   background-color: $green;
   font-weight: bolder;
@@ -27,11 +50,11 @@ tooltip {
   font-family: $font;
   color: white;
   background-color: rgba(0, 0, 0, 0);
+  padding: 5px;
 }
 
 .time {
   border-radius: 10px;
-  padding: 0.55em;
 }
 .hour {
   font-size: 1.2em;
@@ -55,4 +78,5 @@ tooltip {
 .wp-free, .wp-occupied {
   opacity: 0.7;
 }
+
 

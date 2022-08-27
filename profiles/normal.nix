@@ -11,16 +11,16 @@ mkHome username {
     /nix.nix
     /printer-4500.nix
     # /vscode.nix
-    /wine.nix
+    # /wine.nix
     /zsh.nix
-    /steam.nix
+    # /steam.nix
     # /mouse-g502-xserver.nix
     /neovim
     # /i3.nix
     # /alacritty.nix
     # /picom.nix
     # /keyboard/xserver.nix
-    /betterdiscord.nix
+    # /betterdiscord.nix
     /eww
     /rofi
     /gtk.nix
@@ -45,6 +45,20 @@ mkHome username {
     #     tapping = true;
     #   };
     # };
+    services.upower.enable = true;
+    # services.tlp.enable = true;
+    # Notify on low battery
+    # systemd.user.services.batsignal = {
+    #   Install.WantedBy = [ "graphical-session.target" ];
+    #   Unit = {
+    #     Description = "Battery status daemon";
+    #     PartOf = [ "graphical-session.target" ];
+    #   };
+    #   Service = {
+    #     Type = "simple";
+    #     ExecStart = "${pkgs.batsignal}/bin/batsignal";
+    #   };
+    # };
 
     environment.systemPackages = with pkgs; [
       nano
@@ -56,6 +70,7 @@ mkHome username {
       gh
       xclip
       service-wrapper
+      wl-clipboard
     ];
 
     fonts.fonts = with pkgs; [
@@ -82,6 +97,7 @@ mkHome username {
       pavucontrol
       kitty
       mpvpaper
+      webcord
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";

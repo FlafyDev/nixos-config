@@ -1,0 +1,71 @@
+(defpoll hour :interval "1s" "date '+%H'")
+(defpoll min :interval "1s" "date '+%M'")
+(defpoll monthDay :interval "1s" "date '+%d.%m'")
+(defpoll fullDate :interval "1s" "date '+%A %B %T'")
+(defvar batterySaving "false")
+                                                 
+(defpoll batteryPercentage :interval "1s" :initial 100 'getBattery percentage')
+(defpoll batteryCharging :interval "1s" :initial false 'getBattery charging')
+(deflisten workspace "getWorkspaces")
+(deflisten volumePercentageWidgetText "volume listen")
+
+;; BAR
+(defwindow bar
+  :geometry (geometry :height "100%" :anchor "left center")
+  :monitor 0 
+  :exclusive true
+  :focusable false
+  :stacking "fg"
+  (bar))
+
+(defwidget bar []
+  (box :class "eww-bar" :orientation "v"
+    ;; (top)
+    (center)
+    (bottom)))
+
+;; (defwidget top [])
+
+(defwidget center []
+  (box :orientation "v" :halign "center" :valign "center" :space-evenly "false"
+    (workspaces)))
+
+(defwidget bottom []
+  (box :class "bottom" :orientation "v" :halign "center" :valign "end" :space-evenly "false" :spacing 15
+    ;; (bluetooth)
+    (saveBatteryButton)
+    (volumePercentage)
+    (battery)
+    (time)))
+
+;; BAR WIDGETS
+(defwidget workspaces []
+  (literal :content workspace))
+
+(defwidget volumePercentage []
+  (literal :content volumePercentageWidgetText))
+
+(defwidget bluetooth []
+  (button 
+    (image :path "./bluetoothOff.png")))
+
+(defwidget saveBatteryButton []
+  (button :class "batterySaveButton ${batterySaving ? "active" : "inactive"}"
+          :onclick "saveBattery ${batterySaving}"
+    {batterySaving ? "disable" : "enable"}))
+
+(defwidget battery []
+  (box :halign "center" :valign "center" :tooltip "${batteryPercentage}%" :orientation "v" :space-evenly "false"
+    (box :halign "center" :valign "start" 
+      (box :class "battery-top" :width 5 :height 2))
+    (overlay
+      (box :class "battery progress-container" 
+        (progress :value batteryPercentage :flipped true :orientation "v"))
+      (image :visible batteryCharging :path "./assets/batteryCharging.png"))))
+
+(defwidget time []
+  (box :class "time" :tooltip "It's ${fullDate}" :orientation "v" :halign "center" :space-evenly "false"
+    (button :class "hour" hour)
+    (button :class "min" min)
+    (button :class "month" monthDay)))
+
