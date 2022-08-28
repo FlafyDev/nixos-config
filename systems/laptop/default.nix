@@ -12,9 +12,10 @@
 
     boot = {
       loader = {
+        # systemd-boot.enable = true;
         efi = {
           canTouchEfiVariables = true;
-          efiSysMountPoint = "/boot";
+          efiSysMountPoint = "/boot/efi";
         };
         grub = {
           devices = [ "nodev" ];
@@ -116,10 +117,10 @@
       };
     };
 
-    system.stateVersion = "21.11";
+    system.stateVersion = "22.05";
   };
 
   home = { pkgs, lib, ... }: {
-    home.stateVersion = "21.11";
+    home.stateVersion = "22.05";
   };
 }

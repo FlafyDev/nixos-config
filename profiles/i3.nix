@@ -17,9 +17,9 @@ mkHome username {
     /alacritty.nix
     /picom.nix
     /keyboard/xserver.nix
-    /betterdiscord.nix
+    # /betterdiscord.nix
     /eww
-    /rofi
+    # /rofi
     /gtk.nix
     /utility-software.nix
     /utility-scripts.nix
