@@ -76,7 +76,6 @@
 
         binds {
           workspace_back_and_forth=1
-            col.inactive_border=0x00333333
         }
 
         decoration {
