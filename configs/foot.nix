@@ -16,7 +16,6 @@
 
         colors = {
           alpha=0.6;
-          alpha=0.7;
 
           regular0 = "29414f";
           regular1 = "0xec5f67";

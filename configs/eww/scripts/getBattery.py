@@ -4,6 +4,7 @@ import psutil
 import math
 import sys
 
+
 def getPercentage():
     battery = psutil.sensors_battery()
 

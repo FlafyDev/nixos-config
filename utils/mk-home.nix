@@ -12,7 +12,9 @@ in {
     {
       users.users.${username} = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "networkmanager" "adbusers" "scanner" "lp" ];
+        extraGroups = [
+          "wheel" "video" "networkmanager" "adbusers" "scanner" "lp"
+        ];
       };
     }
     (additions.modules inputs)

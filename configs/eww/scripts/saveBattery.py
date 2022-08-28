@@ -3,8 +3,9 @@
 import sys
 import subprocess
 
+
 def save(enable: bool):
-    subprocess.check_output(["eww", "update", f"batterySaving={str(not enable).lower()}"])
+    subprocess.check_output(["eww", "update", f"notBatterySaving={str(not enable).lower()}"])
     if enable:
         subprocess.check_output(["hyprctl", "keyword", "decoration:blur", "0"])
         subprocess.check_output(["hyprctl", "keyword", "animations:enabled", "0"])

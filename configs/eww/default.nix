@@ -16,11 +16,11 @@
         '';
       };
     
-    scripts = [
+    scripts = with pkgs; [
       (mkPyScript {
         name = "getWorkspaces";
         dependeinces = [
-          pkgs.hyprland
+          hyprland
         ];
       })
       (mkPyScript {
@@ -31,7 +31,7 @@
       })
       (mkPyScript {
         name = "volume";
-        dependeinces = with pkgs; [
+        dependeinces = [
           pamixer 
           pulsemixer
           pulseaudio
@@ -40,7 +40,8 @@
       (mkPyScript {
         name = "saveBattery";
         dependeinces = [
-          pkgs.hyprland
+          hyprland
+          eww-wayland
         ];
       })
     ];

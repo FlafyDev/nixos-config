@@ -2,7 +2,7 @@
 (defpoll min :interval "1s" "date '+%M'")
 (defpoll monthDay :interval "1s" "date '+%d.%m'")
 (defpoll fullDate :interval "1s" "date '+%A %B %T'")
-(defvar batterySaving "false")
+(defvar notBatterySaving "true")
 
 (defpoll batteryPercentage :interval "1s" :initial 100 'getBattery percentage')
 (defpoll batteryCharging :interval "1s" :initial false 'getBattery charging')
@@ -50,9 +50,9 @@
     (image :path "./bluetoothOff.png")))
 
 (defwidget saveBatteryButton []
-  (button :class "batterySaveButton ${batterySaving ? "active" : "inactive"}"
-          :onclick "saveBattery ${batterySaving}"
-    {batterySaving ? "disable" : "enable"}))
+  (button :class "batterySaveButton ${notBatterySaving ? "active" : "inactive"}"
+          :onclick "saveBattery ${notBatterySaving}"
+    (image :path {notBatterySaving ? "./assets/leafDisabled.png" : "./assets/leafEnabled.png"})))
 
 (defwidget battery []
   (box :halign "center" :valign "center" :tooltip "${batteryPercentage}%" :orientation "v" :space-evenly "false"

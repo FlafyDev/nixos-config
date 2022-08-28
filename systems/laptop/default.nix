@@ -82,10 +82,10 @@
     };
 
     # wake up on external usb devices
-    powerManagement.powerDownCommands = ''
-      echo enabled > /sys/bus/usb/devices/usb1/power/wakeup
-      echo enabled > /sys/bus/usb/devices/usb2/power/wakeup
-    '';
+    # powerManagement.powerDownCommands = ''
+    #   echo enabled > /sys/bus/usb/devices/usb1/power/wakeup
+    #   echo enabled > /sys/bus/usb/devices/usb2/power/wakeup
+    # '';
     
     # specialisation = {
     #   external-display.configuration = {
@@ -96,6 +96,7 @@
     # };
 
     security.rtkit.enable = true;
+    programs.light.enable = true;
 
     services = {
       pipewire = {

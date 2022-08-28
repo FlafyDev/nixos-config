@@ -6,6 +6,7 @@ import json
 import socket
 import os
 
+
 WORKSPACES = 10
 
 class WorkspaceStatus(Enum):

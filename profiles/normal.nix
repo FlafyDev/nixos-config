@@ -98,6 +98,7 @@ mkHome username {
       kitty
       mpvpaper
       webcord
+      mako
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
