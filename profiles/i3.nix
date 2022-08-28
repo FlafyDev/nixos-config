@@ -6,29 +6,24 @@ mkHome username {
   configs = [
     /direnv.nix
     /git.nix
-    # /gnome.nix
     /mpv.nix
     /nix.nix
     /printer-4500.nix
     # /vscode.nix
-    # /wine.nix
     /zsh.nix
-    # /steam.nix
-    # /mouse-g502-xserver.nix
+    /mouse-g502-xserver.nix
     /neovim
-    # /i3.nix
-    # /alacritty.nix
-    # /picom.nix
-    # /keyboard/xserver.nix
-    # /betterdiscord.nix
+    /i3.nix
+    /alacritty.nix
+    /picom.nix
+    /keyboard/xserver.nix
+    /betterdiscord.nix
     /eww
     /rofi
     /gtk.nix
     /utility-software.nix
-    /hyprland.nix
-    /foot.nix
     /utility-scripts.nix
-    /chromium.nix
+    /utility-cli.nix
   ];
 
   system = { pkgs, ... }: {
@@ -60,19 +55,6 @@ mkHome username {
     #   };
     # };
 
-    environment.systemPackages = with pkgs; [
-      nano
-      wget
-      parted
-      git
-      neofetch
-      unzip
-      gh
-      xclip
-      service-wrapper
-      wl-clipboard
-    ];
-
     fonts.fonts = with pkgs; [
       (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
     ];
@@ -80,27 +62,17 @@ mkHome username {
 
   home = ({ pkgs, lib, inputs, ... }: {
     home.packages = with pkgs; [
-      syncplay
       qbittorrent
       polymc
       element-desktop
-      libstrangle
-      yt-dlp
-      termusic
-      godot
-      guake
       gparted
       firefox
       qdirstat
-      htop
       scrcpy
       pavucontrol
-      kitty
-      mpvpaper
-      webcord
-      mako
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
   });
 }
+

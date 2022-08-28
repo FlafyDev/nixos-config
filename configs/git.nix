@@ -1,4 +1,11 @@
 {
+  system = { pkgs, ... }: {
+    environment.systemPackages = with pkgs; [
+      git
+      gh
+    ];
+  }; 
+
   home = { pkgs, ... }: {
     programs.git = {
       enable = true;

@@ -26,8 +26,10 @@
   };
 
   home = { pkgs, ... }: {
-    home.packages = [
-      pkgs.hyprpaper 
+    home.packages = with pkgs; [
+      wl-clipboard
+      hyprpaper 
+      mako
     ];
     xdg.configFile."hypr/hyprpaper.conf".text = let
       background = ../assets/background2.png;

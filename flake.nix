@@ -40,7 +40,7 @@
   outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (
-        (import ./profiles/normal.nix) (import ./systems/laptop) inputs
+        (import ./profiles/i3.nix) (import ./systems/laptop) inputs
       );
     };
   };

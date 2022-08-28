@@ -119,25 +119,7 @@
     system.stateVersion = "21.11";
   };
 
-  home = { pkgs, lib, ... }: let
-    patchDesktop = pkg: appName: from: to: lib.hiPrio (pkgs.runCommand "$patched-desktop-entry-for-${appName}" {} ''
-      ${pkgs.coreutils}/bin/mkdir -p $out/share/applications
-      ${pkgs.gnused}/bin/sed 's#${from}#${to}#g' < ${pkg}/share/applications/${appName}.desktop > $out/share/applications/${appName}.desktop
-    '');
-  in {
-    home.packages = [
-      (
-        patchDesktop pkgs.chromium "chromium-browser"
-        "^Exec=chromium" "Exec=nvidia-offload chromium -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder"
-      )
-      (
-        patchDesktop pkgs.firefox "firefox"
-        "^Exec=firefox" "Exec=env MOZ_ENABLE_WAYLAND=1 nvidia-offload firefox"
-      )
-      (patchDesktop pkgs.mpv-unwrapped "mpv" "^Exec=mpv" "Exec=nvidia-offload mpv")
-      (patchDesktop pkgs.webcord "webcord" "^Exec=webcord" "Exec=nvidia-offload webcord -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder")
-    ];
-
+  home = { pkgs, lib, ... }: {
     home.stateVersion = "21.11";
   };
 }

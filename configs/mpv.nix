@@ -1,6 +1,11 @@
 {
   home = { pkgs, ... }:
   {
+    home.packages = with pkgs; [
+      syncplay
+      yt-dlp
+    ];
+
     programs.mpv = {
       enable = true;
       enableFonts = true;
