@@ -4,6 +4,7 @@ let
 in
 mkHome username {
   configs = [
+    /firefox.nix
     /direnv.nix
     /git.nix
     # /gnome.nix
@@ -62,6 +63,16 @@ mkHome username {
     # };
 
 
+    # xdg = {
+    #   portal = {
+    #     enable = true;
+    #     extraPortals = with pkgs; [
+    #       xdg-desktop-portal-wlr
+    #       xdg-desktop-portal-gtk
+    #     ];
+    #   };
+    # };
+
     fonts.fonts = with pkgs; [
       (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
     ];
@@ -78,12 +89,11 @@ mkHome username {
       polymc
       element-desktop
       gparted
-      firefox
       qdirstat
       scrcpy
       pavucontrol
       mpvpaper
-      webcord
+      # webcord
       (
         patchDesktop pkgs.chromium "chromium-browser"
         "^Exec=chromium" "Exec=nvidia-offload chromium -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder"
@@ -94,13 +104,18 @@ mkHome username {
       #   "^Exec=firefox" "Exec=env MOZ_ENABLE_WAYLAND=1 nvidia-offload firefox"
       # )
       # XWayland
-      (
-        patchDesktop pkgs.firefox "firefox"
-        "^Exec=firefox" "Exec=env GDK_BACKEND=x11 nvidia-offload firefox"
-      )
+      # (
+      #   patchDesktop pkgs.firefox "firefox"
+      #   "^Exec=firefox" "Exec=env GDK_BACKEND=x11 nvidia-offload firefox"
+      # )
       (patchDesktop pkgs.mpv-unwrapped "mpv" "^Exec=mpv" "Exec=nvidia-offload mpv")
-      (patchDesktop pkgs.webcord "webcord" "^Exec=webcord" "Exec=nvidia-offload webcord -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder")
+      # (patchDesktop pkgs.webcord "webcord" "^Exec=webcord" "Exec=nvidia-offload webcord -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder")
     ];
+
+    home.sessionVariables = {
+      MOZ_ENABLE_WAYLAND = 1;
+      XDG_CURRENT_DESKTOP = "sway"; 
+    };
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
   });

@@ -37,6 +37,11 @@
       supportedFilesystems = [ "ntfs" ];
     };
 
+    fileSystems."/mnt/general" = {
+      device = "/dev/disk/by-uuid/23e60b41-48d2-4b32-8cc8-bf52e0b305f4";
+      fsType = "ext4";
+    };
+
     networking = {
       hostName = "nixos";
       networkmanager.enable = true;
@@ -62,7 +67,7 @@
       nvidia = {
         modesetting.enable = true;
         prime = {
-          sync.enable = true;
+          offload.enable = true;
           intelBusId = "PCI:0:2:0";
           nvidiaBusId = "PCI:1:0:0";
         };

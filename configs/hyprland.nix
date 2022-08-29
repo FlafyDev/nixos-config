@@ -36,6 +36,7 @@
     in ''
       preload = ${background}
       wallpaper = HDMI-A-1,${background}
+      wallpaper = eDP-1,${background}
     '';
 
     wayland.windowManager.hyprland = {
@@ -115,6 +116,7 @@
         exec-once=${pkgs.hyprpaper}/bin/hyprpaper 
         exec-once=${pkgs.batsignal}/bin/batsignal 
         exec-once=${lidOpenCloseScript}
+        exec=eww open bar
 
         bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=SUPER,F,exec,${pkgs.foot}/bin/foot
