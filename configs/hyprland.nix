@@ -44,9 +44,16 @@
       extraConfig = let 
         playerctl = "${pkgs.playerctl}/bin/playerctl";
         pulsemixer = "${pkgs.pulsemixer}/bin/pulsemixer";
+        lidOpenCloseScript = pkgs.writeShellScript "lid-open-close" ''
+          if grep -q open /proc/acpi/button/lid/LID0/state; then 
+            ${pkgs.hyprland}/bin/hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
+          else               
+            ${pkgs.hyprland}/bin/hyprctl keyword monitor eDP-1,disable
+          fi 
+        '';
       in ''
         monitor=,preferred,auto,1
-        monitor=eDP-1,disable
+        # monitor=eDP-1,disable
         workspace=DP-1,1
 
         misc {
@@ -107,6 +114,7 @@
 
         exec-once=${pkgs.hyprpaper}/bin/hyprpaper 
         exec-once=${pkgs.batsignal}/bin/batsignal 
+        exec-once=${lidOpenCloseScript}
 
         bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=SUPER,F,exec,${pkgs.foot}/bin/foot

@@ -29,6 +29,7 @@
         wl-clipboard
         omnisharp-roslyn
         netcoredbg
+        gcc # treesitter
       ];
     };
   };

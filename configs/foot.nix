@@ -6,7 +6,7 @@
         main = {
           term = "xterm-256color";
           font = "FiraCode Nerd Font Mono:size=11";
-          dpi-aware = "yes";
+          dpi-aware = "no";
           pad="10x10";
         };
 
