@@ -51,6 +51,8 @@
             "SignColumn",
             "NvimTreeNormal",
             "NvimTreeNormalNC",
+            "TelescopeNormal",
+            "TelescopeBorder"
           },
         })
       '';

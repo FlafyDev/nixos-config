@@ -1,10 +1,18 @@
 username: profile: system: { home-manager, nixpkgs, ... }@inputs:
 with nixpkgs.lib;
-let
+let 
+  configs = mapAttrs' (file: type: let
+      name = builtins.match ''^(.*).nix$'' file;
+    in 
+      attrsets.nameValuePair 
+      (builtins.elemAt ( if builtins.isNull name then [ file ] else name ) 0)
+      (import (../configs + "/${file}"))
+  ) (builtins.readDir ../configs);
+in let
   additions = import ../additions.nix;
-  configs = (map (cfg: import (../configs + cfg)) profile.configs) ++ [ profile system ];
-  systemModules = (map (cfg: cfg.system) (filter (cfg: cfg ? system) configs));
-  homeModules = (map (cfg: cfg.home) (filter (cfg: cfg ? home) configs));
+  profileConfigs = (profile.configs configs) ++ [ profile system ];
+  systemModules = (map (cfg: cfg.system) (filter (cfg: cfg ? system) profileConfigs));
+  homeModules = (map (cfg: cfg.home) (filter (cfg: cfg ? home) profileConfigs));
 in {
   system = system.systemType;
   modules = (flatten [

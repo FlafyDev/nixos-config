@@ -53,26 +53,32 @@ tooltip {
   padding: 5px;
 }
 
+.volume {
+  font-size: 15px;
+}
+.warning {
+  color: #C35817;
+}
 .time {
   border-radius: 10px;
 }
 .hour {
-  font-size: 1.2em;
+  font-size: 17px;
   font-weight: bolder;
 }
 .min {
-  font-size: 1.2em;
+  font-size: 17px;
   font-weight: bold;
 }
 .month {
-  font-size: 0.8em;
+  font-size: 12px;
   padding-top: 3px;
   font-family: $altfont;
 }
 .wp {
   border-radius: 20px;
-  padding: 0.2em 0.5em;
-  font-size: 1.4em;
+  padding: 0.2px 0.5px;
+  font-size: 20px;
   font-family: $font;
 }
 .wp-free, .wp-occupied {

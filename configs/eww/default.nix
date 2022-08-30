@@ -1,5 +1,7 @@
-{
+{ wayland }: {
   home = { pkgs, lib, ... }: let
+    package = if wayland then pkgs.eww-wayland else pkgs.eww;
+
     mkPyScript = { name, pythonLibraries ? (ps: []), dependeinces ? [] }:
       pkgs.stdenv.mkDerivation {
         name = name;
@@ -20,8 +22,8 @@
       (mkPyScript {
         name = "getWorkspaces";
         dependeinces = [
-          hyprland
-        ];
+
+        ] ++ (if wayland then [ hyprland ] else [ i3 wmctrl ]);
       })
       (mkPyScript {
         name = "getBattery";
@@ -40,15 +42,14 @@
       (mkPyScript {
         name = "saveBattery";
         dependeinces = [
-          hyprland
-          eww-wayland
-        ];
+          package
+        ] ++ (if wayland then [ hyprland ] else [  ]);
       })
     ];
   in {
     programs.customEww = {
       enable = true;
-      package = pkgs.eww-wayland;
+      package = package;
       scripts = scripts;
       assets = ./assets;
       scss = ./eww.scss;
