@@ -24,7 +24,7 @@ mkHome username {
     utility-software
     utility-scripts
     utility-cli
-    firefox
+    ( firefox { wayland = false; }) 
     chromium
   ];
 

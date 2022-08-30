@@ -4,7 +4,7 @@ let
 in
 mkHome username {
   configs = cfgs: with cfgs; [
-    firefox
+    ( firefox { wayland = true; } )
     direnv
     git
     # gnome
@@ -22,7 +22,7 @@ mkHome username {
     # picom
     # keyboard/xserver
     # betterdiscord
-    eww
+    ( eww { wayland = true; } )
     # rofi
     gtk
     hyprland
