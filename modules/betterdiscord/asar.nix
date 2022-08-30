@@ -2,14 +2,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "betterdiscord-asar";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = buildYarnPackage {
     src = fetchFromGitHub {
       owner = "FlafyDev";
       repo = "BetterDiscord-Yarn";
       rev = "v${version}";
-      sha256 = "Pf1VeIiMX9ujCepsjUrqIqqqZGK92+AN2pb8ZXZS96U=";
+      sha256 = "QD1aYsb17MOwtHM5WWWcSjgb/tlw7Td1yjV0/Gne6Po=";
     };
     yarnBuildMore = "yarn dist";
   };

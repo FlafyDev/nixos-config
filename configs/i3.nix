@@ -5,7 +5,7 @@
     #   # displayManager = {
     #   #     defaultSession = "none+i3";
     #   # };
-      dpi = 130;
+      dpi = 110;
 
       windowManager.i3 = {
         enable = true;
@@ -109,7 +109,11 @@
           "9" = [{ class = "^qBittorrent$"; }];
         };
 	
-        keybindings = mkMerge [{
+        keybindings = let 
+          playerctl = "${pkgs.playerctl}/bin/playerctl";
+          pactl = "${pkgs.pulseaudio}/bin/pactl";
+        in mkMerge [
+          {
             # "${modifier}+r" = ''mode "resize"'';
             
             "${modifier}+u" = "workspace back_and_forth";
@@ -119,6 +123,18 @@
             "${modifier}+x" = "exec systemctl suspend";
             "${modifier}+r" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
             "${modifier}+Shift+r" = "exec ${pkgs.rofi}/bin/rofi -show window";
+            "${modifier}+space" = "floating toggle";
+
+            # Pulse Audio controls
+            "XF86AudioRaiseVolume" = "exec --no-startup-id ${pactl} set-sink-volume 0 +5%";
+            "XF86AudioLowerVolume" = "exec --no-startup-id ${pactl} set-sink-volume 0 -5%";
+            "XF86AudioMute" = "exec --no-startup-id ${pactl} set-sink-mute 0 toggle";
+
+            # Media player controls
+            "XF86AudioPlay" = "exec ${playerctl} play-pause";
+            "XF86AudioPause" = "exec ${playerctl} play-pause";
+            "XF86AudioNext" = "exec ${playerctl} next";
+            "XF86AudioPrev" = "exec ${playerctl} previous";
 
             # Focus
             "${modifier}+h" = "focus left";
@@ -143,7 +159,7 @@
           (mkMerge (map (num: let strNum = builtins.toString num; in {
             "${modifier}+${strNum}" = "workspace ${strNum}";
             "${modifier}+Shift+${strNum}" = "move container to workspace ${strNum}";
-          }) [1 2 3 4 5 6 7 8 9]))
+          })[1 2 3 4 5 6 7 8 9]))
         ];
         
         colors = {

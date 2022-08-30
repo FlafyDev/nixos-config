@@ -3,34 +3,34 @@ let
   username = "flafydev";
 in
 mkHome username {
-  configs = [
-    /firefox.nix
-    /direnv.nix
-    /git.nix
-    # /gnome.nix
-    /mpv.nix
-    /nix.nix
-    /printer-4500.nix
-    # /vscode.nix
-    # /wine.nix
-    /zsh.nix
-    # /steam.nix
-    # /mouse-g502-xserver.nix
-    /neovim
-    # /i3.nix
-    # /alacritty.nix
-    # /picom.nix
-    # /keyboard/xserver.nix
-    # /betterdiscord.nix
-    /eww
-    # /rofi
-    /gtk.nix
-    /hyprland.nix
-    /foot.nix
-    /chromium.nix
-    /utility-software.nix
-    /utility-scripts.nix
-    /utility-cli.nix
+  configs = cfgs: with cfgs; [
+    firefox
+    direnv
+    git
+    # gnome
+    mpv
+    nix
+    printer-4500
+    # vscode
+    # wine
+    zsh
+    # steam
+    # mouse-g502-xserver
+    neovim
+    # i3
+    # alacritty
+    # picom
+    # keyboard/xserver
+    # betterdiscord
+    eww
+    # rofi
+    gtk
+    hyprland
+    foot
+    chromium
+    utility-software
+    utility-scripts
+    utility-cli
   ];
 
   system = { pkgs, ... }: {

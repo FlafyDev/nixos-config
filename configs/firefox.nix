@@ -13,7 +13,7 @@
         name = "Default";
         isDefault = true;
         settings = {
-          "layout.css.devPixelsPerPx" = "1.2";
+          # "layout.css.devPixelsPerPx" = 130"1.2";
         };
       };
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [

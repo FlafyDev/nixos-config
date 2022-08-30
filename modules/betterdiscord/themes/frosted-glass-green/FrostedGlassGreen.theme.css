@@ -14,8 +14,8 @@
 @import url('https://discordstyles.github.io/Addons/windows-titlebar.css');
 
 :root {
-  --background-image: url('https://i.imgur.com/dvQarij.jpg');
-  --background-image-blur: 30px;
+  --background-image: url('https://i.imgur.com/c80CWmM.png');
+  --background-image-blur: 20px;
   --background-image-size: cover;
   --background-image-position: center;
   --popout-modal-image: var(--background-image);
