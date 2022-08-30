@@ -12,6 +12,9 @@
         id = 0;
         name = "Default";
         isDefault = true;
+        settings = {
+          "layout.css.devPixelsPerPx" = "1.2";
+        };
       };
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
         vimium

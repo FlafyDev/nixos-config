@@ -67,6 +67,7 @@ let
           };
         };
         i3-alternating-layout = callPackage ./modules/i3-alternating-layout.nix { };
+        xborder = callPackage ./modules/xborder.nix { };
         mpvpaper = callPackage ./modules/mpvpaper.nix { };
         mpv-unwrapped-stable = prev.mpv-unwrapped;
         mpv-unwrapped = prev.mpv-unwrapped.overrideAttrs (prev: {

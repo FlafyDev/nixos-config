@@ -7,20 +7,19 @@
         window = {
       	  opacity = 0.6;
           padding = {
-            x = 5;
-            y = 5;
+            x = 10;
+            y = 10;
           };
         };
 
         selection.save_to_clipboard = true;
         
         font = {
-          size = 7;
-          family = "FuraCode Nerd Font Mono";
+          size = 8;
+          family = "FiraCode Nerd Font Mono";
           normal = {
             style = "Regular";
           };
-
           bold = {
             style = "Bold";
           };
@@ -28,8 +27,8 @@
 
         colors = {
           primary = {
-            background = "0x1b2b34";
-            foreground = "0xd8dee9";
+            background = "0x002b36";
+            # foreground = "0x839496";
           };
           normal = {
             black = "0x29414f";

@@ -16,7 +16,7 @@
       updateSystem = pkgs.writeShellScriptBin "updateSystem" ''
         case $2 in
           fast)
-            nixos-rebuild test --fast --flake ./#$1 --impure
+            nixos-rebuild test --fast --flake ./#$1 --impure -L
             ;;
           *)
             nixos-rebuild switch --flake ./#$1

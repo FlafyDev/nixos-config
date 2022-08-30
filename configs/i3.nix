@@ -5,6 +5,7 @@
     #   # displayManager = {
     #   #     defaultSession = "none+i3";
     #   # };
+      dpi = 130;
 
       windowManager.i3 = {
         enable = true;
@@ -21,7 +22,7 @@
       feh
       imagemagick
       jq
-      i3-alternating-layout
+      xborder
     ];
 
     xsession.windowManager.i3 = {
@@ -51,7 +52,7 @@
         fonts = {
           names = [ "DejaVuSansMono" "Terminus" ];
           style = "Bold Semi-Condensed";
-          size = 13.5;
+          size = 19.5;
         };
 
         gaps = let
@@ -59,7 +60,7 @@
           vouter = 16;
         in {
           left = 25+houter; # for eww
-      	  # smartGaps = true;
+          # smartGaps = true;
           inner = 16;
           # outer = 16;
           horizontal = houter - 16;
@@ -70,7 +71,7 @@
        
         startup = [
           {
-            command = "${pkgs.feh}/bin/feh --bg-scale ${../assets/background.png}";
+            command = "${pkgs.feh}/bin/feh --bg-scale ${../assets/background2.png}";
             always = true;
             notification = false;
           }
@@ -81,6 +82,11 @@
           }
           {
             command = "${pkgs.eww}/bin/eww open bar";
+            always = true;
+            notification = false;
+          }
+          {
+            command = "${pkgs.xborder}/bin/xborder --border-width 2 --border-rgba 11ee8e66";
             always = true;
             notification = false;
           }
@@ -106,12 +112,13 @@
         keybindings = mkMerge [{
             # "${modifier}+r" = ''mode "resize"'';
             
-            "${modifier}+Shift+r" = "restart";
+            "${modifier}+u" = "workspace back_and_forth";
+            "${modifier}+Shift+d" = "restart";
             "${modifier}+q" = "kill";
-            "${modifier}+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
-            "${modifier}+Shift+x" = "exec systemctl suspend";
-            "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
-            "${modifier}+Shift+d" = "exec ${pkgs.rofi}/bin/rofi -show window";
+            "${modifier}+f" = "exec ${pkgs.alacritty}/bin/alacritty";
+            "${modifier}+x" = "exec systemctl suspend";
+            "${modifier}+r" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
+            "${modifier}+Shift+r" = "exec ${pkgs.rofi}/bin/rofi -show window";
 
             # Focus
             "${modifier}+h" = "focus left";
@@ -126,10 +133,10 @@
             "${modifier}+Shift+l" = "move right";
             
             # Resize
-            "${modifier}+y" = "resize shrink width 10 px or 10 ppt";
-            "${modifier}+u" = "resize grow height 10 px or 10 ppt";
-            "${modifier}+i" = "resize shrink height 10 px or 10 ppt";
-            "${modifier}+o" = "resize grow width 10 px or 10 ppt";
+            "${modifier}+Control+h" = "resize shrink width 10 px or 10 ppt";
+            "${modifier}+Control+j" = "resize grow height 10 px or 10 ppt";
+            "${modifier}+Control+k" = "resize shrink height 10 px or 10 ppt";
+            "${modifier}+Control+l" = "resize grow width 10 px or 10 ppt";
 
             "--release Print" = "exec ${pkgs.imagemagick}/bin/import ~/screenshot.png";
           }

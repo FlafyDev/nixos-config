@@ -41,6 +41,8 @@ mkHome username {
       kdeconnect.enable = true;
     };
 
+    services.xserver.enable = true;
+
     # services.xserver.libinput = {
     #   enable = true;
     #   touchpad = {

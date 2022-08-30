@@ -7,7 +7,7 @@
       # shadowOpacity = 0.8;
 
       activeOpacity = 1.0;
-      inactiveOpacity = 0.8;
+      inactiveOpacity = 1.0; 
 
       fade = true;
       fadeDelta = 1;
@@ -24,7 +24,7 @@
 
         blur = {
           method = "dual_kawase";
-          size = 12;
+          size = 20;
           background = false;
           background-frame = false;
           background-fixed = false;
@@ -32,6 +32,7 @@
 
         blur-background-exclude = [
           "class_g = 'firefox'"
+          "role   = 'xborder'"
         ];
         
         round-borders = 0;
@@ -40,6 +41,16 @@
           "class_g = 'eww-bar'"
           "class_g = 'Rofi'"
         ];
+
+        # WARN: Unofficial animation support (dccsillag)
+        # animations = true;
+        # animation-stiffness = 170;
+        # animation-window-mass = 0.8;
+        # animation-dampening = 15;
+        # animation-clamping = false;
+        # animation-for-open-window = "zoom";
+        # animation-for-unmap-window = "zoom";
+        # animation-for-transient-window = "slide-up";
       };
       opacityRules = [
         # "85:class_g = 'Code'"
@@ -48,6 +59,12 @@
         # "100:class_g = 'Alacritty'"
       ];
       package = pkgs.picom.overrideAttrs(o: {
+        # src = pkgs.fetchFromGitHub {
+        #   owner = "dccsillag";
+        #   repo = "picom";
+        #   rev = "implement-window-animations";
+        #   sha256 = "sha256-crCwRJd859DCIC0pEerpDqdX2j8ZrNAzVaSSB3mTPN8=";
+        # };
         src = pkgs.fetchFromGitHub {
           repo = "picom";
           owner = "ibhagwan";

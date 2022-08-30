@@ -17,13 +17,15 @@ mkHome username {
     /alacritty.nix
     /picom.nix
     /keyboard/xserver.nix
-    # /betterdiscord.nix
+    /betterdiscord.nix
     /eww
-    # /rofi
+    /rofi
     /gtk.nix
     /utility-software.nix
     /utility-scripts.nix
     /utility-cli.nix
+    /firefox.nix
+    /chromium.nix
   ];
 
   system = { pkgs, ... }: {
@@ -66,10 +68,10 @@ mkHome username {
       polymc
       element-desktop
       gparted
-      firefox
       qdirstat
       scrcpy
       pavucontrol
+      libnotify
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
