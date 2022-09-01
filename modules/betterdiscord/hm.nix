@@ -28,6 +28,15 @@
           List of themes to use with BetterDiscord.
         '';
       };
+
+      plugins = mkOption {
+        type = with types; listOf package;
+        default = [ ];
+        example = literalExpression "[ pkgs.betterdiscordPlugins.hide-disabled-emojis ]";
+        description = ''
+          List of plugin to use with BetterDiscord.
+        '';
+      };
     };
 
     config = mkIf cfg.enable {
@@ -38,7 +47,7 @@
         configDir = "${config.home.homeDirectory}/.config";
       in mkMerge [
         {
-          # There is a bug in BetterDiscord where the settings files can't be readonly otherwise it crashes...
+          # There is a "bug" in BetterDiscord where the settings files can't be readonly otherwise it crashes...
           # "BetterDiscord/data/stable/themes.json".text = builtins.toJSON (
           #   evalModules { modules = [{
           #     res = (mkMerge (map (theme: {
@@ -54,7 +63,8 @@
             require("${configDir}/${asarLocation}");module.exports=require("${configDir}/${d_core}/core.asar");
           '';
         }
-        (mkMerge (map (theme: {"BetterDiscord/themes/${theme.pname}.theme.css".source = "${theme}/theme.css"; }) cfg.themes ))
+        (mkMerge (map (theme: {"BetterDiscord/themes/${theme.themeName}.theme.css".source = "${theme}/theme.css"; }) cfg.themes ))
+        (mkMerge (map (plugin: {"BetterDiscord/plugins/${plugin.pluginName}.plugin.js".source = "${plugin}/plugin.js"; }) cfg.plugins ))
       ];
     };
   }

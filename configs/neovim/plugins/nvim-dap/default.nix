@@ -1,6 +1,8 @@
-pkgs: {
-  type = "lua";
-  plugin = pkgs.vimPlugins.nvim-dap;
-  config = builtins.readFile ./config.lua;
-}
-
+pkgs: with pkgs.vimPlugins; [
+  nvim-dap-ui
+  {
+    type = "lua";
+    plugin = nvim-dap;
+    config = builtins.readFile ./config.lua;
+  }
+]

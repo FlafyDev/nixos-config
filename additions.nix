@@ -14,6 +14,11 @@ let
         mpvScripts = prev.mpvScripts // {
           modern-x-compact = callPackage ./modules/mpv/scripts/modern-x-compact.nix { };
         };
+        betterdiscordPlugins = {
+          hide-disabled-emojis = callPackage ./modules/betterdiscord/plugins/hide-disabled-emojis.nix { };
+          invisible-typing = callPackage ./modules/betterdiscord/plugins/invisible-typing.nix { };
+          zeres-plugin-library = callPackage ./modules/betterdiscord/plugins/zeres-plugin-library.nix { };
+        };
         betterdiscordThemes = {
           solana = callPackage ./modules/betterdiscord/themes/solana.nix { };
           float = callPackage ./modules/betterdiscord/themes/float.nix { };
@@ -47,8 +52,10 @@ let
             "--ignore-gpu-blocklist"
           ];
         };
-        vimPlugins = prev.vimPlugins // {
-          flutter-tools-nvim = prev.vimUtils.buildVimPluginFrom2Nix {
+        vimPlugins = prev.vimPlugins // (let
+          inherit (prev.vimUtils) buildVimPluginFrom2Nix;
+        in {
+          flutter-tools-nvim = buildVimPluginFrom2Nix {
             pname = "flutter-tools.nvim";
             version = "2022-08-26";
             src = fetchFromGitHub {
@@ -59,13 +66,13 @@ let
             };
             meta.homepage = "https://github.com/FlafyDev/flutter-tools.nvim/";
           };
-          yuck-vim = prev.vimUtils.buildVimPluginFrom2Nix {
+          yuck-vim = buildVimPluginFrom2Nix {
             pname = "yuck-vim";
             version = "2022-06-20";
             src = inputs.yuck-vim;
             meta.homepage = "https://github.com/elkowar/yuck.vim";
           };
-        };
+        });
         i3-alternating-layout = callPackage ./modules/i3-alternating-layout.nix { };
         xborder = callPackage ./modules/xborder.nix { };
         mpvpaper = callPackage ./modules/mpvpaper.nix { };

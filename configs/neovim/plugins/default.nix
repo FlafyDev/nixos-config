@@ -19,8 +19,6 @@
     yuck-vim
     vim-surround
     tokyonight-nvim
-    
-    flutter-tools-nvim
     {
       plugin = nvim-comment;
       config = "lua require('nvim_comment').setup()";
@@ -64,6 +62,8 @@
         require('nvim-treesitter.configs').setup {
           sync_install = false,
           auto_install = true,
+
+          disable = { "dart" },
 
           highlight = {
             enable = true,

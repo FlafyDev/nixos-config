@@ -30,6 +30,7 @@
         omnisharp-roslyn
         netcoredbg
         gcc # treesitter
+        nixfmt
       ];
     };
   };

@@ -92,13 +92,17 @@
           }
           {
             command = (builtins.replaceStrings ["\n"] [" "] ''
-              i3-msg -t subscribe -m '[ "window" ]' | while read -r arg; do
-                if [ $(${pkgs.jq}/bin/jq '.container.fullscreen_mode' <<< $arg) == '1' ]; then
-                  eww close bar;
-                else
-                  eww open bar;
-                fi;
-              done 
+              while : do
+                i3-msg -t subscribe -m '[ "window" ]' | while read -r arg; do
+                  if [ $(${pkgs.jq}/bin/jq '.container.fullscreen_mode' <<< $arg) == '1' ]; then
+                    eww close bar;
+                  else
+                    eww open bar;
+                  fi;
+                done 
+
+                sleep 1
+              done
             '');
             always = true;
             notification = false;
@@ -123,7 +127,7 @@
             "${modifier}+x" = "exec systemctl suspend";
             "${modifier}+r" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
             "${modifier}+Shift+r" = "exec ${pkgs.rofi}/bin/rofi -show window";
-            "${modifier}+space" = "floating toggle";
+            "${modifier}+v" = "floating toggle";
 
             # Pulse Audio controls
             "XF86AudioRaiseVolume" = "exec --no-startup-id ${pactl} set-sink-volume 0 +5%";

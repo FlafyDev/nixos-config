@@ -33,6 +33,7 @@
         blur-background-exclude = [
           "class_g = 'firefox'"
           "role   = 'xborder'"
+          "class_g = 'eww-bar'"
         ];
         
         round-borders = 0;
