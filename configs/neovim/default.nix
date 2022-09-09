@@ -31,6 +31,7 @@
         netcoredbg
         gcc # treesitter
         nixfmt
+        nodePackages.typescript-language-server
       ];
     };
   };

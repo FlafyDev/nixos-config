@@ -31,6 +31,7 @@
 
       extraConfig = ''
         for_window [class="^.*"] border pixel 0
+        for_window [class="Funkin"] floating enable
       '';
       
       # window.border = 0;
@@ -85,25 +86,26 @@
             always = true;
             notification = false;
           }
+          # {
+          #   command = "${pkgs.xborder}/bin/xborder --border-width 2 --border-rgba 11ee8e66";
+          #   always = true;
+          #   notification = false;
+          # }
           {
-            command = "${pkgs.xborder}/bin/xborder --border-width 2 --border-rgba 11ee8e66";
-            always = true;
-            notification = false;
-          }
-          {
-            command = (builtins.replaceStrings ["\n"] [" "] ''
-              while : do
+            command = "${(pkgs.writeShellScript "hide-bar-fullscreen" ''
+              while :
+              do
                 i3-msg -t subscribe -m '[ "window" ]' | while read -r arg; do
                   if [ $(${pkgs.jq}/bin/jq '.container.fullscreen_mode' <<< $arg) == '1' ]; then
                     eww close bar;
                   else
                     eww open bar;
-                  fi;
+                  fi
                 done 
 
                 sleep 1
               done
-            '');
+            '')}";
             always = true;
             notification = false;
           }

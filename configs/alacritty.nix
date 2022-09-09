@@ -11,6 +11,13 @@
             y = 10;
           };
         };
+   
+        key_bindings = [
+          {
+            key = "F11";
+            action = "ToggleFullscreen";
+          }
+        ];
 
         selection.save_to_clipboard = true;
         

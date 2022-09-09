@@ -10,9 +10,9 @@
       enable = true;
       enableFonts = true;
       config = {
-        vo = "gpu";
-        profile = "gpu-hq";
-        hwdec = "yes";
+        # vo = "gpu";
+        # profile = "gpu-hq";
+        hwdec = "auto";
         # gpu-context = "wayland";
         force-window = true;
         ytdl-format = "bestvideo+bestaudio";

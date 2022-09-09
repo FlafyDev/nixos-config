@@ -21,7 +21,7 @@
       settings = {
         # "unredir-if-possible" = true;
         # "dbe" = true;
-
+        inactive-dim = 0.2;
         blur = {
           method = "dual_kawase";
           size = 20;
@@ -45,13 +45,15 @@
 
         # WARN: Unofficial animation support (dccsillag)
         # animations = true;
-        # animation-stiffness = 170;
-        # animation-window-mass = 0.8;
-        # animation-dampening = 15;
+        # animation-stiffness = 201;
+        # animation-window-mass = 0.4;
+        # animation-dampening = 20;
         # animation-clamping = false;
-        # animation-for-open-window = "zoom";
-        # animation-for-unmap-window = "zoom";
-        # animation-for-transient-window = "slide-up";
+        # animation-for-open-window = "zoom"; #open window
+        # animation-for-unmap-window = "zoom"; #minimize window
+        # animation-for-workspace-switch-in = "slide-down"; #the windows in the workspace that is coming in
+        # animation-for-workspace-switch-out = "zoom"; #the windows in the workspace that are coming out
+        # animation-for-transient-window = "none"; #popup windows
       };
       opacityRules = [
         # "85:class_g = 'Code'"

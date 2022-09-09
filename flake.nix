@@ -35,6 +35,17 @@
       url = "github:hyprwm/hyprpaper";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    bufresize-nvim = {
+      url = "github:kwkarlwang/bufresize.nvim";
+      flake = false; 
+    };
+    flutter-tools-nvim = {
+      url = "github:FlafyDev/flutter-tools.nvim";
+      flake = false;
+    };
+    lang-to-docx = {
+      url = "github:FlafyDev/lang-to-docx";
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {

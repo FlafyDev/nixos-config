@@ -36,6 +36,10 @@
       '';
     }
     {
+      plugin = bufresize-nvim;
+      config = ''lua require('bufresize').setup()'';
+    }
+    {
       type = "lua";
       plugin = vimExtraPlugins.nvim-transparent;
       config = ''
@@ -55,23 +59,23 @@
         })
       '';
     }
-    {
-      type = "lua";
-      plugin = nvim-treesitter;
-      config = ''
-        require('nvim-treesitter.configs').setup {
-          sync_install = false,
-          auto_install = true,
-
-          disable = { "dart" },
-
-          highlight = {
-            enable = true,
-            additional_vim_regex_highlighting = false,
-          },
-        }      
-      '';
-    }
+    # {
+    #   type = "lua";
+    #   plugin = nvim-treesitter;
+    #   config = ''
+    #     require('nvim-treesitter.configs').setup {
+    #       sync_install = false,
+    #       auto_install = true,
+    #
+    #       disable = { "dart" },
+    #
+    #       highlight = {
+    #         enable = true,
+    #         additional_vim_regex_highlighting = false,
+    #       },
+    #     }      
+    #   '';
+    # }
     {
       plugin = nvim-tree-lua;
       config = "lua require('nvim-tree').setup()";

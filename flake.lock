@@ -24,6 +24,22 @@
         "type": "github"
       }
     },
+    "bufresize-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1647824331,
+        "narHash": "sha256-6jqlKe8Ekm+3dvlgFCpJnI0BZzWC3KDYoOb88/itH+g=",
+        "owner": "kwkarlwang",
+        "repo": "bufresize.nvim",
+        "rev": "3b19527ab936d6910484dcc20fb59bdb12322d8b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kwkarlwang",
+        "repo": "bufresize.nvim",
+        "type": "github"
+      }
+    },
     "crane": {
       "flake": false,
       "locked": {
@@ -161,6 +177,36 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_3": {
+      "locked": {
+        "lastModified": 1649676176,
+        "narHash": "sha256-OWKJratjt2RW151VUlJPRALb7OU2S5s+f0vLj4o1bHM=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "a4b154ebbdc88c8498a5c7b01589addc9e9cb678",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "flakeCompat": {
       "flake": false,
       "locked": {
@@ -174,6 +220,22 @@
       "original": {
         "owner": "edolstra",
         "repo": "flake-compat",
+        "type": "github"
+      }
+    },
+    "flutter-tools-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1662736694,
+        "narHash": "sha256-jkH8qdm4YTDTX1mplgSw6qxUnhoAEk+UsQ+rMFbzo1A=",
+        "owner": "FlafyDev",
+        "repo": "flutter-tools.nvim",
+        "rev": "b023872fa7d82325dc9b44b2fd4d91157f37ef91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "FlafyDev",
+        "repo": "flutter-tools.nvim",
         "type": "github"
       }
     },
@@ -255,6 +317,26 @@
         "type": "github"
       }
     },
+    "lang-to-docx": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nix-dart": "nix-dart",
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1662757148,
+        "narHash": "sha256-O3RagIN7X1Ot+rfPCYsV9KyZdsofOXGUADnxnN91KOM=",
+        "owner": "FlafyDev",
+        "repo": "lang-to-docx",
+        "rev": "887c4e7de49763699f0de1aae7b110ba1c921edd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "FlafyDev",
+        "repo": "lang-to-docx",
+        "type": "github"
+      }
+    },
     "mach-nix": {
       "flake": false,
       "locked": {
@@ -270,7 +352,55 @@
         "type": "indirect"
       }
     },
+    "nix-dart": {
+      "inputs": {
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": "nixpkgs",
+        "pub2nix": "pub2nix"
+      },
+      "locked": {
+        "lastModified": 1662668690,
+        "narHash": "sha256-rfxhwZ8jxhfkJVfFS9qRd61dvqZCKTppNPVPQ3ZpmFY=",
+        "owner": "Cir0X",
+        "repo": "nix-dart",
+        "rev": "436084a4814d0e61a8fdcac4d165ecb7c756e7fb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Cir0X",
+        "repo": "nix-dart",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1652133925,
+        "narHash": "sha256-kfATGChLe9/fQVZkXN9G71JAVMlhePv1qDbaRKklkQs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "51d859cdab1ef58755bd342d45352fc607f5e59b",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1662096612,
+        "narHash": "sha256-R+Q8l5JuyJryRPdiIaYpO5O3A55rT+/pItBrKcy7LM4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "21de2b973f9fee595a7a1ac4693efff791245c34",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1661239211,
         "narHash": "sha256-pNJzBlSNpWEiFJZnLF2oETYq8cGWx1DJPW33aMtG6n8=",
@@ -365,13 +495,32 @@
         "type": "github"
       }
     },
+    "pub2nix": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1658857493,
+        "narHash": "sha256-1JdcFEmjwlr0NGNbB3fgYqaUZPJbaFnxYifNPoL3bio=",
+        "owner": "cir0x",
+        "repo": "pub2nix",
+        "rev": "47e6ab2e061e0c7a0ae6a949a8c6b34daf3ac298",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cir0x",
+        "repo": "pub2nix",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "bufresize-nvim": "bufresize-nvim",
         "discocss": "discocss",
+        "flutter-tools-nvim": "flutter-tools-nvim",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "hyprpaper": "hyprpaper",
-        "nixpkgs": "nixpkgs",
+        "lang-to-docx": "lang-to-docx",
+        "nixpkgs": "nixpkgs_3",
         "npm-buildpackage": "npm-buildpackage",
         "nur": "nur",
         "webcord": "webcord",

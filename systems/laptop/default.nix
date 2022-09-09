@@ -60,7 +60,16 @@
     };
 
     hardware = {
-      bluetooth.enable = true;
+      bluetooth = {
+        enable = true;
+        hsphfpd.enable = true;
+        package = pkgs.bluezFull;
+        settings = {
+          General = {
+            Experimental = true;
+          };
+        };
+      };
       opentabletdriver.enable = true;
       pulseaudio.enable = false;
       

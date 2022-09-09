@@ -9,7 +9,7 @@ mkHome username {
     mpv
     nix
     printer-4500
-    # /vscode
+    vscode
     zsh
     mouse-g502-xserver
     neovim
@@ -26,6 +26,7 @@ mkHome username {
     utility-cli
     ( firefox { wayland = false; }) 
     chromium
+    ssh
   ];
 
   system = { pkgs, ... }: {
@@ -72,6 +73,7 @@ mkHome username {
       scrcpy
       pavucontrol
       libnotify
+      lang-to-docx
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
