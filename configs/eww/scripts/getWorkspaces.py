@@ -107,6 +107,6 @@ def hyprland():
 
 if shutil.which("i3-msg"):
     i3()
-elif shutil.which("hyprland"):
+elif shutil.which("hyprctl"):
     hyprland()
 

@@ -27,6 +27,8 @@ mkHome username {
     ( firefox { wayland = false; }) 
     chromium
     ssh
+    # neofetch
+    # kitty
   ];
 
   system = { pkgs, ... }: {
@@ -61,10 +63,22 @@ mkHome username {
     fonts.fonts = with pkgs; [
       (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
     ];
+    # services.xserver.windowManager.bspwm = {
+    #   enable = true;
+    # };
   };
 
   home = ({ pkgs, lib, inputs, ... }: {
-    home.packages = with pkgs; [
+    # xsession.windowManager.bspwm = {
+    #   enable = true;
+    # };
+
+    home.packages = with pkgs; let 
+      patchDesktop = pkg: appName: from: to: lib.hiPrio (pkgs.runCommand "$patched-desktop-entry-for-${appName}" {} ''
+        ${pkgs.coreutils}/bin/mkdir -p $out/share/applications
+        ${pkgs.gnused}/bin/sed 's#${from}#${to}#g' < ${pkg}/share/applications/${appName}.desktop > $out/share/applications/${appName}.desktop
+      '');
+    in [
       qbittorrent
       polymc
       element-desktop
@@ -74,6 +88,7 @@ mkHome username {
       pavucontrol
       libnotify
       lang-to-docx
+      (patchDesktop pkgs.mpv-unwrapped "mpv" "^Exec=mpv" "Exec=nvidia-offload mpv")
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";

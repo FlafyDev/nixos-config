@@ -123,6 +123,7 @@
             # "${modifier}+r" = ''mode "resize"'';
             
             "${modifier}+u" = "workspace back_and_forth";
+            "${modifier}+a" = "fullscreen";
             "${modifier}+Shift+d" = "restart";
             "${modifier}+q" = "kill";
             "${modifier}+f" = "exec ${pkgs.alacritty}/bin/alacritty";

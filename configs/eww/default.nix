@@ -43,7 +43,7 @@
         name = "saveBattery";
         dependeinces = [
           package
-        ] ++ (if wayland then [ hyprland ] else [  ]);
+        ] ++ (if wayland then [ hyprland ] else [ i3 systemd ]);
       })
     ];
   in {

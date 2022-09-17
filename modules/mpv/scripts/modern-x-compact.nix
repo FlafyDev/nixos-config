@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "1-minute-to-midnight";
     repo = "mpv-modern-x-compact";
-    rev = "0d26e53ffefbbcfefc84d2d1d9bbb2daf51b1809";
-    sha256 = "1qq8p3cafrsl9bdmi493cmrn7dnbzyhz4bzn0zf1a65sig6x7hn9";
+    rev = "9a437fb9936375ff0ca7c844a349398aefbc2c3a";
+    sha256 = "Yp1ukGQGH/xguAkvz6AndkUF7fLOmq42QdR9hntzsvE=";
   };
 
   dontBuild = true;

@@ -10,8 +10,8 @@
       enable = true;
       enableFonts = true;
       config = {
-        # vo = "gpu";
-        # profile = "gpu-hq";
+        vo = "gpu";
+        profile = "gpu-hq";
         hwdec = "auto";
         # gpu-context = "wayland";
         force-window = true;

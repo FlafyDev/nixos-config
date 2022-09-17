@@ -18,20 +18,11 @@
           efiSysMountPoint = "/boot/efi";
         };
         grub = {
+          enable = true;
+          version = 2;
           devices = [ "nodev" ];
           efiSupport = true;
-          enable = true;
-          extraEntries = ''
-            menuentry "Windows" {
-              insmod part_gpt
-              insmod fat
-              insmod search_fs_uuid
-              insmod chain
-              search --fs-uuid --set=root 4424-E13F
-              chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-            }
-          '';
-          version = 2;
+          useOSProber = true;
         };
       };
       supportedFilesystems = [ "ntfs" ];
@@ -85,14 +76,14 @@
 
       opengl = {
         enable = true;
-        driSupport = true;
-        extraPackages = with pkgs; [
-          intel-media-driver
-          vaapiIntel
-          vaapiVdpau
-          libvdpau-va-gl
-          nvidia-vaapi-driver
-        ];
+        # driSupport = true;
+        # extraPackages = with pkgs; [
+        #   intel-media-driver
+        #   vaapiIntel
+        #   vaapiVdpau
+        #   libvdpau-va-gl
+        #   nvidia-vaapi-driver
+        # ];
       };
     };
 

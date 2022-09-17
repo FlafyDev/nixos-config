@@ -49,11 +49,7 @@
         # animation-window-mass = 0.4;
         # animation-dampening = 20;
         # animation-clamping = false;
-        # animation-for-open-window = "zoom"; #open window
-        # animation-for-unmap-window = "zoom"; #minimize window
-        # animation-for-workspace-switch-in = "slide-down"; #the windows in the workspace that is coming in
-        # animation-for-workspace-switch-out = "zoom"; #the windows in the workspace that are coming out
-        # animation-for-transient-window = "none"; #popup windows
+        # animation-for-open-window = "slide-up"; #open window
       };
       opacityRules = [
         # "85:class_g = 'Code'"
