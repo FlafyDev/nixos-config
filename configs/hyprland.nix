@@ -53,8 +53,8 @@
           fi 
         '';
       in ''
-        monitor=,preferred,auto,1
-        # monitor=eDP-1,disable
+        # monitor=,preferred,auto,1
+        monitor=HDMI-A-1,1920x1080@120,0x0,1
         workspace=DP-1,1
 
         misc {
@@ -62,7 +62,7 @@
         }
 
         input {
-            kb_file=${./keyboard/layout.xkb}
+            kb_file=${./keyboard-xserver/layout.xkb}
 
             follow_mouse=1
             force_no_accel=1

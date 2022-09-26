@@ -1,6 +1,7 @@
 (defpoll hour :interval "1s" "date '+%H'")
 (defpoll min :interval "1s" "date '+%M'")
-(defpoll monthDay :interval "1s" "date '+%d.%m'")
+(defpoll month :interval "1s" "date '+%m'")
+(defpoll day :interval "1s" "date '+%d'")
 (defpoll fullDate :interval "1s" "date '+%A %B %T'")
 (defvar notBatterySaving "true")
 
@@ -11,20 +12,27 @@
 
 ;; BAR
 (defwindow bar
-  :geometry (geometry :height "100%" :anchor "left center")
+  :geometry (geometry :height "100%" :width "31px" :anchor "left center")
   :monitor 0 
-  :exclusive true
-  :focusable false
-  :stacking "fg"
+  ; :exclusive true
+  ; :focusable false
+  :stacking "bg"
+  :reserve 
+    (struts 
+      :distance "31px" 
+      :side "left")
+  :windowtype "dock"
+  :wm-ignore "false"
   (bar))
 
 (defwidget bar []
   (box :class "eww-bar" :orientation "v"
-    ;; (top)
+    (top)
     (center)
     (bottom)))
 
-;; (defwidget top [])
+(defwidget top [] 
+  (box :orientation "v"))
 
 (defwidget center []
   (box :orientation "v" :halign "center" :valign "center" :space-evenly "false"
@@ -65,7 +73,11 @@
 
 (defwidget time []
   (box :class "time" :tooltip "It's ${fullDate}" :orientation "v" :halign "center" :space-evenly "false"
-    (button :class "hour" hour)
-    (button :class "min" min)
-    (button :class "month" monthDay)))
+    (box :orientation "h" :halign "center" :space-evenly "false"
+      (label :class "hour" :text hour)
+      (label :class "min" :text min))
+    (box :orientation "h" :halign "center" :space-evenly "false"
+      (label :class "month" :text month)
+      (label :class "day" :text day))))
+
 

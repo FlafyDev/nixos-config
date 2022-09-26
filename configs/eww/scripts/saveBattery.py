@@ -19,7 +19,7 @@ def xorg_save(enable: bool):
 
 def save(enable: bool):
     subprocess.check_output(["eww", "update", f"notBatterySaving={str(not enable).lower()}"])
-    if shutil.which("i3-msg"):
+    if shutil.which("picom"):
         xorg_save(enable)
     elif shutil.which("hyprctl"):
         hyprland_save(enable)

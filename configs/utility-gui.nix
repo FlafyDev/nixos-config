@@ -11,6 +11,11 @@
       krita
       gimp
       libsForQt5.kdenlive
+      qbittorrent
+      gparted
+      qdirstat
+      pavucontrol
+      lxde.lxrandr
     ];
   };
 }

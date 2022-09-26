@@ -1,7 +1,7 @@
 {
   systemType = "x86_64-linux";
 
-  system = { pkgs, config, ... }: {
+  system = { pkgs, config, lib, ... }: {
     imports = [
       ./hardware-configuration.nix
     ];
@@ -10,7 +10,16 @@
 
     nixpkgs.config.allowUnfree = true;
 
+    # specialisation = {
+    #   external-display.configuration = {
+    #     system.nixos.tags = [ "external-display" ];
+    #     hardware.nvidia.prime.offload.enable = lib.mkForce false;
+    #     hardware.nvidia.powerManagement.enable = lib.mkForce false;
+    #   };
+    # };
+
     boot = {
+      kernelPackages = pkgs.linuxPackages_latest;
       loader = {
         # systemd-boot.enable = true;
         efi = {
@@ -67,23 +76,23 @@
       nvidia = {
         modesetting.enable = true;
         prime = {
-          sync.enable = true;
+          offload.enable = true;
           intelBusId = "PCI:0:2:0";
           nvidiaBusId = "PCI:1:0:0";
         };
-        package = config.boot.kernelPackages.nvidiaPackages.stable;
+        package = config.boot.kernelPackages.nvidiaPackages.latest;
       };
 
       opengl = {
         enable = true;
         # driSupport = true;
-        # extraPackages = with pkgs; [
-        #   intel-media-driver
-        #   vaapiIntel
-        #   vaapiVdpau
-        #   libvdpau-va-gl
-        #   nvidia-vaapi-driver
-        # ];
+        extraPackages = with pkgs; [
+          intel-media-driver
+          vaapiIntel
+          vaapiVdpau
+          libvdpau-va-gl
+          nvidia-vaapi-driver
+        ];
       };
     };
 
@@ -119,6 +128,10 @@
       
       xserver = {
         videoDrivers = [ "nvidia" ];
+        # deviceSection = ''
+        #   Option "DRI" "2"
+        #   Option "TearFree" "true"
+        # '';
       };
     };
 

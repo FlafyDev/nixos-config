@@ -1,4 +1,10 @@
 { wayland }: {
+  system = { pkgs, ... }: {
+    environment.sessionVariables = {
+       DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
+    };
+  };
+
   home = { pkgs, ... }: {
     programs.firefox = {
       enable = true;
@@ -13,6 +19,11 @@
         name = "Default";
         isDefault = true;
         settings = {
+          "browser.fullscreen.autohide" = false;
+          "media.ffmpeg.vaapi.enabled" = true;
+          "media.hardware-video-decoding.force-enabled" = true;
+          "general.smoothScroll.msdPhysics.enabled" = true;
+          "layout.frame_rate" = 120;
           # "layout.css.devPixelsPerPx" = "1.2";
         };
       };

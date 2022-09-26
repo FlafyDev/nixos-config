@@ -13,15 +13,18 @@ mkHome username {
     zsh
     mouse-g502-xserver
     neovim
-    i3
+    # i3
+    bspwm
     alacritty
     picom
     keyboard-xserver
     betterdiscord
     ( eww { wayland = false; } )
     rofi
+    bitwarden
     gtk
-    utility-software
+    qt
+    utility-gui
     utility-scripts
     utility-cli
     ( firefox { wayland = false; }) 
@@ -29,6 +32,9 @@ mkHome username {
     ssh
     # neofetch
     # kitty
+    # sway
+    # hyprland
+    # foot
   ];
 
   system = { pkgs, ... }: {
@@ -63,32 +69,15 @@ mkHome username {
     fonts.fonts = with pkgs; [
       (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
     ];
-    # services.xserver.windowManager.bspwm = {
-    #   enable = true;
-    # };
   };
 
   home = ({ pkgs, lib, inputs, ... }: {
-    # xsession.windowManager.bspwm = {
-    #   enable = true;
-    # };
-
-    home.packages = with pkgs; let 
-      patchDesktop = pkg: appName: from: to: lib.hiPrio (pkgs.runCommand "$patched-desktop-entry-for-${appName}" {} ''
-        ${pkgs.coreutils}/bin/mkdir -p $out/share/applications
-        ${pkgs.gnused}/bin/sed 's#${from}#${to}#g' < ${pkg}/share/applications/${appName}.desktop > $out/share/applications/${appName}.desktop
-      '');
-    in [
-      qbittorrent
+    home.packages = with pkgs; [
       polymc
       element-desktop
-      gparted
-      qdirstat
-      scrcpy
-      pavucontrol
       libnotify
-      lang-to-docx
-      (patchDesktop pkgs.mpv-unwrapped "mpv" "^Exec=mpv" "Exec=nvidia-offload mpv")
+      # (patchDesktop pkgs.mpv-unwrapped "mpv" "^Exec=mpv" "Exec=nvidia-offload mpv")
+      libva-utils 
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";

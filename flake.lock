@@ -24,6 +24,22 @@
         "type": "github"
       }
     },
+    "bspwm-rounded": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650470277,
+        "narHash": "sha256-VyQoLiQ4yT43scFcCfBejr+SfGuJEZ6RI9Gf1kRGFV0=",
+        "owner": "phuhl",
+        "repo": "bspwm-rounded",
+        "rev": "a510c368595cd530713cc9d850842ba096051d12",
+        "type": "github"
+      },
+      "original": {
+        "owner": "phuhl",
+        "repo": "bspwm-rounded",
+        "type": "github"
+      }
+    },
     "bufresize-nvim": {
       "flake": false,
       "locked": {
@@ -513,6 +529,7 @@
     },
     "root": {
       "inputs": {
+        "bspwm-rounded": "bspwm-rounded",
         "bufresize-nvim": "bufresize-nvim",
         "discocss": "discocss",
         "flutter-tools-nvim": "flutter-tools-nvim",

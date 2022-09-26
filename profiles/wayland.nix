@@ -28,7 +28,7 @@ mkHome username {
     hyprland
     foot
     chromium
-    utility-software
+    utility-gui
     utility-scripts
     utility-cli
   ];

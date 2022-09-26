@@ -8,6 +8,10 @@ let
       let 
         inherit (prev) callPackage fetchFromGitHub;
       in {
+        patchDesktop = pkg: appName: from: to: final.hiPrio (final.runCommand "$patched-desktop-entry-for-${appName}" {} ''
+          ${final.coreutils}/bin/mkdir -p $out/share/applications
+          ${final.gnused}/bin/sed 's#${from}#${to}#g' < ${pkg}/share/applications/${appName}.desktop > $out/share/applications/${appName}.desktop
+        '');
         writers = prev.writers // {
           writePython310Bin = name: prev.writers.makePythonWriter prev.python310 prev.python310Packages "/bin/${name}";
         };
@@ -34,6 +38,18 @@ let
         };
         webcord = inputs.webcord.packages.${prev.system}.default;
         discord-open-asar = prev.discord.override { withOpenASAR = true; };
+
+        bspwm-rounded = prev.bspwm.overrideAttrs(prev: {
+          src = inputs.bspwm-rounded;
+        });
+
+
+        # mpv-with-vapoursynth = prev.wrapMpv final.mpv-unwrapped {
+        #   # extraMakeWrapperArgs = [
+        #   #   "--prefix" "LD_LIBRARY_PATH" ":" "${prev.vapoursynth-mvtools}/lib/vapoursynth"
+        #   # ];
+        # };
+
         discord-electron-openasar = prev.callPackage ./modules/discord.nix {
           inherit (prev.discord) src version pname;
           openasar = prev.callPackage "${inputs.nixpkgs}/pkgs/applications/networking/instant-messengers/discord/openasar.nix" {};
@@ -84,6 +100,7 @@ let
         xborder = callPackage ./modules/xborder.nix { };
         mpvpaper = callPackage ./modules/mpvpaper.nix { };
         mpv-unwrapped-stable = prev.mpv-unwrapped;
+        svpflow = callPackage ./modules/svpflow.nix { };
         mpv-unwrapped = prev.mpv-unwrapped.overrideAttrs (prev: {
           version = "2022-08-21";
           src = fetchFromGitHub {

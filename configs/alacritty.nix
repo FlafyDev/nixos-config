@@ -1,28 +1,30 @@
 {
-  home = { ... }: {
+  home = { pkgs, ... }: {
+    home.packages = [
+      (pkgs.patchDesktop pkgs.alacritty "Alacritty" "^Exec=alacritty" "Exec=env WINIT_X11_SCALE_FACTOR=1 alacritty")
+    ];
+
     programs.alacritty = {
       enable = true;
       
       settings = {
         window = {
-      	  opacity = 0.8;
+      	  opacity = 0.0;
           padding = {
             x = 10;
             y = 10;
           };
         };
    
-        key_bindings = [
-          {
-            key = "F11";
-            action = "ToggleFullscreen";
-          }
-        ];
+        key_bindings = [{
+          key = "F11";
+          action = "ToggleFullscreen";
+        }];
 
         selection.save_to_clipboard = true;
         
         font = {
-          size = 8;
+          size = 13;
           family = "FiraCode Nerd Font Mono";
           normal = {
             style = "Regular";
@@ -30,6 +32,7 @@
           bold = {
             style = "Bold";
           };
+          scale_with_dpi = true;
         };
 
         colors = {

@@ -32,6 +32,26 @@ def execute(cmd):
         raise subprocess.CalledProcessError(return_code, cmd)
 
 # WM Specific:
+# Single monitor setups only...
+def bspwm():
+    def printWidget():
+        data = json.loads(subprocess.check_output(["bspc", "query", "-T", "-m"]))
+        all_status = [ ] 
+
+        for desktop in data["desktops"]:
+            if desktop["id"] == data["focusedDesktopId"]:
+                all_status.append(WorkspaceStatus.selected)
+            elif desktop["root"] != None:
+                all_status.append(WorkspaceStatus.occupied)
+            else:
+                all_status.append(WorkspaceStatus.free)
+    
+        print(turnToWidget(all_status), flush=True)
+
+    printWidget()
+    for _ in execute(["bspc", "subscribe", "desktop", "node_add", "node_remove"]):
+        printWidget()
+
 def i3():
     def status_from_wmctrl_symbol(symbol):
         match symbol:
@@ -105,8 +125,12 @@ def hyprland():
 
         printWidget()
 
-if shutil.which("i3-msg"):
-    i3()
-elif shutil.which("hyprctl"):
+if shutil.which("hyprctl"):
     hyprland()
+else:
+    match os.environ.get('DESKTOP_SESSION', None):
+        case "none+bspwm":
+            bspwm()
+        case "none+i3":
+            i3()
 

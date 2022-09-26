@@ -8,6 +8,8 @@
       unzip
       xclip
       service-wrapper
+      intel-gpu-tools
+      lang-to-docx
       htop
     ];
   };

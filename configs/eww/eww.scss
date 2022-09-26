@@ -11,7 +11,7 @@ $fg: #c5c8c9;
 $fg2: #6e7071;
 $gray: #b2b2b2;
 
-$green: #87c7a1;
+$blueish: #1d4147;
 
 $font: "JetBrainsMono Nerd Font";
 $altfont: "FuraCode Nerd Font";
@@ -40,9 +40,11 @@ $altfont: "FuraCode Nerd Font";
 }
 
 tooltip {
-  background-color: $green;
+  background: rgb(20,36,77);
+  background: linear-gradient(151deg, rgba(20,36,77,1) 0%, rgba(12,39,82,1) 59%, rgba(29,52,71,1) 100%); 
   font-weight: bolder;
   border-radius: 5px;
+  color: black;
 }
 
 // BAR 
@@ -50,7 +52,6 @@ tooltip {
   font-family: $font;
   color: white;
   background-color: rgba(0, 0, 0, 0);
-  padding: 5px;
 }
 
 .volume {
@@ -62,27 +63,28 @@ tooltip {
 .time {
   border-radius: 10px;
 }
-.hour {
-  font-size: 17px;
-  font-weight: bolder;
-}
-.min {
-  font-size: 17px;
-  font-weight: bold;
-}
-.month {
-  font-size: 12px;
-  padding-top: 3px;
+.hour, .month {
+  font-size: 14px;
+  font-weight: 700;
   font-family: $altfont;
 }
+.min, .day {
+  font-size: 14px;
+  font-family: $altfont;
+}
+// .month {
+//   font-size: 12px;
+//   padding-top: 3px;
+//   font-family: $altfont;
+// }
 .wp {
   border-radius: 20px;
-  padding: 0.2px 0.5px;
   font-size: 20px;
   font-family: $font;
 }
 .wp-free, .wp-occupied {
   opacity: 0.7;
 }
+
 
 

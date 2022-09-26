@@ -9,8 +9,12 @@
         gtk-application-prefer-dark-theme = 1;
       };
       theme = {
-        name = "Flat-Remix-GTK-Green-Dark";
-        package = pkgs.flat-remix-gtk;
+        name = "Adwaita";
+        package = pkgs.gnome.gnome-themes-extra;
+      };
+      iconTheme = {
+        name = "Adwaita";
+        package = pkgs.gnome.adwaita-icon-theme;
       };
     };
   };

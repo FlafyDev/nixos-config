@@ -2,7 +2,7 @@
   home = { pkgs, lib, ... }: let
     package = if wayland then pkgs.eww-wayland else pkgs.eww;
 
-    mkPyScript = { name, pythonLibraries ? (ps: []), dependeinces ? [] }:
+    mkPyScript = { name, pythonLibraries ? (ps: []), dependeinces ? [], isolate ? true}:
       pkgs.stdenv.mkDerivation {
         name = name;
         buildInputs = [
@@ -10,20 +10,23 @@
           (pkgs.python310.withPackages pythonLibraries)
         ];
         unpackPhase = "true";
-        installPhase = ''
+        installPhase = let
+          wrap = if isolate
+          then "wrapProgram $out/bin/${name} --set PATH ${lib.makeBinPath dependeinces}"
+          else "wrapProgram $out/bin/${name} --suffix PATH : ${lib.makeBinPath dependeinces}";
+        in ''
           mkdir -p $out/bin
           cp ${./scripts + "/${name}.py"} $out/bin/${name}
           chmod +x $out/bin/${name}
-          wrapProgram $out/bin/${name} --set PATH ${lib.makeBinPath dependeinces}
+          ${wrap}
         '';
       };
     
     scripts = with pkgs; [
       (mkPyScript {
         name = "getWorkspaces";
-        dependeinces = [
-
-        ] ++ (if wayland then [ hyprland ] else [ i3 wmctrl ]);
+        isolate = false;
+        dependeinces = if wayland then [  ] else [ wmctrl ];
       })
       (mkPyScript {
         name = "getBattery";
@@ -43,7 +46,7 @@
         name = "saveBattery";
         dependeinces = [
           package
-        ] ++ (if wayland then [ hyprland ] else [ i3 systemd ]);
+        ] ++ (if wayland then [ hyprland ] else [ picom systemd ]);
       })
     ];
   in {

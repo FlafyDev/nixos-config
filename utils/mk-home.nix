@@ -15,6 +15,7 @@ in let
   homeModules = (map (cfg: cfg.home) (filter (cfg: cfg ? home) profileConfigs));
 in {
   system = system.systemType;
+  specialArgs = { inherit (inputs) nixpkgs; };
   modules = (flatten [
     systemModules
     {

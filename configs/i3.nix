@@ -5,12 +5,13 @@
     #   # displayManager = {
     #   #     defaultSession = "none+i3";
     #   # };
-      dpi = 110;
+      dpi = 96;
 
       windowManager.i3 = {
         enable = true;
       	package = pkgs.i3-gaps;
         extraPackages = with pkgs; [
+          clipster
           dmenu
         ];
       };
@@ -56,23 +57,20 @@
           size = 19.5;
         };
 
-        gaps = let
-          houter = 16;
-          vouter = 16;
-        in {
-          left = 25+houter; # for eww
+        gaps = {
+          left = 37; # for eww
           # smartGaps = true;
-          inner = 16;
-          # outer = 16;
-          horizontal = houter - 16;
-          vertical = vouter - 16;
+          inner = 8;
+          outer = -8;
+          # horizontal = houter - 16;
+          # vertical = vouter - 16;
         };
 
         bars = [ ];
        
         startup = [
           {
-            command = "${pkgs.feh}/bin/feh --bg-scale ${../assets/background2.png}";
+            command = "${pkgs.feh}/bin/feh --bg-scale ${../assets/forest.jpg}";
             always = true;
             notification = false;
           }
@@ -131,6 +129,7 @@
             "${modifier}+r" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
             "${modifier}+Shift+r" = "exec ${pkgs.rofi}/bin/rofi -show window";
             "${modifier}+v" = "floating toggle";
+            "${modifier}+g" = "exec ${pkgs.rofi-rbw}/bin/rofi-rbw";
 
             # Pulse Audio controls
             "XF86AudioRaiseVolume" = "exec --no-startup-id ${pactl} set-sink-volume 0 +5%";

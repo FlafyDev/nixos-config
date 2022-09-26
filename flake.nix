@@ -46,12 +46,16 @@
     lang-to-docx = {
       url = "github:FlafyDev/lang-to-docx";
     };
+    bspwm-rounded = {
+      url = "github:phuhl/bspwm-rounded";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (
-        (import ./profiles/i3.nix) (import ./systems/laptop) inputs
+        (import ./profiles/x.nix) (import ./systems/laptop) inputs
       );
     };
   };
