@@ -2,6 +2,8 @@
   system = { pkgs, ... }: {
     services = {
       xserver = {
+        enable = true;
+        dpi = 96;
         desktopManager.gnome.enable = true;
         displayManager.lightdm.enable = true;
 
@@ -60,7 +62,7 @@
           primary-color = "#3465a4";
         };
         "org/gnome/desktop/interface" = {
-          gtk-theme = "Adwaita-dark";
+          # gtk-theme = "Adwaita-dark";
           color-scheme = "prefer-dark";
         };
         "apps/guake/general" = {

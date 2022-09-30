@@ -9,12 +9,12 @@
       activeOpacity = 1.0;
       inactiveOpacity = 1.0; 
 
-      fade = true;
-      fadeDelta = 1;
-      fadeSteps = [ 0.01 0.01 ];
-      fadeExclude = [
-        "class_g != 'Rofi'"
-      ];
+      # fade = true;
+      # fadeDelta = 1;
+      # fadeSteps = [ 0.01 0.01 ];
+      # fadeExclude = [
+      #   "class_g != 'Rofi'"
+      # ];
 
       backend = "glx";
       vSync = true;

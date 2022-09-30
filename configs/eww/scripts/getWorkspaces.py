@@ -87,7 +87,7 @@ def hyprland():
     selectedWorkspaceId = initial_monitors[0]["activeWorkspace"]["id"]
 
     def onEvent(rawEvent: str):
-        global selectedWorkspaceId
+        nonlocal selectedWorkspaceId
         (event, param) = rawEvent.split(">>");
         match event:
             case "createworkspace":
@@ -125,12 +125,12 @@ def hyprland():
 
         printWidget()
 
-if shutil.which("hyprctl"):
-    hyprland()
-else:
-    match os.environ.get('DESKTOP_SESSION', None):
-        case "none+bspwm":
-            bspwm()
-        case "none+i3":
-            i3()
+match os.environ.get('DESKTOP_SESSION', None):
+    case "none+bspwm":
+        bspwm()
+    case "none+i3":
+        i3()
+    case None:
+        if shutil.which("hyprctl"):
+            hyprland()
 

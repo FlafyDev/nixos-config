@@ -35,7 +35,6 @@ xkb_keymap {
     key <LALT> { [ Shift_L ] };
     key <CAPS> { [ Escape ] };
     key <LFSH> { [ Return ] };
-    key <RALT> { [ ISO_Level3_Shift ] };
     modifier_map Mod5 { ISO_Level3_Shift };
     key <AC06> {
        type = "THREE_LEVEL",

@@ -17,7 +17,7 @@
     };
     nur = {
       url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
     webcord = {
       url = "github:fufexan/webcord-flake";
@@ -45,9 +45,14 @@
     };
     lang-to-docx = {
       url = "github:FlafyDev/lang-to-docx";
+      # url = "path:/mnt/general/repos/flafydev/lang-to-docx";
     };
     bspwm-rounded = {
       url = "github:phuhl/bspwm-rounded";
+      flake = false;
+    };
+    sway-borders = {
+      url = "github:fluix-dev/sway-borders";
       flake = false;
     };
   };
@@ -55,7 +60,7 @@
   outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (
-        (import ./profiles/x.nix) (import ./systems/laptop) inputs
+        (import ./profiles/wayland.nix) (import ./systems/laptop) inputs
       );
     };
   };

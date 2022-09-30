@@ -44,9 +44,10 @@
       })
       (mkPyScript {
         name = "saveBattery";
+        isolate = false;
         dependeinces = [
           package
-        ] ++ (if wayland then [ hyprland ] else [ picom systemd ]);
+        ];
       })
     ];
   in {

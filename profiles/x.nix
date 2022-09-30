@@ -9,7 +9,7 @@ mkHome username {
     mpv
     nix
     printer-4500
-    vscode
+    # vscode
     zsh
     mouse-g502-xserver
     neovim
@@ -33,8 +33,7 @@ mkHome username {
     # neofetch
     # kitty
     # sway
-    # hyprland
-    # foot
+    foot
   ];
 
   system = { pkgs, ... }: {

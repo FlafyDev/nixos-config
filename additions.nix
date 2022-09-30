@@ -43,6 +43,14 @@ let
           src = inputs.bspwm-rounded;
         });
 
+        sway-borders = let 
+          sway-unwrapped = prev.sway-unwrapped.overrideAttrs(prev: {
+            src = inputs.sway-borders;
+          });
+        in prev.sway.override {
+          inherit sway-unwrapped;
+        };
+
 
         # mpv-with-vapoursynth = prev.wrapMpv final.mpv-unwrapped {
         #   # extraMakeWrapperArgs = [

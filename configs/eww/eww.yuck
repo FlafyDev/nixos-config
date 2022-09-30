@@ -14,8 +14,8 @@
 (defwindow bar
   :geometry (geometry :height "100%" :width "31px" :anchor "left center")
   :monitor 0 
-  ; :exclusive true
-  ; :focusable false
+  :exclusive true
+  :focusable false
   :stacking "bg"
   :reserve 
     (struts 
