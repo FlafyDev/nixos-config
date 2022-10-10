@@ -9,7 +9,6 @@
     sound.enable = false;
 
     nixpkgs.config.allowUnfree = true;
-    systemd.services.nix-daemon.serviceConfig.LimitNOFILE = lib.mkForce 65536;
 
     # specialisation = {
     #   external-display.configuration = {
