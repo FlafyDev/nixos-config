@@ -8,6 +8,9 @@
         gtk-decoration-layout = ":menu"; # disable title bar buttons
         gtk-application-prefer-dark-theme = 1;
       };
+      font = {
+        name = "DroidSansMono Nerd Font";
+      };
       theme = {
         name = "Adwaita";
         package = pkgs.gnome.gnome-themes-extra;

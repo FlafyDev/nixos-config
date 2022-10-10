@@ -4,10 +4,13 @@ let
     inputs.npm-buildpackage.overlays.default
     inputs.hyprland.overlays.default
     inputs.lang-to-docx.overlays.default
+    inputs.tofi-rbw.overlays.default
+    inputs.guifetch.overlays.default
     (final: prev:
       let 
         inherit (prev) callPackage fetchFromGitHub;
       in {
+        inherit (inputs) qutebrowser-base16;
         patchDesktop = pkg: appName: from: to: final.hiPrio (final.runCommand "$patched-desktop-entry-for-${appName}" {} ''
           ${final.coreutils}/bin/mkdir -p $out/share/applications
           ${final.gnused}/bin/sed 's#${from}#${to}#g' < ${pkg}/share/applications/${appName}.desktop > $out/share/applications/${appName}.desktop

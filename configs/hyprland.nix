@@ -8,21 +8,6 @@
     # programs.hyprland = {
     #   enable = true;
     # };
-
-    # environment.sessionVariables = {
-    #   LIBVA_DRIVER_NAME = "nvidia";
-    #   CLUTTER_BACKEND = "wayland";
-    #   XDG_SESSION_TYPE = "wayland";
-    #   QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    #   MOZ_ENABLE_WAYLAND = "1";
-    #   GBM_BACKEND = "nvidia-drm";
-    #   __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    #   WLR_NO_HARDWARE_CURSORS = "1";
-    #   WLR_BACKEND = "vulkan";
-    #   QT_QPA_PLATFORM = "wayland";
-    #   GDK_BACKEND = "wayland";
-    #   # WLR_DRM_DEVICES = "/dev/dri/card1";
-    # };
   };
 
   home = { pkgs, ... }: {
@@ -33,17 +18,18 @@
       (pkgs.writeShellScriptBin "hyprland" ''
         export _JAVA_AWT_WM_NONREPARENTING=1;
         export XCURSOR_SIZE=1;
-        export LIBVA_DRIVER_NAME="nvidia";
+        # export LIBVA_DRIVER_NAME="nvidia";
         export CLUTTER_BACKEND="wayland";
         export XDG_SESSION_TYPE="wayland";
         export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
         export MOZ_ENABLE_WAYLAND="1";
-        export GBM_BACKEND="nvidia-drm";
-        export __GLX_VENDOR_LIBRARY_NAME="nvidia";
+        # export GBM_BACKEND="nvidia-drm";
+        # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
         export WLR_NO_HARDWARE_CURSORS="1";
         export WLR_BACKEND="vulkan";
         export QT_QPA_PLATFORM="wayland";
         export GDK_BACKEND="wayland";
+        export TERM="foot";
         Hyprland "$@"
       '')
     ];
@@ -64,12 +50,27 @@
         playerctl = "${pkgs.playerctl}/bin/playerctl";
         pactl = "${pkgs.pulseaudio}/bin/pactl";
         pamixer = "${pkgs.pamixer}/bin/pamixer";
-        lidOpenCloseScript = pkgs.writeShellScript "lid-open-close" ''
-          if grep -q open /proc/acpi/button/lid/LID0/state; then 
+        # lidOpenCloseScript = pkgs.writeShellScript "lid-open-close" ''
+        #   if grep -q open /proc/acpi/button/lid/LID0/state; then 
+        #     hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
+        #   else               
+        #     hyprctl keyword monitor eDP-1,disable
+        #   fi 
+        # '';
+        autoMonitors = pkgs.writeShellScript "auto-monitors" ''
+          hyprctl keyword monitor HDMI-A-1,disable
+
+          if grep -q disconnected /sys/class/drm/card1-HDMI-A-1/status; then
             hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
-          else               
+            hyprctl keyword monitor HDMI-A-1,disable
+          else
+            hyprctl keyword monitor HDMI-A-1,1920x1080@60,0x0,1
             hyprctl keyword monitor eDP-1,disable
-          fi 
+          fi
+
+          sleep 1
+
+          eww kill; eww daemon; eww open bar;
         '';
         styledWob = pkgs.writeShellScript "styled-wob" ''
           ${pkgs.wob}/bin/wob --anchor "top" \
@@ -85,20 +86,24 @@
         hyprlandFocusChange = pkgs.writeShellScript "hyprland-focus-change" ''
           ${pkgs.socat}/bin/socat -u "UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" - |
           while read -r line; do if [ "''${line%>>*}" = "activewindow" ]; then
-            pkill -9 -x tofi-drun
+            pkill -9 -x tofi-run
+            # pkill -9 -x tofi
           fi; done
         '';
       in ''
         # monitor=,preferred,auto,1
 
+        monitor=eDP-1,1920x1080@60,0x0,1
         monitor=HDMI-A-1,1920x1080@60,0x0,1
-        monitor=eDP-1,disable
 
         # monitor=eDP-1,1920x1080@60,1920x0,1,mirror,DP-1
+
         # workspace=DP-1,1
 
         misc {
-          no_vfr = false;
+          no_vfr = false
+          enable_swallow = true
+          swallow_regex = ^(foot)$
         }
 
         input {
@@ -134,6 +139,7 @@
             blur=1
             blur_size=10
             blur_passes=3
+            blur_ignore_opacity=1
             blur_new_optimizations=1
         }
 
@@ -141,36 +147,58 @@
         bezier=mycurve,0.4, 0, 0.6, 1
 
         animations {
-            enabled=0
-            animation=windows,1,7,default,slide
-            animation=border,1,10,default
-            #animation=fade,1,10,default
-            animation=workspaces,1,4,default,slidevert
+          enabled=1
+
+          animation=windowsMove,1,1,default
+
+          animation=windowsIn,1,2,default,popin 90%
+
+          animation=windowsOut,1,3,overshot,popin 95%
+          animation=fadeOut,1,3,default
+
+          animation=border,1,3,default
+          # animation=fade,1,3,default
+          animation=workspaces,0,1,default,fade
         }
 
         dwindle {
             pseudotile=0 # enable pseudotiling on dwindle
             force_split=2
+            preserve_split=1
             # no_gaps_when_only=1
         }
 
         exec-once=${pkgs.hyprpaper}/bin/hyprpaper 
         exec-once=${pkgs.batsignal}/bin/batsignal 
-        exec-once=${lidOpenCloseScript}
+        exec-once=sleep 1 && ${autoMonitors}
         exec-once=${hyprlandFocusChange}
+        exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
         exec=eww open bar
 
         $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
         exec-once=rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | ${styledWob}
 
+        windowrulev2 = float,class:^(sideterm)$
+        windowrulev2 = move 60% 10,class:^(sideterm)$
+        windowrulev2 = size 750 350,class:^(sideterm)$
+        windowrulev2 = animation slide,class:^(sideterm)$
+
+        windowrulev2 = float,class:^(.guifetch-wrapped_)$
+        windowrulev2 = animation slide,class:^(.guifetch-wrapped_)$
+        windowrulev2 = move 10 10,class:^(.guifetch-wrapped_)$
+
         bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=SUPER,A,fullscreen
         bind=SUPER,F,exec,${pkgs.foot}/bin/foot
+        bind=SUPER,G,exec,${pkgs.foot}/bin/foot --app-id sideterm
         bind=SUPER,Q,killactive,
         bind=SUPER,M,exit,
         bind=SUPER,E,exec,nautilus --new-window
         bind=SUPER,V,togglefloating,
-        bind=SUPER,R,exec,exec $(${pkgs.tofi}/bin/tofi-drun)
+        bind=SUPER,D,togglesplit,
+        bind=SUPER,R,exec,exec $(${pkgs.tofi}/bin/tofi-run)
+        bind=SUPER,W,exec,res=$(${pkgs.tofi-rbw}/bin/tofi-rbw) && wl-copy "$res"
+        bind=SUPER,C,exec,${pkgs.guifetch}/bin/guifetch
         bind=SUPER,P,pseudo,
         bind=,XF86AudioPlay,exec,${playerctl} play-pause
         bind=,XF86AudioPrev,exec,${playerctl} previous

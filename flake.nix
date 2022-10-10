@@ -45,7 +45,11 @@
     };
     lang-to-docx = {
       url = "github:FlafyDev/lang-to-docx";
-      # url = "path:/mnt/general/repos/flafydev/lang-to-docx";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    tofi-rbw = {
+      url = "github:FlafyDev/tofi-rbw";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     bspwm-rounded = {
       url = "github:phuhl/bspwm-rounded";
@@ -54,6 +58,13 @@
     sway-borders = {
       url = "github:fluix-dev/sway-borders";
       flake = false;
+    };
+    qutebrowser-base16 = {
+      url = "github:base16-project/base16-qutebrowser";
+      flake = false;
+    };
+    guifetch = {
+      url = "github:flafydev/guifetch";
     };
   };
 

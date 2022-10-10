@@ -12,14 +12,13 @@
 
 ;; BAR
 (defwindow bar
-  :geometry (geometry :height "100%" :width "31px" :anchor "left center")
+  :geometry (geometry :height "100%" :anchor "left center")
   :monitor 0 
   :exclusive true
   :focusable false
   :stacking "bg"
   :reserve 
     (struts 
-      :distance "31px" 
       :side "left")
   :windowtype "dock"
   :wm-ignore "false"
@@ -41,8 +40,8 @@
 (defwidget bottom []
   (box :class "bottom" :orientation "v" :halign "center" :valign "end" :space-evenly "false" :spacing 15
     ;; (bluetooth)
-    (saveBatteryButton)
     (volumePercentage)
+    (saveBatteryButton)
     (battery)
     (time)))
 
@@ -60,7 +59,7 @@
 (defwidget saveBatteryButton []
   (button :class "batterySaveButton ${notBatterySaving ? "active" : "inactive"}"
           :onclick "saveBattery ${notBatterySaving}"
-    (image :path {notBatterySaving ? "./assets/leafDisabled.png" : "./assets/leafEnabled.png"})))
+    (image :image-width 20 :path {notBatterySaving ? "./assets/leafDisabled.png" : "./assets/leafEnabled.png"})))
 
 (defwidget battery []
   (box :halign "center" :valign "center" :tooltip "${batteryPercentage}%" :orientation "v" :space-evenly "false"
@@ -73,11 +72,10 @@
 
 (defwidget time []
   (box :class "time" :tooltip "It's ${fullDate}" :orientation "v" :halign "center" :space-evenly "false"
-    (box :orientation "h" :halign "center" :space-evenly "false"
+    (box :orientation "v" :halign "center" :space-evenly "false"
       (label :class "hour" :text hour)
       (label :class "min" :text min))
-    (box :orientation "h" :halign "center" :space-evenly "false"
-      (label :class "month" :text month)
-      (label :class "day" :text day))))
-
+    (box :orientation "v" :halign "center" :space-evenly "false"
+      (label :class "day" :text day)
+      (label :class "month" :text month))))
 

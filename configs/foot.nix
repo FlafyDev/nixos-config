@@ -4,7 +4,7 @@
       enable = true;
       settings = {
         main = {
-          term = "xterm-256color";
+          term = "foot";
           font = "FiraCode Nerd Font Mono:size=11";
           dpi-aware = "no";
           pad="10x10";

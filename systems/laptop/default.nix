@@ -9,6 +9,7 @@
     sound.enable = false;
 
     nixpkgs.config.allowUnfree = true;
+    systemd.services.nix-daemon.serviceConfig.LimitNOFILE = lib.mkForce 65536;
 
     # specialisation = {
     #   external-display.configuration = {
@@ -60,6 +61,7 @@
     };
 
     hardware = {
+      pulseaudio.enable = lib.mkForce false;
       bluetooth = {
         enable = true;
         hsphfpd.enable = true;
@@ -71,7 +73,6 @@
         };
       };
       opentabletdriver.enable = true;
-      pulseaudio.enable = false;
       
       nvidia = {
         modesetting.enable = true;
@@ -110,14 +111,26 @@
     #   };
     # };
 
-    security.rtkit.enable = true;
     programs.light.enable = true;
+
+    security = {
+      rtkit.enable = true;
+      pam.loginLimits = [{
+        domain = "*";
+        type = "soft";
+        item = "nofile"; # max FD count
+        value = "unlimited";
+      }];
+    };
+
 
     services = {
       pipewire = {
         enable = true;
         alsa.enable = true;
         pulse.enable = true;
+        # media-session.enable = true;
+        wireplumber.enable = true;
         # If you want to use JACK applications, uncomment this
         #jack.enable = true;
       };

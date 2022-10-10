@@ -11,6 +11,7 @@
       intel-gpu-tools
       lang-to-docx
       htop
+      tofi-rbw
     ];
   };
 }

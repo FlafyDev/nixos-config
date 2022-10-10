@@ -9,7 +9,7 @@
       
       settings = {
         window = {
-      	  opacity = 0.0;
+      	  opacity = 0.8;
           padding = {
             x = 10;
             y = 10;
@@ -37,7 +37,7 @@
 
         colors = {
           primary = {
-            background = "0x002b36";
+            background = "0x333333";
             # foreground = "0x839496";
           };
           normal = {

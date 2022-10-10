@@ -1,6 +1,7 @@
-// GENERAL STUFF 
 * {
   all: unset;
+  padding: 0;
+  margin: 0;
 }
 
 $bg: #0b0f10;
@@ -13,8 +14,8 @@ $gray: #b2b2b2;
 
 $blueish: #1d4147;
 
-$font: "JetBrainsMono Nerd Font";
-$altfont: "FuraCode Nerd Font";
+$font: "DroidSansMono Nerd Font";
+$altfont: "FiraCode Nerd Font";
 
 .battery-top {
   background-color: white;
@@ -51,11 +52,11 @@ tooltip {
 .eww-bar {
   font-family: $font;
   color: white;
-  background-color: rgba(0, 0, 0, 0);
+  font-size: 13px;
+  background-color: rgba(0, 100, 0, 0);
 }
 
 .volume {
-  font-size: 15px;
 }
 .warning {
   color: #C35817;
@@ -63,13 +64,13 @@ tooltip {
 .time {
   border-radius: 10px;
 }
-.hour, .month {
-  font-size: 14px;
+.hour, .day {
+  font-size: 13px;
   font-weight: 700;
   font-family: $altfont;
 }
-.min, .day {
-  font-size: 14px;
+.min, .month {
+  font-size: 13px;
   font-family: $altfont;
 }
 // .month {
@@ -79,12 +80,10 @@ tooltip {
 // }
 .wp {
   border-radius: 20px;
-  font-size: 20px;
   font-family: $font;
+  font-size: 17px;
 }
 .wp-free, .wp-occupied {
   opacity: 0.7;
 }
-
-
 

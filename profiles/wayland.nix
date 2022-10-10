@@ -21,11 +21,14 @@ mkHome username {
     utility-scripts
     utility-cli
     ssh
-    gnome
+    # gnome
     alacritty
     keyboard-xserver
+    bitwarden
     # sway
     tofi
+    betterdiscord
+    qutebrowser
   ];
 
   system = { pkgs, ... }: {
@@ -60,18 +63,36 @@ mkHome username {
     # };
 
 
-    # xdg = {
-    #   portal = {
-    #     enable = true;
-    #     extraPortals = with pkgs; [
-    #       xdg-desktop-portal-wlr
-    #       xdg-desktop-portal-gtk
-    #     ];
-    #   };
-    # };
+    xdg = {
+      portal = {
+        enable = true;
+        extraPortals = with pkgs; [
+          xdg-desktop-portal-wlr
+        ];
+      };
+    };
 
     fonts.fonts = with pkgs; [
-      (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+      (nerdfonts.override { fonts = [
+        "AurulentSansMono"
+        "JetBrainsMono"
+        "FiraCode"
+        "DroidSansMono"
+      ]; })
+      source-sans
+      cantarell-fonts
+      dejavu_fonts
+      source-code-pro # Default monospace font in 3.32
+      source-sans
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      liberation_ttf
+      fira-code
+      fira-code-symbols
+      mplus-outline-fonts.githubRelease
+      dina-font
+      proggyfonts
     ];
   };
 
@@ -85,11 +106,6 @@ mkHome username {
       mpvpaper
       # (patchDesktop pkgs.webcord "webcord" "^Exec=webcord" "Exec=nvidia-offload webcord -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder")
     ];
-
-    home.sessionVariables = {
-      MOZ_ENABLE_WAYLAND = 1;
-      XDG_CURRENT_DESKTOP = "sway"; 
-    };
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
   });

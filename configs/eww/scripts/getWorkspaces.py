@@ -19,7 +19,7 @@ def turnToWidget(all_status):
 
         widgets += f'(button :class "wp-{status.name} wp-{id}" "{status.value}")'
 
-    return f'(box :class "wp" :orientation "v" :halign "start" :valign "center" :space-evenly "false" :spacing "-5" {widgets})'
+    return f'(box :class "wp" :orientation "v" :halign "center" :valign "center" :space-evenly "false" :spacing "-5" {widgets})'
 
 
 def execute(cmd):
@@ -113,17 +113,21 @@ def hyprland():
 
     printWidget()
 
-    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    sock.connect(f"/tmp/hypr/{os.environ.get('HYPRLAND_INSTANCE_SIGNATURE')}/.socket2.sock")
-
     while True:
-        rawEvents = sock.recv(1024)
-        for rawEvent in rawEvents.splitlines():
-            rawEventStr = rawEvent.decode("utf-8");
-            if (">>" in rawEventStr):
-                onEvent(rawEventStr)
+        try:
+            sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            sock.connect(f"/tmp/hypr/{os.environ.get('HYPRLAND_INSTANCE_SIGNATURE')}/.socket2.sock")
 
-        printWidget()
+            while True:
+                rawEvents = sock.recv(1024)
+                for rawEvent in rawEvents.splitlines():
+                    rawEventStr = rawEvent.decode("utf-8");
+                    if (">>" in rawEventStr):
+                        onEvent(rawEventStr)
+
+                printWidget()
+        except:
+            pass
 
 match os.environ.get('DESKTOP_SESSION', None):
     case "none+bspwm":

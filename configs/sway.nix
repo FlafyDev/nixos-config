@@ -25,7 +25,7 @@
   home = { pkgs, lib, ... }: with lib; {
     wayland.windowManager.sway = {
       enable = true;
-      package = pkgs.sway-borders;
+      # package = pkgs.sway-borders;
       xwayland = true;
       config = let 
         modifier = "Mod4"; 
@@ -56,6 +56,7 @@
           "${modifier}+f" = "exec ${pkgs.foot}/bin/foot";
           "${modifier}+m" = "pkill -9 -f sway";
           "${modifier}+q" = "kill";
+          "${modifier}+r" = "exec $(${pkgs.tofi}/bin/tofi-drun)";
           "${modifier}+a" = "fullscreen";
           "${modifier}+u" = "workspace back_and_forth";
           "${modifier}+v" = "floating toggle";

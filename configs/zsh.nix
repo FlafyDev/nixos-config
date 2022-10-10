@@ -12,12 +12,6 @@
       enableAutosuggestions = true;
       enableSyntaxHighlighting = true;
       autocd = true;
-      shellAliases = let
-        configLocation = "/home/flafydev/.dotfiles/system";
-      in {
-        update = "(cd ${configLocation} ; sudo updateSystem laptop)";
-        updateFast = "(cd ${configLocation} ; sudo updateSystem laptop fast)";
-      };
       history = {
         size = 10000;
         path = "${config.xdg.dataHome}/zsh/history";

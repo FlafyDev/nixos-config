@@ -7,7 +7,8 @@
       gnome.simple-scan
       gnome.evince
       gnome.gnome-system-monitor
-      libreoffice
+      gnome.gnome-font-viewer
+      # libreoffice
       krita
       gimp
       libsForQt5.kdenlive
@@ -16,6 +17,9 @@
       qdirstat
       pavucontrol
       lxde.lxrandr
+      obs-studio
+      onlyoffice-bin
+      guifetch
     ];
   };
 }
