@@ -66,6 +66,10 @@
     guifetch = {
       url = "github:flafydev/guifetch";
     };
+    neovide = {
+      url = "github:barklan/neovide/barklan";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {

@@ -55,6 +55,16 @@ let
         };
 
 
+        # neovide = prev.neovide.overrideAttrs (prev: rec {
+        #   src = inputs.neovide;
+        #   version = "git";
+        #   cargoDeps = prev.cargoDeps.overrideAttrs (_: {
+        #     inherit src;
+        #     name = "neovide-vendor.tar.gz";
+        #     outputHash = "0000000000000000000000000000000000000000000000000000";
+        #   });
+        # });
+
         # mpv-with-vapoursynth = prev.wrapMpv final.mpv-unwrapped {
         #   # extraMakeWrapperArgs = [
         #   #   "--prefix" "LD_LIBRARY_PATH" ":" "${prev.vapoursynth-mvtools}/lib/vapoursynth"

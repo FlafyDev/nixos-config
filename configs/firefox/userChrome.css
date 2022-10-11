@@ -1,0 +1,245 @@
+:root {
+  --navbarWidth: 40vw; /* Set width of navbar. Use px for a fixed width 
+  or vw for a percentage of your window. */
+  --animationSpeed: 0.15s;
+  /*   --tab-min-height: 36px !important;
+  --urlbar-min-height: 20px !important; */
+}
+
+@media (max-width: 800px) {
+  :root {
+    --navbarWidth: Calc(800px * 0.4);
+  }
+
+  #urlbar-zoom-button {
+    display: none !important;;
+  }
+}
+
+@media (min-width: 1100px) {
+  :root {
+    --navbarWidth: Calc(1100px * 0.4);
+  }
+}
+
+/* .scrollbox-clip > scrollbox { */
+/*   justify-content: right; */
+/*   align-items: center; */
+/*   display: flex; */
+/*   flex-direction: row-reverse; */
+/* } */
+
+#TabsToolbar
+/* .tab-background, */
+{
+  margin-top: 0 !important;
+}
+
+.tabbrowser-tab[fadein|="true"] {
+  min-width: 35px !important;;
+  max-width: 35px !important;;
+  width: 35px !important;;
+}
+
+#urlbar-background {
+  /*   background: radial-gradient(circle, rgba(4,11,29,1) 0%, rgba(1,3,6,1) 21%, rgba(7,11,18,1) 48%, rgba(26,35,57,1) 79%, rgba(1,3,6,1) 100%) !important; */
+  background: rgb(27,45,89);
+  background: linear-gradient(140deg, rgba(26,35,57,1) 0%, rgba(2,5,10,1) 48%, rgba(1,3,6,1) 100%) !important;
+}
+
+#urlbar:not([open="true"]) > #urlbar-background {
+  background: rgb(26,35,57);
+  background: linear-gradient(90deg, rgba(26,35,57,1) 0%, rgba(1,3,6,1) 100%) !important;
+}
+
+#navigator-toolbox-background::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: -5;
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+#navigator-toolbox-background::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  filter: blur(40px);
+  background-position: left;
+  background-size: cover;
+
+  background-image: url('@background@');
+}
+
+#star-button-box,
+#reader-mode-button,
+.tab-close-button,
+#identity-box,
+#forward-button[disabled="true"],
+#back-button[disabled="true"],
+#back-button,
+#forward-button,
+#tracking-protection-icon-container,
+.tab-icon-overlay,
+.tab-throbber,
+.tab-icon-pending,
+#tabbrowser-arrowscrollbox-periphery,
+.titlebar-close
+{
+  display: none !important;
+}
+
+.tabbrowser-tab:not([fadein|="true"]) {
+  display: none !important;
+}
+
+.search-one-offs {
+  display: none !important;
+}
+
+.tab-icon-image {
+  margin-inline-end: 0 !important;
+}
+
+* {
+  font-family: Cantarell;
+}
+
+/* This is the "Search with" indicator on the urlbar */
+/* #urlbar-search-mode-indicator { display: none !important } */
+
+/* Zoom button */
+/* #urlbar-zoom-button { display: none !important } */
+
+/* Page action (right three dash button) */
+/* #pageActionButton { display: none !important } */
+
+/* These are the buttons on the right of the urlbar */
+/* #page-action-buttons { display: none !important } */
+
+/* #urlbar-label-box { display: none !important } */
+
+/* This one is the hamburger menu! */
+/* CAUTION: if you hide this some popups may be bugged */
+/* #PanelUI-button { display: none !important } */
+
+/* Enable this to show the tab close button when hovering the tab */
+/* .tabbrowser-tab:hover .tab-close-button { display: -moz-inline-box !important } */
+
+/*============================================================================*/
+
+/* Oneline tweak */
+
+#TabsToolbar {
+  margin-left: var(--navbarWidth) !important;
+}
+
+#nav-bar {
+  margin-right: calc(100vw - var(--navbarWidth)) !important;
+}
+
+#urlbar-container {
+  min-width: 0px !important;
+}
+
+:root[uidensity="compact"] #nav-bar {
+  margin-top: -37px !important;
+  height: 37px !important;
+}
+
+:root:not([uidensity="compact"]):not([uidensity="touch"]) #nav-bar {
+  margin-top: -44px !important;
+  height: 44px !important;
+}
+
+:root[uidensity="touch"] #nav-bar {
+  margin-top: -49px !important;
+  height: 49px !important;
+}
+
+/* Dragging space */
+/* :root[sizemode="maximized"] #TabsToolbar {
+margin-top: 1px;
+} */
+
+  #TabsToolbar {
+    margin-top: 5px;
+  }
+
+  /* Simplifying interface */
+
+  #nav-bar {
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  #navigator-toolbox {
+    border: none !important;
+  }
+
+  .titlebar-spacer {
+    display: none !important;
+  }
+
+  #urlbar-background {
+    border: none !important;
+  }
+
+  #urlbar:not(:hover):not([breakout][breakout-extend]) > #urlbar-background {
+    /*   box-shadow: none !important;
+    background: none !important; */
+  opacity: 0 !important;
+}
+
+/* Hide urlbar elements when not active */
+
+.urlbar-icon,
+#userContext-indicator,
+#userContext-label {
+  fill: transparent !important;
+  background: transparent !important;
+  color: transparent !important;
+}
+
+#urlbar:hover .urlbar-icon,
+#urlbar:active .urlbar-icon,
+#urlbar[focused] .urlbar-icon {
+  fill: var(--toolbar-color) !important;
+}
+
+/* animations */
+.subviewbutton,
+#urlbar-background,
+.urlbar-icon,
+#userContext-indicator,
+#userContext-label,
+.urlbar-input-box,
+#identity-box,
+#tracking-protection-icon-container,
+[anonid="urlbar-go-button"],
+.urlbar-icon-wrapper,
+#tracking-protection-icon,
+#identity-box image,
+stack,
+tab:not(:active) .tab-background,
+tab:not([beforeselected-visible])::after,
+tab[visuallyselected] .tab-background::before,
+tab[visuallyselected] .tab-background::before,
+.tab-close-button {
+  transition: var(--animationSpeed) !important;
+}
+#webrtcIndicator {
+  display: none;
+}
+

@@ -1,5 +1,5 @@
 {
-  system = { pkgs, ... }: {
+  system = { pkgs, lib, ... }: {
     services = {
       xserver = {
         enable = true;
@@ -13,6 +13,7 @@
       };
       
       gnome.core-utilities.enable = false;
+      # gnome.core-os-services.enable = lib.mkForce false;
     };
 
     environment.gnome.excludePackages = with pkgs; [

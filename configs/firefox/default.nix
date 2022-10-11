@@ -14,17 +14,25 @@
           ExtensionSettings = {};
         };
       } else pkgs.firefox;
-      profiles.default = {
+      profiles.default = let 
+        startpage = pkgs.substituteAll { src = ./startpage.html; background = ../../assets/forest.jpg; };
+        userChrome = pkgs.substituteAll { src = ./userChrome.css; background = ../../assets/forest.jpg; };
+      in {
         id = 0;
         name = "Default";
         isDefault = true;
+        userChrome = builtins.readFile userChrome;
         settings = {
           "browser.fullscreen.autohide" = false;
           "media.ffmpeg.vaapi.enabled" = true;
           "media.hardware-video-decoding.force-enabled" = true;
           "general.smoothScroll.msdPhysics.enabled" = true;
-          "layout.frame_rate" = 120;
+          "layout.frame_rate" = 60;
           # "layout.css.devPixelsPerPx" = "1.2";
+          "layout.css.devPixelsPerPx" = "-1.0";
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          "browser.startup.homepage" = "file://${startpage}";
+          "browser.newtabpage.enabled" = false;
         };
       };
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [

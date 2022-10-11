@@ -9,7 +9,7 @@
         gtk-application-prefer-dark-theme = 1;
       };
       font = {
-        name = "DroidSansMono Nerd Font";
+        name = "Cantarell";
       };
       theme = {
         name = "Adwaita";

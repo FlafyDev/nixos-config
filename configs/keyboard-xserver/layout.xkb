@@ -4,29 +4,9 @@ xkb_keymap {
   };
 	xkb_types {
     include "complete"
-    type "THREE_LEVEL" {
-        modifiers= Shift+Mod5;
-        map[Shift]= Level2;
-        map[Mod5]= Level3;
-        map[Shift+Mod5]= Level3;
-        level_name[Level1]= "Base";
-        level_name[Level2]= "Shift";
-        level_name[Level3]= "Level3";
-    };
-    type "FOUR_LEVEL" {
-        modifiers= Shift+LevelThree;
-        map[Shift]= Level2;
-        map[LevelThree]= Level3;
-        map[Shift+LevelThree]= Level4;
-        level_name[Level1]= "Base";
-        level_name[Level2]= "Shift";
-        level_name[Level3]= "Alt Base";
-        level_name[Level4]= "Shift Alt";
-    };
   };
   xkb_compatibility {
     include "complete"	
-    interpret ISO_Level3_Shift { action= SetMods(modifiers=Mod5); };
   };
 	xkb_symbols   {
     include "pc+us+il:2+inet(evdev)+group(menu_toggle)"	
@@ -34,12 +14,40 @@ xkb_keymap {
     key.type = "ONE_LEVEL";
     key <LALT> { [ Shift_L ] };
     key <CAPS> { [ Escape ] };
-    key <LFSH> { [ Return ] };
-    modifier_map Mod5 { ISO_Level3_Shift };
-    key <AC06> {
-       type = "THREE_LEVEL",
-       symbols[Group1] = [h, H, a]
+    # key <LFSH> { [ Return ] };
+
+    key <LFSH> {
+        type[Group1]="ONE_LEVEL",
+            symbols[Group1]= [ ISO_Level3_Shift ]
     };
+
+    modifier_map Mod5 { <LVL3> };
+    modifier_map Mod1 { <LALT>, <META> };
+    key <AD07> { type = "THREE_LEVEL", symbols[Group1] = [ u, U, 7 ] };
+    key <AD08> { type = "THREE_LEVEL", symbols[Group1] = [ i, I, 8 ] };
+    key <AD09> { type = "THREE_LEVEL", symbols[Group1] = [ o, O, 9 ] };
+
+    key <AC07> { type = "THREE_LEVEL", symbols[Group1] = [ j, J, 4 ] };
+    key <AC08> { type = "THREE_LEVEL", symbols[Group1] = [ k, K, 5 ] };
+    key <AC09> { type = "THREE_LEVEL", symbols[Group1] = [ l, L, 6 ] };
+    key <AC10> { type = "THREE_LEVEL", symbols[Group1] = [ semicolon, colon, 0 ] };
+
+    key <AB07> { type = "THREE_LEVEL", symbols[Group1] = [ m, M, 1 ] };
+    key <AB08> { type = "THREE_LEVEL", symbols[Group1] = [ comma, less, 2 ] };
+    key <AB09> { type = "THREE_LEVEL", symbols[Group1] = [ period, greater, 3 ] };
+
+    # key <AC06> { type = "THREE_LEVEL", symbols[Group1] = [h, H, a] };
+    # key <AC01> { type = "THREE_LEVEL", symbols[Group1] = [ a, A, 1 ] };
+    # key <AC02> { type = "THREE_LEVEL", symbols[Group1] = [ s, S, 2, U1E9E ] };
+    # key <AC03> { type = "THREE_LEVEL", symbols[Group1] = [ d, D, 3, ETH ] };
+    # key <AC04> { type = "THREE_LEVEL", symbols[Group1] = [ f, F, 4, F ] };
+    # key <AC05> { type = "THREE_LEVEL", symbols[Group1] = [ g, G, 5, G ] };
+    # key <AC06> { type = "THREE_LEVEL", symbols[Group1] = [ h, H, 6, H ] };
+    # key <AC07> { type = "THREE_LEVEL", symbols[Group1] = [ j, J, 7, J ] };
+    # key <AC08> { type = "THREE_LEVEL", symbols[Group1] = [ k, K, 8, dead_greek ] };
+    # key <AC09> { type = "THREE_LEVEL", symbols[Group1] = [ l, L, 9, dead_currency ] };
+    # key <AC10> { type = "THREE_LEVEL", symbols[Group1] = [ odiaeresis, Odiaeresis, 0, Oslash ] };
   };
 	xkb_geometry  { include "pc(pc104)"	};
 };
+

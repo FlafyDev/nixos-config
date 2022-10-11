@@ -364,11 +364,11 @@
         "wlroots": "wlroots"
       },
       "locked": {
-        "lastModified": 1665413965,
-        "narHash": "sha256-QerUvVuB6zA7nqFRoaUBnngLafa7eL9O63uDt7cLILA=",
+        "lastModified": 1665480816,
+        "narHash": "sha256-FPcO5We1hhUcql4bnes3Q5sIa8E9nfH8y582wieFGQU=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "f55f56f26049ec97dab2cdbaf6445e9166c72b7d",
+        "rev": "8880298f50dcc53b0aa91e13673dbd3391b65170",
         "type": "github"
       },
       "original": {
@@ -432,6 +432,23 @@
       "original": {
         "id": "mach-nix",
         "type": "indirect"
+      }
+    },
+    "neovide": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1655552622,
+        "narHash": "sha256-L4Rtu4CYe9ozZA9b8t9nGZWLzUduZSFtsrwYFTmW0/M=",
+        "owner": "barklan",
+        "repo": "neovide",
+        "rev": "e4316cedad9d841e1907b0a7ae1b5ad40e62cae5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "barklan",
+        "ref": "barklan",
+        "repo": "neovide",
+        "type": "github"
       }
     },
     "nix-dart": {
@@ -672,6 +689,7 @@
         "hyprland": "hyprland",
         "hyprpaper": "hyprpaper",
         "lang-to-docx": "lang-to-docx",
+        "neovide": "neovide",
         "nixpkgs": "nixpkgs_3",
         "npm-buildpackage": "npm-buildpackage",
         "nur": "nur",
@@ -794,11 +812,11 @@
       "flake": false,
       "locked": {
         "host": "gitlab.freedesktop.org",
-        "lastModified": 1665331677,
-        "narHash": "sha256-3Dh1i11mHK80jx5figC1oh1V0rCjieh0Mj+MajXdbPw=",
+        "lastModified": 1665405587,
+        "narHash": "sha256-lVL48azhjGA/oEIcUSZQNwomNs0EzPxCcjgzyDST0PM=",
         "owner": "wlroots",
         "repo": "wlroots",
-        "rev": "ab8341975e62b1f668d8c9779ec8e72d04718a99",
+        "rev": "221ee83d440fb7dcbfd141ef3a459a5a973331b6",
         "type": "gitlab"
       },
       "original": {

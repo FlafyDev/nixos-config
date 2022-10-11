@@ -30,6 +30,7 @@
         export QT_QPA_PLATFORM="wayland";
         export GDK_BACKEND="wayland";
         export TERM="foot";
+        export NIXOS_OZONE_WL="1";
         Hyprland "$@"
       '')
     ];
@@ -43,6 +44,7 @@
 
     wayland.windowManager.hyprland = {
       enable = true;
+      recommendedEnvironment = false;
       xwayland = {
         enable = true;
       };
@@ -58,19 +60,17 @@
         #   fi 
         # '';
         autoMonitors = pkgs.writeShellScript "auto-monitors" ''
-          hyprctl keyword monitor HDMI-A-1,disable
-
           if grep -q disconnected /sys/class/drm/card1-HDMI-A-1/status; then
             hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
             hyprctl keyword monitor HDMI-A-1,disable
+            sleep 1
+            eww kill; eww daemon; eww open bar;
           else
             hyprctl keyword monitor HDMI-A-1,1920x1080@60,0x0,1
             hyprctl keyword monitor eDP-1,disable
-          fi
-
-          sleep 1
-
-          eww kill; eww daemon; eww open bar;
+            sleep 1
+            eww kill; eww daemon; eww open bar;
+         fi
         '';
         styledWob = pkgs.writeShellScript "styled-wob" ''
           ${pkgs.wob}/bin/wob --anchor "top" \
@@ -90,6 +90,7 @@
             # pkill -9 -x tofi
           fi; done
         '';
+        compileWindowRule = window: rules: (builtins.concatStringsSep "\n" (map (rule: "windowrulev2=${rule},${window}") rules));
       in ''
         # monitor=,preferred,auto,1
 
@@ -170,7 +171,7 @@
 
         exec-once=${pkgs.hyprpaper}/bin/hyprpaper 
         exec-once=${pkgs.batsignal}/bin/batsignal 
-        exec-once=sleep 1 && ${autoMonitors}
+        exec-once=${autoMonitors}
         exec-once=${hyprlandFocusChange}
         exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
         exec=eww open bar
@@ -178,14 +179,6 @@
         $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
         exec-once=rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | ${styledWob}
 
-        windowrulev2 = float,class:^(sideterm)$
-        windowrulev2 = move 60% 10,class:^(sideterm)$
-        windowrulev2 = size 750 350,class:^(sideterm)$
-        windowrulev2 = animation slide,class:^(sideterm)$
-
-        windowrulev2 = float,class:^(.guifetch-wrapped_)$
-        windowrulev2 = animation slide,class:^(.guifetch-wrapped_)$
-        windowrulev2 = move 10 10,class:^(.guifetch-wrapped_)$
 
         bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=SUPER,A,fullscreen
@@ -251,6 +244,17 @@
 
         bind=SUPER,mouse_down,workspace,e+1
         bind=SUPER,mouse_up,workspace,e-1
+
+        # windowrulev2 = float,class:^(sideterm)$
+        # windowrulev2 = move 60% 10,class:^(sideterm)$
+        # windowrulev2 = size 750 350,class:^(sideterm)$
+        # windowrulev2 = animation slide,class:^(sideterm)$
+        ${compileWindowRule "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"]}
+        ${compileWindowRule "class:^(.guifetch-wrapped_)$" ["float" "animation slide" "move 10 10"]}
+
+        # windowrulev2 = float,class:^(.guifetch-wrapped_)$
+        # windowrulev2 = animation slide,class:^(.guifetch-wrapped_)$
+        # windowrulev2 = move 10 10,class:^(.guifetch-wrapped_)$
       '';
     };
   };

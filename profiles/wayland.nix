@@ -21,17 +21,18 @@ mkHome username {
     utility-scripts
     utility-cli
     ssh
-    # gnome
+    gnome
     alacritty
     keyboard-xserver
     bitwarden
     # sway
     tofi
-    betterdiscord
+    # betterdiscord
+    discord-open-asar
     qutebrowser
   ];
 
-  system = { pkgs, ... }: {
+  system = { pkgs, lib, ... }: {
     time.timeZone = "Israel";
 
     programs = {
@@ -66,7 +67,7 @@ mkHome username {
     xdg = {
       portal = {
         enable = true;
-        extraPortals = with pkgs; [
+        extraPortals = with pkgs; lib.mkForce [
           xdg-desktop-portal-wlr
         ];
       };
@@ -104,6 +105,7 @@ mkHome username {
       # pavucontrol
       webcord
       mpvpaper
+      # neovide
       # (patchDesktop pkgs.webcord "webcord" "^Exec=webcord" "Exec=nvidia-offload webcord -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder")
     ];
 
