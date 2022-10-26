@@ -4,14 +4,17 @@
     environment.pathsToLink = [ "/share/zsh" ];
   };
 
-  home = { config, pkgs, ... }:
-  {
+  home = { config, pkgs, ... }: {
+    programs.nix-index = {
+      enableZshIntegration = true;
+    };
     programs.zsh = {
       enable = true;
       enableCompletion = true;
       enableAutosuggestions = true;
       enableSyntaxHighlighting = true;
       autocd = true;
+      initExtra = "${pkgs.cp-maps}/bin/cp-maps";
       history = {
         size = 10000;
         path = "${config.xdg.dataHome}/zsh/history";

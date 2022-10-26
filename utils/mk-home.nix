@@ -8,11 +8,12 @@ let
       (builtins.elemAt ( if builtins.isNull name then [ file ] else name ) 0)
       (import (../configs + "/${file}"))
   ) (builtins.readDir ../configs);
+  getDeepConfigs = (config: flatten ((if config ? configs then (map (cfg: getDeepConfigs cfg) (config.configs configs)) else []) ++ [ config ]));
 in let
   additions = import ../additions.nix;
-  profileConfigs = (profile.configs configs) ++ [ profile system ];
-  systemModules = (map (cfg: cfg.system) (filter (cfg: cfg ? system) profileConfigs));
-  homeModules = (map (cfg: cfg.home) (filter (cfg: cfg ? home) profileConfigs));
+  selectedConfigs = (getDeepConfigs profile) ++ (getDeepConfigs system);
+  systemModules = (map (cfg: cfg.system) (filter (cfg: cfg ? system) selectedConfigs));
+  homeModules = (map (cfg: cfg.home) (filter (cfg: cfg ? home) selectedConfigs));
 in {
   system = system.systemType;
   specialArgs = { inherit (inputs) nixpkgs; };

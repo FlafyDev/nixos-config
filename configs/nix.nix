@@ -1,8 +1,10 @@
 {
   system = { pkgs, nixpkgs, ... }: {
+    programs.command-not-found.enable = false;
+
     nix = {
       nixPath = [
-        "nixpkgs=${nixpkgs}" 
+        "nixpkgs=${nixpkgs}"
       ];
       # package = pkgs.nixFlakes;
       extraOptions = ''
@@ -15,5 +17,9 @@
         ];
       };
     };
+  };
+
+  home = { pkgs, ... }: {
+    programs.nix-index.enable = true;
   };
 }

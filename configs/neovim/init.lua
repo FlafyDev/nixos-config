@@ -30,8 +30,29 @@ vim.opt.laststatus = 3;
 vim.cmd('set fillchars+=vert:\\ " ');
 vim.cmd('set nowrap');
 vim.cmd('colorscheme tokyonight');
-vim.cmd(':set termguicolors');
+vim.cmd('set termguicolors');
+vim.cmd('set clipboard+=unnamedplus');
 vim.g.transparent_enabled = true;
+
+vim.api.nvim_create_user_command(
+  'FlutterLogToggle',
+  function(opts)
+    local wins = vim.api.nvim_list_wins()
+
+    for _, id in pairs(wins) do
+      local bufnr = vim.api.nvim_win_get_buf(id)
+      if vim.api.nvim_buf_get_name(bufnr):match '.*/([^/]+)$' == '__FLUTTER_DEV_LOG__' then
+        return vim.api.nvim_win_close(id, true)
+      end
+    end
+
+    pcall(function()
+      vim.api.nvim_command 'belowright split + __FLUTTER_DEV_LOG__ | resize 15'
+    end)
+  end,
+  { nargs = 0 }
+)
+
 -- vim.cmd('highlight LineNr ctermfg=grey');
 -- vim.cmd('highlight VertSplit cterm=NONE');
 -- vim.cmd('highlight StatusLine cterm=NONE');

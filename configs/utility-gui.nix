@@ -1,4 +1,9 @@
 {
+  configs = cfgs: with cfgs; [
+    guifetch
+    listen-blue
+  ];
+
   home = { pkgs, ... }: {
     home.packages = with pkgs; [
       gnome.eog
@@ -19,7 +24,6 @@
       lxde.lxrandr
       obs-studio
       onlyoffice-bin
-      guifetch
     ];
   };
 }

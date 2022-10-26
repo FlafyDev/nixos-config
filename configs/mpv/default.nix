@@ -29,12 +29,12 @@
         profile = "gpu-hq";
         # hwdec = "auto-safe";
         # gpu-context = "wayland";
-        force-window = true;
+        # force-window = true;
         ytdl-format = "bestvideo+bestaudio";
         volume-max = 200;
         fs = true;
         screen = 0;
-        save-position-on-quit = true;
+        # save-position-on-quit = true;
         osc = false;
         # vf = "format=yuv420p,vapoursynth=~~/motioninterpolation.vpy:4:4";
         # vf = "vapoursynth=~~/svp.py:2:24";

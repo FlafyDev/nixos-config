@@ -15,27 +15,11 @@
       wl-clipboard
       hyprpaper 
       mako
-      (pkgs.writeShellScriptBin "hyprland" ''
-        export _JAVA_AWT_WM_NONREPARENTING=1;
-        export XCURSOR_SIZE=1;
-        # export LIBVA_DRIVER_NAME="nvidia";
-        export CLUTTER_BACKEND="wayland";
-        export XDG_SESSION_TYPE="wayland";
-        export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
-        export MOZ_ENABLE_WAYLAND="1";
-        # export GBM_BACKEND="nvidia-drm";
-        # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
-        export WLR_NO_HARDWARE_CURSORS="1";
-        export WLR_BACKEND="vulkan";
-        export QT_QPA_PLATFORM="wayland";
-        export GDK_BACKEND="wayland";
-        export TERM="foot";
-        export NIXOS_OZONE_WL="1";
-        Hyprland "$@"
-      '')
+      hyprland-wrapped
     ];
     xdg.configFile."hypr/hyprpaper.conf".text = let
-      background = ../assets/forest.jpg;
+      # background = ../assets/forest.jpg;
+      background = ../assets/halloween.jpg;
     in ''
       preload = ${background}
       wallpaper = HDMI-A-1,${background}
@@ -103,8 +87,8 @@
 
         misc {
           no_vfr = false
-          enable_swallow = true
-          swallow_regex = ^(foot)$
+          # enable_swallow = true
+          # swallow_regex = ^(foot)$
         }
 
         input {
@@ -138,8 +122,8 @@
         decoration {
             rounding=0
             blur=1
-            blur_size=10
-            blur_passes=3
+            blur_size=6
+            blur_passes=4
             blur_ignore_opacity=1
             blur_new_optimizations=1
         }
@@ -179,7 +163,6 @@
         $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
         exec-once=rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | ${styledWob}
 
-
         bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=SUPER,A,fullscreen
         bind=SUPER,F,exec,${pkgs.foot}/bin/foot
@@ -192,7 +175,8 @@
         bind=SUPER,R,exec,exec $(${pkgs.tofi}/bin/tofi-run)
         bind=SUPER,W,exec,res=$(${pkgs.tofi-rbw}/bin/tofi-rbw) && wl-copy "$res"
         bind=SUPER,C,exec,${pkgs.guifetch}/bin/guifetch
-        bind=SUPER,P,pseudo,
+        bind=SUPER,O,pseudo,
+        bind=SUPER,Z,exec,${pkgs.listen-blue}/bin/listen_blue
         bind=,XF86AudioPlay,exec,${playerctl} play-pause
         bind=,XF86AudioPrev,exec,${playerctl} previous
         bind=,XF86AudioNext,exec,${playerctl} next
@@ -245,16 +229,9 @@
         bind=SUPER,mouse_down,workspace,e+1
         bind=SUPER,mouse_up,workspace,e-1
 
-        # windowrulev2 = float,class:^(sideterm)$
-        # windowrulev2 = move 60% 10,class:^(sideterm)$
-        # windowrulev2 = size 750 350,class:^(sideterm)$
-        # windowrulev2 = animation slide,class:^(sideterm)$
         ${compileWindowRule "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"]}
-        ${compileWindowRule "class:^(.guifetch-wrapped_)$" ["float" "animation slide" "move 10 10"]}
-
-        # windowrulev2 = float,class:^(.guifetch-wrapped_)$
-        # windowrulev2 = animation slide,class:^(.guifetch-wrapped_)$
-        # windowrulev2 = move 10 10,class:^(.guifetch-wrapped_)$
+        ${compileWindowRule "class:^(guifetch)$" ["float" "animation slide" "move 10 10"]}
+        ${compileWindowRule "class:^(listen_blue)$" ["size 813 695" "float" "center"]}
       '';
     };
   };

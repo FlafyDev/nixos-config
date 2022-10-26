@@ -5,10 +5,11 @@ with lib;
 let
   cfg = config.programs.customEww;
   package = pkgs.writeShellScriptBin "eww" ''
-    PATH="$PATH:${lib.makeBinPath cfg.scripts}"
+    PATH="$PATH:${lib.makeBinPath cfg.dependencies}"
     exec ${cfg.package}/bin/eww "$@"
-  ''; 
-in {
+  '';
+in
+{
   options.programs.customEww = {
     enable = mkEnableOption "customEww";
 
@@ -37,18 +38,18 @@ in {
         <filename>$XDG_CONFIG_HOME/eww/eww.yuck</filename>.
       '';
     };
-    
-    scripts = mkOption {
+
+    dependencies = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       description = ''
-        The scripts the yuck files will use.
+        The dependencies the yuck files will use.
       '';
     };
 
     assets = mkOption {
       type = types.nullOr types.path;
-      default = null; 
+      default = null;
       example = literalExpression "./assets";
       description = ''
         The assets directory that gets symlinked as
@@ -58,6 +59,20 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # systemd.user.services.eww = {
+    #   Unit = {
+    #     Description = "Eww Daemon";
+    #     # not yet implemented
+    #     # PartOf = ["tray.target"];
+    #     PartOf = [ "graphical-session.target" ];
+    #   };
+    #   Service = {
+    #     # Environment = "PATH=/run/wrappers/bin:${lib.makeBinPath dependencies}";
+    #     ExecStart = "${package}/bin/eww daemon --no-daemonize";
+    #     Restart = "on-failure";
+    #   };
+    #   Install.WantedBy = [ "graphical-session.target" ];
+    # };
     home.packages = [ package ];
     xdg.configFile = {
       "eww/eww.yuck".source = cfg.yuck;

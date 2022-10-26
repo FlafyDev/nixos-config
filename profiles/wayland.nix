@@ -4,7 +4,7 @@ let
 in
 mkHome username {
   configs = cfgs: with cfgs; [
-    ( firefox { wayland = true; } )
+    (firefox { wayland = true; })
     direnv
     git
     mpv
@@ -12,7 +12,7 @@ mkHome username {
     printer-4500
     zsh
     neovim
-    ( eww { wayland = true; } )
+    (eww { wayland = true; })
     gtk
     qt
     hyprland
@@ -48,7 +48,17 @@ mkHome username {
     #     tapping = true;
     #   };
     # };
+    services.getty.autologinUser = username;
     services.upower.enable = true;
+    services.greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command = "${pkgs.hyprland-wrapped}/bin/hyprland";
+          user = username;
+        };
+      };
+    };
     # services.tlp.enable = true;
     # Notify on low battery
     # systemd.user.services.batsignal = {
@@ -69,17 +79,20 @@ mkHome username {
         enable = true;
         extraPortals = with pkgs; lib.mkForce [
           xdg-desktop-portal-wlr
+          # xdg-desktop-portal-gtk
         ];
       };
     };
 
     fonts.fonts = with pkgs; [
-      (nerdfonts.override { fonts = [
-        "AurulentSansMono"
-        "JetBrainsMono"
-        "FiraCode"
-        "DroidSansMono"
-      ]; })
+      (nerdfonts.override {
+        fonts = [
+          "AurulentSansMono"
+          "JetBrainsMono"
+          "FiraCode"
+          "DroidSansMono"
+        ];
+      })
       source-sans
       cantarell-fonts
       dejavu_fonts
@@ -95,6 +108,19 @@ mkHome username {
       dina-font
       proggyfonts
     ];
+    environment.systemPackages = with pkgs; [
+      (retroarch.override {
+        cores = [
+          libretro.genesis-plus-gx
+          # libretro.snes9x
+          # libretro.beetle-psx-hw
+        ];
+      })
+      libretro.genesis-plus-gx
+      # libretro.snes9x
+      # libretro.beetle-psx-hw
+    ];
+
   };
 
   home = ({ pkgs, lib, inputs, ... }: {
@@ -103,10 +129,14 @@ mkHome username {
       element-desktop
       # scrcpy
       # pavucontrol
+      cp-maps
       webcord
       mpvpaper
       # neovide
       # (patchDesktop pkgs.webcord "webcord" "^Exec=webcord" "Exec=nvidia-offload webcord -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder")
+      # nix-alien
+      # nix-index # not necessary, but recommended
+      # nix-index-update
     ];
 
     home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";

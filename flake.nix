@@ -70,6 +70,32 @@
       url = "github:barklan/neovide/barklan";
       flake = false;
     };
+    listen-blue = {
+      url = "github:flafydev/listen_blue";
+      # url = "path:/mnt/general/repos/flafydev/music_player";
+    };
+    nix-alien.url = "github:thiagokokada/nix-alien";
+    cp-maps.url = "github:flafydev/cp-maps";
+    firefox-ublock-origin = {
+      url = "https://addons.mozilla.org/firefox/downloads/file/4003969/ublock_origin-1.44.4.xpi";
+      flake = false;
+    };
+    firefox-sponsor-block = {
+      url = "https://addons.mozilla.org/firefox/downloads/file/4016632/sponsorblock-5.1.1.xpi";
+      flake = false;
+    };
+    firefox-vimium-ff = {
+      url = "https://addons.mozilla.org/firefox/downloads/file/4017172/vimium_ff-1.67.2.xpi";
+      flake = false;
+    };
+    firefox-bitwarden = {
+      url = "https://addons.mozilla.org/firefox/downloads/file/4018008/bitwarden_password_manager-2022.10.1.xpi";
+      flake = false;
+    };
+    firefox-stylus = {
+      url = "https://addons.mozilla.org/firefox/downloads/file/3995806/styl_us-1.5.26.xpi";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {
