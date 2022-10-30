@@ -1,8 +1,8 @@
-{ username ? "flafy" }: let 
+{ username }: let 
   sshPath = "/secrets/ssh/${username}";
 in {
   system = { ... }: {
-    ssh = {
+    programs.ssh = {
       startAgent = true;
     };
   };
@@ -10,9 +10,9 @@ in {
   home = { ... }: {
     programs.ssh = {
       enable = true;
-
+    
       userKnownHostsFile = "${sshPath}/known_hosts";
-
+    
       matchBlocks = {
         "github.com" = {
           hostname = "github.com";

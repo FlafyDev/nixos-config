@@ -28,7 +28,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     yuck-vim = {
-      url = "github:elkowar/yuck.vim"; 
+      url = "github:elkowar/yuck.vim";
       flake = false;
     };
     hyprpaper = {
@@ -37,7 +37,7 @@
     };
     bufresize-nvim = {
       url = "github:kwkarlwang/bufresize.nvim";
-      flake = false; 
+      flake = false;
     };
     flutter-tools-nvim = {
       url = "github:FlafyDev/flutter-tools.nvim";
@@ -96,6 +96,10 @@
       url = "https://addons.mozilla.org/firefox/downloads/file/3995806/styl_us-1.5.26.xpi";
       flake = false;
     };
+    # nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland"; };
+    # # only needed if you use as a package set:
+    # # nixpkgs-wayland.inputs.nixpkgs.follows = "cmpkgs";
+    # nixpkgs-wayland.inputs.master.follows = "master";
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {

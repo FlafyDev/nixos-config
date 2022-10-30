@@ -20,12 +20,12 @@ mkHome username {
     utility-gui
     utility-scripts
     utility-cli
-    ssh
-    gnome
+    (ssh { username = "flafy"; })
+    # gnome
     alacritty
     keyboard-xserver
     bitwarden
-    # sway
+    sway
     tofi
     # betterdiscord
     discord-open-asar
@@ -124,14 +124,19 @@ mkHome username {
   };
 
   home = ({ pkgs, lib, inputs, ... }: {
+    # manual.manpages.enable = false;
+    # wayland.windowManager.sway = {
+    #   enable = true;
+    #   extraOptions = [ "--unsupported-gpu" ];
+    # };
     home.packages = with pkgs; [
-      polymc
+      prismlauncher
       element-desktop
-      # scrcpy
+      scrcpy
       # pavucontrol
       cp-maps
       webcord
-      mpvpaper
+      # mpvpaper
       # neovide
       # (patchDesktop pkgs.webcord "webcord" "^Exec=webcord" "Exec=nvidia-offload webcord -enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=VaapiVideoDecoder")
       # nix-alien

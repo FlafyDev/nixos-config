@@ -18,21 +18,23 @@
     #   };
     # };
 
+    systemd.services.NetworkManager-wait-online.enable = false;
+
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
       loader = {
-        # systemd-boot.enable = true;
+        systemd-boot.enable = true;
         efi = {
           canTouchEfiVariables = true;
           efiSysMountPoint = "/boot/efi";
         };
-        grub = {
-          enable = true;
-          version = 2;
-          devices = [ "nodev" ];
-          efiSupport = true;
-          useOSProber = true;
-        };
+        # grub = {
+        #   enable = true;
+        #   version = 2;
+        #   devices = [ "nodev" ];
+        #   efiSupport = true;
+        #   useOSProber = true;
+        # };
       };
       supportedFilesystems = [ "ntfs" ];
     };
@@ -45,6 +47,11 @@
     networking = {
       hostName = "nixos";
       networkmanager.enable = true;
+
+      dhcpcd = {
+        wait = "background";
+        extraConfig = "noarp";
+      };
 
       useDHCP = false;
       interfaces = {
@@ -60,6 +67,7 @@
     };
 
     hardware = {
+      # bumblebee.enable = true;
       pulseaudio.enable = lib.mkForce false;
       bluetooth = {
         enable = true;
@@ -72,11 +80,13 @@
         };
       };
       opentabletdriver.enable = true;
-      
+
       nvidia = {
         modesetting.enable = true;
+        powerManagement.enable = false;
         prime = {
           offload.enable = true;
+          # sync.enable = true;
           intelBusId = "PCI:0:2:0";
           nvidiaBusId = "PCI:1:0:0";
         };
@@ -85,8 +95,9 @@
 
       opengl = {
         enable = true;
-        # driSupport = true;
+        driSupport = true;
         extraPackages = with pkgs; [
+          libglvnd
           intel-media-driver
           vaapiIntel
           vaapiVdpau
@@ -101,7 +112,7 @@
     #   echo enabled > /sys/bus/usb/devices/usb1/power/wakeup
     #   echo enabled > /sys/bus/usb/devices/usb2/power/wakeup
     # '';
-    
+
     # specialisation = {
     #   external-display.configuration = {
     #     system.nixos.tags = [ "external-display" ];
@@ -110,7 +121,7 @@
     #   };
     # };
 
-    programs.light.enable = true;
+    programs.light.enable = false;
 
     security = {
       rtkit.enable = true;
@@ -136,7 +147,7 @@
 
       openssh.enable = true;
       blueman.enable = true;
-      
+
       xserver = {
         videoDrivers = [ "nvidia" ];
         # deviceSection = ''

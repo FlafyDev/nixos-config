@@ -54,16 +54,18 @@ let
 
         hyprland-wrapped =
           (prev.writeShellScriptBin "hyprland" ''
+            export LIBVA_DRIVER_NAME="nvidia";
+            export GBM_BACKEND="nvidia-drm";
+            export __GLX_VENDOR_LIBRARY_NAME="nvidia";
+            # export WLR_DRM_DEVICES=/dev/dri/card0
+
             export _JAVA_AWT_WM_NONREPARENTING=1;
             export XCURSOR_SIZE=1;
-            # export LIBVA_DRIVER_NAME="nvidia";
+            # export WLR_NO_HARDWARE_CURSORS="1";
             export CLUTTER_BACKEND="wayland";
             export XDG_SESSION_TYPE="wayland";
             export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
             export MOZ_ENABLE_WAYLAND="1";
-            # export GBM_BACKEND="nvidia-drm";
-            # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
-            # export WLR_NO_HARDWARE_CURSORS="1";
             export WLR_BACKEND="vulkan";
             export QT_QPA_PLATFORM="wayland";
             export GDK_BACKEND="wayland";
@@ -188,9 +190,9 @@ let
         xborder = callPackage
           ./modules/xborder.nix
           { };
-        mpvpaper = callPackage
-          ./modules/mpvpaper.nix
-          { };
+        # mpvpaper = callPackage
+        #   ./modules/mpvpaper.nix
+        #   { };
         mpv-unwrapped-stable = prev.mpv-unwrapped;
         svpflow = callPackage
           ./modules/svpflow.nix
@@ -215,11 +217,32 @@ in
     ({ ... }: {
       nixpkgs.overlays = overlays inputs;
     })
+    ({ pkgs, config, ... }: {
+      config = {
+        nix = {
+          # add binary caches
+          settings = {
+            trusted-public-keys = [
+            ];
+            substituters = [
+            ];
+          };
+        };
+
+        # # use it as an overlay
+        # nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
+        #
+        # # # or, pull specific packages (built against inputs.nixpkgs, usually `nixos-unstable`)
+        # # environment.systemPackages = with pkgs; [
+        # #   inputs.nixpkgs-wayland.packages.${system}.waybar
+        # # ];
+      };
+    })
   ];
 
   homeModules = { ... }@inputs: [
     inputs.hyprland.homeManagerModules.default
-    inputs.discocss.hmModule
+    # inputs.discocss.hmModule
     ./modules/mpv/hm-mpv-fonts.nix
     ./modules/betterdiscord/hm.nix
     ./modules/hm-custom-eww.nix

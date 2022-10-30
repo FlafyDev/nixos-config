@@ -110,7 +110,8 @@
             gaps_in=5
             gaps_out=5
             border_size=1
-            col.active_border=0xFF817f7f
+            # col.active_border=0xFF817f7f
+            col.active_border=0xFFd9b27c
             col.inactive_border=0x00000000
         }
 
@@ -143,7 +144,7 @@
 
           animation=border,1,3,default
           # animation=fade,1,3,default
-          animation=workspaces,0,1,default,fade
+          animation=workspaces,1,5,default,slidevert
         }
 
         dwindle {

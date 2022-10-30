@@ -32,6 +32,7 @@
         gcc # treesitter
         nixfmt
         nodePackages.typescript-language-server
+        python310Packages.autopep8
       ];
     };
   };

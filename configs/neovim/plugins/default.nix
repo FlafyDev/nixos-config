@@ -67,13 +67,7 @@
         require('nvim-treesitter.configs').setup {
           sync_install = false,
           auto_install = true,
-    
-          disable = { "dart" },
-    
-          highlight = {
-            enable = true,
-            additional_vim_regex_highlighting = false,
-          },
+          parser_install_dir = "~/.cache/treesitter",
         }      
       '';
     }
@@ -84,6 +78,21 @@
         require('nvim-tree').setup({
           view = {
             preserve_window_proportions = true,
+          },
+          renderer = {
+            full_name = true,
+            highlight_opened_files = "all",
+          };
+          diagnostics = {
+            enable = true,
+            show_on_dirs = false,
+            debounce_delay = 50,
+            icons = {
+              hint = "",
+              info = "",
+              warning = "",
+              error = "",
+            },
           },
         })
       '';

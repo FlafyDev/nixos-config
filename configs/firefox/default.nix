@@ -9,8 +9,8 @@
     xdg.configFile."aaaa.json".text = (builtins.toJSON pkgs.nur.repos.rycee.firefox-addons.ublock-origin);
     programs.firefox =
       let
-        startpage = pkgs.substituteAll { src = ./startpage.html; background = ../../assets/forest.jpg; };
-        userChrome = pkgs.substituteAll { src = ./userChrome.css; background = ../../assets/forest.jpg; };
+        startpage = pkgs.substituteAll { src = ./startpage.html; background = ../../assets/halloween.jpg; };
+        userChrome = pkgs.substituteAll { src = ./userChrome.css; background = ../../assets/halloween.jpg; };
       in
       {
         enable = true;
@@ -100,6 +100,7 @@
                 "media.hardware-video-decoding.force-enabled" = true;
                 "general.smoothScroll.msdPhysics.enabled" = true;
                 "layout.frame_rate" = 60;
+                "layout.css.backdrop-filter.enabled" = true;
                 # "layout.css.devPixelsPerPx" = "1.2";
                 "layout.css.devPixelsPerPx" = "-1.0";
                 "devtools.debugger.remote-enabled" = true;

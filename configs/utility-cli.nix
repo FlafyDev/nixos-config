@@ -12,6 +12,7 @@
       lang-to-docx
       htop
       tofi-rbw
+      pciutils
     ];
   };
 }

@@ -50,11 +50,11 @@
         LEFT = "seek -5 exact";
         I = "vf toggle format=yuv420p,vapoursynth=~~/motioninterpolation.vpy:4:4";
       };
-      # scripts = with pkgs.mpvScripts; [
-      #   modern-x-compact
-      #   mpris
-      #   autoload
-      # ];
+      scripts = with pkgs.mpvScripts; [
+        modern-x-compact
+        mpris
+        autoload
+      ];
     };
   };
 }
