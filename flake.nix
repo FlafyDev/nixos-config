@@ -102,10 +102,21 @@
     # nixpkgs-wayland.inputs.master.follows = "master";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: {
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  } @ inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (
-        (import ./profiles/wayland.nix) (import ./systems/laptop) inputs
+        import ./profiles/wayland.nix {
+          inherit inputs;
+          system = import ./systems/laptop;
+          args = {
+            theme = "Halloween";
+            # theme = "";
+          };
+        }
       );
     };
   };

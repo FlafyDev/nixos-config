@@ -19,6 +19,26 @@
     yuck-vim
     vim-surround
     tokyonight-nvim
+
+    {
+      type = "lua";
+      plugin = null-ls-nvim;
+      config = ''
+        local nb = require('null-ls').builtins
+
+        require('null-ls').setup({
+            sources = {
+                nb.formatting.alejandra,
+                nb.code_actions.statix,
+                nb.diagnostics.cppcheck,
+                nb.diagnostics.deadnix,
+                nb.diagnostics.statix,
+                nb.diagnostics.eslint,
+                nb.completion.spell,
+            },
+        })
+      '';
+    }
     {
       plugin = nvim-comment;
       config = "lua require('nvim_comment').setup()";

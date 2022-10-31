@@ -5,7 +5,9 @@
     ];
   };
 
-  home = { pkgs, ... }: {
+  home = { pkgs, theme, ... }: let
+    primaryColor = if theme == "Halloween" then "0xFFF0800F" else "0xFF52afea";
+  in {
     xdg.configFile."listen_blue/config.toml".text = ''
       collections = [
         "~/Music/music_files_1",
@@ -13,7 +15,7 @@
 
       # background_color = 0x7600000F
       background_color = 0x2600000F
-      primary_color = 0xFFF0800F
+      primary_color = ${primaryColor}
 
       [[playlists]]
       title = "My Cool Playlist"

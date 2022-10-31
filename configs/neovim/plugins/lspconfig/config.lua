@@ -31,7 +31,12 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>lrn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<space>lca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>lf', vim.lsp.buf.formatting, bufopts)
+  vim.keymap.set('n', '<space>lf', function() vim.lsp.buf.format { 
+    async = true,
+    filter = function(client)
+        return client.name == "null-ls"
+    end,
+  } end, bufopts)
 end
 
 local lsp_flags = {
@@ -41,17 +46,24 @@ local lsp_flags = {
 
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+
 require('lspconfig')['tsserver'].setup {
   on_attach = on_attach,
   flags = lsp_flags,
   capabilities = capabilities,
 }
 
-require('lspconfig')['rnix'].setup {
+require('lspconfig')['nil_ls'].setup {
   on_attach = on_attach,
   flags = lsp_flags,
   capabilities = capabilities,
 }
+
+-- require('lspconfig')['rnix'].setup {
+--   on_attach = on_attach,
+--   flags = lsp_flags,
+--   capabilities = capabilities,
+-- }
 
 -- require('lspconfig')['ccls'].setup {
 --   on_attach = on_attach,
@@ -106,6 +118,8 @@ require('lspconfig')['omnisharp'].setup{
   capabilities = capabilities,
   cmd = { "OmniSharp", "--languageserver" , "--hostPID", tostring(pid)},
 }
+
+
 
 -- require('lspconfig')['dartls'].setup{
 --   on_attach = on_attach,

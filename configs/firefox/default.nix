@@ -5,12 +5,16 @@
     };
   };
 
-  home = { pkgs, ... }: {
+  home = { pkgs, theme, ... }: {
     xdg.configFile."aaaa.json".text = (builtins.toJSON pkgs.nur.repos.rycee.firefox-addons.ublock-origin);
     programs.firefox =
       let
-        startpage = pkgs.substituteAll { src = ./startpage.html; background = ../../assets/halloween.jpg; };
-        userChrome = pkgs.substituteAll { src = ./userChrome.css; background = ../../assets/halloween.jpg; };
+        background =
+          if theme == "Halloween" then
+            ../../assets/halloween.jpg else
+            ../../assets/forest.jpg;
+        startpage = pkgs.substituteAll { src = ./startpage.html; inherit background; };
+        userChrome = pkgs.substituteAll { src = ./userChrome.css; inherit background; };
       in
       {
         enable = true;

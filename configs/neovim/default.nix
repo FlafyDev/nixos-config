@@ -1,5 +1,5 @@
 {
-  home = { pkgs, ... }: {
+  home = {pkgs, ...}: {
     home.packages = with pkgs; [
       ripgrep
       fd
@@ -19,11 +19,14 @@
       '';
 
       extraPackages = with pkgs; [
+        statix
+        deadnix
+        alejandra
         nodePackages.pyright
         clang
         nodejs-18_x
         tree-sitter
-        rnix-lsp
+        nil
         clang-tools
         ccls
         wl-clipboard
@@ -36,5 +39,4 @@
       ];
     };
   };
-  
 }
