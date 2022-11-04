@@ -1,8 +1,8 @@
 {
   home = {pkgs, ...}: {
     home.packages = with pkgs; [
-      ripgrep
-      fd
+      neovide
+      (writeShellScriptBin "vim" "nvidia-offload ${pkgs.neovide}/bin/neovide --nofork")
     ];
 
     imports = [
@@ -19,6 +19,8 @@
       '';
 
       extraPackages = with pkgs; [
+        ripgrep
+        fd
         statix
         deadnix
         alejandra

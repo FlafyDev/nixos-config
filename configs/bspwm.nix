@@ -1,5 +1,5 @@
 {
-  system = { pkgs, ... }: {
+  system = {pkgs, ...}: {
     services.xserver = {
       enable = true;
       dpi = 96;
@@ -13,23 +13,34 @@
         package = pkgs.bspwm-rounded;
       };
 
-      displayManager.gdm.enable = true;
+      # displayManager.gdm.enable = true;
     };
   };
-  
-  home = { pkgs, lib, ... }: let
+
+  home = {
+    pkgs,
+    lib,
+    ...
+  }: let
     workspaces = 6;
   in {
     xsession.windowManager.bspwm = {
       enable = true;
       package = pkgs.bspwm-rounded;
       monitors = {
-        HDMI-1 = map (i: toString i) (lib.lists.range 1 workspaces);
+        HDMI-1 = map toString (lib.lists.range 1 workspaces);
       };
-      startupPrograms = [
+      startupPrograms = let
+        compiledLayout = pkgs.runCommand "keyboard-layout" {} ''
+          ${pkgs.xorg.xkbcomp}/bin/xkbcomp ${./keyboard-xserver/layout.xkb} $out
+        '';
+      in [
         "${pkgs.feh}/bin/feh --bg-scale ${../assets/forest.jpg}"
         "xsetroot -cursor_name left_ptr"
         "eww open bar"
+        "sxhkd"
+        "${pkgs.xorg.xset}/bin/xset r rate 200 40"
+        "${pkgs.xorg.xkbcomp}/bin/xkbcomp ${compiledLayout} $DISPLAY"
         (toString (pkgs.writeShellScript "bspwm-hide-eww-bar-fullscreen" ''
           bspc subscribe desktop_focus node_state node_focus | while read _; do
             if bspc query -T -n | grep '"state":"fullscreen"' -q; then
@@ -44,7 +55,7 @@
 
     services.sxhkd = {
       enable = true;
-      keybindings = let 
+      keybindings = let
         mod = "super";
         resizePixels = "20";
         playerctl = "${pkgs.playerctl}/bin/playerctl";
@@ -54,11 +65,11 @@
         "${mod} + q" = "bspc node -c";
         "${mod} + {d,shift + d,v,a}" = "bspc node -t {tiled,pseudo_tiled,floating,~fullscreen}";
         "${mod} + ctrl + {m,x,y,z}" = "bspc node -g {marked,locked,sticky,private}";
-        "${mod} + {_,shift + }{h,j,k,l}" = "bspc node -{f,s} {west,south,north,east}";
-        
+        "${mod} + {_,shift + }{j,k,l,'}" = "bspc node -{f,s} {west,south,north,east}";
+
         "${mod} + {o,i}" = "bspc wm -h off; bspc node {older,newer} -f; bspc wm -h on";
-        "${mod} + ctrl + {h,j,k,l}" = "bspc node -z {left -${resizePixels} 0,bottom 0 ${resizePixels},top 0 -${resizePixels},right ${resizePixels} 0}";
-        "${mod} + ctrl + shift + {h,j,k,l}" = "bspc node -z {right -${resizePixels} 0,top 0 ${resizePixels},bottom 0 -${resizePixels},left ${resizePixels} 0}";
+        "${mod} + ctrl + {j,k,l,'}" = "bspc node -z {left -${resizePixels} 0,bottom 0 ${resizePixels},top 0 -${resizePixels},right ${resizePixels} 0}";
+        "${mod} + ctrl + shift + {j,k,l,'}" = "bspc node -z {right -${resizePixels} 0,top 0 ${resizePixels},bottom 0 -${resizePixels},left ${resizePixels} 0}";
 
         "${mod} + f" = "WINIT_X11_SCALE_FACTOR=1 alacritty";
         "${mod} + s" = "firefox";

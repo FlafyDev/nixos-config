@@ -40,6 +40,10 @@
       '';
     }
     {
+      plugin = custom-theme-nvim;
+      config = "lua require('custom-theme').setup()";
+    }
+    {
       plugin = nvim-comment;
       config = "lua require('nvim_comment').setup()";
     }

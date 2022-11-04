@@ -6,7 +6,6 @@
   };
 
   home = { pkgs, theme, ... }: {
-    xdg.configFile."aaaa.json".text = (builtins.toJSON pkgs.nur.repos.rycee.firefox-addons.ublock-origin);
     programs.firefox =
       let
         background =
@@ -25,7 +24,7 @@
         };
         package = with pkgs;
           wrapFirefox firefox-esr-102-unwrapped {
-            forceWayland = true;
+            forceWayland = wayland;
             nixExtensions = with pkgs.firefox-addons; [
               sponsor-block
               vimium

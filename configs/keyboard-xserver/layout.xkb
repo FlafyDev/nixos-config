@@ -145,6 +145,11 @@ xkb_symbols {
     symbols[Group1]= [ Right ]
   };
 
+  key <FK4> {
+    type[Group1]="ONE_LEVEL",
+    symbols[Group1]= [ F4 ]
+  };
+
   # key <LCTL> {[Control_L]};
   # key <RCTL> {[Control_R]};
   # key <CAPS> {[ISO_Next_Group]};
@@ -231,6 +236,8 @@ xkb_symbols {
   key <KPDL> {	[       KP_Delete ] };
   key <LVL3> {	[ ISO_Level3_Shift ] };
   key <LSGT> {    [            less ] };
+
+
   key <FK11> {    [             F11 ] };
   key <FK12> {    [             F12 ] };
   key <KATA> {	[        Katakana ] };

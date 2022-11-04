@@ -1,5 +1,5 @@
 {
-  system = { ... }: {
+  system = _: {
     services.xserver.libinput = {
       enable = true;
 

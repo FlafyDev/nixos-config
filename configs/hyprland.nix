@@ -177,7 +177,7 @@
           bind=SUPER,G,exec,${pkgs.foot}/bin/foot --app-id sideterm
           bind=SUPER,Q,killactive,
           bind=SUPER,M,exit,
-          bind=SUPER,E,exec,nautilus --new-window
+          bind=SUPER,E,exec,${pkgs.xfce.thunar}/bin/thunar
           bind=SUPER,V,togglefloating,
           bind=SUPER,D,togglesplit,
           bind=SUPER,R,exec,exec $(${pkgs.tofi}/bin/tofi-run)

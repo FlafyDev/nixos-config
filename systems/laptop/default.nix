@@ -1,7 +1,12 @@
 {
   systemType = "x86_64-linux";
 
-  system = { pkgs, config, lib, ... }: {
+  system = {
+    pkgs,
+    config,
+    lib,
+    ...
+  }: {
     imports = [
       ./hardware-configuration.nix
     ];
@@ -22,21 +27,30 @@
 
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
+      # kernelPatches = [
+      #   {
+      #     name = "nouveau-try";
+      #     patch = null;
+      #     extraConfig = ''
+      #       CONFIG_FRAMEBUFFER_CONSOLE y
+      #     '';
+      #   }
+      # ];
       loader = {
-        systemd-boot.enable = true;
+        # systemd-boot.enable = true;
         efi = {
           canTouchEfiVariables = true;
           efiSysMountPoint = "/boot/efi";
         };
-        # grub = {
-        #   enable = true;
-        #   version = 2;
-        #   devices = [ "nodev" ];
-        #   efiSupport = true;
-        #   useOSProber = true;
-        # };
+        grub = {
+          enable = true;
+          version = 2;
+          devices = ["nodev"];
+          efiSupport = true;
+          useOSProber = true;
+        };
       };
-      supportedFilesystems = [ "ntfs" ];
+      supportedFilesystems = ["ntfs"];
     };
 
     fileSystems."/mnt/general" = {
@@ -61,10 +75,37 @@
 
       firewall = {
         enable = false;
-        allowedTCPPorts = [ ];
-        allowedUDPPorts = [ ];
+        allowedTCPPorts = [];
+        allowedUDPPorts = [];
       };
     };
+
+    # boot.kernelParams = ["nouveau.modeset=1"];
+
+    hardware.nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = false;
+      prime = {
+        offload.enable = true;
+        sync.enable = false;
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
+      package = config.boot.kernelPackages.nvidiaPackages.latest;
+    };
+    services.xserver = {
+      videoDrivers = ["nvidia"];
+      # deviceSection = ''
+      #   Option "DRI" "2"
+      #   Option "TearFree" "true"
+      # '';
+    };
+
+    # specialisation = {
+    #   nvidiaSync.configuration = {
+    #     hardware.nvidia.prime.sync.enable = lib.mkForce true;
+    #   };
+    # };
 
     hardware = {
       # bumblebee.enable = true;
@@ -80,18 +121,6 @@
         };
       };
       opentabletdriver.enable = true;
-
-      nvidia = {
-        modesetting.enable = true;
-        powerManagement.enable = false;
-        prime = {
-          offload.enable = true;
-          # sync.enable = true;
-          intelBusId = "PCI:0:2:0";
-          nvidiaBusId = "PCI:1:0:0";
-        };
-        package = config.boot.kernelPackages.nvidiaPackages.latest;
-      };
 
       opengl = {
         enable = true;
@@ -125,14 +154,15 @@
 
     security = {
       rtkit.enable = true;
-      pam.loginLimits = [{
-        domain = "*";
-        type = "soft";
-        item = "nofile"; # max FD count
-        value = "unlimited";
-      }];
+      pam.loginLimits = [
+        {
+          domain = "*";
+          type = "soft";
+          item = "nofile"; # max FD count
+          value = "unlimited";
+        }
+      ];
     };
-
 
     services = {
       pipewire = {
@@ -147,20 +177,12 @@
 
       openssh.enable = true;
       blueman.enable = true;
-
-      xserver = {
-        videoDrivers = [ "nvidia" ];
-        # deviceSection = ''
-        #   Option "DRI" "2"
-        #   Option "TearFree" "true"
-        # '';
-      };
     };
 
     system.stateVersion = "22.05";
   };
 
-  home = { pkgs, lib, ... }: {
+  home = _: {
     home.stateVersion = "22.05";
   };
 }

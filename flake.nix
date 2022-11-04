@@ -13,7 +13,7 @@
     };
     hyprland = {
       url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
     nur = {
       url = "github:nix-community/NUR";
@@ -67,7 +67,7 @@
       url = "github:flafydev/guifetch";
     };
     neovide = {
-      url = "github:barklan/neovide/barklan";
+      url = "github:flafydev/neovide/barklan";
       flake = false;
     };
     listen-blue = {
@@ -96,6 +96,10 @@
       url = "https://addons.mozilla.org/firefox/downloads/file/3995806/styl_us-1.5.26.xpi";
       flake = false;
     };
+    custom-theme-nvim = {
+      url = "github:Djancyp/custom-theme.nvim";
+      flake = false;
+    };
     # nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland"; };
     # # only needed if you use as a package set:
     # # nixpkgs-wayland.inputs.nixpkgs.follows = "cmpkgs";
@@ -113,8 +117,8 @@
           inherit inputs;
           system = import ./systems/laptop;
           args = {
-            theme = "Halloween";
-            # theme = "";
+            # theme = "Halloween";
+            theme = "";
           };
         }
       );
