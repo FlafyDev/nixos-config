@@ -2,7 +2,7 @@ let
   overlays = inputs: [
     inputs.nur.overlay
     inputs.npm-buildpackage.overlays.default
-    inputs.hyprland.overlays.default
+    # inputs.hyprland.overlays.default
     inputs.lang-to-docx.overlays.default
     inputs.tofi-rbw.overlays.default
     inputs.guifetch.overlays.default
@@ -57,26 +57,26 @@ let
           src = inputs.bspwm-rounded;
         });
 
-        hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
-          export LIBVA_DRIVER_NAME="nvidia";
-          export GBM_BACKEND="nvidia-drm";
-          export __GLX_VENDOR_LIBRARY_NAME="nvidia";
-          # export WLR_DRM_DEVICES=/dev/dri/card0
-
-          export _JAVA_AWT_WM_NONREPARENTING=1;
-          export XCURSOR_SIZE=1;
-          # export WLR_NO_HARDWARE_CURSORS="1";
-          export CLUTTER_BACKEND="wayland";
-          export XDG_SESSION_TYPE="wayland";
-          export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
-          export MOZ_ENABLE_WAYLAND="1";
-          export WLR_BACKEND="vulkan";
-          export QT_QPA_PLATFORM="wayland";
-          export GDK_BACKEND="wayland";
-          export TERM="foot";
-          export NIXOS_OZONE_WL="1";
-          ${inputs.hyprland.packages.${prev.system}.default}/bin/Hyprland "$@"
-        '';
+        # hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
+        #   export LIBVA_DRIVER_NAME="nvidia";
+        #   export GBM_BACKEND="nvidia-drm";
+        #   export __GLX_VENDOR_LIBRARY_NAME="nvidia";
+        #   # export WLR_DRM_DEVICES=/dev/dri/card0
+        #
+        #   export _JAVA_AWT_WM_NONREPARENTING=1;
+        #   export XCURSOR_SIZE=1;
+        #   # export WLR_NO_HARDWARE_CURSORS="1";
+        #   export CLUTTER_BACKEND="wayland";
+        #   export XDG_SESSION_TYPE="wayland";
+        #   export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
+        #   export MOZ_ENABLE_WAYLAND="1";
+        #   export WLR_BACKEND="vulkan";
+        #   export QT_QPA_PLATFORM="wayland";
+        #   export GDK_BACKEND="wayland";
+        #   export TERM="foot";
+        #   export NIXOS_OZONE_WL="1";
+        #   ${inputs.hyprland.packages.${prev.system}.default}/bin/Hyprland "$@"
+        # '';
 
         sway-borders = let
           sway-unwrapped = prev.sway-unwrapped.overrideAttrs (_: {
@@ -228,14 +228,14 @@ let
   ];
 in {
   modules = inputs: [
-    inputs.hyprland.nixosModules.default
+    # inputs.hyprland.nixosModules.default
     (_: {
       nixpkgs.overlays = overlays inputs;
     })
   ];
 
   homeModules = inputs: [
-    inputs.hyprland.homeManagerModules.default
+    # inputs.hyprland.homeManagerModules.default
     # inputs.discocss.hmModule
     ./modules/mpv/hm-mpv-fonts.nix
     ./modules/betterdiscord/hm.nix

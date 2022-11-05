@@ -1,6 +1,17 @@
 {
   description = "A very basic flake";
 
+  # inputs = let
+  #   configs = import ./utils/get-all-configs.nix ./configs;
+  #   inputsConfig =
+  #     map (
+  #       cfg:
+  #         if builtins.typeOf cfg == "lambda"
+  #         then (cfg {}).inputs
+  #         else cfg.inputs
+  #     )
+  #     configs;
+  # in
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {

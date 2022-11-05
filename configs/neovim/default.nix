@@ -2,7 +2,7 @@
   home = {pkgs, ...}: {
     home.packages = with pkgs; [
       neovide
-      (writeShellScriptBin "vim" "nvidia-offload ${pkgs.neovide}/bin/neovide --nofork")
+      (writeShellScriptBin "vim" "nvidia-offload ${pkgs.neovide}/bin/neovide --nofork $@")
     ];
 
     imports = [

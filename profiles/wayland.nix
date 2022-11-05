@@ -127,7 +127,6 @@ in
       #   extraOptions = [ "--unsupported-gpu" ];
       # };
       home.packages = with pkgs; [
-        neovide
         prismlauncher
         element-desktop
         scrcpy

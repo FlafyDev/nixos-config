@@ -1,21 +1,21 @@
 {
-  system = { pkgs, ... }: {
+  system = {pkgs, ...}: {
     environment.systemPackages = let
-      updateSystem = pkgs.writeShellScriptBin "updateSystem" ''
+      updateSystem = pkgs.writeShellScript "updateSystem" ''
         case $2 in
           fast)
-            nixos-rebuild test --fast --flake ./#$1 --impure -L
+            nixos-rebuild test --fast --flake ./#$1 --impure -L "$@"
             ;;
           boot)
-            nixos-rebuild boot --flake ./#$1
+            nixos-rebuild boot --flake ./#$1 "$@"
             ;;
           *)
-            nixos-rebuild switch --flake ./#$1
+            nixos-rebuild switch --flake ./#$1 "$@"
             ;;
         esac
       '';
-      configLocation = "/home/flafydev/.dotfiles/system"; 
-    in let 
+      configLocation = "/home/flafydev/.dotfiles/system";
+    in let
       nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
         export __NV_PRIME_RENDER_OFFLOAD=1
         export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -28,9 +28,9 @@
         mv ./$1 ./''${newName}
         cat ''${newName} > ./$1
       '';
-      update = pkgs.writeShellScriptBin "update" "(cd ${configLocation} ; sudo ${updateSystem}/bin/updateSystem laptop)";
-      updateBoot = pkgs.writeShellScriptBin "update-boot" "(cd ${configLocation} ; sudo ${updateSystem}/bin/updateSystem laptop boot)";
-      updateFast = pkgs.writeShellScriptBin "update-fast" "(cd ${configLocation} ; sudo ${updateSystem}/bin/updateSystem laptop fast)";
+      update = pkgs.writeShellScriptBin "update" ''(cd ${configLocation} ; sudo ${updateSystem} laptop "$@")'';
+      updateBoot = pkgs.writeShellScriptBin "update-boot" ''(cd ${configLocation} ; sudo ${updateSystem} laptop boot "$@")'';
+      updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} laptop fast "$@")'';
       wifi = pkgs.writeShellScriptBin "wifi" ''
         case $1 in
           list)
@@ -58,7 +58,9 @@
         esac
       '';
     in [
-      update updateBoot updateFast
+      update
+      updateBoot
+      updateFast
       nvidia-offload
       makeConfigEditable
       wifi

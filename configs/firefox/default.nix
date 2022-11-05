@@ -1,7 +1,7 @@
 { wayland }: {
   system = { pkgs, ... }: {
     environment.sessionVariables = {
-      DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
+      DEFAULT_BROWSER = "firefox";
     };
   };
 
