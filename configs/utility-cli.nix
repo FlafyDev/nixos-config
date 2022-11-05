@@ -8,12 +8,17 @@
       url = "github:FlafyDev/tofi-rbw";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    cp-maps = {
+      url = "github:flafydev/cp-maps";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  add = {lang-to-docx, tofi-rbw, ...}: {
+  add = {lang-to-docx, tofi-rbw, cp-maps, ...}: {
     overlays = _: [
       lang-to-docx.overlays.default
       tofi-rbw.overlays.default
+      cp-maps.overlays.default
     ];
   };
 
@@ -31,6 +36,7 @@
       htop
       tofi-rbw
       pciutils
+      cp-maps
     ];
   };
 }

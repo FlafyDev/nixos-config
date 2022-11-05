@@ -10,16 +10,6 @@ with inputs.nixpkgs.lib; let
     map (item: item.${attr}) (filter (item: item ? ${attr}) list);
 
   configs = import ./get-all-configs.nix ../configs;
-  # configs = mapAttrs'
-  #   (file: type:
-  #     let
-  #       name = builtins.match ''^(.*).nix$'' file;
-  #     in
-  #     attrsets.nameValuePair
-  #       (builtins.elemAt (if builtins.isNull name then [ file ] else name) 0)
-  #       (import (../configs + "/${file}"))
-  #   )
-  #   (builtins.readDir ../configs);
   getDeepConfigs = config:
     flatten ((
         if config ? configs
@@ -27,7 +17,6 @@ with inputs.nixpkgs.lib; let
         else []
       )
       ++ [config]);
-  additions = import ../additions.nix;
   selectedConfigs = (getDeepConfigs profile) ++ (getDeepConfigs system);
 
   addConfigs = map (add: add inputs) (filterMap selectedConfigs "add");
@@ -51,7 +40,6 @@ in {
     (moduleArgs: {
       nixpkgs.overlays = flatten (map (ovrCfg: ovrCfg moduleArgs) overlaysConfigs);
     })
-    (additions.modules inputs)
     {
       users.users.${username} = {
         isNormalUser = true;
@@ -71,13 +59,7 @@ in {
       home-manager.useUserPackages = true;
       home-manager.extraSpecialArgs = args;
       home-manager.users.${username} = {...}: {
-        imports =
-          [
-            ({...}: {
-              imports = flatten homeModulesConfigs ++ (additions.homeModules inputs);
-            })
-          ]
-          ++ homeConfigs;
+        imports = flatten homeModulesConfigs ++ homeConfigs;
       };
     }
   ];

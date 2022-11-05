@@ -1,4 +1,8 @@
 {
+  configs = cfgs: with cfgs; [
+    nur
+  ];
+
   inputs = {
     neovide = {
       url = "github:flafydev/neovide/barklan";

@@ -1,8 +1,8 @@
 {
   home = { pkgs, ... }: {
-    home.packages = [
-      (pkgs.patchDesktop pkgs.alacritty "Alacritty" "^Exec=alacritty" "Exec=env WINIT_X11_SCALE_FACTOR=1 alacritty")
-    ];
+    # home.packages = [
+    #   (pkgs.patchDesktop pkgs.alacritty "Alacritty" "^Exec=alacritty" "Exec=env WINIT_X11_SCALE_FACTOR=1 alacritty")
+    # ];
 
     programs.alacritty = {
       enable = true;

@@ -135,7 +135,7 @@ in
         scrcpy
         # pavucontrol
         cp-maps
-        webcord
+        # webcord
         drm_info
         # mpvpaper
         # neovide
