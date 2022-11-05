@@ -73,8 +73,8 @@
     programs.firefox = let
       background =
         if theme == "Halloween"
-        then ../../assets/halloween.jpg
-        else ../../assets/forest.jpg;
+        then "${pkgs.assets}/wallpapers/halloween.jpg"
+        else "${pkgs.assets}/wallpapers/forest.jpg";
       startpage = pkgs.substituteAll {
         src = ./startpage.html;
         inherit background;

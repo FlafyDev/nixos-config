@@ -17,7 +17,7 @@
   };
 
   home = { pkgs, theme, lib, ... }: let 
-    image = if theme == "Halloween" then ../assets/nixween.png else null;
+    image = if theme == "Halloween" then "${pkgs.assets}/logos/nixween.png" else null;
   in {
     xdg.configFile."guifetch/guifetch.toml".text = ''
       background_color = 0x2600000F

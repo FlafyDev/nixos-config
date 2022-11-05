@@ -63,8 +63,8 @@
     xdg.configFile."hypr/hyprpaper.conf".text = let
       background =
         if theme == "Halloween"
-        then ../assets/halloween.jpg
-        else ../assets/forest.jpg;
+        then "${pkgs.assets}/wallpapers/halloween.jpg"
+        else "${pkgs.assets}/wallpapers/forest.jpg";
     in ''
       preload = ${background}
       wallpaper = HDMI-A-1,${background}

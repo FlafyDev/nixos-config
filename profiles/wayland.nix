@@ -43,6 +43,7 @@ in
         picom
         mouse-g502-xserver
         rofi
+        assets
       ];
 
     system = {

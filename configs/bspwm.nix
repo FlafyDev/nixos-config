@@ -52,7 +52,7 @@
           ${pkgs.xorg.xkbcomp}/bin/xkbcomp ${./keyboard-xserver/layout.xkb} $out
         '';
       in [
-        "${pkgs.feh}/bin/feh --bg-scale ${../assets/forest.jpg}"
+        "${pkgs.feh}/bin/feh --bg-scale ${pkgs.assets}/wallpapers/forest.jpg"
         "xsetroot -cursor_name left_ptr"
         "eww open bar"
         "sxhkd"

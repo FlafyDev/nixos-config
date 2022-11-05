@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "assets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1667690206,
+        "narHash": "sha256-WAyA8QLzdYR/kK2SccEiZF92JupLDqdEiMQz+ALyuXY=",
+        "owner": "flafydev",
+        "repo": "nixos-assets",
+        "rev": "11bf5881cd361097e86bbf69c4398e399743d081",
+        "type": "github"
+      },
+      "original": {
+        "owner": "flafydev",
+        "repo": "nixos-assets",
+        "type": "github"
+      }
+    },
     "bspwm-rounded": {
       "flake": false,
       "locked": {
@@ -766,6 +782,7 @@
     },
     "root": {
       "inputs": {
+        "assets": "assets",
         "bspwm-rounded": "bspwm-rounded",
         "bufresize-nvim": "bufresize-nvim",
         "cp-maps": "cp-maps",

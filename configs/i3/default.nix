@@ -84,7 +84,7 @@
 
           startup = [
             {
-              command = "${pkgs.feh}/bin/feh --bg-scale ${../assets/forest.jpg}";
+              command = "${pkgs.feh}/bin/feh --bg-scale ${pkgs.assets}/wallpapers/forest.jpg";
               always = true;
               notification = false;
             }
