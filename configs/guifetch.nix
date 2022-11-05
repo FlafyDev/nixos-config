@@ -1,4 +1,15 @@
 {
+  inputs = {
+    guifetch = {
+      url = "github:flafydev/guifetch";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  add = {guifetch, ...}: {
+    overlays = _: [guifetch.overlays.default];
+  };
+
   system = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       guifetch

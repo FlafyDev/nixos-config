@@ -34,10 +34,10 @@
                 nb.diagnostics.deadnix,
                 nb.diagnostics.statix,
                 nb.diagnostics.eslint,
-                nb.completion.spell,
             },
         })
       '';
+      # nb.completion.spell,
     }
     {
       plugin = custom-theme-nvim;

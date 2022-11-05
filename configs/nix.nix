@@ -1,7 +1,20 @@
 {
+  inputs.nix = {
+    url = "github:flafydev/nix";
+  };
+
+  add = {nix, ...}: {
+    overlays = _: [
+      (final: prev: {
+        nix = nix.packages.${prev.system}.default;
+      })
+    ];
+  };
+
   system = {
     pkgs,
     nixpkgs,
+    lib,
     ...
   }: {
     programs.command-not-found.enable = false;
@@ -10,6 +23,14 @@
       nixPath = [
         "nixpkgs=${nixpkgs}"
       ];
+      # package = pkgs.nix.overrideAttrs(o: {
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "flafydev";
+      #     repo = "nix";
+      #     rev = "882995b9c5d8214646d4cee884b7fa2ee8375cc7";
+      #     sha256 = "sha256-ryB/fIr6uJNCrgAWQuS3PIogfRoDMcZ3UykOFDLMAlg=";
+      #   };
+      # });
       # package = pkgs.nixFlakes;
       extraOptions = ''
         experimental-features = nix-command flakes

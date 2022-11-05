@@ -1,4 +1,21 @@
 {
+  inputs = {
+    bspwm-rounded = {
+      url = "github:phuhl/bspwm-rounded";
+      flake = false;
+    };
+  };
+
+  add = {bspwm-rounded, ...}: {
+    overlays = _: [
+      (final: prev: {
+        bspwm-rounded = prev.bspwm.overrideAttrs (_: {
+          src = bspwm-rounded;
+        });
+      })
+    ];
+  };
+
   system = {pkgs, ...}: {
     services.xserver = {
       enable = true;

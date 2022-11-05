@@ -4,18 +4,17 @@
       updateSystem = pkgs.writeShellScript "updateSystem" ''
         case $2 in
           fast)
-            nixos-rebuild test --fast --flake ./#$1 --impure -L "$@"
+            nixos-rebuild test --fast --flake ./#$1 --impure -L "''${@:2}"
             ;;
           boot)
-            nixos-rebuild boot --flake ./#$1 "$@"
+            nixos-rebuild boot --flake ./#$1 "''${@:2}"
             ;;
           *)
-            nixos-rebuild switch --flake ./#$1 "$@"
+            nixos-rebuild switch --flake ./#$1 "''${@:2}"
             ;;
         esac
       '';
       configLocation = "/home/flafydev/.dotfiles/system";
-    in let
       nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
         export __NV_PRIME_RENDER_OFFLOAD=1
         export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0

@@ -1,7 +1,9 @@
-username: profile: {
+{
+  username,
+  args,
+}: profile: {
   system,
   inputs,
-  args,
 }:
 with inputs.nixpkgs.lib; let
   filterMap = list: attr:

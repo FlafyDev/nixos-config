@@ -1,8 +1,14 @@
 let
-  mkHome = import ../utils/mk-home.nix;
+  mkSystem = import ../utils/mk-system.nix;
   username = "flafydev";
 in
-  mkHome username {
+  mkSystem {
+    inherit username;
+    args = {
+      # theme = "Halloween";
+      theme = "";
+    };
+  } {
     configs = cfgs:
       with cfgs; [
         (firefox {wayland = true;})
@@ -114,10 +120,7 @@ in
       ];
     };
 
-    home = {
-      pkgs,
-      ...
-    }: {
+    home = {pkgs, ...}: {
       home.file.".xinitrc".text = ''
         exec bspwm
       '';

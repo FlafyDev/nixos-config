@@ -1,6 +1,24 @@
 {
-  home = { pkgs, ... }:
-  {
+  add = _: {
+    overlays = _: [
+      (final: prev: {
+        svpflow =
+          prev.callPackage
+          ./svpflow.nix
+          {};
+        mpvScripts =
+          prev.mpvScripts
+          // {
+            modern-x-compact = prev.callPackage ./scripts/modern-x-compact.nix {};
+          };
+      })
+    ];
+
+    # Extends the Home Manager Mpv modules to allow Mpv scripts to add fonts.
+    homeModules = [./hm-mpv-fonts.nix];
+  };
+
+  home = {pkgs, ...}: {
     home.packages = with pkgs; [
       syncplay
       yt-dlp
@@ -17,13 +35,13 @@
     #   mvtoolslib = "${pkgs.vapoursynth-mvtools}/lib/vapoursynth/";
     # };
 
-    programs.mpv = let 
+    programs.mpv = let
       # mpv-unwrapped = pkgs.mpv-unwrapped.override { vapoursynthSupport = true; };
       # mpv = pkgs.wrapMpv mpv-unwrapped { };
     in {
       enable = true;
       enableFonts = true;
-      # package = mpv; 
+      # package = mpv;
       config = {
         vo = "gpu";
         profile = "gpu-hq";
@@ -45,7 +63,7 @@
         WHEEL_UP = "add volume 2";
         WHEEL_DOWN = "add volume -2";
         "ctrl+pgup" = "playlist-next";
-        "ctrl+pgdwn" = "playlist-prev"; 
+        "ctrl+pgdwn" = "playlist-prev";
         RIGHT = "seek 5 exact";
         LEFT = "seek -5 exact";
         I = "vf toggle format=yuv420p,vapoursynth=~~/motioninterpolation.vpy:4:4";

@@ -1,14 +1,22 @@
 {
-  home = { pkgs, ... }: {
-    home.packages = [ pkgs.discord-open-asar ];
+  add = _: {
+    overlays = _: [
+      (final: prev: {
+        discord-open-asar = prev.discord.override {withOpenASAR = true;};
+      })
+    ];
+  };
 
-    xdg.configFile."discord/settings.json".text = (builtins.toJSON {
+  home = {pkgs, ...}: {
+    home.packages = [pkgs.discord-open-asar];
+
+    xdg.configFile."discord/settings.json".text = builtins.toJSON {
       openasar = {
         setup = true;
         quickstart = true;
         noTyping = true;
         cmdPreset = "none";
-        css = builtins.readFile ../../modules/betterdiscord/themes/frosted-glass-blue/FrostedGlassBlue.theme.css;
+        css = builtins.readFile ../betterdiscord/themes/frosted-glass-blue/FrostedGlassBlue.theme.css;
       };
       IS_MAXIMIZED = false;
       IS_MINIMIZED = false;
@@ -19,8 +27,9 @@
         height = 967;
       };
       trayBalloonShown = true;
+      # Why such a scary name for just enabling devtools?
+      # Perhaps I don't know what I'm doing??
       DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING = true;
-    });
+    };
   };
 }
-

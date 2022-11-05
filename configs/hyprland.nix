@@ -1,5 +1,11 @@
 {
-  inputs.hyprland.url = "github:hyprwm/Hyprland";
+  inputs = {
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprpaper = {
+      url = "github:hyprwm/hyprpaper";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 
   add = {hyprland, ...}: {
     modules = [hyprland.nixosModules.default];
@@ -167,7 +173,7 @@
             blur=1
             blur_size=6
             blur_passes=4
-            blur_ignore_opacity=1
+            blur_ignore_opacity=0
             blur_new_optimizations=1
         }
 

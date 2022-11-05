@@ -11,7 +11,7 @@
     };
 
     config = mkIf (cfg.enable && cfg.enableFonts) {
-      xdg.configFile = (mkMerge 
+      xdg.configFile = mkMerge 
         (lists.flatten 
           (map (script: 
             (if script ? "fonts" then
@@ -22,8 +22,7 @@
             ))
             cfg.scripts
           )
-        )
-      );
+        );
     };
   }
 )

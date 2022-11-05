@@ -44,8 +44,8 @@ rustPlatform.buildRustPackage rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m100-0.48.7";
-        sha256 = "sha256-roZUv5YoLolRi0iWAB+5WlCFV+8GdzNzS+JINnEHaMs=";
+        rev = "m103-0.51.1";
+        sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = lib.mapAttrs (n: fetchgit) (lib.importJSON ./skia-externals.json);

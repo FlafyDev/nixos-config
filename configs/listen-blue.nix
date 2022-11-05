@@ -1,4 +1,16 @@
 {
+  inputs = {
+    listen-blue = {
+      url = "github:flafydev/listen_blue";
+      # url = "path:/mnt/general/repos/flafydev/music_player";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  add = {listen-blue, ...}: {
+    overlays = _: [listen-blue.overlays.default];
+  };
+
   system = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       listen-blue

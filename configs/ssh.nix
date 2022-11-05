@@ -1,13 +1,13 @@
-{ username }: let 
+{ username ? "" }: let 
   sshPath = "/secrets/ssh/${username}";
 in {
-  system = { ... }: {
+  system = _: {
     programs.ssh = {
       startAgent = true;
     };
   };
 
-  home = { ... }: {
+  home = _: {
     programs.ssh = {
       enable = true;
     

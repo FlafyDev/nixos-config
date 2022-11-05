@@ -1,4 +1,9 @@
 {
+  add = _: {
+
+    homeModules = [./hm-custom-eww.nix];
+  };
+
   home = {
     pkgs,
     lib,

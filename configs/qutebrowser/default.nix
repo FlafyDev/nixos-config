@@ -1,5 +1,20 @@
 {
-  home = { pkgs, ... }: {
+  inputs = {
+    qutebrowser-base16 = {
+      url = "github:base16-project/base16-qutebrowser";
+      flake = false;
+    };
+  };
+
+  add = {qutebrowser-base16, ...}: {
+    overlays = _: [
+      (final: prev: {
+        inherit qutebrowser-base16;
+      })
+    ];
+  };
+
+  home = {pkgs, ...}: {
     programs.qutebrowser = {
       enable = true;
       settings = {
