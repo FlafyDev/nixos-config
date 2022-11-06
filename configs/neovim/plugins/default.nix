@@ -86,12 +86,12 @@
     }
     {
       type = "lua";
-      plugin = nvim-treesitter;
+      plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
       config = ''
         require('nvim-treesitter.configs').setup {
           sync_install = false,
-          auto_install = true,
-          parser_install_dir = "~/.cache/treesitter",
+          auto_install = true
+          -- parser_install_dir = "~/.cache/treesitter",
         }      
       '';
     }
@@ -105,7 +105,7 @@
           },
           renderer = {
             full_name = true,
-            highlight_opened_files = "all",
+            -- highlight_opened_files = "all",
           };
           diagnostics = {
             enable = true,
