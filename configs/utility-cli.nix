@@ -12,13 +12,18 @@
       url = "github:flafydev/cp-maps";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    project-creator = {
+      url = "github:flafydev/project_creator";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  add = {lang-to-docx, tofi-rbw, cp-maps, ...}: {
+  add = {lang-to-docx, tofi-rbw, cp-maps, project-creator, ...}: {
     overlays = _: [
       lang-to-docx.overlays.default
       tofi-rbw.overlays.default
       cp-maps.overlays.default
+      project-creator.overlays.default
     ];
   };
 
@@ -37,6 +42,7 @@
       tofi-rbw
       pciutils
       cp-maps
+      project-creator
     ];
   };
 }

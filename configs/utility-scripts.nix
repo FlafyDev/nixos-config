@@ -4,10 +4,10 @@
       updateSystem = pkgs.writeShellScript "updateSystem" ''
         case $2 in
           fast)
-            nixos-rebuild test --fast --flake ./#$1 --impure -L "''${@:2}"
+            nixos-rebuild test --fast --flake ./#$1 --impure -L "''${@:3}"
             ;;
           boot)
-            nixos-rebuild boot --flake ./#$1 "''${@:2}"
+            nixos-rebuild boot --flake ./#$1 "''${@:3}"
             ;;
           *)
             nixos-rebuild switch --flake ./#$1 "''${@:2}"
