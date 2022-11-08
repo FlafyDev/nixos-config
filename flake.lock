@@ -1,5 +1,29 @@
 {
   "nodes": {
+    "android": {
+      "inputs": {
+        "devshell": "devshell",
+        "flake-utils": "flake-utils_8",
+        "nixpkgs": [
+          "project-creator",
+          "dart-flutter",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1666643336,
+        "narHash": "sha256-FWH8uB96v96rMKVZr3ZlUr3+n4hOBYlguf1Ff68yLv0=",
+        "owner": "tadfisher",
+        "repo": "android-nixpkgs",
+        "rev": "91659735fe0671987f7c69b63e1dc132ad4e3445",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tadfisher",
+        "repo": "android-nixpkgs",
+        "type": "github"
+      }
+    },
     "assets": {
       "flake": false,
       "locked": {
@@ -123,6 +147,58 @@
         "type": "github"
       }
     },
+    "dart-flutter_3": {
+      "inputs": {
+        "android": "android",
+        "flake-utils": "flake-utils_9",
+        "nixpkgs": [
+          "project-creator",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1666736637,
+        "narHash": "sha256-gdCwSukE3p3wvfo40YGqrSPlSlbCOtslgG7NPcWhbcA=",
+        "owner": "flafydev",
+        "repo": "dart-flutter-nix",
+        "rev": "4c57bf974caf83ecb2ec3e5e1b93b3b8667dc159",
+        "type": "github"
+      },
+      "original": {
+        "owner": "flafydev",
+        "repo": "dart-flutter-nix",
+        "type": "github"
+      }
+    },
+    "devshell": {
+      "inputs": {
+        "flake-utils": [
+          "project-creator",
+          "dart-flutter",
+          "android",
+          "nixpkgs"
+        ],
+        "nixpkgs": [
+          "project-creator",
+          "dart-flutter",
+          "android",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1666548262,
+        "narHash": "sha256-4DyN4KXqQQsCw0vCXkMThw4b5Q4/q87ZZgRb4st8COc=",
+        "owner": "numtide",
+        "repo": "devshell",
+        "rev": "c8ce8ed81726079c398f5f29c4b68a7d6a3c2fa2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "devshell",
+        "type": "github"
+      }
+    },
     "firefox-bitwarden": {
       "flake": false,
       "locked": {
@@ -190,6 +266,51 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_10": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_11": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_12": {
+      "locked": {
+        "lastModified": 1649676176,
+        "narHash": "sha256-OWKJratjt2RW151VUlJPRALb7OU2S5s+f0vLj4o1bHM=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "a4b154ebbdc88c8498a5c7b01589addc9e9cb678",
         "type": "github"
       },
       "original": {
@@ -305,11 +426,11 @@
     },
     "flake-utils_9": {
       "locked": {
-        "lastModified": 1649676176,
-        "narHash": "sha256-OWKJratjt2RW151VUlJPRALb7OU2S5s+f0vLj4o1bHM=",
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "a4b154ebbdc88c8498a5c7b01589addc9e9cb678",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
         "type": "github"
       },
       "original": {
@@ -411,6 +532,28 @@
       "original": {
         "owner": "hyprwm",
         "repo": "hyprpaper",
+        "type": "github"
+      }
+    },
+    "kmonad": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "nix",
+        "lastModified": 1666935187,
+        "narHash": "sha256-/7uLVQHQm+d1Qyl9VGfDN3toBp5LvRx+qLLKxNj2ak4=",
+        "owner": "kmonad",
+        "repo": "kmonad",
+        "rev": "820af08d1ef1bff417829415d5f673041b67ef4d",
+        "type": "github"
+      },
+      "original": {
+        "dir": "nix",
+        "owner": "kmonad",
+        "repo": "kmonad",
         "type": "github"
       }
     },
@@ -531,7 +674,7 @@
     },
     "nix-dart_2": {
       "inputs": {
-        "flake-utils": "flake-utils_9",
+        "flake-utils": "flake-utils_12",
         "nixpkgs": "nixpkgs_9",
         "pub2nix": "pub2nix_2"
       },
@@ -716,6 +859,28 @@
         "type": "github"
       }
     },
+    "project-creator": {
+      "inputs": {
+        "dart-flutter": "dart-flutter_3",
+        "flake-utils": "flake-utils_10",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1667739967,
+        "narHash": "sha256-3nuWNn/2lyY9BjGuutI7JLi1YBbRH+n8gesmd1zOzTo=",
+        "owner": "flafydev",
+        "repo": "project_creator",
+        "rev": "e29d9f8a6b262a9639d441f058f5ca8b2ace815c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "flafydev",
+        "repo": "project_creator",
+        "type": "github"
+      }
+    },
     "pub2nix": {
       "flake": false,
       "locked": {
@@ -797,12 +962,14 @@
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "hyprpaper": "hyprpaper",
+        "kmonad": "kmonad",
         "lang-to-docx": "lang-to-docx",
         "listen-blue": "listen-blue",
         "neovide": "neovide",
         "nix": "nix",
         "nixpkgs": "nixpkgs_8",
         "nur": "nur",
+        "project-creator": "project-creator",
         "qutebrowser-base16": "qutebrowser-base16",
         "rofi-themes": "rofi-themes",
         "tofi-rbw": "tofi-rbw",
@@ -811,7 +978,7 @@
     },
     "tofi-rbw": {
       "inputs": {
-        "flake-utils": "flake-utils_8",
+        "flake-utils": "flake-utils_11",
         "nix-dart": "nix-dart_2",
         "nixpkgs": [
           "nixpkgs"

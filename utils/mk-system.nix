@@ -29,6 +29,7 @@ with inputs.nixpkgs.lib; let
   homeConfigs = filterMap selectedConfigs "home";
 in {
   system = system.systemType;
+  # Delete?
   specialArgs =
     {
       inherit (inputs) nixpkgs;
