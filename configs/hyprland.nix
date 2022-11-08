@@ -185,9 +185,10 @@
 
           animation=windowsMove,1,1,default
 
-          animation=windowsIn,1,2,default,popin 90%
+          animation=windowsIn,1,2,default,popin 70%
 
           animation=windowsOut,1,3,overshot,popin 95%
+          animation=fadeIn,1,2,default
           animation=fadeOut,1,3,default
 
           animation=border,1,3,default
