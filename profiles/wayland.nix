@@ -12,6 +12,7 @@ in
     configs = cfgs:
       with cfgs; [
         (firefox {wayland = true;})
+        # kmonad
         direnv
         git
         mpv
