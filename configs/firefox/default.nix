@@ -23,7 +23,7 @@
   };
   add = inputs: {
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         firefox-addons = {
           sponsor-block = prev.fetchFirefoxAddon {
             name = "sponsor-block";
@@ -59,7 +59,7 @@
     ];
   };
 
-  system = {pkgs, ...}: {
+  system = _: {
     environment.sessionVariables = {
       DEFAULT_BROWSER = "firefox";
     };

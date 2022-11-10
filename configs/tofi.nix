@@ -1,6 +1,6 @@
 {
-  home = { pkgs, ... }: {
-    home.packages = [ pkgs.tofi ];
+  home = {pkgs, ...}: {
+    home.packages = [pkgs.tofi];
     xdg.configFile."tofi/config".text = ''
       anchor = bottom-left
       width = 30%

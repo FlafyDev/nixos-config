@@ -1,6 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub, }: 
-
-stdenvNoCC.mkDerivation rec {
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
+stdenvNoCC.mkDerivation {
   pname = "zeres-plugin-library";
   version = "2.0.5";
 

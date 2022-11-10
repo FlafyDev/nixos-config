@@ -3,7 +3,7 @@
     homeModules = [./hm.nix];
 
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         betterdiscord-asar = prev.callPackage ./asar.nix {};
         betterdiscordPlugins = {
           hide-disabled-emojis = prev.callPackage plugins/hide-disabled-emojis.nix {};

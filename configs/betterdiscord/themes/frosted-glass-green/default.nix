@@ -1,12 +1,11 @@
-{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, callPackage }: 
-
+{stdenvNoCC}:
 stdenvNoCC.mkDerivation rec {
   pname = "frosted-glass-green";
   version = "1.0.0";
 
   executable = ./FrostedGlassGreen.theme.css;
 
-  phases = [ "installPhase" ];
+  phases = ["installPhase"];
 
   installPhase = ''
     mkdir -p $out/

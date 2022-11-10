@@ -1,5 +1,5 @@
 {
-  system = { pkgs, ... }: let
+  system = {pkgs, ...}: let
     compiledLayout = pkgs.runCommand "keyboard-layout" {} ''
       ${pkgs.xorg.xkbcomp}/bin/xkbcomp ${./layout.xkb} $out
     '';

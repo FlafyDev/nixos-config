@@ -1,11 +1,11 @@
-configsEntry: let
+_configsEntry: let
   mapAttrs' = f: set:
     builtins.listToAttrs (map (attr: f attr set.${attr}) (builtins.attrNames set));
   nameValuePair = name: value: {inherit name value;};
 in
   mapAttrs'
   (
-    file: type: let
+    file: _type: let
       name = builtins.match ''^(.*).nix$'' file;
     in
       nameValuePair

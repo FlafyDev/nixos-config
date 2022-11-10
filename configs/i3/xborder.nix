@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenvNoCC,
   fetchFromGitHub,
   python310,
@@ -9,8 +10,7 @@
   gobject-introspection,
   libnotify,
   ...
-}: 
-
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "xborder";
   version = "2022-08-30";
@@ -31,23 +31,23 @@ stdenvNoCC.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    (python310.withPackages (ps: with ps; [
-      pycairo
-      pygobject3
-      requests
-    ]))
+    (python310.withPackages (ps:
+      with ps; [
+        pycairo
+        pygobject3
+        requests
+      ]))
   ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp xborders $out/bin/xborder
     chmod +x $out/bin/xborder
-    wrapProgram $out/bin/xborder --set PATH ${lib.makeBinPath [ libnotify ]}
+    wrapProgram $out/bin/xborder --set PATH ${lib.makeBinPath [libnotify]}
   '';
 }
-
 # buildPythonPackage rec {
-#  
+#
 #   preBuild = ''
 #     cat >setup.py <<'EOF'
 #     from setuptools import setup
@@ -69,10 +69,10 @@ stdenvNoCC.mkDerivation rec {
 #     mv -v $out/bin/xborders $out/bin/xborder
 #   '';
 #
-#   propagatedBuildInputs = [ 
-#     
-#     
-#     
+#   propagatedBuildInputs = [
+#
+#
+#
 #   ];
 # }
 #

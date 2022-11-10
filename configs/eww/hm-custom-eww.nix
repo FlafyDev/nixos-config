@@ -1,15 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.customEww;
   package = pkgs.writeShellScriptBin "eww" ''
     PATH="$PATH:${lib.makeBinPath cfg.dependencies}"
     exec ${cfg.package}/bin/eww "$@"
   '';
-in
-{
+in {
   options.programs.customEww = {
     enable = mkEnableOption "customEww";
 
@@ -41,7 +42,7 @@ in
 
     dependencies = mkOption {
       type = types.listOf types.path;
-      default = [ ];
+      default = [];
       description = ''
         The dependencies the yuck files will use.
       '';
@@ -73,7 +74,7 @@ in
     #   };
     #   Install.WantedBy = [ "graphical-session.target" ];
     # };
-    home.packages = [ package ];
+    home.packages = [package];
     xdg.configFile = {
       "eww/eww.yuck".source = cfg.yuck;
       "eww/eww.scss".source = cfg.scss;

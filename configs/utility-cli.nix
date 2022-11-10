@@ -18,7 +18,13 @@
     };
   };
 
-  add = {lang-to-docx, tofi-rbw, cp-maps, project-creator, ...}: {
+  add = {
+    lang-to-docx,
+    tofi-rbw,
+    cp-maps,
+    project-creator,
+    ...
+  }: {
     overlays = _: [
       lang-to-docx.overlays.default
       tofi-rbw.overlays.default

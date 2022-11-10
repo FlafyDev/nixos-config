@@ -1,5 +1,5 @@
 {
-  system = { pkgs, lib, ... }: {
+  system = {pkgs, ...}: {
     services = {
       xserver = {
         enable = true;
@@ -11,7 +11,7 @@
           xterm
         ];
       };
-      
+
       gnome.core-utilities.enable = false;
       # gnome.core-os-services.enable = lib.mkForce false;
     };
@@ -25,15 +25,19 @@
     ];
   };
 
-  home = { lib, pkgs, ... }: {
+  home = {
+    lib,
+    pkgs,
+    ...
+  }: {
     dconf = {
       enable = true;
-      settings = let 
+      settings = let
         inherit (lib.hm.gvariant) mkTuple mkUint32;
       in {
         "org/gnome/desktop/input-sources" = {
           per-window = false;
-          sources = [ (mkTuple ["xkb" "us"]) (mkTuple ["xkb" "il"]) ];
+          sources = [(mkTuple ["xkb" "us"]) (mkTuple ["xkb" "il"])];
           xkb-options = ["terminate:ctrl_alt_bksp" "caps:escape"];
         };
         "org/gnome/shell" = {

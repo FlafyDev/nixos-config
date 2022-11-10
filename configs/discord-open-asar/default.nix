@@ -1,7 +1,7 @@
 {
   add = _: {
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         discord-open-asar = prev.discord.override {withOpenASAR = true;};
       })
     ];

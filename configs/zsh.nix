@@ -1,10 +1,14 @@
 {
-  system = { pkgs, ... }: {
+  system = {pkgs, ...}: {
     users.defaultUserShell = pkgs.zsh;
-    environment.pathsToLink = [ "/share/zsh" ];
+    environment.pathsToLink = ["/share/zsh"];
   };
 
-  home = { config, pkgs, ... }: {
+  home = {
+    config,
+    pkgs,
+    ...
+  }: {
     programs.nix-index = {
       enableZshIntegration = true;
     };
@@ -21,7 +25,7 @@
       };
       oh-my-zsh = {
         enable = true;
-        plugins = [ "git" ];
+        plugins = ["git"];
         theme = "robbyrussell";
       };
       plugins = [
@@ -49,4 +53,3 @@
     };
   };
 }
-

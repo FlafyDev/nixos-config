@@ -1,5 +1,5 @@
 {
-  home = { pkgs, ... }: {
+  home = {pkgs, ...}: {
     home.packages = with pkgs; [
       rbw
       pinentry

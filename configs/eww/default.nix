@@ -1,6 +1,5 @@
 {
   add = _: {
-
     homeModules = [./hm-custom-eww.nix];
   };
 
@@ -13,7 +12,7 @@
 
     mkPyScript = {
       name,
-      pythonLibraries ? (ps: []),
+      pythonLibraries ? (_ps: []),
       dependeinces ? [],
       isolate ? true,
     }:

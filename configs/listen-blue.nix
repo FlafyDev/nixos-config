@@ -11,14 +11,17 @@
     overlays = _: [listen-blue.overlays.default];
   };
 
-  system = { pkgs, ... }: {
+  system = {pkgs, ...}: {
     environment.systemPackages = with pkgs; [
       listen-blue
     ];
   };
 
-  home = { pkgs, theme, ... }: let
-    primaryColor = if theme == "Halloween" then "0xFFF0800F" else "0xFF52afea";
+  home = {theme, ...}: let
+    primaryColor =
+      if theme == "Halloween"
+      then "0xFFF0800F"
+      else "0xFF52afea";
   in {
     xdg.configFile."listen_blue/config.toml".text = ''
       collections = [

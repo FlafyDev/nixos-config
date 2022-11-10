@@ -1,7 +1,8 @@
 {
-  configs = cfgs: with cfgs; [
-    nur
-  ];
+  configs = cfgs:
+    with cfgs; [
+      nur
+    ];
 
   inputs = {
     neovide = {
@@ -29,7 +30,7 @@
 
   add = inputs: {
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         # neovide = prev.callPackage ./neovide {};
         vimPlugins =
           prev.vimPlugins

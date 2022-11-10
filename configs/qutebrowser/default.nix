@@ -8,7 +8,7 @@
 
   add = {qutebrowser-base16, ...}: {
     overlays = _: [
-      (final: prev: {
+      (_final: _prev: {
         inherit qutebrowser-base16;
       })
     ];

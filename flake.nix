@@ -9,11 +9,7 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    ...
-  } @ inputs: {
+  outputs = {nixpkgs, ...} @ inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (
         import ./profiles/wayland.nix {

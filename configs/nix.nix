@@ -5,18 +5,13 @@
 
   add = {nix, ...}: {
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         nix = nix.packages.${prev.system}.default;
       })
     ];
   };
 
-  system = {
-    pkgs,
-    nixpkgs,
-    lib,
-    ...
-  }: {
+  system = {nixpkgs, ...}: {
     programs.command-not-found.enable = false;
 
     nix = {
@@ -50,7 +45,7 @@
     };
   };
 
-  home = {pkgs, ...}: {
+  home = _: {
     programs.nix-index.enable = true;
   };
 }

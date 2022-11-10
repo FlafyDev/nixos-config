@@ -1,10 +1,11 @@
 {
-  configs = cfgs: with cfgs; [
-    guifetch
-    listen-blue
-  ];
+  configs = cfgs:
+    with cfgs; [
+      guifetch
+      listen-blue
+    ];
 
-  home = { pkgs, ... }: {
+  home = {pkgs, ...}: {
     home.packages = with pkgs; [
       gnome.eog
       gnome.nautilus

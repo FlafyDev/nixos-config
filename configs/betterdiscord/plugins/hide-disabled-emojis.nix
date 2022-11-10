@@ -1,6 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub, }: 
-
-stdenvNoCC.mkDerivation rec {
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
+stdenvNoCC.mkDerivation {
   pname = "hide-disabled-emojis";
   version = "0.0.7";
 

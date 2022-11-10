@@ -1,6 +1,6 @@
 {
-  home = { pkgs, ... }: {
-    home.packages = [ pkgs.dconf ];
+  home = {pkgs, ...}: {
+    home.packages = [pkgs.dconf];
     dconf.enable = true;
     gtk = {
       enable = true;

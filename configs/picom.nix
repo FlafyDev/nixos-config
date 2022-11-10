@@ -1,5 +1,5 @@
 {
-  home = { pkgs, ... }: {
+  home = _: {
     services.picom = {
       enable = true;
       # shadow = true;
@@ -7,7 +7,7 @@
       # shadowOpacity = 0.8;
 
       activeOpacity = 1.0;
-      inactiveOpacity = 1.0; 
+      inactiveOpacity = 1.0;
 
       # fade = true;
       # fadeDelta = 1;
@@ -40,7 +40,7 @@
           "role   = 'xborder'"
           "class_g = 'eww-bar'"
         ];
-        
+
         round-borders = 0;
         corner-radius = 0;
         rounded-corners-exclude = [

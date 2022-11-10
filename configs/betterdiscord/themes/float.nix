@@ -1,6 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, callPackage }: 
-
-stdenvNoCC.mkDerivation rec {
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
+stdenvNoCC.mkDerivation {
   pname = "float";
   version = "1.0.0";
 

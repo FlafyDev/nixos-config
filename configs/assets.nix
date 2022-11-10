@@ -6,7 +6,7 @@
 
   add = {assets, ...}: {
     overlays = _: [
-      (final: prev: {
+      (_final: _prev: {
         inherit assets;
       })
     ];

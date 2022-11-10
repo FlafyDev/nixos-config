@@ -13,7 +13,7 @@
 
     overlays = _: [
       hyprland.overlays.default
-      (final: prev: {
+      (_final: prev: {
         hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
             export LIBVA_DRIVER_NAME="nvidia";
             export GBM_BACKEND="nvidia-drm";
@@ -38,7 +38,7 @@
     ];
   };
 
-  system = {pkgs, ...}: {
+  system = _: {
     nix.settings = {
       trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="

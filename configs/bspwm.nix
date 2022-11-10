@@ -8,7 +8,7 @@
 
   add = {bspwm-rounded, ...}: {
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         bspwm-rounded = prev.bspwm.overrideAttrs (_: {
           src = bspwm-rounded;
         });

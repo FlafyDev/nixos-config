@@ -1,7 +1,7 @@
 {
   add = _: {
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         svpflow =
           prev.callPackage
           ./svpflow.nix
@@ -35,10 +35,7 @@
     #   mvtoolslib = "${pkgs.vapoursynth-mvtools}/lib/vapoursynth/";
     # };
 
-    programs.mpv = let
-      # mpv-unwrapped = pkgs.mpv-unwrapped.override { vapoursynthSupport = true; };
-      # mpv = pkgs.wrapMpv mpv-unwrapped { };
-    in {
+    programs.mpv = {
       enable = true;
       enableFonts = true;
       # package = mpv;

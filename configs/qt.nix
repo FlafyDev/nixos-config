@@ -1,5 +1,5 @@
 {
-  home = { pkgs, ... }: {
+  home = {pkgs, ...}: {
     qt = {
       enable = true;
       platformTheme = "gnome";

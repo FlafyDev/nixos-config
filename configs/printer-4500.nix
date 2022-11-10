@@ -1,10 +1,9 @@
 # HP Officejet 4500 g510g-m
-
 {
-  system = { pkgs, ... }: {
+  system = {pkgs, ...}: {
     hardware.sane = {
       enable = true;
-      extraBackends = [ pkgs.hplipWithPlugin ];
+      extraBackends = [pkgs.hplipWithPlugin];
     };
 
     services.printing = {

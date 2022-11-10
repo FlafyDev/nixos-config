@@ -1,14 +1,14 @@
 {
   inputs = {
     rofi-themes = {
-      url = "github:adi1090x/rofi"; 
+      url = "github:adi1090x/rofi";
       flake = false;
     };
   };
 
   add = {rofi-themes, ...}: {
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         rofiThemes = {
           sideNavy =
             prev.callPackage

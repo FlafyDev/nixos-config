@@ -1,5 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, callPackage, nodejs-16_x, yarn, yarn2nix, buildYarnPackage }: 
-
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  buildYarnPackage,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "betterdiscord-asar";
   version = "1.6.3";
@@ -19,7 +22,6 @@ stdenvNoCC.mkDerivation rec {
     cp dist/betterdiscord.asar $out/betterdiscord.asar
   '';
 }
-
 # src = fetchFromGitHub {
 #   owner = "BetterDiscord";
 #   repo = "BetterDiscord";

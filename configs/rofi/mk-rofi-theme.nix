@@ -1,5 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub, theme, src }: 
-
+{
+  stdenvNoCC,
+  theme,
+  src,
+}:
 # last rev tested: 307deb9b9203a0f3d343c98f87d96eefa2a7ae96
 stdenvNoCC.mkDerivation {
   pname = "adi1090x-rofi-themes";

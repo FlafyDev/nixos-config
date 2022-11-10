@@ -1,6 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub, }: 
-
-stdenvNoCC.mkDerivation rec {
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
+stdenvNoCC.mkDerivation {
   pname = "invisible-typing";
   version = "1.2.2";
 

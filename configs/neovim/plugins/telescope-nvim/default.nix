@@ -1,4 +1,5 @@
-pkgs: with pkgs.vimPlugins; [
+pkgs:
+with pkgs.vimPlugins; [
   telescope-file-browser-nvim
   {
     type = "lua";

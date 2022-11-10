@@ -1,5 +1,5 @@
 {
-  home = { config, pkgs, lib, ... }: {
+  home = _: {
     programs.kitty = {
       enable = true;
       font.name = "mono";

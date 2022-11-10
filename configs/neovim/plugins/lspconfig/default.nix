@@ -1,4 +1,5 @@
-pkgs: with pkgs.vimPlugins; [
+pkgs:
+with pkgs.vimPlugins; [
   cmp-nvim-lsp
   flutter-tools-nvim
   {

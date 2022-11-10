@@ -1,7 +1,7 @@
 {
   add = _: {
     overlays = _: [
-      (final: prev: {
+      (_final: prev: {
         i3-alternating-layout = prev.callPackage ./i3-alternating-layout.nix {};
         xborder = prev.callPackage ./xborder.nix {};
       })

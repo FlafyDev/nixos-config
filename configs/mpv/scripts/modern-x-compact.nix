@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchFromGitHub }:
-
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
+stdenv.mkDerivation {
   pname = "mpv-modern-x-compact";
   version = "unstable-2022-07-20";
 
@@ -30,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/1-minute-to-midnight/mpv-modern-x-compact";
     license = licenses.unlicense;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [];
   };
 }
