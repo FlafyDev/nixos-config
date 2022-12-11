@@ -1,4 +1,23 @@
 {
+  inputs = {
+    footSrc = {
+      # type = "git";
+      url = "git+https://codeberg.org/dnkl/foot?ref=master";
+      flake = false;
+    };
+  };
+
+  add = {footSrc, ...}: {
+    overlays = _: [
+      (_final: prev: {
+        foot = prev.foot.overrideAttrs (old: {
+          # version = "git";
+          # src = footSrc;
+        });
+      })
+    ];
+  };
+
   home = _: {
     programs.foot = {
       enable = true;
@@ -16,7 +35,10 @@
 
         colors = {
           # alpha = 0.3;
-          alpha = 0.0;
+          # alpha = 0.0;
+          # background = "0x220086";
+          alpha = 0.7;
+          background = "0x020536";
           # background = "0x00000F";
           # background = "0xfaa734";
 

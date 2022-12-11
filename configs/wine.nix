@@ -1,7 +1,7 @@
 {
   home = {pkgs, ...}: {
     home.packages = with pkgs; [
-      wineWowPackages.staging
+      wineWowPackages.waylandFull
       winetricks
     ];
   };

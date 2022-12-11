@@ -63,6 +63,19 @@
     environment.sessionVariables = {
       DEFAULT_BROWSER = "firefox";
     };
+
+    # Firefox cache on tmpfs
+    fileSystems."/home/flafydev/.cache/mozilla/firefox" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      noCheck = true;
+      options = [
+        "noatime"
+        "nodev"
+        "nosuid"
+        "size=128M"
+      ];
+    };
   };
 
   home = {
@@ -90,16 +103,23 @@
         isDefault = true;
         userChrome = builtins.readFile userChrome;
       };
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        vimium
+        sponsorblock
+        ublock-origin
+        bitwarden
+      ];
       package = with pkgs;
-        wrapFirefox firefox-esr-102-unwrapped {
-          forceWayland = wayland;
-          nixExtensions = with pkgs.firefox-addons; [
-            sponsor-block
-            vimium
-            ublock-origin
-            bitwarden
-            stylus
-          ];
+      # wrapFirefox firefox-esr-102-unwrapped {
+        wrapFirefox firefox-beta-bin-unwrapped {
+          # forceWayland = wayland;
+          # nixExtensions = with pkgs.firefox-addons; [
+          #   sponsor-block
+          #   vimium
+          #   ublock-origin
+          #   bitwarden
+          #   stylus
+          # ];
           extraPolicies = {
             CaptivePortal = false;
             DisableFirefoxStudies = true;
@@ -128,34 +148,34 @@
                 installation_mode = "force_installed";
                 install_url = "https://raw.githubusercontent.com/mlyxshi/FFExtension/main/github-search.xpi";
               };
-
+          
               "youtube@search" = {
                 installation_mode = "force_installed";
                 install_url = "https://raw.githubusercontent.com/mlyxshi/FFExtension/main/youtube-search.xpi";
               };
-
+          
               "nix.package@search" = {
                 installation_mode = "force_installed";
                 install_url = "https://raw.githubusercontent.com/mlyxshi/FFExtension/main/nix-search.xpi";
               };
-
+          
               "github.nix@search" = {
                 installation_mode = "force_installed";
                 install_url = "https://raw.githubusercontent.com/mlyxshi/FFExtension/main/github-nix.xpi";
               };
-
+          
               # Uninstall all build-in search shortcuts except google <-- my default search engine
-
+          
               "ebay@search.mozilla.org" = {installation_mode = "blocked";};
-
+          
               "amazondotcom@search.mozilla.org" = {
                 installation_mode = "blocked";
               };
-
+          
               "bing@search.mozilla.org" = {installation_mode = "blocked";};
-
+          
               "ddg@search.mozilla.org" = {installation_mode = "blocked";};
-
+          
               "wikipedia@search.mozilla.org" = {
                 installation_mode = "blocked";
               };
@@ -180,7 +200,7 @@
               "browser.uiCustomization.state" = ''
                 {"placements":{"widget-overflow-fixed-list":["downloads-button","nixos_bitwarden-browser-action","nixos_ublock-browser-action","nixos_sponsor-block-browser-action","nixos_vimium-ff-browser-action","nixos_stylus-browser-action","_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","ublock0_raymondhill_net-browser-action","stop-reload-button","add-ons-button","print-button"],"nav-bar":["back-button","forward-button","urlbar-container","_b2c51689-0095-472b-b900-2b3911fd5089_-browser-action"],"toolbar-menubar":["menubar-items"],"TabsToolbar":["tabbrowser-tabs","new-tab-button","alltabs-button"],"PersonalToolbar":["import-button","personal-bookmarks"]},"seen":["save-to-pocket-button","developer-button","_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action","ublock0_raymondhill_net-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","_b2c51689-0095-472b-b900-2b3911fd5089_-browser-action","_7a7a4a92-a2a0-41d1-9fd7-1e92480d612d_-browser-action","_e4a8a97b-f2ed-450b-b12d-ee082ba24781_-browser-action","nixos_vimium-ff-browser-action","nixos_ublock-browser-action","nixos_stylus-browser-action","nixos_bitwarden-browser-action","nixos_sponsor-block-browser-action"],"dirtyAreaCache":["nav-bar","PersonalToolbar","toolbar-menubar","TabsToolbar","widget-overflow-fixed-list"],"currentVersion":17,"newElementCount":11}
               '';
-
+          
               # Arkenfox stuff
               # https://github.com/arkenfox/user.js/wiki/
               "browser.aboutConfig.showWarning" = false;

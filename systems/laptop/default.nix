@@ -1,6 +1,18 @@
 {
   systemType = "x86_64-linux";
 
+  # add = {nixpkgs-stable, ...}: {
+  #   overlays = _: let
+  #     pkgs-stable = import nixpkgs-stable {
+  #       system = "x86_64-linux";
+  #     };
+  #   in [
+  #     (_final: prev: {
+  #       inherit (pkgs-stable) pipewire;
+  #     })
+  #   ];
+  # };
+
   system = {
     pkgs,
     config,
@@ -60,7 +72,10 @@
 
     networking = {
       hostName = "nixos";
-      networkmanager.enable = true;
+      networkmanager = {
+        enable = true;
+        insertNameservers = [ "1.1.1.1" ];
+      };
 
       dhcpcd = {
         wait = "background";
@@ -110,10 +125,11 @@
     hardware = {
       # bumblebee.enable = true;
       pulseaudio.enable = lib.mkForce false;
+      # pulseaudio.enable = true;
       bluetooth = {
         enable = true;
         hsphfpd.enable = true;
-        package = pkgs.bluez;
+        # package = pkgs.bluez;
         settings = {
           General = {
             Experimental = true;
@@ -124,15 +140,22 @@
 
       opengl = {
         enable = true;
-        driSupport = true;
         extraPackages = with pkgs; [
-          libglvnd
           intel-media-driver
-          vaapiIntel
           vaapiVdpau
           libvdpau-va-gl
-          nvidia-vaapi-driver
         ];
+        # driSupport = true;
+        # extraPackages = with pkgs; [
+        #   libglvnd
+        #   intel-media-driver
+        #   vaapiVdpau
+        #   vaapi-intel-hybrid
+        #   vaapiIntel
+        #   libvdpau-va-gl
+        #   nvidia-vaapi-driver
+        #   libva
+        # ];
       };
     };
 
@@ -165,18 +188,24 @@
     };
 
     services = {
+      # pipewire = {
+      #   enable = true;
+      #   # alsa.enable = true;
+      #   # pulse.enable = true;
+      #   # media-session.enable = true;
+      #   wireplumber.enable = true;
+      #   # If you want to use JACK applications, uncomment this
+      #   #jack.enable = true;
+      # }
       pipewire = {
         enable = true;
         alsa.enable = true;
-        pulse.enable = true;
-        # media-session.enable = true;
         wireplumber.enable = true;
-        # If you want to use JACK applications, uncomment this
-        #jack.enable = true;
+        pulse.enable = true;
       };
 
       openssh.enable = true;
-      blueman.enable = true;
+      # blueman.enable = true;
     };
 
     system.stateVersion = "22.05";

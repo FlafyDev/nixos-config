@@ -26,6 +26,21 @@
       yuck-vim
       vim-surround
       tokyonight-nvim
+      rust-tools-nvim
+      copilot-vim
+      (lspsaga-nvim.overrideAttrs (old: {
+        src = pkgs.fetchFromGitHub {
+          owner = "glepnir";
+          repo = "lspsaga.nvim";
+          rev = "version_2.3";
+          sha256 = "wZ4ithkXnQyQeYtLIiymq4lVWhA8TNcOGh4l/lKRgfs=";
+        };
+      }))
+      # {
+      #   type = "lua";
+      #   plugin = lsp_signature-nvim;
+      #   config = ''require "lsp_signature".setup(cfg)'';
+      # }
 
       {
         type = "lua";
@@ -77,7 +92,6 @@
           require("transparent").setup({
             enable = true,
             extra_groups = {
-              "LineNr",
               "VertSplit",
               "StatusLine",
               "StatusLineNC",
@@ -93,12 +107,11 @@
       }
       {
         type = "lua";
-        plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
+        plugin = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
         config = ''
           require('nvim-treesitter.configs').setup {
-            sync_install = false,
-            auto_install = true
-            -- parser_install_dir = "~/.cache/treesitter",
+            indent = { enable = true },
+            highlight = { enable = true },
           }
         '';
       }

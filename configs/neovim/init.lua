@@ -6,6 +6,25 @@ function map(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+function hl(group, arg)
+  vim.api.nvim_set_hl(0, group, arg)
+end
+
+function hl_con(contains, arg)
+  local highlights = vim.fn.execute("highlight")
+  -- print(highlights)
+  
+  for line in highlights:gmatch("[^\n]+") do
+    -- print(line:match("(%w+)"))
+    local highlight = line:match("(%w+)")
+    if (highlight:match(contains)) then
+      -- print("found: " .. highlight)
+      hl(line:match("(%w+)"), arg)
+    end
+  end
+end
+
+
 vim.g.mapleader = ' '
 
 map("n", "<leader>n", ":NvimTreeToggle<CR>")
@@ -19,6 +38,11 @@ map("n", "<leader>h", ":Telescope file_browser<CR>")
 map("v", "<leader>r", ":SnipRun<CR>")
 map("n", "<leader>r", ":SnipClose<CR>")
 map("n", "<esc>", ":w!<CR>")
+
+map("n", "<C-d>", "<C-d>zz")
+map("n", "<C-u>", "<C-u>zz")
+map("n", "n", "nzzzv")
+map("n", "N", "Nzzzv")
 
 vim.opt.tabstop = 2;
 vim.opt.shiftwidth = 2;
@@ -35,17 +59,27 @@ vim.g.neovide_hide_mouse_when_typing = true;
 -- vim.g.neovide_floating_blur_amount_x = 2.0;
 -- vim.g.neovide_floating_blur_amount_y = 2.0;
 -- vim.g.neovide_floating_opacity = 0.3;
+--
+--
+--
+--
 
-vim.cmd('highlight LineNr guifg=#3b4261');
-vim.cmd('highlight LineNrAbove guifg=#3b4261');
-vim.cmd('highlight LineNrBelow guifg=#3b4261');
 
 vim.cmd('set fillchars+=vert:\\ " ');
 vim.cmd('set nowrap');
 vim.cmd('colorscheme tokyonight');
 vim.cmd('set termguicolors');
 vim.cmd('set clipboard+=unnamedplus');
+vim.cmd('set signcolumn=no');
+
 vim.g.transparent_enabled = true;
+
+hl_con("Float", {background = nil})
+hl_con("TruncateLine", {foreground = "#7aa2f7"})
+hl('LineNr', { foreground = "#FFFFFF" });
+hl('LineNrAbove', { foreground = "#00AAFF" });
+hl('LineNrBelow', { foreground = "#00AAFF" });
+
 
 vim.api.nvim_create_user_command(
   'FlutterLogToggle',
@@ -66,7 +100,6 @@ vim.api.nvim_create_user_command(
   { nargs = 0 }
 )
 
--- vim.cmd('highlight LineNr ctermfg=grey');
 -- vim.cmd('highlight VertSplit cterm=NONE');
 -- vim.cmd('highlight StatusLine cterm=NONE');
 -- vim.cmd('highlight StatusLineNC cterm=NONE');

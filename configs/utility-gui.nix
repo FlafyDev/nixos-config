@@ -1,4 +1,20 @@
 {
+  inputs = {
+    nixpkgs-gimp.url = "github:jtojnar/nixpkgs/gimp-meson";
+  };
+
+  add = { nixpkgs-gimp, ... }: {
+    overlays = _: [
+      (_final: prev: let
+        pkgs = import nixpkgs-gimp {
+          inherit (prev) system;
+        };
+      in {
+        gimp-dev = pkgs.gimp;
+      })
+    ];
+  };
+
   configs = cfgs:
     with cfgs; [
       guifetch
@@ -8,15 +24,15 @@
   home = {pkgs, ...}: {
     home.packages = with pkgs; [
       gnome.eog
-      gnome.nautilus
-      gnome.file-roller
+      mate.engrampa
+      cinnamon.nemo.out
       gnome.simple-scan
       gnome.evince
       gnome.gnome-system-monitor
       gnome.gnome-font-viewer
-      # libreoffice
+      libreoffice
       krita
-      gimp
+      # gimp
       libsForQt5.kdenlive
       qbittorrent
       gparted
@@ -25,6 +41,7 @@
       lxde.lxrandr
       obs-studio
       onlyoffice-bin
+      gimp-dev
     ];
   };
 }

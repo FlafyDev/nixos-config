@@ -78,6 +78,10 @@
       (writeShellScriptBin "vim" "nvidia-offload ${pkgs.neovide}/bin/neovide --nofork $@")
     ];
 
+    home.sessionVariables = {
+      EDITOR = "nvim";
+    };
+
     imports = [
       ./plugins
     ];
@@ -93,18 +97,19 @@
 
       extraPackages = with pkgs; [
         ripgrep
+        kotlin-language-server
         fd
         statix
         cppcheck
         deadnix
         alejandra
         nodePackages.pyright
-        clang
-        nodejs-18_x
+        nodejs-16_x
         tree-sitter
         nil
         clang-tools
-        ccls
+        cmake-language-server
+        # ccls
         wl-clipboard
         omnisharp-roslyn
         netcoredbg
@@ -112,6 +117,7 @@
         nixfmt
         nodePackages.typescript-language-server
         python310Packages.autopep8
+        lazygit
       ];
     };
   };

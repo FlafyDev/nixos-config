@@ -1,6 +1,7 @@
 {
   inputs = {
-    hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:flafydev/Hyprland/flafy";
     hyprpaper = {
       url = "github:hyprwm/hyprpaper";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -15,13 +16,13 @@
       hyprland.overlays.default
       (_final: prev: {
         hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
-            export LIBVA_DRIVER_NAME="nvidia";
-            export GBM_BACKEND="nvidia-drm";
-            export __GLX_VENDOR_LIBRARY_NAME="nvidia";
+            # export LIBVA_DRIVER_NAME="nvidia";
+            # export GBM_BACKEND="nvidia-drm";
+            # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
           # export WLR_DRM_DEVICES=/dev/dri/card0
 
             export _JAVA_AWT_WM_NONREPARENTING=1;
-            export XCURSOR_SIZE=1;
+            export XCURSOR_SIZE=24;
           # export WLR_NO_HARDWARE_CURSORS="1";
             export CLUTTER_BACKEND="wayland";
             export XDG_SESSION_TYPE="wayland";
@@ -60,11 +61,22 @@
       mako
       hyprland-wrapped
     ];
+    gtk = {
+      enable = true;
+      cursorTheme = {
+        name = "Bibata-Modern-Ice";
+        size = 24;
+        package = pkgs.bibata-cursors;
+      };
+    };
     xdg.configFile."hypr/hyprpaper.conf".text = let
       background =
         if theme == "Halloween"
         then "${pkgs.assets}/wallpapers/halloween.jpg"
-        else "${pkgs.assets}/wallpapers/forest.jpg";
+        # else "${pkgs.assets}/wallpapers/forest.jpg";
+        # TODO: add to assets git
+        # else "/home/flafydev/Downloads/vecteezy_abstract-dark-pink-gradient-geometric-background-modern_4256686.jpg";
+        else "/home/flafydev/Downloads/peakpx.jpg";
     in ''
       preload = ${background}
       wallpaper = HDMI-A-1,${background}
@@ -81,7 +93,7 @@
         activeBorder =
           if theme == "Halloween"
           then "0xFFd9b27c"
-          else "0xFF817f7f";
+          else "rgb(314956)";
         playerctl = "${pkgs.playerctl}/bin/playerctl";
         pactl = "${pkgs.pulseaudio}/bin/pactl";
         pamixer = "${pkgs.pamixer}/bin/pamixer";
@@ -127,8 +139,8 @@
       in ''
         # monitor=,preferred,auto,1
 
-        monitor=eDP-1,1920x1080@60,0x0,1
-        monitor=HDMI-A-1,1920x1080@60,0x0,1
+        monitor=eDP-1,1920x1080@60,0x0,1,bitdepth,10
+        monitor=HDMI-A-1,1920x1080@60,0x0,1,bitdepth,10
 
         # monitor=eDP-1,1920x1080@60,1920x0,1,mirror,DP-1
 
@@ -154,13 +166,17 @@
         }
 
         general {
-            sensitivity=0.3
+          sensitivity=0.2
 
-            gaps_in=5
-            gaps_out=5
-            border_size=1
-            col.active_border=${activeBorder}
-            col.inactive_border=0x00000000
+          gaps_in=5
+          gaps_out=5
+          border_size=2
+          # col.active_border=rgba(FF22BBaa) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FF22BBaa) 45deg
+          col.active_border=rgba(FFFFFFFF) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFFFF) 45deg
+          col.inactive_border=rgba(FFFFFF55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFF55) 45deg
+
+          # col.active_border=gradient(rgb(314956), rgb(113355), 0.0, 1.0, 3.14/4.0)
+          # col.inactive_border=rgba(FF22BB55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FF22BB55) 45deg
         }
 
         binds {
@@ -169,31 +185,40 @@
         }
 
         decoration {
-            rounding=0
-            blur=1
-            blur_size=6
-            blur_passes=4
-            blur_ignore_opacity=0
-            blur_new_optimizations=1
+          rounding=7
+          blur=1
+          blur_xray=1
+          # blur_size=6
+          # blur_passes=4
+          blur_size=10
+          blur_passes=3
+          blur_ignore_opacity=0
+          blur_new_optimizations=1
+          drop_shadow=1
+          shadow_range=20
+          shadow_render_power=0
+          col.shadow = 0x33220056
+          shadow_offset=5 5
         }
 
-        bezier=overshot,0.05,0.9,0.1,1.1
+        bezier=overshot,0.05,0.4,0.6,1.3
         bezier=mycurve,0.4, 0, 0.6, 1
+
+        blurls=gtk-layer-shell
 
         animations {
           enabled=1
+          animation=windowsMove,1,7,default
 
-          animation=windowsMove,1,1,default
+          animation=windowsIn,1,7,default,popin 90%
 
-          animation=windowsIn,1,2,default,popin 70%
-
-          animation=windowsOut,1,3,overshot,popin 95%
-          animation=fadeIn,1,2,default
-          animation=fadeOut,1,3,default
+          animation=windowsOut,1,10,default,slide
+          animation=fadeIn,1,10,default
+          animation=fadeOut,1,10,default
 
           animation=border,1,3,default
           # animation=fade,1,3,default
-          animation=workspaces,1,5,default,slidevert
+          animation=workspaces,1,3,default,fade
         }
 
         dwindle {
@@ -207,7 +232,9 @@
         exec-once=${pkgs.batsignal}/bin/batsignal
         exec-once=${autoMonitors}
         exec-once=${hyprlandFocusChange}
+        exec-once=[workspace special] firefox
         exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
+        exec-once=hyprctl setcursor Bibata-Modern-Ice 24
         exec=eww open bar
 
         $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
@@ -219,7 +246,7 @@
         bind=SUPER,G,exec,${pkgs.foot}/bin/foot --app-id sideterm
         bind=SUPER,Q,killactive,
         bind=SUPER,M,exit,
-        bind=SUPER,E,exec,${pkgs.xfce.thunar}/bin/thunar
+        bind=SUPER,E,exec,${pkgs.cinnamon.nemo}/bin/nemo
         bind=SUPER,V,togglefloating,
         bind=SUPER,D,togglesplit,
         bind=SUPER,R,exec,exec $(${pkgs.tofi}/bin/tofi-run)
@@ -234,6 +261,9 @@
         bind=,XF86AudioRaiseVolume,exec,${pactl} set-sink-volume @DEFAULT_SINK@ +5% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK
         bind=,XF86AudioLowerVolume,exec,${pactl} set-sink-volume @DEFAULT_SINK@ -5% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK
         bind=,XF86AudioMute,exec,${pamixer} --toggle-mute && ( [ "$(${pamixer} --get-mute)" = "true" ] && echo 0 > $WOBSOCK ) || ${pamixer} --get-volume > $WOBSOCK
+
+        bind=,XF86MonBrightnessUp,exec,${pkgs.lib.getExe pkgs.brightnessctl} set +5%
+        bind=,XF86MonBrightnessDown,exec,${pkgs.lib.getExe pkgs.brightnessctl} set 5%-
 
         bindm=SUPER,mouse:272,movewindow
         bindm=SUPER,mouse:273,resizewindow

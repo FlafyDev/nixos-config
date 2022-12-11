@@ -9,6 +9,7 @@
           "DroidSansMono"
         ];
       })
+      # carlito
       source-sans
       cantarell-fonts
       dejavu_fonts

@@ -28,7 +28,8 @@
   in {
     xdg.configFile."guifetch/guifetch.toml".text =
       ''
-        background_color = 0x2600000F
+        # background_color = 0x2600000F
+        background_color = 0x00000000
       ''
       + (
         if (image != null)

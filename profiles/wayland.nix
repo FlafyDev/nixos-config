@@ -30,7 +30,7 @@ in
         utility-cli
         (ssh {username = "flafy";})
         # gnome
-        # sway
+        sway
         tofi
         bitwarden
         # betterdiscord
@@ -44,7 +44,10 @@ in
         picom
         mouse-g502-xserver
         rofi
+
+        wine
         assets
+        waydroid
       ];
 
     system = {
@@ -104,6 +107,7 @@ in
             lib.mkForce [
               xdg-desktop-portal-wlr
               # xdg-desktop-portal-gtk
+              # lxqt.xdg-desktop-portal-lxqt
             ];
         };
       };
@@ -132,6 +136,7 @@ in
       #   extraOptions = [ "--unsupported-gpu" ];
       # };
       home.packages = with pkgs; [
+        # android-studio
         prismlauncher
         element-desktop
         scrcpy

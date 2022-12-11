@@ -42,13 +42,16 @@
       unzip
       xclip
       service-wrapper
-      intel-gpu-tools
       lang-to-docx
       htop
       tofi-rbw
-      pciutils
       cp-maps
       project-creator
+
+      vdpauinfo
+      pciutils
+      intel-gpu-tools
+      libva-utils
     ];
   };
 }

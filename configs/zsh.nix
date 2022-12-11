@@ -18,7 +18,7 @@
       enableAutosuggestions = true;
       enableSyntaxHighlighting = true;
       autocd = true;
-      initExtra = "${pkgs.cp-maps}/bin/cp-maps";
+      # initExtra = "${pkgs.cp-maps}/bin/cp-maps";
       history = {
         size = 10000;
         path = "${config.xdg.dataHome}/zsh/history";
