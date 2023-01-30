@@ -1,7 +1,7 @@
 {
   inputs = {
     # hyprland.url = "github:hyprwm/Hyprland";
-    hyprland.url = "github:flafydev/Hyprland/flafy";
+    hyprland.url = "github:flafydev/Hyprland/flafy2";
     hyprpaper = {
       url = "github:hyprwm/hyprpaper";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,6 +21,7 @@
             # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
           # export WLR_DRM_DEVICES=/dev/dri/card0
 
+            export SDL_VIDEODRIVER=wayland
             export _JAVA_AWT_WM_NONREPARENTING=1;
             export XCURSOR_SIZE=24;
           # export WLR_NO_HARDWARE_CURSORS="1";
@@ -39,7 +40,7 @@
     ];
   };
 
-  system = _: {
+  system = { pkgs, ... }: {
     nix.settings = {
       trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
@@ -48,6 +49,8 @@
         "https://hyprland.cachix.org"
       ];
     };
+    xdg.portal.enable = true;
+    programs.hyprland.enable = true;
   };
 
   home = {
@@ -58,7 +61,7 @@
     home.packages = with pkgs; [
       wl-clipboard
       hyprpaper
-      mako
+      # mako
       hyprland-wrapped
     ];
     gtk = {
@@ -76,7 +79,7 @@
         # else "${pkgs.assets}/wallpapers/forest.jpg";
         # TODO: add to assets git
         # else "/home/flafydev/Downloads/vecteezy_abstract-dark-pink-gradient-geometric-background-modern_4256686.jpg";
-        else "/home/flafydev/Downloads/peakpx.jpg";
+        else "/home/flafydev/Pictures/ferns.jpg";
     in ''
       preload = ${background}
       wallpaper = HDMI-A-1,${background}
@@ -97,6 +100,7 @@
         playerctl = "${pkgs.playerctl}/bin/playerctl";
         pactl = "${pkgs.pulseaudio}/bin/pactl";
         pamixer = "${pkgs.pamixer}/bin/pamixer";
+        socat = "${pkgs.socat}/bin/socat";
         # lidOpenCloseScript = pkgs.writeShellScript "lid-open-close" ''
         #   if grep -q open /proc/acpi/button/lid/LID0/state; then
         #     hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
@@ -128,13 +132,13 @@
             --background-color '#eeeeeeFF' \
             --bar-color '#87afd7FF'
         '';
-        hyprlandFocusChange = pkgs.writeShellScript "hyprland-focus-change" ''
-          ${pkgs.socat}/bin/socat -u "UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" - |
-          while read -r line; do if [ "''${line%>>*}" = "activewindow" ]; then
-            pkill -9 -x tofi-run
-            # pkill -9 -x tofi
-          fi; done
-        '';
+        # hyprlandFocusChange = pkgs.writeShellScript "hyprland-focus-change" ''
+        #   ${pkgs.socat}/bin/socat -u "UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" - |
+        #   while read -r line; do if [ "''${line%>>*}" = "activewindow" ]; then
+        #     pkill -9 -x tofi-run
+        #     # pkill -9 -x tofi
+        #   fi; done
+        # '';
         compileWindowRule = window: rules: (builtins.concatStringsSep "\n" (map (rule: "windowrulev2=${rule},${window}") rules));
       in ''
         # monitor=,preferred,auto,1
@@ -148,12 +152,24 @@
 
         misc {
           no_vfr = false
-          enable_swallow=true
+          enable_swallow=false
           swallow_regex=^(foot)$
         }
 
+        device:kmonad-kb-hyperx {
+          kb_layout=us,il
+        }
+
+        device:kmonad-kb-laptop {
+          kb_layout=us,il
+        }
+
+        device:my-kmonad-output {
+          kb_layout=us,il
+        }
+
         input {
-            kb_file=${./keyboard-xserver/layout.xkb}
+            # kb_file=${./keyboard-xserver/layout.xkb}
 
             follow_mouse=1
             force_no_accel=1
@@ -168,12 +184,15 @@
         general {
           sensitivity=0.2
 
-          gaps_in=5
-          gaps_out=5
-          border_size=2
+          gaps_in=1
+          gaps_out=20
+          border_size=1
           # col.active_border=rgba(FF22BBaa) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FF22BBaa) 45deg
-          col.active_border=rgba(FFFFFFFF) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFFFF) 45deg
-          col.inactive_border=rgba(FFFFFF55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFF55) 45deg
+          # col.active_border=rgba(FFFFFFFF) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFFFF) 45deg
+          # col.inactive_border=rgba(FFFFFF55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFF55) 45deg
+
+          col.active_border=rgba(557755FF)
+          col.inactive_border=rgba(758875FF)
 
           # col.active_border=gradient(rgb(314956), rgb(113355), 0.0, 1.0, 3.14/4.0)
           # col.inactive_border=rgba(FF22BB55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FF22BB55) 45deg
@@ -185,7 +204,7 @@
         }
 
         decoration {
-          rounding=7
+          rounding=0
           blur=1
           blur_xray=1
           # blur_size=6
@@ -194,7 +213,7 @@
           blur_passes=3
           blur_ignore_opacity=0
           blur_new_optimizations=1
-          drop_shadow=1
+          drop_shadow=0
           shadow_range=20
           shadow_render_power=0
           col.shadow = 0x33220056
@@ -208,17 +227,17 @@
 
         animations {
           enabled=1
-          animation=windowsMove,1,7,default
+          animation=windowsMove,1,2,default
 
-          animation=windowsIn,1,7,default,popin 90%
+          animation=windowsIn,1,3,default,popin 10%
 
           animation=windowsOut,1,10,default,slide
-          animation=fadeIn,1,10,default
-          animation=fadeOut,1,10,default
+          animation=fadeIn,1,3,default
+          animation=fadeOut,0,10,default
 
-          animation=border,1,3,default
+          animation=border,0,3,default
           # animation=fade,1,3,default
-          animation=workspaces,1,3,default,fade
+          animation=workspaces,0,3,default,fade
         }
 
         dwindle {
@@ -228,11 +247,10 @@
             # no_gaps_when_only=1
         }
 
-        exec-once=${pkgs.hyprpaper}/bin/hyprpaper
+        # exec-once=${pkgs.hyprpaper}/bin/hyprpaper
         exec-once=${pkgs.batsignal}/bin/batsignal
-        exec-once=${autoMonitors}
-        exec-once=${hyprlandFocusChange}
-        exec-once=[workspace special] firefox
+        # exec-once=${autoMonitors}
+        # exec-once=[workspace special] firefox
         exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
         exec-once=hyprctl setcursor Bibata-Modern-Ice 24
         exec=eww open bar
@@ -241,29 +259,34 @@
         exec-once=rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | ${styledWob}
 
         bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
-        bind=SUPER,A,fullscreen
-        bind=SUPER,F,exec,${pkgs.foot}/bin/foot
-        bind=SUPER,G,exec,${pkgs.foot}/bin/foot --app-id sideterm
-        bind=SUPER,Q,killactive,
-        bind=SUPER,M,exit,
-        bind=SUPER,E,exec,${pkgs.cinnamon.nemo}/bin/nemo
-        bind=SUPER,V,togglefloating,
-        bind=SUPER,D,togglesplit,
-        bind=SUPER,R,exec,exec $(${pkgs.tofi}/bin/tofi-run)
-        bind=SUPER,W,exec,res=$(${pkgs.tofi-rbw}/bin/tofi-rbw) && wl-copy "$res"
-        bind=SUPER,C,exec,${pkgs.guifetch}/bin/guifetch
+        bind=ALT,S,fullscreen
+        bind=ALT,F,exec,${pkgs.foot}/bin/foot
+        bind=ALT,X,exec,${pkgs.foot}/bin/foot --app-id sideterm
+        bind=ALT,D,killactive,
+        bind=ALT,E,exec,${pkgs.cinnamon.nemo}/bin/nemo
+        bind=ALT,V,togglefloating,
+        bind=ALT,ALT_L,exec,exec $(${pkgs.tofi}/bin/tofi-run)
+        bind=ALT,W,exec,res=$(${pkgs.tofi-rbw}/bin/tofi-rbw) && wl-copy "$res"
+        bind=ALT,C,exec,${pkgs.guifetch}/bin/guifetch
+        bind=ALT,Z,exec,${pkgs.listen-blue}/bin/listen_blue
+        bind=,Menu,exec,hyprctl switchxkblayout kmonad-kb-laptop next && hyprctl switchxkblayout kmonad-kb-hyperx next
         bind=SUPER,O,pseudo,
-        bind=SUPER,Z,exec,${pkgs.listen-blue}/bin/listen_blue
+        bind=SUPER,M,exit,
+        bind=SUPER,D,togglesplit,
+
+        bind=CTRLALT,d,exec,echo -n 'hide' | ${socat} - UNIX-CONNECT:/tmp/screen_painter_socket.sock
+        bind=CTRLALT,f,exec,echo -n 'show' | ${socat} - UNIX-CONNECT:/tmp/screen_painter_socket.sock
+
         bind=,XF86AudioPlay,exec,${playerctl} play-pause
         bind=,XF86AudioPrev,exec,${playerctl} previous
         bind=,XF86AudioNext,exec,${playerctl} next
 
-        bind=,XF86AudioRaiseVolume,exec,${pactl} set-sink-volume @DEFAULT_SINK@ +5% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK
-        bind=,XF86AudioLowerVolume,exec,${pactl} set-sink-volume @DEFAULT_SINK@ -5% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK
-        bind=,XF86AudioMute,exec,${pamixer} --toggle-mute && ( [ "$(${pamixer} --get-mute)" = "true" ] && echo 0 > $WOBSOCK ) || ${pamixer} --get-volume > $WOBSOCK
+        binde=,XF86AudioRaiseVolume,exec,${pactl} set-sink-volume @DEFAULT_SINK@ +5% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK
+        binde=,XF86AudioLowerVolume,exec,${pactl} set-sink-volume @DEFAULT_SINK@ -5% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK
+        binde=,XF86AudioMute,exec,${pamixer} --toggle-mute && ( [ "$(${pamixer} --get-mute)" = "true" ] && echo 0 > $WOBSOCK ) || ${pamixer} --get-volume > $WOBSOCK
 
-        bind=,XF86MonBrightnessUp,exec,${pkgs.lib.getExe pkgs.brightnessctl} set +5%
-        bind=,XF86MonBrightnessDown,exec,${pkgs.lib.getExe pkgs.brightnessctl} set 5%-
+        binde=,XF86MonBrightnessUp,exec,${pkgs.lib.getExe pkgs.brightnessctl} set +5%
+        binde=,XF86MonBrightnessDown,exec,${pkgs.lib.getExe pkgs.brightnessctl} set 5%-
 
         bindm=SUPER,mouse:272,movewindow
         bindm=SUPER,mouse:273,resizewindow
@@ -273,10 +296,10 @@
         bind=SUPER,K,movefocus,u
         bind=SUPER,J,movefocus,d
 
-        bind=SUPERCTRL,L,resizeactive,150 0
-        bind=SUPERCTRL,H,resizeactive,-150 0
-        bind=SUPERCTRL,K,resizeactive,0 -150
-        bind=SUPERCTRL,J,resizeactive,0 150
+        binde=SUPERCTRL,L,resizeactive,150 0
+        binde=SUPERCTRL,H,resizeactive,-150 0
+        binde=SUPERCTRL,K,resizeactive,0 -150
+        binde=SUPERCTRL,J,resizeactive,0 150
 
         bind=SUPERSHIFT,L,movewindow,r
         bind=SUPERSHIFT,H,movewindow,l
@@ -284,16 +307,16 @@
         bind=SUPERSHIFT,J,movewindow,d
 
         bind=SUPER,U,workspace,previous
-        bind=SUPER,1,workspace,1
-        bind=SUPER,2,workspace,2
-        bind=SUPER,3,workspace,3
-        bind=SUPER,4,workspace,4
-        bind=SUPER,5,workspace,5
-        bind=SUPER,6,workspace,6
-        bind=SUPER,7,workspace,7
-        bind=SUPER,8,workspace,8
-        bind=SUPER,9,workspace,9
-        bind=SUPER,0,workspace,10
+        bind=CTRLALT,1,workspace,1
+        bind=CTRLALT,2,workspace,2
+        bind=CTRLALT,3,workspace,3
+        bind=CTRLALT,4,workspace,4
+        bind=CTRLALT,5,workspace,5
+        bind=CTRLALT,6,workspace,6
+        bind=CTRLALT,7,workspace,7
+        bind=CTRLALT,8,workspace,8
+        bind=CTRLALT,9,workspace,9
+        bind=CTRLALT,0,workspace,10
 
         bind=SUPERSHIFT,1,movetoworkspace,1
         bind=SUPERSHIFT,2,movetoworkspace,2
@@ -312,6 +335,8 @@
         ${compileWindowRule "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"]}
         ${compileWindowRule "class:^(guifetch)$" ["float" "animation slide" "move 10 10"]}
         ${compileWindowRule "class:^(listen_blue)$" ["size 813 695" "float" "center"]}
+        ${compileWindowRule "floating:0" ["rounding 0"]}
+        ${compileWindowRule "floating:1" ["rounding 5"]}
       '';
     };
   };

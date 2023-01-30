@@ -1,12 +1,14 @@
 {
-  inputs.nix = {
-    url = "github:flafydev/nix";
-  };
-
-  add = {nix, ...}: {
+  add = _: {
     overlays = _: [
       (_final: prev: {
-        nix = nix.packages.${prev.system}.default;
+        nix = prev.nix.overrideAttrs (old: {
+          patches =
+            (old.patches or [])
+            ++ [
+              ./evaluable-inputs.patch
+            ];
+        });
       })
     ];
   };
@@ -33,11 +35,9 @@
       '';
       settings = {
         trusted-public-keys = [
-          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         ];
         substituters = [
-          "https://hyprland.cachix.org"
           "https://nix-community.cachix.org"
         ];
         trusted-users = [

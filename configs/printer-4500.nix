@@ -10,7 +10,11 @@
       enable = true;
       drivers = with pkgs; [
         hplip
+        hplipWithPlugin
       ];
     };
+
+    services.avahi.enable = true;
+    services.ipp-usb.enable = true;
   };
 }

@@ -1,6 +1,5 @@
-{
-  system = {pkgs, ...}: {
-    fonts.fonts = with pkgs; [
+let
+  buildFonts = pkgs: with pkgs; [
       (nerdfonts.override {
         fonts = [
           "AurulentSansMono"
@@ -9,7 +8,8 @@
           "DroidSansMono"
         ];
       })
-      # carlito
+      carlito
+      corefonts
       source-sans
       cantarell-fonts
       dejavu_fonts
@@ -22,8 +22,16 @@
       fira-code
       fira-code-symbols
       mplus-outline-fonts.githubRelease
-      dina-font
+      # dina-font
       proggyfonts
     ];
+in {
+  system = {pkgs, ...}: {
+    fonts.fonts = buildFonts pkgs;
+  };
+
+  home = {pkgs, ...}: {
+    fonts.fontconfig.enable = true;
+    home.packages = buildFonts pkgs;
   };
 }

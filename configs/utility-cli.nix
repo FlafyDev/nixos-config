@@ -41,6 +41,7 @@
       neofetch
       unzip
       xclip
+      bat
       service-wrapper
       lang-to-docx
       htop

@@ -39,8 +39,8 @@ map("v", "<leader>r", ":SnipRun<CR>")
 map("n", "<leader>r", ":SnipClose<CR>")
 map("n", "<esc>", ":w!<CR>")
 
-map("n", "<C-d>", "<C-d>zz")
-map("n", "<C-u>", "<C-u>zz")
+-- map("n", "<C-d>", "<C-d>zz")
+-- map("n", "<C-u>", "<C-u>zz")
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 
@@ -107,3 +107,11 @@ vim.api.nvim_create_user_command(
 -- vim.cmd('highlight NvimTreeNormal guibg=NONE guifg=NONE');
 -- vim.cmd('highlight NvimTreeNormalNC guibg=NONE guifg=NONE');
 
+local notify = vim.notify
+vim.notify = function(msg, ...)
+    if msg:match("warning: multiple different client offset_encodings") then
+        return
+    end
+
+    notify(msg, ...)
+end

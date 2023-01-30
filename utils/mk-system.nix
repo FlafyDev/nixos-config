@@ -51,6 +51,7 @@ in {
           "adbusers"
           "scanner"
           "lp"
+          "docker"
         ];
       };
     }

@@ -104,7 +104,7 @@
         userChrome = builtins.readFile userChrome;
       };
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        vimium
+        vimium-c
         sponsorblock
         ublock-origin
         bitwarden

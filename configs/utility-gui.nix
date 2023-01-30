@@ -26,15 +26,17 @@
       gnome.eog
       mate.engrampa
       cinnamon.nemo.out
+      # gnome.nautilus
       gnome.simple-scan
       gnome.evince
       gnome.gnome-system-monitor
       gnome.gnome-font-viewer
       libreoffice
       krita
+      armcord
       # gimp
       libsForQt5.kdenlive
-      qbittorrent
+      # qbittorrent
       gparted
       qdirstat
       pavucontrol

@@ -39,6 +39,8 @@
 
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
+      # blacklistedKernelModules = ["nouveau"];
+      supportedFilesystems = ["ntfs"];
       # kernelPatches = [
       #   {
       #     name = "nouveau-try";
@@ -62,7 +64,6 @@
           useOSProber = true;
         };
       };
-      supportedFilesystems = ["ntfs"];
     };
 
     fileSystems."/mnt/general" = {
@@ -102,7 +103,6 @@
       powerManagement.enable = false;
       prime = {
         offload.enable = true;
-        sync.enable = false;
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
       };
@@ -128,7 +128,7 @@
       # pulseaudio.enable = true;
       bluetooth = {
         enable = true;
-        hsphfpd.enable = true;
+        hsphfpd.enable = false;
         # package = pkgs.bluez;
         settings = {
           General = {
@@ -142,6 +142,7 @@
         enable = true;
         extraPackages = with pkgs; [
           intel-media-driver
+          # vaapiIntel
           vaapiVdpau
           libvdpau-va-gl
         ];
@@ -197,6 +198,10 @@
       #   # If you want to use JACK applications, uncomment this
       #   #jack.enable = true;
       # }
+      tlp = {
+        enable = false;
+      };
+
       pipewire = {
         enable = true;
         alsa.enable = true;
@@ -204,7 +209,7 @@
         pulse.enable = true;
       };
 
-      openssh.enable = true;
+      # openssh.enable = true;
       # blueman.enable = true;
     };
 

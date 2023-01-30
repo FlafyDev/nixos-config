@@ -12,13 +12,16 @@ in
     configs = cfgs:
       with cfgs; [
         (firefox {wayland = true;})
-        # kmonad
+        steam
+        helix
+        kmonad
         direnv
         git
         mpv
         nix
         printer-4500
         zsh
+        starship
         neovim
         eww
         gtk
@@ -30,17 +33,18 @@ in
         utility-cli
         (ssh {username = "flafy";})
         # gnome
-        sway
+        # sway
         tofi
         bitwarden
         # betterdiscord
         discord-open-asar
         qutebrowser
+        chromium
         fonts
 
         bspwm
         alacritty
-        keyboard-xserver
+        # keyboard-xserver
         picom
         mouse-g502-xserver
         rofi
@@ -48,6 +52,7 @@ in
         wine
         assets
         waydroid
+        deluge
       ];
 
     system = {
@@ -73,19 +78,27 @@ in
       #   };
       # };
       services.upower.enable = true;
-      services.getty.autologinUser = username;
+      # services.getty.autologinUser = username;
       services.greetd = {
         enable = true;
         settings = {
           default_session = {
-            command = "${pkgs.hyprland-wrapped}/bin/hyprland";
+            command = "${pkgs.cage}/bin/cage ${pkgs.greetd.gtkgreet}/bin/gtkgreet";
+            # command = "${pkgs.hyprland-wrapped}/bin/hyprland";
             # if config.specialisation != {}
             # then "${pkgs.hyprland-wrapped}/bin/hyprland"
             # else "WLR_DRM_DEVICES=/dev/dri/card0 ${pkgs.hyprland-wrapped}/bin/hyprland";
             user = username;
           };
+          # initial_session = {
+          #   command = "${pkgs.hyprland-wrapped}/bin/hyprland";
+          #   user = username;
+          # };
         };
       };
+
+      virtualisation.docker.enable = true;
+
       # services.tlp.enable = true;
       # Notify on low battery
       # systemd.user.services.batsignal = {
@@ -100,19 +113,8 @@ in
       #   };
       # };
 
-      xdg = {
-        portal = {
-          enable = true;
-          extraPortals = with pkgs;
-            lib.mkForce [
-              xdg-desktop-portal-wlr
-              # xdg-desktop-portal-gtk
-              # lxqt.xdg-desktop-portal-lxqt
-            ];
-        };
-      };
-
       environment.systemPackages = with pkgs; [
+        distrobox
         (retroarch.override {
           cores = [
             libretro.genesis-plus-gx
@@ -136,7 +138,8 @@ in
       #   extraOptions = [ "--unsupported-gpu" ];
       # };
       home.packages = with pkgs; [
-        # android-studio
+        lutris
+        android-studio
         prismlauncher
         element-desktop
         scrcpy

@@ -10,17 +10,17 @@ function map(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-saga.init_lsp_saga({
-  code_action_lightbulb = {
-    enable = true,
-    enable_in_insert = true,
-    cache_code_action = true,
-    sign = false,
-    update_time = 150,
-    sign_priority = 20,
-    virtual_text = true,
-  },
-})
+-- saga.init_lsp_saga({
+--   code_action_lightbulb = {
+--     enable = true,
+--     enable_in_insert = true,
+--     cache_code_action = true,
+--     sign = false,
+--     update_time = 150,
+--     sign_priority = 20,
+--     virtual_text = true,
+--   },
+-- })
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -89,11 +89,12 @@ local on_attach = function(client, bufnr)
   -- Code action
   map("n", "L", "<cmd>Lspsaga code_action<CR>", { silent = true })
   -- Outline
-  map("n","<leader>o", "<cmd>LSoutlineToggle<CR>",{ silent = true })
+  map("n","<leader>o", "<cmd>Lspsaga outline<CR>",{ silent = true })
   -- Rename
   map("n", "<space>lr", "<cmd>Lspsaga rename<CR>", { silent = true })
   -- Hover Doc
   map("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
+  map("n", "<leader>K", "<cmd>Lspsaga hover_doc ++keep<CR>")
 
   -- Lsp finder find the symbol definition implement reference
   -- if there is no implement it will hide
@@ -105,10 +106,12 @@ local on_attach = function(client, bufnr)
   -- you can edit the definition file in this flaotwindow
   -- also support open/vsplit/etc operation check definition_action_keys
   -- support tagstack C-t jump back
-  map("n", "<space>gd", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
+  map("n", "<space>gD", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
+  map("n", "<space>gd", "<cmd>Lspsaga goto_definition<CR>", { silent = true })
 
   -- Show line diagnostics
   map("n", "<leader>e", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
+  map("n", "<leader>E", "<cmd>Lspsaga show_buf_diagnostics<CR>", { silent = true })
 
   -- Show cursor diagnostic
   -- map("n", "<leader>lcd", "<cmd>Lspsaga show_cursor_diagnostics<CR>", { silent = true })
@@ -118,20 +121,21 @@ local on_attach = function(client, bufnr)
   -- map("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>", { silent = true })
   --
   -- -- Only jump to error
-  -- map("n", "[E", function()
-  --   require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
-  -- end, { silent = true })
-  -- map("n", "]E", function()
-  --   require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
+  -- map("n", "<leader>[e", function()
+  --   require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
   -- end, { silent = true })
 
-  -- Float terminal
-  map("n", "F", "<cmd>Lspsaga open_floaterm<CR>", { silent = true })
-  -- if you want pass somc cli command into terminal you can do like this
-  -- open lazygit in lspsaga float terminal
-  map("n", "F", "<cmd>Lspsaga open_floaterm lazygit<CR>", { silent = true })
-  -- close floaterm
-  map("t", "F", [[<C-\><C-n><cmd>Lspsaga close_floaterm<CR>]], { silent = true })
+  -- map("n", "<leader>]e", function()
+  --   require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
+  -- end, { silent = true })
+
+  -- -- Float terminal
+  -- map("n", "F", "<cmd>Lspsaga open_floaterm<CR>", { silent = true })
+  -- -- if you want pass somc cli command into terminal you can do like this
+  -- -- open lazygit in lspsaga float terminal
+  -- map("n", "F", "<cmd>Lspsaga open_floaterm lazygit<CR>", { silent = true })
+  -- -- close floaterm
+  -- map("t", "F", [[<C-\><C-n><cmd>Lspsaga close_floaterm<CR>]], { silent = true })
 end
 
 local lsp_flags = {

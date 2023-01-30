@@ -37,8 +37,8 @@
           # alpha = 0.3;
           # alpha = 0.0;
           # background = "0x220086";
-          alpha = 0.7;
-          background = "0x020536";
+          alpha = 0.2;
+          background = "0x002200";
           # background = "0x00000F";
           # background = "0xfaa734";
 

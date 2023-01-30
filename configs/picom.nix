@@ -18,7 +18,7 @@
 
       backend = "glx";
       vSync = true;
-      experimentalBackends = true;
+      # experimentalBackends = true;
       settings = {
         # "unredir-if-possible" = true;
         # "dbe" = true;
