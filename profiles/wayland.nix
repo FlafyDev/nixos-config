@@ -14,6 +14,7 @@ in
         (firefox {wayland = true;})
         steam
         helix
+        (greetd username)
         kmonad
         direnv
         git
@@ -32,8 +33,7 @@ in
         utility-scripts
         utility-cli
         (ssh {username = "flafy";})
-        # gnome
-        # sway
+        sway
         tofi
         bitwarden
         # betterdiscord
@@ -41,23 +41,20 @@ in
         qutebrowser
         chromium
         fonts
-
         bspwm
         alacritty
         # keyboard-xserver
         picom
         mouse-g502-xserver
         rofi
-
         wine
         assets
-        waydroid
+        # waydroid
         deluge
       ];
 
     system = {
       pkgs,
-      lib,
       ...
     }: {
       time.timeZone = "Israel";
@@ -67,7 +64,6 @@ in
         kdeconnect.enable = true;
       };
       services.xserver.displayManager.startx.enable = true;
-
       services.xserver.enable = true;
       services.xserver.autorun = false;
 
@@ -79,23 +75,6 @@ in
       # };
       services.upower.enable = true;
       # services.getty.autologinUser = username;
-      services.greetd = {
-        enable = true;
-        settings = {
-          default_session = {
-            command = "${pkgs.cage}/bin/cage ${pkgs.greetd.gtkgreet}/bin/gtkgreet";
-            # command = "${pkgs.hyprland-wrapped}/bin/hyprland";
-            # if config.specialisation != {}
-            # then "${pkgs.hyprland-wrapped}/bin/hyprland"
-            # else "WLR_DRM_DEVICES=/dev/dri/card0 ${pkgs.hyprland-wrapped}/bin/hyprland";
-            user = username;
-          };
-          # initial_session = {
-          #   command = "${pkgs.hyprland-wrapped}/bin/hyprland";
-          #   user = username;
-          # };
-        };
-      };
 
       virtualisation.docker.enable = true;
 

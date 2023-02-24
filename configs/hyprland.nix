@@ -1,7 +1,7 @@
 {
   inputs = {
-    # hyprland.url = "github:hyprwm/Hyprland";
-    hyprland.url = "github:flafydev/Hyprland/flafy2";
+    hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.url = "github:flafydev/Hyprland/flafy2";
     hyprpaper = {
       url = "github:hyprwm/hyprpaper";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,6 +50,9 @@
       ];
     };
     xdg.portal.enable = true;
+    xdg.portal.extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+    ];
     programs.hyprland.enable = true;
   };
 

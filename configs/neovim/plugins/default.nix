@@ -28,6 +28,7 @@
       tokyonight-nvim
       rust-tools-nvim
       copilot-vim
+      centerpad-nvim
       {
         type = "lua";
         plugin = lspsaga-nvim-original;

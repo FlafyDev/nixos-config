@@ -75,7 +75,7 @@
       hostName = "nixos";
       networkmanager = {
         enable = true;
-        insertNameservers = [ "1.1.1.1" ];
+        insertNameservers = ["1.1.1.1"];
       };
 
       dhcpcd = {
@@ -90,9 +90,9 @@
       };
 
       firewall = {
-        enable = false;
-        allowedTCPPorts = [];
-        allowedUDPPorts = [];
+        enable = true;
+        allowedTCPPorts = [58846];
+        allowedUDPPorts = [58846];
       };
     };
 
@@ -205,8 +205,10 @@
       pipewire = {
         enable = true;
         alsa.enable = true;
-        wireplumber.enable = true;
+        jack.enable = true;
         pulse.enable = true;
+        wireplumber.enable = false;
+        media-session.enable = true;
       };
 
       # openssh.enable = true;

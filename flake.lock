@@ -72,6 +72,22 @@
         "type": "github"
       }
     },
+    "centerpad-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1620975636,
+        "narHash": "sha256-clHJFfU7F95WYpGVGr3iQEN+00lnS9YxIpLOoH56e68=",
+        "owner": "smithbm2316",
+        "repo": "centerpad.nvim",
+        "rev": "666641d02fd8c58ac401c1fb6bf596bb00b815fb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "smithbm2316",
+        "repo": "centerpad.nvim",
+        "type": "github"
+      }
+    },
     "cp-maps": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -442,15 +458,15 @@
     "flutter-tools-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1662736694,
-        "narHash": "sha256-jkH8qdm4YTDTX1mplgSw6qxUnhoAEk+UsQ+rMFbzo1A=",
-        "owner": "FlafyDev",
+        "lastModified": 1675599743,
+        "narHash": "sha256-LExepkD8K1rkD8Nd7A+97iVOH6o1U+1Mh2dnoNQ09OU=",
+        "owner": "akinsho",
         "repo": "flutter-tools.nvim",
-        "rev": "b023872fa7d82325dc9b44b2fd4d91157f37ef91",
+        "rev": "d67caa7dd17eccb89bfda1c0657d0723e339ef60",
         "type": "github"
       },
       "original": {
-        "owner": "FlafyDev",
+        "owner": "akinsho",
         "repo": "flutter-tools.nvim",
         "type": "github"
       }
@@ -640,19 +656,34 @@
         "type": "github"
       }
     },
-    "neovide": {
+    "lspsaga-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1667562308,
-        "narHash": "sha256-/MEooWk7+EggsFpk4UZ4yx9oEzoJj+f7cmrPW/wscyY=",
-        "owner": "flafydev",
-        "repo": "neovide",
-        "rev": "0a33cb886f572634e2826e2ca1e7570e420af377",
+        "lastModified": 1676723674,
+        "narHash": "sha256-EmRt/lcJHNkwH2LFKD4+tAohSBW72Q38KHGlUDkc5eY=",
+        "owner": "glepnir",
+        "repo": "lspsaga.nvim",
+        "rev": "66bb06771789d677ef2b7c9a0bd57941298f6a9f",
         "type": "github"
       },
       "original": {
-        "owner": "flafydev",
-        "ref": "barklan",
+        "owner": "glepnir",
+        "repo": "lspsaga.nvim",
+        "type": "github"
+      }
+    },
+    "neovide": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1677076780,
+        "narHash": "sha256-Aou5/tjwPjKpkig4LFDmqFAFivsK97CGdXa35dx17cI=",
+        "owner": "williamspatrick",
+        "repo": "neovide",
+        "rev": "677e87e887bc14544ca6156907666a5739f5a361",
+        "type": "github"
+      },
+      "original": {
+        "owner": "williamspatrick",
         "repo": "neovide",
         "type": "github"
       }
@@ -955,6 +986,7 @@
         "assets": "assets",
         "bspwm-rounded": "bspwm-rounded",
         "bufresize-nvim": "bufresize-nvim",
+        "centerpad-nvim": "centerpad-nvim",
         "cp-maps": "cp-maps",
         "custom-theme-nvim": "custom-theme-nvim",
         "firefox-bitwarden": "firefox-bitwarden",
@@ -971,6 +1003,7 @@
         "kmonad": "kmonad",
         "lang-to-docx": "lang-to-docx",
         "listen-blue": "listen-blue",
+        "lspsaga-nvim": "lspsaga-nvim",
         "neovide": "neovide",
         "nixpkgs": "nixpkgs_7",
         "nixpkgs-gimp": "nixpkgs-gimp",

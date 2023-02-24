@@ -40,8 +40,8 @@
       gparted
       qdirstat
       pavucontrol
-      lxde.lxrandr
       obs-studio
+      lxde.lxrandr
       onlyoffice-bin
       gimp-dev
     ];

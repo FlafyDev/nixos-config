@@ -6,7 +6,7 @@
 
   inputs = {
     neovide = {
-      url = "github:flafydev/neovide/barklan";
+      url = "github:williamspatrick/neovide";
       # url = "path:/mnt/general/repos/flafydev/neovide";
       flake = false;
     };
@@ -23,7 +23,15 @@
       flake = false;
     };
     flutter-tools-nvim = {
-      url = "github:FlafyDev/flutter-tools.nvim";
+      url = "github:akinsho/flutter-tools.nvim";
+      flake = false;
+    };
+    centerpad-nvim = {
+      url = "github:smithbm2316/centerpad.nvim";
+      flake = false;
+    };
+    lspsaga-nvim = {
+      url = "github:glepnir/lspsaga.nvim";
       flake = false;
     };
   };
@@ -31,13 +39,23 @@
   add = inputs: {
     overlays = _: [
       (_final: prev: {
-        # neovide = prev.callPackage ./neovide {};
+        neovide = prev.neovide.overrideAttrs (old: {
+          src = inputs.neovide;
+          nativeBuildInputs = old.nativeBuildInputs ++ [ prev.cmake ];
+          cargoDeps = old.cargoDeps.overrideAttrs (_: {
+            src = inputs.neovide;
+            outputHash = "sha256-wW/Z32X5YieTraEVbPKpj+59MzPjVKbgTaXyrZLwU50=";
+          });
+        });
         vimPlugins =
           prev.vimPlugins
           // (
             let
               inherit (prev.vimUtils) buildVimPluginFrom2Nix;
             in {
+              lspsaga-nvim-original = prev.vimPlugins.lspsaga-nvim-original.overrideAttrs (_old: {
+                src = inputs.lspsaga-nvim;
+              });
               custom-theme-nvim = buildVimPluginFrom2Nix {
                 pname = "custom-theme.nvim";
                 version = "git";
@@ -65,6 +83,11 @@
                 version = "2022-06-20";
                 src = inputs.yuck-vim;
                 meta.homepage = "https://github.com/elkowar/yuck.vim";
+              };
+              centerpad-nvim = buildVimPluginFrom2Nix {
+                name = "centerpad-nvim";
+                src = inputs.centerpad-nvim;
+                meta.homepage = "https://github.com/smithbm2316/centerpad.nvim";
               };
             }
           );

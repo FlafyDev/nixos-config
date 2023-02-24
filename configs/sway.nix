@@ -1,37 +1,4 @@
 {
-  add = _: {
-    overlays = _: [
-      (final: prev: {
-        sway-unwrapped =
-          (prev.sway-unwrapped.overrideAttrs (old: rec {
-            # version = "";
-            src = prev.fetchFromGitHub {
-              owner = "swaywm";
-              repo = "sway";
-              rev = "b69d637f7a34e239e48a4267ae94a5e7087b5834";
-              sha256 = "sha256-PmfT2LSeXGBv3Udu5Mn2VOd9IZIFg5zjmhLWNrn3ySw=";
-            };
-            buildInputs =
-              old.buildInputs
-              ++ [
-                prev.pcre2
-                prev.xorg.xcbutilwm
-              ];
-          }))
-          .override {
-            wlroots = prev.wlroots_0_16.overrideAttrs (old: {
-              src = prev.fetchFromGitHub {
-                owner = "danvd";
-                repo = "wlroots-eglstreams";
-                rev = "6ea541730e87ac8ce4187e55a0c3aa3cefef5624";
-                sha256 = "sha256-Fqc8yMQlBg/pEKQYo/Gd041o5rCEF+dX4Tu2Kpk54DM=";
-              };
-            });
-          };
-      })
-    ];
-  };
-
   system = {pkgs, ...}: {
     # xdg-desktop-portal works by exposing a series of D-Bus interfaces
     # known as portals under a well-known name

@@ -13,6 +13,7 @@ in {
     # };
     services.gnome.gnome-keyring.enable = true;
     security.pam.services.login.enableGnomeKeyring = true;
+    security.pam.services.greetd.enableGnomeKeyring = true;
     programs.seahorse.enable = true;
 
     systemd.services.gnome-keyring-daemon-ssh-agent = {
@@ -22,18 +23,13 @@ in {
         Type = "simple";
       };
       serviceConfig = {
-        ExecStart = "/run/wrappers/bin/gnome-keyring-daemon --start --components=ssh";
+        ExecStart = "eval $(/run/wrappers/bin/gnome-keyring-daemon --start --components=ssh)";
       };
       wantedBy = ["multi-user.target"];
     };
   };
 
   home = {pkgs, ...}: {
-    # programs.keychain = {
-    #   enable = true;
-    #   enableZshIntegration = false;
-    # };
-
     services.gnome-keyring = {
       enable = true;
       components = ["pkcs11" "secrets" "ssh"];
@@ -42,32 +38,5 @@ in {
     home.sessionVariables = {
       SSH_AUTH_SOCK = "/run/user/1000/keyring/ssh";
     };
-
-
-    # programs.zsh = {
-    #   initExtra = ''
-    #     eval "$(${pkgs.keychain}/bin/keychain --eval --agents ssh ~/.ssh/id_*)"
-    #   '';
-    #   # initExtra = builtins.concatStringsSep "\n" (map (key: ''
-    #   #     eval "$(SHELL=zsh ${pkgs.keychain}/bin/keychain --eval --agents ssh ${sshPath}/${key})"
-    #   #   '')
-    #   #   [
-    #   #     "id_github"
-    #   #   ]);
-    # };
-
-    # programs.ssh = {
-    #   enable = true;
-
-    #   # userKnownHostsFile = "${sshPath}/known_hosts";
-
-    #   # matchBlocks = {
-    #   #   "github.com" = {
-    #   #     hostname = "github.com";
-    #   #     user = "git";
-    #   #     identityFile = ["${sshPath}/id_github"];
-    #   #   };
-    #   # };
-    # };
   };
 }
