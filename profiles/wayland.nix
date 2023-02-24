@@ -12,7 +12,7 @@ in
     configs = cfgs:
       with cfgs; [
         (firefox {wayland = true;})
-        steam
+        # steam
         helix
         (greetd username)
         kmonad
@@ -37,7 +37,7 @@ in
         tofi
         bitwarden
         # betterdiscord
-        discord-open-asar
+        # discord-open-asar
         qutebrowser
         chromium
         fonts
