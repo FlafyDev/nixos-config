@@ -17,8 +17,8 @@
 
   configs = cfgs:
     with cfgs; [
-      guifetch
-      listen-blue
+      # guifetch
+      # listen-blue
     ];
 
   home = {pkgs, ...}: {
@@ -42,7 +42,6 @@
       pavucontrol
       obs-studio
       lxde.lxrandr
-      onlyoffice-bin
       gimp-dev
     ];
   };

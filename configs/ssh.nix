@@ -16,17 +16,17 @@ in {
     security.pam.services.greetd.enableGnomeKeyring = true;
     programs.seahorse.enable = true;
 
-    systemd.services.gnome-keyring-daemon-ssh-agent = {
-      enable = true;
-      description = "Custom service to start gnome-keyring-daemon ssh agent";
-      unitConfig = {
-        Type = "simple";
-      };
-      serviceConfig = {
-        ExecStart = "eval $(/run/wrappers/bin/gnome-keyring-daemon --start --components=ssh)";
-      };
-      wantedBy = ["multi-user.target"];
-    };
+    # systemd.services.gnome-keyring-daemon-ssh-agent = {
+    #   enable = true;
+    #   description = "Custom service to start gnome-keyring-daemon ssh agent";
+    #   unitConfig = {
+    #     Type = "simple";
+    #   };
+    #   serviceConfig = {
+    #     ExecStart = "/run/wrappers/bin/gnome-keyring-daemon --start --components=ssh";
+    #   };
+    #   wantedBy = ["multi-user.target"];
+    # };
   };
 
   home = {pkgs, ...}: {

@@ -52,6 +52,7 @@ in {
           "scanner"
           "lp"
           "docker"
+          "deluge"
         ];
       };
     }

@@ -129,7 +129,7 @@
         nodePackages.pyright
         nodejs-16_x
         tree-sitter
-        nil
+        # nil
         clang-tools
         cmake-language-server
         # ccls

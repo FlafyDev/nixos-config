@@ -152,11 +152,11 @@ lspconfig['tsserver'].setup {
   capabilities = capabilities,
 }
 
-lspconfig['nil_ls'].setup {
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-}
+-- lspconfig['nil_ls'].setup {
+--   on_attach = on_attach,
+--   flags = lsp_flags,
+--   capabilities = capabilities,
+-- }
 
 -- lspconfig['rnix'].setup {
 --   on_attach = on_attach,

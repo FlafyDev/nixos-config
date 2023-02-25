@@ -51,7 +51,7 @@
     };
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
+      # pkgs.xdg-desktop-portal-gtk
     ];
     programs.hyprland.enable = true;
   };
@@ -154,7 +154,7 @@
         # workspace=DP-1,1
 
         misc {
-          no_vfr = false
+          vfr = true
           enable_swallow=false
           swallow_regex=^(foot)$
         }
@@ -269,9 +269,6 @@
         bind=ALT,E,exec,${pkgs.cinnamon.nemo}/bin/nemo
         bind=ALT,V,togglefloating,
         bind=ALT,ALT_L,exec,exec $(${pkgs.tofi}/bin/tofi-run)
-        bind=ALT,W,exec,res=$(${pkgs.tofi-rbw}/bin/tofi-rbw) && wl-copy "$res"
-        bind=ALT,C,exec,${pkgs.guifetch}/bin/guifetch
-        bind=ALT,Z,exec,${pkgs.listen-blue}/bin/listen_blue
         bind=,Menu,exec,hyprctl switchxkblayout kmonad-kb-laptop next && hyprctl switchxkblayout kmonad-kb-hyperx next
         bind=SUPER,O,pseudo,
         bind=SUPER,M,exit,
@@ -341,6 +338,9 @@
         ${compileWindowRule "floating:0" ["rounding 0"]}
         ${compileWindowRule "floating:1" ["rounding 5"]}
       '';
+      # bind=ALT,W,exec,res=$(${pkgs.tofi-rbw}/bin/tofi-rbw) && wl-copy "$res"
+      # bind=ALT,C,exec,${pkgs.guifetch}/bin/guifetch
+      # bind=ALT,Z,exec,${pkgs.listen-blue}/bin/listen_blue
     };
   };
 }

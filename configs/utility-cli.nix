@@ -43,11 +43,11 @@
       xclip
       bat
       service-wrapper
-      lang-to-docx
+      # lang-to-docx
       htop
-      tofi-rbw
-      cp-maps
-      project-creator
+      # tofi-rbw
+      # cp-maps
+      # project-creator
 
       vdpauinfo
       pciutils

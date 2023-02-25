@@ -38,7 +38,7 @@
     systemd.services.NetworkManager-wait-online.enable = false;
 
     boot = {
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.linuxPackages_6_1;
       # blacklistedKernelModules = ["nouveau"];
       supportedFilesystems = ["ntfs"];
       # kernelPatches = [
@@ -207,8 +207,8 @@
         alsa.enable = true;
         jack.enable = true;
         pulse.enable = true;
-        wireplumber.enable = false;
-        media-session.enable = true;
+        wireplumber.enable = true;
+        media-session.enable = false;
       };
 
       # openssh.enable = true;
