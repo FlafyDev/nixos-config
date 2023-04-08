@@ -1,4 +1,4 @@
-{
+{ neovide ? true }: {
   configs = cfgs:
     with cfgs; [
       nur
@@ -96,10 +96,10 @@
   };
 
   home = {pkgs, ...}: {
-    home.packages = with pkgs; [
-      neovide
-      (writeShellScriptBin "vim" "nvidia-offload ${pkgs.neovide}/bin/neovide --nofork $@")
-    ];
+    home.packages = if neovide then [
+      pkgs.neovide
+      (pkgs.writeShellScriptBin "vim" "nvidia-offload ${pkgs.neovide}/bin/neovide --nofork $@")
+    ] else [];
 
     home.sessionVariables = {
       EDITOR = "nvim";

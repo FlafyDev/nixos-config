@@ -71,6 +71,8 @@
       fsType = "ext4";
     };
 
+    services.upower.enable = true;
+
     networking = {
       hostName = "nixos";
       networkmanager = {

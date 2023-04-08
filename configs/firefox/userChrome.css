@@ -120,7 +120,7 @@
   background-position: left;
   background-size: cover;
 
-  background-image: url('@background@');
+  background-image: url('@wallpaper@');
 }
 
 #PanelUI-menu-button {

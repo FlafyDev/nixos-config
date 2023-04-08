@@ -40,22 +40,6 @@
         "type": "github"
       }
     },
-    "assets": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1667690206,
-        "narHash": "sha256-WAyA8QLzdYR/kK2SccEiZF92JupLDqdEiMQz+ALyuXY=",
-        "owner": "flafydev",
-        "repo": "nixos-assets",
-        "rev": "11bf5881cd361097e86bbf69c4398e399743d081",
-        "type": "github"
-      },
-      "original": {
-        "owner": "flafydev",
-        "repo": "nixos-assets",
-        "type": "github"
-      }
-    },
     "bspwm-rounded": {
       "flake": false,
       "locked": {
@@ -552,66 +536,6 @@
         "type": "github"
       }
     },
-    "firefox-bitwarden": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-cC+Njda0eOLkOcJ/nD8Z4sAOKS/qfUHC1Kc3Wv3Bscs=",
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/4018008/bitwarden_password_manager-2022.10.1.xpi"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/4018008/bitwarden_password_manager-2022.10.1.xpi"
-      }
-    },
-    "firefox-sponsor-block": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-sM7XoRbf0BV9l4FNP4+53Pm6MVkLKeOUVzLVHBiwqVM=",
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/4016632/sponsorblock-5.1.1.xpi"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/4016632/sponsorblock-5.1.1.xpi"
-      }
-    },
-    "firefox-stylus": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-L49JE4Cd6NPCUkL4ytZ91d3fHUL3AWmYOIX0DpjB5LM=",
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/3995806/styl_us-1.5.26.xpi"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/3995806/styl_us-1.5.26.xpi"
-      }
-    },
-    "firefox-ublock-origin": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-2aTbbcnimWuyhtVkZrf7kTMwqZV4+/x/T7fUrytIhp0=",
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/4003969/ublock_origin-1.44.4.xpi"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/4003969/ublock_origin-1.44.4.xpi"
-      }
-    },
-    "firefox-vimium-ff": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-6qCjjBeDyvQfI6j8lNJWaFFgr/OOQmskNmZaL1m2PCE=",
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/4017172/vimium_ff-1.67.2.xpi"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://addons.mozilla.org/firefox/downloads/file/4017172/vimium_ff-1.67.2.xpi"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -729,36 +653,6 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_14": {
-      "locked": {
-        "lastModified": 1659877975,
-        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_15": {
-      "locked": {
-        "lastModified": 1649676176,
-        "narHash": "sha256-OWKJratjt2RW151VUlJPRALb7OU2S5s+f0vLj4o1bHM=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "a4b154ebbdc88c8498a5c7b01589addc9e9cb678",
         "type": "github"
       },
       "original": {
@@ -919,23 +813,6 @@
         "type": "github"
       }
     },
-    "footSrc": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1676538773,
-        "narHash": "sha256-EBByXZLJiuMnqO96XsBh69mej9W2Eipe6Hxb9grpmxo=",
-        "ref": "master",
-        "rev": "f2356adee392edefa54009c9932a37e6c5a45b20",
-        "revCount": 5724,
-        "type": "git",
-        "url": "https://codeberg.org/dnkl/foot"
-      },
-      "original": {
-        "ref": "master",
-        "type": "git",
-        "url": "https://codeberg.org/dnkl/foot"
-      }
-    },
     "gesture-nvim": {
       "flake": false,
       "locked": {
@@ -1035,17 +912,17 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1679590533,
-        "narHash": "sha256-THhjCmMfB4qqTZjh0jnksXK3PfGF2qOgAa3oarc8SHE=",
+        "lastModified": 1680955736,
+        "narHash": "sha256-zbtxX0NezuNg46PAKscmDfFfNID4rAq2qGNf1BE3Cqc=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "f9096779de1d3704063d97d445f52bc6e660b6f8",
+        "rev": "3ce19e67fe60321c1af845dd30925e193cd96440",
         "type": "github"
       },
       "original": {
         "owner": "hyprwm",
+        "ref": "v0.24.0",
         "repo": "Hyprland",
-        "rev": "f9096779de1d3704063d97d445f52bc6e660b6f8",
         "type": "github"
       }
     },
@@ -1067,26 +944,6 @@
       "original": {
         "owner": "hyprwm",
         "repo": "hyprland-protocols",
-        "type": "github"
-      }
-    },
-    "hyprpaper": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1676681260,
-        "narHash": "sha256-R2FvbPzgvDSVs0jCUA9CMDIgw4F6exF8cR+y3Yea5jQ=",
-        "owner": "hyprwm",
-        "repo": "hyprpaper",
-        "rev": "2bc88dc8c220db674f458432aec0ac0d9ea6a640",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hyprwm",
-        "repo": "hyprpaper",
         "type": "github"
       }
     },
@@ -1119,28 +976,6 @@
       "original": {
         "owner": "lukas-reineke",
         "repo": "indent-blankline.nvim",
-        "type": "github"
-      }
-    },
-    "kmonad": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "dir": "nix",
-        "lastModified": 1673185501,
-        "narHash": "sha256-uEtWPpl9nH7QqochHo1z+giPga1zXR1Ko3dOXHIapFY=",
-        "owner": "kmonad",
-        "repo": "kmonad",
-        "rev": "3413f1be996142c8ef4f36e246776a6df7175979",
-        "type": "github"
-      },
-      "original": {
-        "dir": "nix",
-        "owner": "kmonad",
-        "repo": "kmonad",
         "type": "github"
       }
     },
@@ -1545,26 +1380,6 @@
         "type": "github"
       }
     },
-    "nix-dart_2": {
-      "inputs": {
-        "flake-utils": "flake-utils_15",
-        "nixpkgs": "nixpkgs_10",
-        "pub2nix": "pub2nix_2"
-      },
-      "locked": {
-        "lastModified": 1664396700,
-        "narHash": "sha256-bkB6U6Anu5xeX3P7kZFrcGABfg4DZgvi3SRgEpXGXP0=",
-        "owner": "Cir0X",
-        "repo": "nix-dart",
-        "rev": "d4158692f6fb28a837c398e9f8d091c0e5b05ab2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Cir0X",
-        "repo": "nix-dart",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1665937116,
@@ -1628,20 +1443,6 @@
         "ref": "nixos-22.05",
         "repo": "nixpkgs",
         "type": "github"
-      }
-    },
-    "nixpkgs_10": {
-      "locked": {
-        "lastModified": 1652133925,
-        "narHash": "sha256-kfATGChLe9/fQVZkXN9G71JAVMlhePv1qDbaRKklkQs=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "51d859cdab1ef58755bd342d45352fc607f5e59b",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
       }
     },
     "nixpkgs_2": {
@@ -2205,22 +2006,6 @@
         "type": "github"
       }
     },
-    "pub2nix_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1658857493,
-        "narHash": "sha256-1JdcFEmjwlr0NGNbB3fgYqaUZPJbaFnxYifNPoL3bio=",
-        "owner": "cir0x",
-        "repo": "pub2nix",
-        "rev": "47e6ab2e061e0c7a0ae6a949a8c6b34daf3ac298",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cir0x",
-        "repo": "pub2nix",
-        "type": "github"
-      }
-    },
     "qutebrowser-base16": {
       "flake": false,
       "locked": {
@@ -2273,42 +2058,17 @@
         "type": "github"
       }
     },
-    "rofi-themes": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1676300620,
-        "narHash": "sha256-eXtL6MLkwJ513dsR6yy6VBzUVjaFh/nWm2M9bQnAPzw=",
-        "owner": "adi1090x",
-        "repo": "rofi",
-        "rev": "024a948b72239ed9ee2c5397330cb09dcc1a0df2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "adi1090x",
-        "repo": "rofi",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
-        "assets": "assets",
         "bspwm-rounded": "bspwm-rounded",
         "bufresize-nvim": "bufresize-nvim",
         "centerpad-nvim": "centerpad-nvim",
         "cp-maps": "cp-maps",
         "custom-theme-nvim": "custom-theme-nvim",
-        "firefox-bitwarden": "firefox-bitwarden",
-        "firefox-sponsor-block": "firefox-sponsor-block",
-        "firefox-stylus": "firefox-stylus",
-        "firefox-ublock-origin": "firefox-ublock-origin",
-        "firefox-vimium-ff": "firefox-vimium-ff",
         "flutter-tools-nvim": "flutter-tools-nvim",
-        "footSrc": "footSrc",
         "guifetch": "guifetch",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
-        "hyprpaper": "hyprpaper",
-        "kmonad": "kmonad",
         "lang-to-docx": "lang-to-docx",
         "listen-blue": "listen-blue",
         "lspsaga-nvim": "lspsaga-nvim",
@@ -2320,8 +2080,6 @@
         "nur": "nur",
         "project-creator": "project-creator",
         "qutebrowser-base16": "qutebrowser-base16",
-        "rofi-themes": "rofi-themes",
-        "tofi-rbw": "tofi-rbw",
         "yuck-vim": "yuck-vim"
       }
     },
@@ -2503,28 +2261,6 @@
       "original": {
         "owner": "folke",
         "repo": "todo-comments.nvim",
-        "type": "github"
-      }
-    },
-    "tofi-rbw": {
-      "inputs": {
-        "flake-utils": "flake-utils_14",
-        "nix-dart": "nix-dart_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1665153357,
-        "narHash": "sha256-BSwx6EPw3QnHqGYsS2nkRIPO0ECT5zuNRT8W9SwA1+8=",
-        "owner": "FlafyDev",
-        "repo": "tofi-rbw",
-        "rev": "7eb291ce95a077ec05d0f32d55e091e8f8b8c55a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "FlafyDev",
-        "repo": "tofi-rbw",
         "type": "github"
       }
     },

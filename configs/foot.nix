@@ -1,23 +1,4 @@
 {
-  inputs = {
-    footSrc = {
-      # type = "git";
-      url = "git+https://codeberg.org/dnkl/foot?ref=master";
-      flake = false;
-    };
-  };
-
-  add = {footSrc, ...}: {
-    overlays = _: [
-      (_final: prev: {
-        foot = prev.foot.overrideAttrs (old: {
-          # version = "git";
-          # src = footSrc;
-        });
-      })
-    ];
-  };
-
   home = _: {
     programs.foot = {
       enable = true;

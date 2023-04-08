@@ -1,80 +1,12 @@
-{wayland ? false}: {
-  inputs = {
-    firefox-ublock-origin = {
-      url = "https://addons.mozilla.org/firefox/downloads/file/4003969/ublock_origin-1.44.4.xpi";
-      flake = false;
-    };
-    firefox-sponsor-block = {
-      url = "https://addons.mozilla.org/firefox/downloads/file/4016632/sponsorblock-5.1.1.xpi";
-      flake = false;
-    };
-    firefox-vimium-ff = {
-      url = "https://addons.mozilla.org/firefox/downloads/file/4017172/vimium_ff-1.67.2.xpi";
-      flake = false;
-    };
-    firefox-bitwarden = {
-      url = "https://addons.mozilla.org/firefox/downloads/file/4018008/bitwarden_password_manager-2022.10.1.xpi";
-      flake = false;
-    };
-    firefox-stylus = {
-      url = "https://addons.mozilla.org/firefox/downloads/file/3995806/styl_us-1.5.26.xpi";
-      flake = false;
-    };
-  };
-  add = inputs: {
-    overlays = _: [
-      (_final: prev: {
-        firefox-addons = {
-          sponsor-block = prev.fetchFirefoxAddon {
-            name = "sponsor-block";
-            src = inputs.firefox-sponsor-block;
-            # url =
-            #   "https://addons.mozilla.org/firefox/downloads/file/4011816/sponsorblock-5.0.7.xpi";
-            # sha256 = "/XqkOnjPiHJyyNJt6cJnqbiWBbQRj5zh/XwbdfYx6uQ=";
-          };
-          vimium = prev.fetchFirefoxAddon {
-            name = "vimium-ff";
-            src = inputs.firefox-vimium-ff;
-            # url =
-            #   "https://addons.mozilla.org/firefox/downloads/file/3898202/vimium_ff-1.67.1.xpi";
-            # sha256 = "EnQIAnSOer/48TAUyEXbGCtSZvKA4vniL64K+CeJ/m0=";
-          };
-          ublock-origin = prev.fetchFirefoxAddon {
-            name = "ublock";
-            src = inputs.firefox-ublock-origin;
-            # url =
-            #   "https://addons.mozilla.org/firefox/downloads/file/4003969/ublock_origin-1.44.4.xpi";
-            # sha256 = "C+VQyaJ8BA0ErXGVTdnppJZ6J9SP+izf6RFxdS4VJoU=";
-          };
-          bitwarden = prev.fetchFirefoxAddon {
-            name = "bitwarden";
-            src = inputs.firefox-bitwarden;
-          };
-          stylus = prev.fetchFirefoxAddon {
-            name = "stylus";
-            src = inputs.firefox-stylus;
-          };
-        };
-      })
+{
+  configs = cfgs:
+    with cfgs; [
+      nur
     ];
-  };
 
   system = _: {
     environment.sessionVariables = {
       DEFAULT_BROWSER = "firefox";
-    };
-
-    # Firefox cache on tmpfs
-    fileSystems."/home/flafydev/.cache/mozilla/firefox" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      noCheck = true;
-      options = [
-        "noatime"
-        "nodev"
-        "nosuid"
-        "size=128M"
-      ];
     };
   };
 
@@ -84,42 +16,29 @@
     ...
   }: {
     programs.firefox = let
-      background =
-        if theme == "Halloween"
-        then "${pkgs.assets}/wallpapers/halloween.jpg"
-        else "${pkgs.assets}/wallpapers/forest.jpg";
       startpage = pkgs.substituteAll {
         src = ./startpage.html;
-        inherit background;
+        inherit (theme) wallpaper;
       };
       userChrome = pkgs.substituteAll {
         src = ./userChrome.css;
-        inherit background;
+        inherit (theme) wallpaper;
       };
     in {
       enable = true;
       profiles.default = {
         settings = {};
         isDefault = true;
-        userChrome = builtins.readFile userChrome;
-        # extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        #   vimium-c
-        #   sponsorblock
-        #   ublock-origin
-        #   bitwarden
-        # ];
+        # userChrome = builtins.readFile userChrome;
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          vimium-c
+          sponsorblock
+          ublock-origin
+          bitwarden
+        ];
       };
       package = with pkgs;
-      # wrapFirefox firefox-esr-102-unwrapped {
-        wrapFirefox firefox-beta-bin-unwrapped {
-          # forceWayland = wayland;
-          # nixExtensions = with pkgs.firefox-addons; [
-          #   sponsor-block
-          #   vimium
-          #   ublock-origin
-          #   bitwarden
-          #   stylus
-          # ];
+        wrapFirefox firefox-devedition-bin-unwrapped {
           extraPolicies = {
             CaptivePortal = false;
             DisableFirefoxStudies = true;
@@ -143,7 +62,6 @@
               # @ytb  -->  YouTube
               # @gh  -->  GitHub
               # @nix  -->  Nix Package
-              # @ghnix  -->  Nix Code in Github
               "github@search" = {
                 installation_mode = "force_installed";
                 install_url = "https://raw.githubusercontent.com/mlyxshi/FFExtension/main/github-search.xpi";
@@ -159,26 +77,11 @@
                 install_url = "https://raw.githubusercontent.com/mlyxshi/FFExtension/main/nix-search.xpi";
               };
 
-              "github.nix@search" = {
-                installation_mode = "force_installed";
-                install_url = "https://raw.githubusercontent.com/mlyxshi/FFExtension/main/github-nix.xpi";
-              };
-
-              # Uninstall all build-in search shortcuts except google <-- my default search engine
-
-              "ebay@search.mozilla.org" = {installation_mode = "blocked";};
-
-              "amazondotcom@search.mozilla.org" = {
-                installation_mode = "blocked";
-              };
-
-              "bing@search.mozilla.org" = {installation_mode = "blocked";};
-
-              "ddg@search.mozilla.org" = {installation_mode = "blocked";};
-
-              "wikipedia@search.mozilla.org" = {
-                installation_mode = "blocked";
-              };
+              "ebay@search.mozilla.org".installation_mode = "blocked";
+              "amazondotcom@search.mozilla.org".installation_mode = "blocked";
+              "bing@search.mozilla.org".installation_mode = "blocked";
+              "ddg@search.mozilla.org".installation_mode = "blocked";
+              "wikipedia@search.mozilla.org".installation_mode = "blocked";
             };
             Preferences = {
               "browser.toolbars.bookmarks.visibility" = "never";
@@ -195,11 +98,10 @@
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
               "browser.startup.homepage" = "file://${startpage}";
               "browser.newtabpage.enabled" = false;
-              # Normal useragent
               # "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36";
-              "browser.uiCustomization.state" = ''
-                {"placements":{"widget-overflow-fixed-list":["downloads-button","nixos_bitwarden-browser-action","nixos_ublock-browser-action","nixos_sponsor-block-browser-action","nixos_vimium-ff-browser-action","nixos_stylus-browser-action","_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","ublock0_raymondhill_net-browser-action","stop-reload-button","add-ons-button","print-button"],"nav-bar":["back-button","forward-button","urlbar-container","_b2c51689-0095-472b-b900-2b3911fd5089_-browser-action"],"toolbar-menubar":["menubar-items"],"TabsToolbar":["tabbrowser-tabs","new-tab-button","alltabs-button"],"PersonalToolbar":["import-button","personal-bookmarks"]},"seen":["save-to-pocket-button","developer-button","_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action","ublock0_raymondhill_net-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","_b2c51689-0095-472b-b900-2b3911fd5089_-browser-action","_7a7a4a92-a2a0-41d1-9fd7-1e92480d612d_-browser-action","_e4a8a97b-f2ed-450b-b12d-ee082ba24781_-browser-action","nixos_vimium-ff-browser-action","nixos_ublock-browser-action","nixos_stylus-browser-action","nixos_bitwarden-browser-action","nixos_sponsor-block-browser-action"],"dirtyAreaCache":["nav-bar","PersonalToolbar","toolbar-menubar","TabsToolbar","widget-overflow-fixed-list"],"currentVersion":17,"newElementCount":11}
-              '';
+              # "browser.uiCustomization.state" = ''
+              #   {"placements":{"widget-overflow-fixed-list":["downloads-button","nixos_bitwarden-browser-action","nixos_ublock-browser-action","nixos_sponsor-block-browser-action","nixos_vimium-ff-browser-action","nixos_stylus-browser-action","_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","ublock0_raymondhill_net-browser-action","stop-reload-button","add-ons-button","print-button"],"nav-bar":["back-button","forward-button","urlbar-container","_b2c51689-0095-472b-b900-2b3911fd5089_-browser-action"],"toolbar-menubar":["menubar-items"],"TabsToolbar":["tabbrowser-tabs","new-tab-button","alltabs-button"],"PersonalToolbar":["import-button","personal-bookmarks"]},"seen":["save-to-pocket-button","developer-button","_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action","ublock0_raymondhill_net-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","_b2c51689-0095-472b-b900-2b3911fd5089_-browser-action","_7a7a4a92-a2a0-41d1-9fd7-1e92480d612d_-browser-action","_e4a8a97b-f2ed-450b-b12d-ee082ba24781_-browser-action","nixos_vimium-ff-browser-action","nixos_ublock-browser-action","nixos_stylus-browser-action","nixos_bitwarden-browser-action","nixos_sponsor-block-browser-action"],"dirtyAreaCache":["nav-bar","PersonalToolbar","toolbar-menubar","TabsToolbar","widget-overflow-fixed-list"],"currentVersion":17,"newElementCount":11}
+              # '';
 
               # Arkenfox stuff
               # https://github.com/arkenfox/user.js/wiki/
@@ -316,7 +218,7 @@
               "pdfjs.enableScripting" = false;
               "network.protocol-handler.external.ms-windows-store" = false;
               "permissions.delegation.enabled" = false;
-              "browser.download.useDownloadDir" = false;
+              "browser.download.useDownloadDir" = true;
               "browser.download.alwaysOpenPanel" = false;
               "browser.download.manager.addToRecentDocs" = false;
               "browser.download.always_ask_before_handling_new_types" = true;
@@ -376,41 +278,5 @@
           };
         };
     };
-
-    # programs.firefox = {
-    #   enable = true;
-    #   package = if wayland then pkgs.wrapFirefox pkgs.firefox-unwrapped {
-    #     forceWayland = true;
-    #     extraPolicies = {
-    #       ExtensionSettings = {};
-    #     };
-    #   } else pkgs.firefox;
-    #   profiles.default = let
-    #     startpage = pkgs.substituteAll { src = ./startpage.html; background = ../../assets/forest.jpg; };
-    #     userChrome = pkgs.substituteAll { src = ./userChrome.css; background = ../../assets/forest.jpg; };
-    #   in {
-    #     id = 0;
-    #     name = "Default";
-    #     isDefault = true;
-    #     userChrome = builtins.readFile userChrome;
-    #     settings = {
-    #       "browser.fullscreen.autohide" = false;
-    #       "media.ffmpeg.vaapi.enabled" = true;
-    #       "media.hardware-video-decoding.force-enabled" = true;
-    #       "general.smoothScroll.msdPhysics.enabled" = true;
-    #       "layout.frame_rate" = 60;
-    #       # "layout.css.devPixelsPerPx" = "1.2";
-    #       "layout.css.devPixelsPerPx" = "-1.0";
-    #       "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-    #       "browser.startup.homepage" = "file://${startpage}";
-    #       "browser.newtabpage.enabled" = false;
-    #     };
-    #   };
-    #   extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-    #     vimium
-    #     ublock-origin
-    #     bitwarden
-    #   ];
-    # };
   };
 }

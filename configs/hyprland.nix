@@ -1,13 +1,7 @@
 {
   inputs = {
     hyprland = {
-      url = "github:hyprwm/Hyprland/f9096779de1d3704063d97d445f52bc6e660b6f8";
-      # url = "github:hyprwm/Hyprland/463690a27ac9c921d34dad7169a3d2c8cea5b46f";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    # hyprland.url = "github:flafydev/Hyprland/flafy2";
-    hyprpaper = {
-      url = "github:hyprwm/hyprpaper";
+      url = "github:hyprwm/Hyprland/v0.24.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -20,11 +14,6 @@
       hyprland.overlays.default
       (_final: prev: {
         hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
-            # export LIBVA_DRIVER_NAME="nvidia";
-            # export GBM_BACKEND="nvidia-drm";
-            # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
-            # export WLR_DRM_DEVICES=/dev/dri/card0
-            # export WLR_NO_HARDWARE_CURSORS="1";
             export SDL_VIDEODRIVER=wayland
             export _JAVA_AWT_WM_NONREPARENTING=1;
             export XCURSOR_SIZE=24;
@@ -43,7 +32,7 @@
     ];
   };
 
-  system = { pkgs, lib, ... }: {
+  system = _: {
     nix.settings = {
       trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
@@ -53,9 +42,6 @@
       ];
     };
     xdg.portal.enable = true;
-    xdg.portal.extraPortals = lib.mkForce [
-      pkgs.xdg-desktop-portal-wlr
-    ];
     programs.hyprland.enable = true;
   };
 
@@ -65,103 +51,21 @@
     ...
   }: {
     home.packages = with pkgs; [
-      wl-clipboard
-      hyprpaper
-      # mako
       hyprland-wrapped
     ];
-    gtk = {
-      enable = true;
-      cursorTheme = {
-        name = "Bibata-Modern-Ice";
-        size = 24;
-        package = pkgs.bibata-cursors;
-      };
-    };
-    xdg.configFile."hypr/hyprpaper.conf".text = let
-      # background =
-      #   if theme == "Halloween"
-      #   then "${pkgs.assets}/wallpapers/halloween.jpg"
-      #   # else "${pkgs.assets}/wallpapers/forest.jpg";
-      #   # TODO: add to assets git
-      #   # else "/home/flafydev/Downloads/vecteezy_abstract-dark-pink-gradient-geometric-background-modern_4256686.jpg";
-      #   else "/home/flafydev/Pictures/ferns.jpg";
-      background = "/home/flafydev/Downloads/coolpaper.jpg"; # Temp
-    in ''
-      preload = ${background}
-      wallpaper = HDMI-A-1,${background}
-      wallpaper = eDP-1,${background}
-    '';
 
     wayland.windowManager.hyprland = {
       enable = true;
       recommendedEnvironment = false;
-      xwayland = {
-        enable = true;
-      };
+      xwayland.enable = true;
       extraConfig = let
-        activeBorder =
-          if theme == "Halloween"
-          then "0xFFd9b27c"
-          else "rgb(314956)";
         playerctl = "${pkgs.playerctl}/bin/playerctl";
         pactl = "${pkgs.pulseaudio}/bin/pactl";
         pamixer = "${pkgs.pamixer}/bin/pamixer";
-        socat = "${pkgs.socat}/bin/socat";
-        # lidOpenCloseScript = pkgs.writeShellScript "lid-open-close" ''
-        #   if grep -q open /proc/acpi/button/lid/LID0/state; then
-        #     hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
-        #   else
-        #     hyprctl keyword monitor eDP-1,disable
-        #   fi
-        # '';
-        autoMonitors = pkgs.writeShellScript "auto-monitors" ''
-          while :
-          do
-            if grep -q disconnected /sys/class/drm/card1-HDMI-A-1/status; then
-              hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
-              hyprctl keyword monitor HDMI-A-1,disable
-              sleep 1
-              pkill hyprpaper; ${pkgs.hyprpaper}/bin/hyprpaper
-              eww kill; eww daemon; eww open bar;
-            else
-              hyprctl keyword monitor HDMI-A-1,1920x1080@60,0x0,1
-              hyprctl keyword monitor eDP-1,disable
-              sleep 1
-              pkill hyprpaper; ${pkgs.hyprpaper}/bin/hyprpaper
-              eww kill; eww daemon; eww open bar;
-            fi
-            sleep 2
-          done
-        '';
-        styledWob = pkgs.writeShellScript "styled-wob" ''
-          ${pkgs.wob}/bin/wob --anchor "top" \
-            --anchor "right" \
-            --width  300 \
-            --height 40 \
-            --offset 0 \
-            --border 0 \
-            --margin 10 \
-            --background-color '#eeeeeeFF' \
-            --bar-color '#87afd7FF'
-        '';
-        # hyprlandFocusChange = pkgs.writeShellScript "hyprland-focus-change" ''
-        #   ${pkgs.socat}/bin/socat -u "UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" - |
-        #   while read -r line; do if [ "''${line%>>*}" = "activewindow" ]; then
-        #     pkill -9 -x tofi-run
-        #     # pkill -9 -x tofi
-        #   fi; done
-        # '';
         compileWindowRule = window: rules: (builtins.concatStringsSep "\n" (map (rule: "windowrulev2=${rule},${window}") rules));
       in ''
-        # monitor=,preferred,auto,1
-
         monitor=eDP-1,1920x1080@60,0x0,1
         monitor=HDMI-A-1,1920x1080@60,1920x0,1
-
-        # monitor=eDP-1,1920x1080@60,1920x0,1,mirror,DP-1
-
-        # workspace=DP-1,1
 
         misc {
           vfr = true
@@ -171,21 +75,11 @@
           no_direct_scanout=true
         }
 
-        device:kmonad-kb-hyperx {
-          kb_layout=us,il
-        }
-
-        device:kmonad-kb-laptop {
-          kb_layout=us,il
-        }
-
         device:my-kmonad-output {
           kb_layout=us,il
         }
 
         input {
-            # kb_file=${./keyboard-xserver/layout.xkb}
-
             follow_mouse=1
             force_no_accel=1
             repeat_delay=200
@@ -202,15 +96,9 @@
           gaps_in=1
           gaps_out=20
           border_size=1
-          # col.active_border=rgba(FF22BBaa) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FF22BBaa) 45deg
-          # col.active_border=rgba(FFFFFFFF) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFFFF) 45deg
-          # col.inactive_border=rgba(FFFFFF55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFF55) 45deg
 
           col.active_border=rgba(29A4BDFF)
           col.inactive_border=rgba(75758555)
-
-          # col.active_border=gradient(rgb(314956), rgb(113355), 0.0, 1.0, 3.14/4.0)
-          # col.inactive_border=rgba(FF22BB55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FF22BB55) 45deg
         }
 
         binds {
@@ -222,8 +110,6 @@
           rounding=0
           blur=1
           blur_xray=1
-          # blur_size=6
-          # blur_passes=4
           blur_size=10
           blur_passes=3
           blur_ignore_opacity=0
@@ -237,8 +123,6 @@
 
         bezier=overshot,0.05,0.4,0.6,1.3
         bezier=mycurve,0.4, 0, 0.6, 1
-
-        blurls=gtk-layer-shell
 
         animations {
           enabled=1
@@ -256,21 +140,15 @@
         }
 
         dwindle {
-            pseudotile=0 # enable pseudotiling on dwindle
+            pseudotile=0
             force_split=2
             preserve_split=1
-            # no_gaps_when_only=1
         }
 
-        exec-once=${pkgs.batsignal}/bin/batsignal
-        # exec-once=${autoMonitors}
+        exec-once=sway --image ${theme.wallpaper}
         exec-once=[workspace special] firefox
         exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
         exec-once=hyprctl setcursor Bibata-Modern-Ice 24
-        exec=eww open bar
-
-        $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
-        exec-once=rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | ${styledWob}
 
         bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
         bind=ALT,S,fullscreen
@@ -284,9 +162,6 @@
         bind=SUPER,O,pseudo,
         bind=SUPER,M,exit,
         bind=SUPER,D,togglesplit,
-
-        bind=CTRLALT,d,exec,echo -n 'hide' | ${socat} - UNIX-CONNECT:/tmp/screen_painter_socket.sock
-        bind=CTRLALT,f,exec,echo -n 'show' | ${socat} - UNIX-CONNECT:/tmp/screen_painter_socket.sock
 
         bind=,XF86AudioPlay,exec,${playerctl} play-pause
         bind=,XF86AudioPrev,exec,${playerctl} previous
@@ -349,9 +224,6 @@
         ${compileWindowRule "floating:0" ["rounding 0"]}
         ${compileWindowRule "floating:1" ["rounding 5"]}
       '';
-      # bind=ALT,W,exec,res=$(${pkgs.tofi-rbw}/bin/tofi-rbw) && wl-copy "$res"
-      # bind=ALT,C,exec,${pkgs.guifetch}/bin/guifetch
-      # bind=ALT,Z,exec,${pkgs.listen-blue}/bin/listen_blue
     };
   };
 }

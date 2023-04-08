@@ -5,6 +5,10 @@
       flake = false;
     };
   };
+  
+  configs = cfgs: with cfgs; [
+    x
+  ];
 
   add = {bspwm-rounded, ...}: {
     overlays = _: [
@@ -18,9 +22,6 @@
 
   system = {pkgs, ...}: {
     services.xserver = {
-      enable = true;
-      dpi = 96;
-
       displayManager = {
         defaultSession = "none+bspwm";
       };
@@ -29,8 +30,6 @@
         enable = true;
         package = pkgs.bspwm-rounded;
       };
-
-      # displayManager.gdm.enable = true;
     };
   };
 
@@ -41,32 +40,20 @@
   }: let
     workspaces = 6;
   in {
+    home.file.".xinitrc".text = ''
+      exec bspwm
+    '';
+
     xsession.windowManager.bspwm = {
       enable = true;
       package = pkgs.bspwm-rounded;
       monitors = {
         HDMI-1 = map toString (lib.lists.range 1 workspaces);
       };
-      startupPrograms = let
-        compiledLayout = pkgs.runCommand "keyboard-layout" {} ''
-          ${pkgs.xorg.xkbcomp}/bin/xkbcomp ${./keyboard-xserver/layout.xkb} $out
-        '';
-        # "${pkgs.xorg.xkbcomp}/bin/xkbcomp ${compiledLayout} $DISPLAY"
-      in [
-        "${pkgs.feh}/bin/feh --bg-scale ${pkgs.assets}/wallpapers/forest.jpg"
+      startupPrograms = [
         "xsetroot -cursor_name left_ptr"
-        "eww open bar"
         "sxhkd"
         "${pkgs.xorg.xset}/bin/xset r rate 200 40"
-        (toString (pkgs.writeShellScript "bspwm-hide-eww-bar-fullscreen" ''
-          bspc subscribe desktop_focus node_state node_focus | while read _; do
-            if bspc query -T -n | grep '"state":"fullscreen"' -q; then
-              xdotool search --class eww-bar windowunmap
-            else
-              xdotool search --class eww-bar windowmap
-            fi;
-          done
-        ''))
       ];
     };
 

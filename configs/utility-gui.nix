@@ -1,10 +1,14 @@
 {
   inputs = {
     nixpkgs-gimp.url = "github:jtojnar/nixpkgs/gimp-meson";
+    guifetch.url = "github:flafydev/guifetch";
+    listen-blue.url = "github:flafydev/listen_blue";
   };
 
-  add = { nixpkgs-gimp, ... }: {
+  add = { nixpkgs-gimp, guifetch, listen-blue, ... }: {
     overlays = _: [
+      guifetch.overlays.default
+      listen-blue.overlays.default
       (_final: prev: let
         pkgs = import nixpkgs-gimp {
           inherit (prev) system;
@@ -15,34 +19,33 @@
     ];
   };
 
-  configs = cfgs:
-    with cfgs; [
-      # guifetch
-      # listen-blue
-    ];
-
   home = {pkgs, ...}: {
     home.packages = with pkgs; [
       gnome.eog
+      # guifetch
+      # listen-blue
       mate.engrampa
       cinnamon.nemo.out
       # gnome.nautilus
+      scrcpy
       gnome.simple-scan
       gnome.evince
       gnome.gnome-system-monitor
       gnome.gnome-font-viewer
       libreoffice
       krita
-      armcord
-      # gimp
       libsForQt5.kdenlive
-      # qbittorrent
       gparted
       qdirstat
       pavucontrol
       obs-studio
       lxde.lxrandr
       gimp-dev
+      webcord
+      element-desktop
+      lutris
+      android-studio
+      prismlauncher
     ];
   };
 }

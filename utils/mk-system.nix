@@ -1,6 +1,6 @@
 {
   username,
-  args,
+  args ? {},
 }: profile: {
   system,
   inputs,
@@ -8,6 +8,11 @@
 with inputs.nixpkgs.lib; let
   filterMap = list: attr:
     map (item: item.${attr}) (filter (item: item ? ${attr}) list);
+
+  passedArgs = args // {
+    inherit inputs;
+    inherit username;
+  };
 
   configs = import ./get-all-configs.nix ../configs;
   getDeepConfigs = config:
@@ -19,7 +24,7 @@ with inputs.nixpkgs.lib; let
       ++ [config]);
   selectedConfigs = (getDeepConfigs profile) ++ (getDeepConfigs system);
 
-  addConfigs = map (add: add inputs) (filterMap selectedConfigs "add");
+  addConfigs = map (add: add (inputs // {args = passedArgs;})) (filterMap selectedConfigs "add");
 
   modulesConfigs = flatten (filterMap addConfigs "modules");
   homeModulesConfigs = flatten (filterMap addConfigs "homeModules");
@@ -30,11 +35,7 @@ with inputs.nixpkgs.lib; let
 in {
   system = system.systemType;
   # Delete?
-  specialArgs =
-    {
-      inherit (inputs) nixpkgs;
-    }
-    // args;
+  specialArgs = passedArgs;
   modules = flatten [
     systemConfigs
     modulesConfigs
@@ -60,7 +61,7 @@ in {
     {
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
-      home-manager.extraSpecialArgs = args;
+      home-manager.extraSpecialArgs = passedArgs;
       home-manager.users.${username} = {...}: {
         imports = flatten homeModulesConfigs ++ homeConfigs;
       };

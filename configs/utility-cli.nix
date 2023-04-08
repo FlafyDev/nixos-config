@@ -4,10 +4,6 @@
       url = "github:FlafyDev/lang-to-docx";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    tofi-rbw = {
-      url = "github:FlafyDev/tofi-rbw";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     cp-maps = {
       url = "github:flafydev/cp-maps";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,14 +16,12 @@
 
   add = {
     lang-to-docx,
-    tofi-rbw,
     cp-maps,
     project-creator,
     ...
   }: {
     overlays = _: [
       lang-to-docx.overlays.default
-      tofi-rbw.overlays.default
       cp-maps.overlays.default
       project-creator.overlays.default
     ];
@@ -43,12 +37,14 @@
       xclip
       bat
       service-wrapper
+      distrobox
+      wl-clipboard
+      drm_info
       # lang-to-docx
       htop
-      # tofi-rbw
+      tree
       # cp-maps
       # project-creator
-
       vdpauinfo
       pciutils
       intel-gpu-tools

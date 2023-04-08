@@ -14,10 +14,5 @@
         admin:admin:10
       '';
     };
-
-    # environment.systemPackages = with pkgs; [
-    #   transmission
-    #   transmission-qt
-    # ];
   };
 }

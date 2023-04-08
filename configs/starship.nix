@@ -1,12 +1,8 @@
 {
-  home = {lib, ...}: {
+  home = _: {
     programs.starship = {
       enable = true;
       settings = {
-        # character = {
-        #   error_symbol = "[➜](bold bright red)";
-        #   success_symbol = "[➜](bold bright green)";
-        # };
         aws.symbol = "  ";
         buf.symbol = " ";
         c.symbol = " ";
