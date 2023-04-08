@@ -23,7 +23,7 @@
       flake = false;
     };
     flutter-tools-nvim = {
-      url = "github:akinsho/flutter-tools.nvim";
+      url = "github:flafydev/flutter-tools.nvim";
       flake = false;
     };
     centerpad-nvim = {

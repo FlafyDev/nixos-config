@@ -138,16 +138,28 @@
           })
         '';
       }
-      # {
-      #  type = "lua";
-      #  plugin = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
-      #  config = ''
-      #    require('nvim-treesitter.configs').setup {
-      #      indent = { enable = true },
-      #      highlight = { enable = true },
-      #    }
-      #  '';
-      #}
+      {
+       type = "lua";
+       plugin = pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
+         p.c
+         p.java
+         p.kotlin
+         p.cpp
+         p.dart
+         p.python
+         p.javascript
+         p.typescript
+         p.rust
+         p.markdown
+         p.markdown_inline
+       ]);
+       config = ''
+         require('nvim-treesitter.configs').setup {
+           indent = { enable = true },
+           highlight = { enable = true },
+         }
+       '';
+      }
       {
         type = "lua";
         plugin = nvim-tree-lua;

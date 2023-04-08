@@ -102,12 +102,12 @@
         settings = {};
         isDefault = true;
         userChrome = builtins.readFile userChrome;
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-          vimium-c
-          sponsorblock
-          ublock-origin
-          bitwarden
-        ];
+        # extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        #   vimium-c
+        #   sponsorblock
+        #   ublock-origin
+        #   bitwarden
+        # ];
       };
       package = with pkgs;
       # wrapFirefox firefox-esr-102-unwrapped {

@@ -97,6 +97,9 @@
     };
 
     # boot.kernelParams = ["nouveau.modeset=1"];
+    boot.kernelParams = [
+      "video=HDMI-A-1:1920x1080@60"
+    ];
 
     hardware.nvidia = {
       modesetting.enable = true;
@@ -146,6 +149,7 @@
           vaapiVdpau
           libvdpau-va-gl
         ];
+        # setLdLibraryPath = true;
         # driSupport = true;
         # extraPackages = with pkgs; [
         #   libglvnd

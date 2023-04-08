@@ -24,6 +24,7 @@ in
         zsh
         starship
         neovim
+        # neovim-flake
         eww
         gtk
         qt
@@ -51,13 +52,13 @@ in
         assets
         # waydroid
         deluge
+        cuda
       ];
 
-    system = {
-      pkgs,
-      ...
-    }: {
+    system = {pkgs, ...}: {
       time.timeZone = "Israel";
+
+      boot.plymouth.enable = true;
 
       programs = {
         adb.enable = true;
@@ -124,7 +125,7 @@ in
         scrcpy
         # pavucontrol
         cp-maps
-        # webcord
+        webcord
         drm_info
         # mpvpaper
         # neovide

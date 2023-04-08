@@ -1,16 +1,16 @@
-;;(defcfg
-;;  ;; For Linux
-;;  input  (device-file "/dev/input/event0")
-;;  ;; input  (low-level-hook)
-;;  output (uinput-sink "My KMonad output")
-;;
-;;
-;;  ;; Comment this if you want unhandled events not to be emitted
-;;  fallthrough false 
-;;
-;;  ;; Set this to false to disable any command-execution in KMonad
-;;  allow-cmd false
-;;)
+;; (defcfg
+;;   ;; For Linux
+;;   input  (device-file "/dev/input/event0")
+;;   ;; input  (low-level-hook)
+;;   output (uinput-sink "My KMonad output")
+;; 
+;; 
+;;   ;; Comment this if you want unhandled events not to be emitted
+;;   fallthrough false 
+;; 
+;;   ;; Set this to false to disable any command-execution in KMonad
+;;   allow-cmd false
+;; )
 
 (defsrc
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc

@@ -7,13 +7,13 @@
     # The portal interfaces include APIs for file access, opening URIs,
     # printing and others.
     services.dbus.enable = true;
-    # xdg.portal = {
-    #   enable = true;
-    #   wlr.enable = true;
-    #   # gtk portal needed to make gtk apps happy
-    #   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    #   gtkUsePortal = true;
-    # };
+    xdg.portal = {
+      enable = true;
+      wlr.enable = true;
+      # gtk portal needed to make gtk apps happy
+      # extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      # gtkUsePortal = true;
+    };
     environment.systemPackages = with pkgs; [
       glxinfo
       vulkan-tools
@@ -36,7 +36,7 @@
       wayland.windowManager.sway = {
         enable = true;
         # package = pkgs.sway-borders;
-        xwayland = false;
+        xwayland = true;
         extraOptions = ["--unsupported-gpu"];
         config = let
           modifier = "Mod4";

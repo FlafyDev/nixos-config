@@ -1,6 +1,10 @@
 {
   inputs = {
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland = {
+      url = "github:hyprwm/Hyprland/f9096779de1d3704063d97d445f52bc6e660b6f8";
+      # url = "github:hyprwm/Hyprland/463690a27ac9c921d34dad7169a3d2c8cea5b46f";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # hyprland.url = "github:flafydev/Hyprland/flafy2";
     hyprpaper = {
       url = "github:hyprwm/hyprpaper";
@@ -19,12 +23,11 @@
             # export LIBVA_DRIVER_NAME="nvidia";
             # export GBM_BACKEND="nvidia-drm";
             # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
-          # export WLR_DRM_DEVICES=/dev/dri/card0
-
+            # export WLR_DRM_DEVICES=/dev/dri/card0
+            # export WLR_NO_HARDWARE_CURSORS="1";
             export SDL_VIDEODRIVER=wayland
             export _JAVA_AWT_WM_NONREPARENTING=1;
             export XCURSOR_SIZE=24;
-          # export WLR_NO_HARDWARE_CURSORS="1";
             export CLUTTER_BACKEND="wayland";
             export XDG_SESSION_TYPE="wayland";
             export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
@@ -40,7 +43,7 @@
     ];
   };
 
-  system = { pkgs, ... }: {
+  system = { pkgs, lib, ... }: {
     nix.settings = {
       trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
@@ -50,8 +53,8 @@
       ];
     };
     xdg.portal.enable = true;
-    xdg.portal.extraPortals = [
-      # pkgs.xdg-desktop-portal-gtk
+    xdg.portal.extraPortals = lib.mkForce [
+      pkgs.xdg-desktop-portal-wlr
     ];
     programs.hyprland.enable = true;
   };
@@ -76,13 +79,14 @@
       };
     };
     xdg.configFile."hypr/hyprpaper.conf".text = let
-      background =
-        if theme == "Halloween"
-        then "${pkgs.assets}/wallpapers/halloween.jpg"
-        # else "${pkgs.assets}/wallpapers/forest.jpg";
-        # TODO: add to assets git
-        # else "/home/flafydev/Downloads/vecteezy_abstract-dark-pink-gradient-geometric-background-modern_4256686.jpg";
-        else "/home/flafydev/Pictures/ferns.jpg";
+      # background =
+      #   if theme == "Halloween"
+      #   then "${pkgs.assets}/wallpapers/halloween.jpg"
+      #   # else "${pkgs.assets}/wallpapers/forest.jpg";
+      #   # TODO: add to assets git
+      #   # else "/home/flafydev/Downloads/vecteezy_abstract-dark-pink-gradient-geometric-background-modern_4256686.jpg";
+      #   else "/home/flafydev/Pictures/ferns.jpg";
+      background = "/home/flafydev/Downloads/coolpaper.jpg"; # Temp
     in ''
       preload = ${background}
       wallpaper = HDMI-A-1,${background}
@@ -112,17 +116,23 @@
         #   fi
         # '';
         autoMonitors = pkgs.writeShellScript "auto-monitors" ''
-           if grep -q disconnected /sys/class/drm/card1-HDMI-A-1/status; then
-             hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
-             hyprctl keyword monitor HDMI-A-1,disable
-             sleep 1
-             eww kill; eww daemon; eww open bar;
-           else
-             hyprctl keyword monitor HDMI-A-1,1920x1080@60,0x0,1
-             hyprctl keyword monitor eDP-1,disable
-             sleep 1
-             eww kill; eww daemon; eww open bar;
-          fi
+          while :
+          do
+            if grep -q disconnected /sys/class/drm/card1-HDMI-A-1/status; then
+              hyprctl keyword monitor eDP-1,1920x1080@60,0x0,1
+              hyprctl keyword monitor HDMI-A-1,disable
+              sleep 1
+              pkill hyprpaper; ${pkgs.hyprpaper}/bin/hyprpaper
+              eww kill; eww daemon; eww open bar;
+            else
+              hyprctl keyword monitor HDMI-A-1,1920x1080@60,0x0,1
+              hyprctl keyword monitor eDP-1,disable
+              sleep 1
+              pkill hyprpaper; ${pkgs.hyprpaper}/bin/hyprpaper
+              eww kill; eww daemon; eww open bar;
+            fi
+            sleep 2
+          done
         '';
         styledWob = pkgs.writeShellScript "styled-wob" ''
           ${pkgs.wob}/bin/wob --anchor "top" \
@@ -146,8 +156,8 @@
       in ''
         # monitor=,preferred,auto,1
 
-        monitor=eDP-1,1920x1080@60,0x0,1,bitdepth,10
-        monitor=HDMI-A-1,1920x1080@60,0x0,1,bitdepth,10
+        monitor=eDP-1,1920x1080@60,0x0,1
+        monitor=HDMI-A-1,1920x1080@60,1920x0,1
 
         # monitor=eDP-1,1920x1080@60,1920x0,1,mirror,DP-1
 
@@ -156,7 +166,9 @@
         misc {
           vfr = true
           enable_swallow=false
+          render_ahead_of_time=false
           swallow_regex=^(foot)$
+          no_direct_scanout=true
         }
 
         device:kmonad-kb-hyperx {
@@ -194,8 +206,8 @@
           # col.active_border=rgba(FFFFFFFF) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFFFF) 45deg
           # col.inactive_border=rgba(FFFFFF55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FFFFFF55) 45deg
 
-          col.active_border=rgba(557755FF)
-          col.inactive_border=rgba(758875FF)
+          col.active_border=rgba(29A4BDFF)
+          col.inactive_border=rgba(75758555)
 
           # col.active_border=gradient(rgb(314956), rgb(113355), 0.0, 1.0, 3.14/4.0)
           # col.inactive_border=rgba(FF22BB55) rgba(00000000) rgba(00000000) rgba(00000000) rgba(00000000) rgba(FF22BB55) 45deg
@@ -238,7 +250,7 @@
           animation=fadeIn,1,3,default
           animation=fadeOut,0,10,default
 
-          animation=border,0,3,default
+          animation=border,1,5,default
           # animation=fade,1,3,default
           animation=workspaces,0,3,default,fade
         }
@@ -250,10 +262,9 @@
             # no_gaps_when_only=1
         }
 
-        # exec-once=${pkgs.hyprpaper}/bin/hyprpaper
         exec-once=${pkgs.batsignal}/bin/batsignal
         # exec-once=${autoMonitors}
-        # exec-once=[workspace special] firefox
+        exec-once=[workspace special] firefox
         exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
         exec-once=hyprctl setcursor Bibata-Modern-Ice 24
         exec=eww open bar

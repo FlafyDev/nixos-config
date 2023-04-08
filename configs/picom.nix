@@ -23,30 +23,30 @@
         # "unredir-if-possible" = true;
         # "dbe" = true;
         # inactive-dim = 0.4;
-        transparent-clipping = true;
-        blur = {
-          method = "dual_kawase";
-          strength = 15;
-          deviation = 14;
-          kernel = "11x11gaussian";
-          background = true;
-          background-frame = true;
-          background-fixed = true;
-          kern = "3x3box";
-        };
+        # transparent-clipping = true;
+        # blur = {
+        #   method = "dual_kawase";
+        #   strength = 15;
+        #   deviation = 14;
+        #   kernel = "11x11gaussian";
+        #   background = true;
+        #   background-frame = true;
+        #   background-fixed = true;
+        #   kern = "3x3box";
+        # };
 
-        blur-background-exclude = [
-          "class_g = 'firefox'"
-          "role   = 'xborder'"
-          "class_g = 'eww-bar'"
-        ];
+        # blur-background-exclude = [
+        #   "class_g = 'firefox'"
+        #   "role   = 'xborder'"
+        #   "class_g = 'eww-bar'"
+        # ];
 
-        round-borders = 0;
-        corner-radius = 0;
-        rounded-corners-exclude = [
-          "class_g = 'eww-bar'"
-          "class_g = 'Rofi'"
-        ];
+        # round-borders = 0;
+        # corner-radius = 0;
+        # rounded-corners-exclude = [
+        #   "class_g = 'eww-bar'"
+        #   "class_g = 'Rofi'"
+        # ];
         # WARN: Unofficial animation support (pijulius)
         # animations = true;
         # # `auto`, `none`, `fly-in`, `zoom`, `slide-down`, `slide-up`, `slide-left`, `slide-right` `slide-in`, `slide-out`
@@ -69,12 +69,12 @@
         # animation-clamping = false;
         # animation-for-open-window = "slide-up"; #open window
       };
-      opacityRules = [
-        # "85:class_g = 'Code'"
-        # "88:class_g = 'discord'"
-        "100:class_g = 'firefox'"
-        # "100:class_g = 'Alacritty'"
-      ];
+      # opacityRules = [
+      #   # "85:class_g = 'Code'"
+      #   # "88:class_g = 'discord'"
+      #   "100:class_g = 'firefox'"
+      #   # "100:class_g = 'Alacritty'"
+      # ];
       # package = pkgs.picom.overrideAttrs(o: {
       #   # src = pkgs.fetchFromGitHub {
       #   #   owner = "dccsillag";
