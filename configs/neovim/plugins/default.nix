@@ -8,8 +8,7 @@
     (lib.lists.flatten (map (plugin: (import plugin) pkgs) [
       ./telescope-nvim
       ./lualine-nvim
-      ./lspconfig
-      ./cmp
+      ./lsp
       ./nvim-dap
     ]))
     ++ (with pkgs.vimPlugins; let
@@ -17,102 +16,65 @@
     in [
       vim-nix
       nvim-web-devicons
-      nvim-base16
       markdown-preview-nvim
       vim-visual-multi
       vim-parinfer
       # vim-hexokinase
+      tokyonight-nvim
       vim-wayland-clipboard
       yuck-vim
       vim-surround
-      tokyonight-nvim
       rust-tools-nvim
       copilot-vim
       centerpad-nvim
-      {
-        type = "lua";
-        plugin = lspsaga-nvim-original;
-        config = ''
-        require('lspsaga').setup({
-          ui = {
-            -- currently only round theme
-            theme = 'round',
-            -- this option only work in neovim 0.9
-            title = true,
-            -- border type can be single,double,rounded,solid,shadow.
-            border = 'solid',
-            winblend = 0,
-            expand = '',
-            collapse = '',
-            preview = ' ',
-            code_action = '💡',
-            diagnostic = '🐞',
-            incoming = ' ',
-            outgoing = ' ',
-            colors = {
-              --float window normal background color
-              normal_bg = 'NONE',
-              --title background color
-              title_bg = '#afd700',
-              red = '#e95678',
-              magenta = '#b33076',
-              orange = '#FF8700',
-              yellow = '#f7bb3b',
-              green = '#afd700',
-              cyan = '#36d0e0',
-              blue = '#61afef',
-              purple = '#CBA6F7',
-              white = '#d1d4cf',
-              black = '#1c1c19',
-            },
-            kind = {},
-          },
-        })
-        '';
-      }
       # {
       #   type = "lua";
       #   plugin = lsp_signature-nvim;
       #   config = ''require "lsp_signature".setup(cfg)'';
       # }
-
       {
         type = "lua";
-        plugin = null-ls-nvim;
+        plugin = fidget-nvim;
         config = ''
-          local nb = require('null-ls').builtins
-
-          require('null-ls').setup({
-              sources = {
-                  nb.formatting.alejandra,
-                  nb.code_actions.statix,
-                  nb.diagnostics.deadnix,
-                  nb.diagnostics.statix,
-                  nb.diagnostics.eslint,
-              },
+          require('fidget').setup({
+            window = {
+              relative = "win", -- where to anchor, either "win" or "editor"
+              blend = 0, -- &winblend for the window
+              zindex = nil, -- the zindex value for the window
+              border = "none", -- style of border for the fidget window
+            },
           })
         '';
-        # nb.completion.spell,
+      }
+
+      {
+        plugin = barbecue-nvim;
+        config = "lua require('barbecue').setup({theme = 'tokyonight', show_modified = true,})";
+      }
+      {
+        type = "lua";
+        plugin = indent-blankline-nvim;
+        config = ''
+          vim.opt.list = true
+          -- vim.opt.listchars:append "eol:↴"
+
+          require("indent_blankline").setup {
+            -- show_end_of_line = true,
+            -- show_current_context = true,
+          }
+        '';
+      }
+      {
+        plugin = gitsigns-nvim;
+        config = "lua require('gitsigns').setup()";
       }
       {
         plugin = custom-theme-nvim;
         config = "lua require('custom-theme').setup()";
       }
       {
-        plugin = nvim-comment;
-        config = "lua require('nvim_comment').setup()";
-      }
-      {
-        type = "lua";
-        plugin = neoformat;
-        config = ''
-          -- vim.api.nvim_create_autocmd("BufWritePre", {
-          --   command = [[silent! undojoin | Neoformat]],
-          --   desc = "Format using neoformat on save.",
-          --   group = vim.api.nvim_create_augroup("neoformat_format_onsave", { clear = true }),
-          --   pattern = "*",
-          -- })
-        '';
+        plugin = comment-nvim;
+        config = "lua require('Comment').setup()";
       }
       {
         plugin = bufresize-nvim;
@@ -120,10 +82,9 @@
       }
       {
         type = "lua";
-        plugin = vimExtraPlugins.nvim-transparent;
+        plugin = transparent-nvim;
         config = ''
           require("transparent").setup({
-            enable = true,
             extra_groups = {
               "VertSplit",
               "StatusLine",
@@ -134,31 +95,33 @@
               "TelescopeNormal",
               "TelescopeBorder",
               "NvimTreeWinSeparator",
+              "LspInfoBorder",
+              "LspReferenceRead",
+              "LspReferenceText",
+              "LspFloatWinNormal",
+              "LspReferenceWrite",
+              "LspSignatureAciveParameter",
+              "NormalFloat",
+              "WhichKeyFloat",
+              "FloatShadow",
+              "FloatShadowThrough",
+              "FloatBorder",
+              "FidgetTitle",
+              "FidgetTask",
+              "lualine_c_normal",
             },
           })
         '';
       }
       {
-       type = "lua";
-       plugin = pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
-         p.c
-         p.java
-         p.kotlin
-         p.cpp
-         p.dart
-         p.python
-         p.javascript
-         p.typescript
-         p.rust
-         p.markdown
-         p.markdown_inline
-       ]);
-       config = ''
-         require('nvim-treesitter.configs').setup {
-           indent = { enable = true },
-           highlight = { enable = true },
-         }
-       '';
+        type = "lua";
+        plugin = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+        config = ''
+          require('nvim-treesitter.configs').setup {
+            indent = { enable = true },
+            highlight = { enable = true },
+          }
+        '';
       }
       {
         type = "lua";

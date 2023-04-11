@@ -50,6 +50,7 @@
       #     '';
       #   }
       # ];
+      plymouth.enable = true;
       loader = {
         # systemd-boot.enable = true;
         efi = {
@@ -214,7 +215,6 @@
         jack.enable = true;
         pulse.enable = true;
         wireplumber.enable = true;
-        media-session.enable = false;
       };
 
       # openssh.enable = true;

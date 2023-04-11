@@ -32,7 +32,7 @@
       gnome.evince
       gnome.gnome-system-monitor
       gnome.gnome-font-viewer
-      libreoffice
+      # libreoffice
       krita
       libsForQt5.kdenlive
       gparted

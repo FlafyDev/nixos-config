@@ -1,10 +1,11 @@
 {
-  home = _: {
+  home = {theme, ...}: {
     programs.foot = {
       enable = true;
       settings = {
         main = {
           term = "foot";
+          # font = "monospace:size=11";
           font = "FiraCode Nerd Font Mono:size=11";
           dpi-aware = "no";
           pad = "10x10";
@@ -14,57 +15,74 @@
           hide-when-typing = "yes";
         };
 
+        cursor.color = "c0caf5 ffffff";
+
         colors = {
-          # alpha = 0.3;
-          # alpha = 0.0;
-          # background = "0x220086";
           alpha = 0.2;
-          background = "0x002200";
-          # background = "0x00000F";
-          # background = "0xfaa734";
 
-          # regular0 = "2e3436";
-          # regular1 = "cc0000";
-          # regular2 = "4e9a06";
-          # regular3 = "c4a000";
-          # regular4 = "3465a4";
-          # regular5 = "75507b";
-          # regular6 = "06989a";
-          # regular7 = "d3d7cf";
-          # bright0 = "555753";
-          # bright1 = "ef2929";
-          # bright2 = "8ae234";
-          # bright3 = "fce94f";
-          # bright4 = "729fcf";
-          # bright5 = "ad7fa8";
-          # bright6 = "34e2e2";
-          # bright7 = "eeeeec";
-          # dim0 = "373e4d";
-          # dim1 = "94545d";
-          # dim2 = "809575";
-          # dim3 = "b29e75";
-          # dim4 = "68809a";
-          # dim5 = "8c738c";
-          # dim6 = "6d96a5";
-          # dim7 = "aeb3bb";
+          foreground = "c0caf5";
+          background = "1a1b26";
+          selection-foreground = "c0caf5";
+          selection-background = "33467c";
+          urls = "73daca";
 
-          regular0 = "0x29414f";
-          regular1 = "0xec5f67";
-          regular2 = "0x99c794";
-          regular3 = "0xfac863";
-          regular4 = "0x6699cc";
-          regular5 = "0xc594c5";
-          regular6 = "0x5fb3b3";
-          regular7 = "0x65737e";
+          regular0 = "15161e";
+          regular1 = "f7768e";
+          regular2 = "9ece6a";
+          regular3 = "e0af68";
+          regular4 = "7aa2f7";
+          regular5 = "bb9af7";
+          regular6 = "7dcfff";
+          regular7 = "a9b1d6";
 
-          bright0 = "0x405860";
-          bright1 = "0xec5f67";
-          bright2 = "0x99c794";
-          bright3 = "0xfac863";
-          bright4 = "0x6699cc";
-          bright5 = "0xc594c5";
-          bright6 = "0x5fb3b3";
-          bright7 = "0xadb5c0";
+          bright0 = "414868";
+          bright1 = "f7768e";
+          bright2 = "9ece6a";
+          bright3 = "e0af68";
+          bright4 = "7aa2f7";
+          bright5 = "bb9af7";
+          bright6 = "7dcfff";
+          bright7 = "c0caf5";
+
+          "16" = "ff9e64";
+          "17" = "db4b4b";
+
+          # background="1a1b26";
+          # foreground="c0caf5";
+          # regular0="15161E";
+          # regular1="f7768e";
+          # regular2="9ece6a";
+          # regular3="e0af68";
+          # regular4="7aa2f7";
+          # regular5="bb9af7";
+          # regular6="7dcfff";
+          # regular7="a9b1d6";
+          # bright0="414868";
+          # bright1="f7768e";
+          # bright2="9ece6a";
+          # bright3="e0af68";
+          # bright4="7aa2f7";
+          # bright5="bb9af7";
+          # bright6="7dcfff";
+          # bright7="c0caf5";
+          # foreground = "${base05}"; # Text
+          # background = "${base00}"; # Base
+          # regular0 = "${base00}";
+          # regular1 = "${base08}";
+          # regular2 = "${base0B}";
+          # regular3 = "${base0A}";
+          # regular4 = "${base0D}";
+          # regular5 = "${base0E}";
+          # regular6 = "${base0C}";
+          # regular7 = "${base05}";
+          # bright0 = "${base03}";
+          # bright1 = "${base08}";
+          # bright2 = "${base0B}";
+          # bright3 = "${base0A}";
+          # bright4 = "${base0D}";
+          # bright5 = "${base0E}";
+          # bright6 = "${base0C}";
+          # bright7 = "${base07}";
         };
       };
     };

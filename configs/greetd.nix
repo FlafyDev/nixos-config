@@ -1,5 +1,5 @@
-username: {
-  system = {pkgs, ...}: {
+{
+  system = {pkgs, username, ...}: {
     services.greetd = {
       enable = true;
       settings = {

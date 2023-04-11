@@ -20,16 +20,16 @@
         src = ./startpage.html;
         inherit (theme) wallpaper;
       };
-      userChrome = pkgs.substituteAll {
+      userChrome = builtins.readFile (pkgs.substituteAll {
         src = ./userChrome.css;
         inherit (theme) wallpaper;
-      };
+      });
     in {
       enable = true;
       profiles.default = {
         settings = {};
         isDefault = true;
-        # userChrome = builtins.readFile userChrome;
+        inherit userChrome;
         extensions = with pkgs.nur.repos.rycee.firefox-addons; [
           vimium-c
           sponsorblock
@@ -38,7 +38,7 @@
         ];
       };
       package = with pkgs;
-        wrapFirefox firefox-devedition-bin-unwrapped {
+        wrapFirefox firefox-beta-unwrapped {
           extraPolicies = {
             CaptivePortal = false;
             DisableFirefoxStudies = true;

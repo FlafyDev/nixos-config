@@ -13,7 +13,7 @@
   outputs = {nixpkgs, ...} @ inputs: {
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem (
-        import ./profiles/minimal.nix (import ./utils/mk-system.nix) {
+        import ./profiles/normal.nix (import ./utils/mk-system.nix) {
           inherit inputs;
           system = import ./systems/laptop;
         }

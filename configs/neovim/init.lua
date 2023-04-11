@@ -1,7 +1,7 @@
 function map(mode, lhs, rhs, opts)
   local options = { noremap = true }
   if opts then
-      options = vim.tbl_extend("force", options, opts)
+    options = vim.tbl_extend("force", options, opts)
   end
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
@@ -13,10 +13,10 @@ end
 function hl_con(contains, arg)
   local highlights = vim.fn.execute("highlight")
   -- print(highlights)
-  
+
   for line in highlights:gmatch("[^\n]+") do
-    -- print(line:match("(%w+)"))
     local highlight = line:match("(%w+)")
+    -- print(highlight)
     if (highlight:match(contains)) then
       -- print("found: " .. highlight)
       hl(line:match("(%w+)"), arg)
@@ -24,11 +24,9 @@ function hl_con(contains, arg)
   end
 end
 
-
 vim.g.mapleader = ' '
 
 map("n", "<leader>n", ":NvimTreeToggle<CR>")
-map("n", "<leader>dn", ":FlutterOutlineToggle<CR>")
 
 map("n", "<leader>f", ":Telescope find_files<CR>")
 map("n", "<leader>p", ":Telescope oldfiles<CR>")
@@ -56,29 +54,42 @@ vim.g.neovide_transparency = 0;
 vim.g.neovide_cursor_animation_length = 0.1;
 vim.g.neovide_cursor_trail_size = 0.3;
 vim.g.neovide_hide_mouse_when_typing = true;
+vim.g.transparent_enabled = true;
 -- vim.g.neovide_floating_blur_amount_x = 2.0;
 -- vim.g.neovide_floating_blur_amount_y = 2.0;
 -- vim.g.neovide_floating_opacity = 0.3;
---
---
---
---
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+    hl_con("Float", { background = nil })
+    hl_con("TruncateLine", { foreground = "#7aa2f7" })
+    hl('LineNr', { foreground = "#FFFFFF" });
+    hl('LineNrAbove', { foreground = "#@activeBorder@" });
+    hl('LineNrBelow', { foreground = "#@activeBorder@" });
+    hl('FloatBorder', { foreground = "#@activeBorder@" });
+    hl('LspFloatWinBorder', { foreground = "#@activeBorder@" });
+  end,
+})
+
+require('tokyonight').setup({
+  style = "night",
+  on_colors = function(colors)
+    colors.bg = nil
+    colors.bg_dark = nil
+    colors.bg_statusline = nil
+    colors.border = "#@activeBorder@"
+  end
+})
 
 
 vim.cmd('set fillchars+=vert:\\ " ');
 vim.cmd('set nowrap');
-vim.cmd('colorscheme tokyonight');
+vim.cmd('colorscheme tokyonight-night');
 vim.cmd('set termguicolors');
 vim.cmd('set clipboard+=unnamedplus');
-vim.cmd('set signcolumn=no');
-
-vim.g.transparent_enabled = true;
-
-hl_con("Float", {background = nil})
-hl_con("TruncateLine", {foreground = "#7aa2f7"})
-hl('LineNr', { foreground = "#FFFFFF" });
-hl('LineNrAbove', { foreground = "#00AAFF" });
-hl('LineNrBelow', { foreground = "#00AAFF" });
+vim.cmd('set signcolumn=yes');
+-- vim.cmd('TransparentEnable');
 
 
 vim.api.nvim_create_user_command(
@@ -109,9 +120,9 @@ vim.api.nvim_create_user_command(
 
 local notify = vim.notify
 vim.notify = function(msg, ...)
-    if msg:match("warning: multiple different client offset_encodings") then
-        return
-    end
+  if msg:match("warning: multiple different client offset_encodings") then
+    return
+  end
 
-    notify(msg, ...)
+  notify(msg, ...)
 end
