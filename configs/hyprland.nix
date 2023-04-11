@@ -148,7 +148,7 @@
           }
 
           exec-once=${pkgs.swaybg}/bin/swaybg --image ${theme.wallpaper}
-          exec-once=[workspace special] firefox
+          # exec-once=[workspace special] firefox
           exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
           exec-once=hyprctl setcursor Bibata-Modern-Ice 24
 
@@ -193,22 +193,22 @@
           bind=ALTSHIFTCTRL,J,movewindow,d
 
           bind=SUPER,U,workspace,previous
-          bind=ALT,R,workspace,1
-          bind=ALT,T,workspace,2
+          bind=ALT,Q,workspace,1
+          bind=ALT,W,workspace,2
           bind=ALT,E,workspace,3
-          bind=ALT,W,workspace,4
-          bind=ALT,Q,workspace,5
+          bind=ALT,R,workspace,4
+          bind=ALT,T,workspace,5
           bind=ALT,Y,workspace,6
           bind=ALT,U,workspace,7
           bind=ALT,I,workspace,8
           bind=ALT,O,workspace,9
           bind=ALT,P,workspace,10
 
-          bind=ALTSHIFT,R,movetoworkspace,1
-          bind=ALTSHIFT,T,movetoworkspace,2
+          bind=ALTSHIFT,Q,movetoworkspace,1
+          bind=ALTSHIFT,W,movetoworkspace,2
           bind=ALTSHIFT,E,movetoworkspace,3
-          bind=ALTSHIFT,W,movetoworkspace,4
-          bind=ALTSHIFT,Q,movetoworkspace,5
+          bind=ALTSHIFT,R,movetoworkspace,4
+          bind=ALTSHIFT,T,movetoworkspace,5
           bind=ALTSHIFT,Y,movetoworkspace,6
           bind=ALTSHIFT,U,movetoworkspace,7
           bind=ALTSHIFT,I,movetoworkspace,8
