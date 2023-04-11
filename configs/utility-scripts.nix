@@ -22,14 +22,6 @@
         export __VK_LAYER_NV_optimus=NVIDIA_only
         exec "$@"
       '';
-      makeConfigEditable = pkgs.writeShellScriptBin "makeConfigEditable" ''
-        newName="$1-$(date +%s)"
-        mv ./$1 ./''${newName}
-        cat ''${newName} > ./$1
-      '';
-      update = pkgs.writeShellScriptBin "update" ''(cd ${configLocation} ; sudo ${updateSystem} laptop "$@")'';
-      updateBoot = pkgs.writeShellScriptBin "update-boot" ''(cd ${configLocation} ; sudo ${updateSystem} laptop boot "$@")'';
-      updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} laptop fast "$@")'';
       wifi = pkgs.writeShellScriptBin "wifi" ''
         case $1 in
           list)
@@ -56,6 +48,14 @@
             ;;
         esac
       '';
+      makeConfigEditable = pkgs.writeShellScriptBin "makeConfigEditable" ''
+        newName="$1-$(date +%s)"
+        mv ./$1 ./''${newName}
+        cat ''${newName} > ./$1
+      '';
+      update = pkgs.writeShellScriptBin "update" ''(cd ${configLocation} ; sudo ${updateSystem} laptop "$@")'';
+      updateBoot = pkgs.writeShellScriptBin "update-boot" ''(cd ${configLocation} ; sudo ${updateSystem} laptop boot "$@")'';
+      updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} laptop fast "$@")'';
     in [
       update
       updateBoot

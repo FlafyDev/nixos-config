@@ -1,8 +1,10 @@
 let
-  buildFonts = pkgs: with pkgs; [
+  buildFonts = pkgs:
+    with pkgs; [
       (nerdfonts.override {
         fonts = [
           "AurulentSansMono"
+          "Iosevka"
           "JetBrainsMono"
           "FiraCode"
           "DroidSansMono"
@@ -24,6 +26,19 @@ let
       mplus-outline-fonts.githubRelease
       # dina-font
       proggyfonts
+      material-icons
+      material-design-icons
+      roboto
+      work-sans
+      comic-neue
+      twemoji-color-font
+      comfortaa
+      inter
+      lato
+      jost
+      lexend
+      iosevka-bin
+      jetbrains-mono
     ];
 in {
   system = {pkgs, ...}: {
@@ -31,7 +46,11 @@ in {
   };
 
   home = {pkgs, ...}: {
-    fonts.fontconfig.enable = true;
+    fonts = {
+      fontconfig = {
+        enable = true;
+      };
+    };
     home.packages = buildFonts pkgs;
   };
 }

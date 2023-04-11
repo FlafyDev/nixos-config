@@ -1,4 +1,4 @@
-{
+{neovide ? true}: {
   configs = cfgs:
     with cfgs; [
       nur
@@ -34,6 +34,10 @@
       url = "github:glepnir/lspsaga.nvim";
       flake = false;
     };
+    transparent-nvim = {
+      url = "github:xiyaowong/transparent.nvim";
+      flake = false;
+    };
   };
 
   add = inputs: {
@@ -41,7 +45,7 @@
       (_final: prev: {
         neovide = prev.neovide.overrideAttrs (old: {
           src = inputs.neovide;
-          nativeBuildInputs = old.nativeBuildInputs ++ [ prev.cmake ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [prev.cmake];
           cargoDeps = old.cargoDeps.overrideAttrs (_: {
             src = inputs.neovide;
             outputHash = "sha256-wW/Z32X5YieTraEVbPKpj+59MzPjVKbgTaXyrZLwU50=";
@@ -63,31 +67,28 @@
               };
               bufresize-nvim = buildVimPluginFrom2Nix {
                 pname = "bufresize.nvim";
-                version = "2022-09-02";
+                version = "git";
                 src = inputs.bufresize-nvim;
               };
               flutter-tools-nvim = buildVimPluginFrom2Nix {
                 pname = "flutter-tools.nvim";
-                version = "2022-08-26";
+                version = "git";
                 src = inputs.flutter-tools-nvim;
-                # src = fetchFromGitHub {
-                #   owner = "FlafyDev";
-                #   repo = "flutter-tools.nvim";
-                #   rev = "1ea7eca2c88fd56bc64eaa71676b9290932ef2d4";
-                #   sha256 = "d/rbkNLVe42dSdb68AizGbZb7mfPscp6V2NI6yEqLe8=";
-                # };
-                meta.homepage = "https://github.com/FlafyDev/flutter-tools.nvim/";
               };
               yuck-vim = buildVimPluginFrom2Nix {
                 pname = "yuck-vim";
-                version = "2022-06-20";
+                version = "git";
                 src = inputs.yuck-vim;
-                meta.homepage = "https://github.com/elkowar/yuck.vim";
               };
               centerpad-nvim = buildVimPluginFrom2Nix {
-                name = "centerpad-nvim";
+                pname = "centerpad-nvim";
+                version = "git";
                 src = inputs.centerpad-nvim;
-                meta.homepage = "https://github.com/smithbm2316/centerpad.nvim";
+              };
+              transparent-nvim = buildVimPluginFrom2Nix {
+                pname = "transparent-nvim";
+                version = "git";
+                src = inputs.transparent-nvim;
               };
             }
           );
@@ -95,11 +96,18 @@
     ];
   };
 
-  home = {pkgs, ...}: {
-    home.packages = with pkgs; [
-      neovide
-      (writeShellScriptBin "vim" "nvidia-offload ${pkgs.neovide}/bin/neovide --nofork $@")
-    ];
+  home = {
+    pkgs,
+    theme,
+    ...
+  }: {
+    home.packages =
+      if neovide
+      then [
+        pkgs.neovide
+        (pkgs.writeShellScriptBin "vim" "nvidia-offload ${pkgs.neovide}/bin/neovide --nofork $@")
+      ]
+      else [];
 
     home.sessionVariables = {
       EDITOR = "nvim";
@@ -114,11 +122,20 @@
 
       extraConfig = ''
         lua<<EOF
-          ${builtins.readFile ./init.lua}
+        ${builtins.readFile (
+          pkgs.substituteAll {
+            src = ./init.lua;
+            inherit (theme.colors) activeBorder;
+          }
+        )}
         EOF
       '';
 
       extraPackages = with pkgs; [
+        msbuild
+        dotnet-sdk
+        omnisharp-roslyn
+        sumneko-lua-language-server
         ripgrep
         kotlin-language-server
         fd
@@ -129,12 +146,11 @@
         nodePackages.pyright
         nodejs-16_x
         tree-sitter
-        # nil
+        nil
         clang-tools
         cmake-language-server
         # ccls
         wl-clipboard
-        omnisharp-roslyn
         netcoredbg
         gcc # treesitter
         nixfmt

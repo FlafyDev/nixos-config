@@ -50,6 +50,7 @@
       #     '';
       #   }
       # ];
+      plymouth.enable = true;
       loader = {
         # systemd-boot.enable = true;
         efi = {
@@ -70,6 +71,8 @@
       device = "/dev/disk/by-uuid/23e60b41-48d2-4b32-8cc8-bf52e0b305f4";
       fsType = "ext4";
     };
+
+    services.upower.enable = true;
 
     networking = {
       hostName = "nixos";
@@ -212,7 +215,6 @@
         jack.enable = true;
         pulse.enable = true;
         wireplumber.enable = true;
-        media-session.enable = false;
       };
 
       # openssh.enable = true;
