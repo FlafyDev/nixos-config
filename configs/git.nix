@@ -6,7 +6,7 @@
     ];
   };
 
-  home = {pkgs, ...}: {
+  home = _: {
     programs.git = {
       enable = true;
       userName = "FlafyDev";
@@ -18,7 +18,7 @@
       };
       extraConfig = {
         safe.directory = "*";
-      #   credential.helper = "${pkgs.git.override {withLibsecret = true;}}/bin/git-credential-libsecret";
+        #   credential.helper = "${pkgs.git.override {withLibsecret = true;}}/bin/git-credential-libsecret";
       };
     };
   };

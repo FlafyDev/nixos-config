@@ -5,7 +5,12 @@
     listen-blue.url = "github:flafydev/listen_blue";
   };
 
-  add = { nixpkgs-gimp, guifetch, listen-blue, ... }: {
+  add = {
+    nixpkgs-gimp,
+    guifetch,
+    listen-blue,
+    ...
+  }: {
     overlays = _: [
       guifetch.overlays.default
       listen-blue.overlays.default

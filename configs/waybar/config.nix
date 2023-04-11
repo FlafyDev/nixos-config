@@ -1,11 +1,9 @@
 {
   config,
-  theme,
   pkgs,
   lib,
   ...
-}:
-with lib; {
+}: {
   mainBar = {
     layer = "top";
     position = "left";

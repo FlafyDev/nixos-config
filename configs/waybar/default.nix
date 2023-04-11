@@ -1,5 +1,5 @@
 {
-  home = { pkgs, ... }@args: let 
+  home = {pkgs, ...} @ args: let
     settings = import ./config.nix args;
     style = import ./style.nix args;
   in {

@@ -1,5 +1,5 @@
 {
-  home = {theme, ...}: {
+  home = _: {
     programs.foot = {
       enable = true;
       settings = {

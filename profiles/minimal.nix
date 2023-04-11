@@ -12,7 +12,7 @@ in
         printer-4500
         zsh
         starship
-        ( neovim { neovide = false; } )
+        (neovim {neovide = false;})
         utility-scripts
         utility-cli
         ssh

@@ -28,7 +28,7 @@
         path = "${config.xdg.dataHome}/zsh/history";
       };
       envExtra = ''
-          export KEYTIMEOUT=0
+        export KEYTIMEOUT=0
       '';
       initExtra = ''
         # fixes starship swallowing newlines

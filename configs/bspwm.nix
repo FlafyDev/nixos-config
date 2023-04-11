@@ -5,10 +5,11 @@
       flake = false;
     };
   };
-  
-  configs = cfgs: with cfgs; [
-    x
-  ];
+
+  configs = cfgs:
+    with cfgs; [
+      x
+    ];
 
   add = {bspwm-rounded, ...}: {
     overlays = _: [

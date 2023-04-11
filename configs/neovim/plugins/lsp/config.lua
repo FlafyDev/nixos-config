@@ -17,15 +17,13 @@ null.setup({
 })
 
 local lsp_format = function(bufnr)
-  local filetype = vim.api.nvim_exec("echo &filetype", true)
+  local filetype = vim.api.nvim_exec("echo &filetype", true);
   vim.lsp.buf.format({
     filter = function(client)
-      if (filetype == "nix") then
-        return client.name == "null-ls"
-      end
+      if (filetype == "nix") then return client.name == "null-ls" end
       return true
     end,
-    bufnr = bufnr,
+    bufnr = 0,
   })
 end
 
@@ -238,7 +236,7 @@ require("telescope").load_extension("flutter")
 flutter_tools.setup {
   lsp = {
     color = {
-                              -- show the derived colours for dart variables
+      -- show the derived colours for dart variables
       enabled = true,         -- whether or not to highlight color variables at all, only supported on flutter >= 2.10
       background = true,      -- highlight the background
       background_color = { r = 19, g = 17, b = 24 },

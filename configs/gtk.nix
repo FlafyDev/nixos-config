@@ -9,7 +9,6 @@
     home.packages = [pkgs.dconf];
     dconf.enable = true;
     gtk = {
-
       enable = true;
       gtk3.extraConfig = {
         gtk-decoration-layout = ":menu"; # disable title bar buttons
@@ -22,23 +21,24 @@
         package = pkgs.bibata-cursors;
       };
 
-    font = {
-      name = "Roboto";
-      package = pkgs.roboto;
-    };
-
-        iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-
-    theme = {
-      name = "Catppuccin-Mocha-Compact-Mauve-Dark";
-      package = pkgs.catppuccin-gtk.override {
-        accents = ["mauve"];
-        size = "compact";
-        variant = "mocha";
+      font = {
+        name = "Roboto";
+        package = pkgs.roboto;
       };
-    };    };
+
+      iconTheme = {
+        name = "Papirus-Dark";
+        package = pkgs.papirus-icon-theme;
+      };
+
+      theme = {
+        name = "Catppuccin-Mocha-Compact-Mauve-Dark";
+        package = pkgs.catppuccin-gtk.override {
+          accents = ["mauve"];
+          size = "compact";
+          variant = "mocha";
+        };
+      };
+    };
   };
 }

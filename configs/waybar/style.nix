@@ -1,4 +1,4 @@
-{theme, ... }:
+{theme, ...}:
 with theme.colors.base16; let
   OSLogo = builtins.fetchurl rec {
     name = "OSLogo-${sha256}.png";

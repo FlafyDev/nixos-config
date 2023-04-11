@@ -9,10 +9,12 @@ with inputs.nixpkgs.lib; let
   filterMap = list: attr:
     map (item: item.${attr}) (filter (item: item ? ${attr}) list);
 
-  passedArgs = args // {
-    inherit inputs;
-    inherit username;
-  };
+  passedArgs =
+    args
+    // {
+      inherit inputs;
+      inherit username;
+    };
 
   configs = import ./get-all-configs.nix ../configs;
   getDeepConfigs = config:
@@ -34,7 +36,6 @@ with inputs.nixpkgs.lib; let
   homeConfigs = filterMap selectedConfigs "home";
 in {
   system = system.systemType;
-  # Delete?
   specialArgs = passedArgs;
   modules = flatten [
     systemConfigs

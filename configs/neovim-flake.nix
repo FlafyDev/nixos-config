@@ -24,7 +24,7 @@
             logFile = "/tmp/nvim.log";
           };
         };
-      
+
         vim.lsp = {
           enable = true;
           formatOnSave = true;
@@ -53,7 +53,7 @@
             formatter = "alejandra";
           };
         };
-      
+
         vim.visuals = {
           enable = true;
           nvimWebDevicons.enable = true;
@@ -73,26 +73,26 @@
             lineTimeout = 0;
           };
         };
-      
+
         vim.statusline = {
           lualine = {
             enable = true;
             theme = "catppuccin";
           };
         };
-      
+
         vim.theme = {
           enable = true;
           name = "catppuccin";
           style = "mocha";
         };
         vim.autopairs.enable = true;
-      
+
         vim.autocomplete = {
           enable = true;
           type = "nvim-cmp";
         };
-      
+
         vim.filetree = {
           nvimTreeLua = {
             enable = true;
@@ -101,89 +101,89 @@
             };
           };
         };
-      
+
         vim.tabline = {
           nvimBufferline.enable = false;
         };
-      
+
         vim.treesitter = {
           enable = true;
           context.enable = true;
         };
-      
+
         vim.binds = {
           whichKey.enable = true;
           cheatsheet.enable = true;
         };
-      
+
         vim.telescope = {
           enable = true;
         };
-      
+
         vim.markdown = {
           enable = true;
           glow.enable = true;
         };
-      
+
         vim.git = {
           enable = true;
           gitsigns.enable = true;
         };
-      
+
         vim.minimap = {
           minimap-vim.enable = false;
           codewindow.enable = false; # lighter, faster, and uses lua for configuration
         };
-      
+
         vim.dashboard = {
           dashboard-nvim.enable = false;
           alpha.enable = false;
         };
-      
+
         vim.notify = {
           nvim-notify.enable = true;
         };
-      
+
         vim.utility = {
           colorizer.enable = true;
           icon-picker.enable = true;
           venn-nvim.enable = false; # FIXME throws an error when its commands are ran manually
           diffview-nvim.enable = true;
         };
-      
+
         vim.notes = {
           obsidian.enable = false; # FIXME neovim fails to build if obsidian is enabled
           orgmode.enable = false;
           mind-nvim.enable = false;
           todo-comments.enable = true;
         };
-      
+
         vim.terminal = {
           toggleterm.enable = false;
         };
-      
+
         vim.ui = {
           noice.enable = false;
         };
-      
+
         vim.assistant = {
           copilot.enable = true;
           #tabnine.enable = false; # FIXME: this is not working because the plugin depends on an internal script to be ran by the package manager
         };
-      
+
         vim.session = {
           nvim-session-manager.enable = false;
         };
-      
+
         vim.gestures = {
           gesture-nvim.enable = false;
         };
-      
+
         vim.comments = {
           comment-nvim.enable = true;
           kommentary.enable = false;
         };
-      
+
         vim.presence = {
           presence-nvim = {
             enable = true;

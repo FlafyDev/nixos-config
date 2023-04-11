@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }: {
   programs.neovim.plugins =
@@ -19,7 +18,6 @@
       markdown-preview-nvim
       vim-visual-multi
       vim-parinfer
-      # vim-hexokinase
       tokyonight-nvim
       vim-wayland-clipboard
       yuck-vim
@@ -27,11 +25,6 @@
       rust-tools-nvim
       copilot-vim
       centerpad-nvim
-      # {
-      #   type = "lua";
-      #   plugin = lsp_signature-nvim;
-      #   config = ''require "lsp_signature".setup(cfg)'';
-      # }
       {
         type = "lua";
         plugin = fidget-nvim;
@@ -115,7 +108,15 @@
       }
       {
         type = "lua";
-        plugin = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+        plugin = nvim-treesitter.withPlugins (
+          _:
+            lib.filter (
+              g:
+              # Crashes neovim. Blacklist for now.
+                g.pname != "nix-grammar"
+            )
+            nvim-treesitter.allGrammars
+        );
         config = ''
           require('nvim-treesitter.configs').setup {
             indent = { enable = true },
@@ -150,23 +151,9 @@
         '';
       }
       {
-        plugin = sniprun;
-        config = "lua require('sniprun').setup()";
-      }
-      {
         plugin = which-key-nvim;
         config = "lua require('which-key').setup({})";
       }
-      # {
-      #   type = "lua";
-      #   plugin = Shade-nvim;
-      #   config = ''
-      #     require'shade'.setup({
-      #       overlay_opacity = 50,
-      #       opacity_step = 1,
-      #     })
-      #   '';
-      # }
       {
         plugin = nvim-autopairs;
         config = "lua require('nvim-autopairs').setup {}";
@@ -179,7 +166,5 @@
         plugin = twilight-nvim;
         config = "lua require('twilight').setup {}";
       }
-      # flutter-tools-nvim
-      # copilot-vim
     ]);
 }

@@ -42,7 +42,7 @@ in
         printer-4500
         zsh
         starship
-        ( neovim { neovide = false; } )
+        (neovim {neovide = false;})
         gtk
         qt
         hyprland
