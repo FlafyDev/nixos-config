@@ -10,6 +10,7 @@
     dconf.enable = true;
     gtk = {
       enable = true;
+
       gtk3.extraConfig = {
         gtk-decoration-layout = ":menu"; # disable title bar buttons
         gtk-application-prefer-dark-theme = 1;
@@ -32,12 +33,8 @@
       };
 
       theme = {
-        name = "Catppuccin-Mocha-Compact-Mauve-Dark";
-        package = pkgs.catppuccin-gtk.override {
-          accents = ["mauve"];
-          size = "compact";
-          variant = "mocha";
-        };
+        name = "Tokyonight-Moon-BL"; # Moon = Night ?
+        package = pkgs.tokyo-night-gtk;
       };
     };
   };
