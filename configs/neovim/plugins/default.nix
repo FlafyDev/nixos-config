@@ -13,7 +13,7 @@
     ++ (with pkgs.vimPlugins; let
       inherit (pkgs.nur.repos.m15a) vimExtraPlugins;
     in [
-      vim-nix
+      vim-nix # Nix's treesitter grammar is broken. Using this one instead.
       nvim-web-devicons
       markdown-preview-nvim
       vim-visual-multi
