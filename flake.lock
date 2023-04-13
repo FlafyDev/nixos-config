@@ -2151,6 +2151,7 @@
         "project-creator": "project-creator",
         "qutebrowser-base16": "qutebrowser-base16",
         "transparent-nvim": "transparent-nvim",
+        "webcord": "webcord",
         "yuck-vim": "yuck-vim"
       }
     },
@@ -2571,6 +2572,22 @@
         "owner": "supercollider-quarks",
         "ref": "master",
         "repo": "vowel",
+        "type": "github"
+      }
+    },
+    "webcord": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1680957790,
+        "narHash": "sha256-39Qo2LzAbIpbYq0BSf/rV+tT3jZnlbXbxcGpz0AGBO4=",
+        "owner": "SpacingBat3",
+        "repo": "webcord",
+        "rev": "66c71e55c59a5455d64199789a7549cf8b367299",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpacingBat3",
+        "repo": "webcord",
         "type": "github"
       }
     },
