@@ -40,8 +40,9 @@ in
         mpv
         nix
         printer-4500
-        zsh
-        starship
+        # zsh
+        fish
+        # starship
         (neovim {neovide = false;})
         gtk
         qt
@@ -63,6 +64,7 @@ in
         remote-control
         cuda
         waybar
+        steam
       ];
 
     system = _: {
