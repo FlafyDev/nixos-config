@@ -1,13 +1,25 @@
 {
   pkgs,
   lib,
+  inputs,
   ...
 }: {
   programs.neovim.plugins =
-    (lib.lists.flatten (map (plugin: (import plugin) pkgs) [
+    (lib.lists.flatten (map (plugin:
+      (
+        if (lib.isFunction plugin)
+        then plugin
+        else (import plugin)
+      )
+      pkgs) [
       ./telescope-nvim
       ./lualine-nvim
-      ./lsp
+      (import ./lsp {
+        snippets = with inputs; [
+          flutter-riverpod-snippets
+          flutter-hooks-snippets
+        ];
+      })
       ./nvim-dap
     ]))
     ++ (with pkgs.vimPlugins; let

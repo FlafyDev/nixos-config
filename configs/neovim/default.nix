@@ -38,6 +38,14 @@
       url = "github:xiyaowong/transparent.nvim";
       flake = false;
     };
+    flutter-riverpod-snippets = {
+      url = "github:RobertBrunhage/flutter-riverpod-snippets";
+      flake = false;
+    };
+    flutter-hooks-snippets = {
+      url = "github:devmuaz/flutter-hooks-snippets";
+      flake = false;
+    };
   };
 
   add = inputs: {
