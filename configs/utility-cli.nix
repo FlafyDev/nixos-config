@@ -36,6 +36,7 @@
       unzip
       xclip
       bat
+      exa
       service-wrapper
       distrobox
       wl-clipboard
