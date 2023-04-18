@@ -781,6 +781,38 @@
         "type": "github"
       }
     },
+    "flutter-hooks-snippets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1662751664,
+        "narHash": "sha256-tLqazM5m7g0cyhxoOFBWyyjZY71jYELDZY8n1ujFopA=",
+        "owner": "devmuaz",
+        "repo": "flutter-hooks-snippets",
+        "rev": "07fdfe49d006a4a891f0452a8fb1e8914513b96a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "devmuaz",
+        "repo": "flutter-hooks-snippets",
+        "type": "github"
+      }
+    },
+    "flutter-riverpod-snippets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1681732022,
+        "narHash": "sha256-fZXv4+nHTLDpCxbpivp+sOUY+MPXcl6zB+yDrgjhGnI=",
+        "owner": "RobertBrunhage",
+        "repo": "flutter-riverpod-snippets",
+        "rev": "ee10f52d4e2f75bf3ac3fa67d441b493e5770fbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "RobertBrunhage",
+        "repo": "flutter-riverpod-snippets",
+        "type": "github"
+      }
+    },
     "flutter-tools": {
       "flake": false,
       "locked": {
@@ -2135,6 +2167,8 @@
         "centerpad-nvim": "centerpad-nvim",
         "cp-maps": "cp-maps",
         "custom-theme-nvim": "custom-theme-nvim",
+        "flutter-hooks-snippets": "flutter-hooks-snippets",
+        "flutter-riverpod-snippets": "flutter-riverpod-snippets",
         "flutter-tools-nvim": "flutter-tools-nvim",
         "guifetch": "guifetch",
         "home-manager": "home-manager",
