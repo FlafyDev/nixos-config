@@ -77,10 +77,6 @@
             animate_manual_resizes=true
           }
 
-          device:my-kmonad-output {
-            kb_layout=us,il
-          }
-
           input {
               follow_mouse=1
               force_no_accel=1
@@ -90,15 +86,19 @@
               touchpad {
                   natural_scroll=no
               }
+
+              kb_layout = us,il
+              kb_options = grp:alt_shift_toggle
           }
 
           general {
             sensitivity=0.2
 
             gaps_in=1
-            gaps_out=20
+            gaps_out=10
             border_size=1
 
+            layout=master
             col.active_border=rgb(${activeBorder})
             col.inactive_border=rgba(75758555)
           }
@@ -123,39 +123,50 @@
             shadow_offset=5 5
           }
 
-          bezier=overshot,0.05,0.4,0.6,1.3
-          bezier=mycurve,0.4, 0, 0.6, 1
+          bezier=mycurve,.32,.97,.53,.98
+          bezier=overshot,.32,.97,.37,1.16
 
           animations {
             enabled=1
-            animation=windowsMove,1,2,default
+            animation=windowsMove,1,4,overshot
 
-            animation=windowsIn,1,3,default,popin 10%
+            animation=windowsIn,1,3,overshot,slide
 
-            animation=windowsOut,1,10,default,slide
-            animation=fadeIn,1,3,default
-            animation=fadeOut,0,10,default
+            animation=windowsOut,1,10,mycurve,slide
+            animation=fadeIn,1,3,mycurve
+            animation=fadeOut,1,3,mycurve
 
-            animation=border,1,5,default
-            # animation=fade,1,3,default
-            animation=workspaces,0,3,default,fade
+            animation=border,1,5,mycurve
+            # animation=fade,1,3,mycurve
+            animation=workspaces,0,3,mycurve,fade
           }
 
           dwindle {
               pseudotile=0
               force_split=2
               preserve_split=1
+              default_split_ratio=1.3
+          }
+
+          master {
+            new_is_master=false
+            new_on_top=false
+            no_gaps_when_only=false
+            orientation=top
+            mfact=0.6
+            always_center_master=false
           }
 
           exec-once=${pkgs.swaybg}/bin/swaybg --image ${theme.wallpaper}
           # exec-once=[workspace special] firefox
+          exec-once=${pkgs.foot}/bin/foot --server
           exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
           exec-once=hyprctl setcursor Bibata-Modern-Ice 24
 
           bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
           bind=ALT,S,fullscreen
-          bind=ALT,F,exec,${pkgs.foot}/bin/foot
-          bind=ALT,V,exec,${pkgs.foot}/bin/foot --app-id sideterm
+          bind=ALT,F,exec,${pkgs.foot}/bin/footclient
+          bind=ALT,V,exec,${pkgs.foot}/bin/footclient --app-id sideterm
           bind=ALT,D,killactive,
           bind=ALT,G,togglefloating,
           bind=,Menu,exec,hyprctl switchxkblayout kmonad-kb-laptop next && hyprctl switchxkblayout kmonad-kb-hyperx next
