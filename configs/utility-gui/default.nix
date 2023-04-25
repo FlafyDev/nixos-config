@@ -30,31 +30,28 @@
 
   home = {pkgs, ...}: {
     home.packages = with pkgs; [
+      # # guifetch
+      # # listen-blue
       gnome.eog
-      # guifetch
-      # listen-blue
       mate.engrampa
-      cinnamon.nemo.out
-      # gnome.nautilus
+      gnome.nautilus
       scrcpy
       gnome.simple-scan
       gnome.evince
       gnome.gnome-system-monitor
       gnome.gnome-font-viewer
-      # libreoffice
-      krita
-      libsForQt5.kdenlive
       gparted
-      qdirstat
       pavucontrol
       obs-studio
       lxde.lxrandr
-      # gimp-dev
-      # webcord-vencord
-      element-desktop
-      lutris
-      android-studio
+      syncplay
       prismlauncher
+      # # libreoffice
+      # # gimp-dev
+      # # webcord-vencord
+      # cinnamon.nemo
+      # krita
+      # libsForQt5.kdenlive
     ];
   };
 }

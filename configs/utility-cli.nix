@@ -11,6 +11,7 @@
     project-creator = {
       url = "github:flafydev/project_creator";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.dart-flutter.follows = "dart-flutter";
     };
   };
 
@@ -45,7 +46,7 @@
       htop
       tree
       # cp-maps
-      # project-creator
+      project-creator
       vdpauinfo
       pciutils
       intel-gpu-tools

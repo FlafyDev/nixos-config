@@ -1,86 +1,77 @@
-{
-  rustPlatform,
-  runCommand,
-  lib,
-  fetchFromGitHub,
-  fetchgit,
-  fetchurl,
-  makeWrapper,
-  pkg-config,
-  python2,
-  python3,
-  openssl,
-  SDL2,
-  fontconfig,
-  freetype,
-  ninja,
-  gn,
-  llvmPackages,
-  makeFontsConf,
-  libglvnd,
-  libxkbcommon,
-  stdenv,
-  enableWayland ? stdenv.isLinux,
-  wayland,
-  xorg,
-  removeReferencesTo,
-  cmake,
+{ lib
+, rustPlatform
+, clangStdenv
+, fetchFromGitHub
+, linkFarm
+, fetchgit
+, runCommand
+, gn
+, ninja
+, makeWrapper
+, pkg-config
+, python3
+, removeReferencesTo
+, xcbuild
+, SDL2
+, fontconfig
+, xorg
+, stdenv
+, darwin
+, libglvnd
+, libxkbcommon
+, enableWayland ? stdenv.isLinux
+, wayland
+, src
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
   version = "git";
 
-  src = fetchFromGitHub {
-    owner = "flafydev";
-    repo = "neovide";
-    rev = "0a33cb886f572634e2826e2ca1e7570e420af377";
-    sha256 = "sha256-/MEooWk7+EggsFpk4UZ4yx9oEzoJj+f7cmrPW/wscyY=";
+  inherit src;
+
+  cargoLock = {
+    lockFile = src + "/Cargo.lock";
+    outputHashes = {
+      "glutin-0.26.0" = "sha256-tKpll/gJuMsw7T2SfCi92eWPWICDKnrEhg4d5zvk9S4=";
+      # "winit-0.28.1" = "sha256-D5E9j9PJMAnfkVf0pr46+Bbk63M/OaWqrNeZU2CTUFQ=";
+      # "winit-0.24.0" = "sha256-p/eAaDVmTHzfZ+0DiBA/9v06Z5o1dXVNoCgWRqC1ed0=";
+      "winit-0.28.1" = "sha256-D5E9j9PJMAnfkVf0pr46+Bbk63M/OaWqrNeZU2CTUFQ=";
+      "winit-0.24.0" = "sha256-p/eAaDVmTHzfZ+0DiBA/9v06Z5o1dXVNoCgWRqC1ed0=";
+      "xkbcommon-dl-0.1.0" = "sha256-ojokJF7ivN8JpXo+JAfX3kUOeXneNek7pzIy8D1n4oU=";
+    };
   };
 
-  cargoSha256 = "sha256-7uFn8Mkf+T8wMpq6VucEUzTmr+QVbZ0d4HblUAIZprA=";
+  SKIA_SOURCE_DIR =
+    let
+      repo = fetchFromGitHub {
+        owner = "rust-skia";
+        repo = "skia";
+        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+        rev = "m103-0.51.1";
+        sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
+      };
+      # The externals for skia are taken from skia/DEPS
+      externals = linkFarm "skia-externals" (lib.mapAttrsToList
+        (name: value: { inherit name; path = fetchgit value; })
+        (lib.importJSON ./skia-externals.json));
+    in
+    runCommand "source" { } ''
+      cp -R ${repo} $out
+      chmod -R +w $out
+      ln -s ${externals} $out/third_party/externals
+    ''
+  ;
 
-  SKIA_SOURCE_DIR = let
-    repo = fetchFromGitHub {
-      owner = "rust-skia";
-      repo = "skia";
-      # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-      rev = "m103-0.51.1";
-      sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
-    };
-    # The externals for skia are taken from skia/DEPS
-    externals = lib.mapAttrs (_n: fetchgit) (lib.importJSON ./skia-externals.json);
-  in
-    runCommand "source" {} (
-      ''
-        cp -R ${repo} $out
-        chmod -R +w $out
-
-        mkdir -p $out/third_party/externals
-        cd $out/third_party/externals
-      ''
-      + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals))
-    );
-
-  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
   SKIA_GN_COMMAND = "${gn}/bin/gn";
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-
-  preConfigure = ''
-    unset CC CXX
-  '';
-
-  # test needs a valid fontconfig file
-  FONTCONFIG_FILE = makeFontsConf {fontDirectories = [];};
+  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
   nativeBuildInputs = [
-    pkg-config
     makeWrapper
-    python2 # skia-bindings
-    python3 # rust-xcb
-    llvmPackages.clang # skia
+    pkg-config
+    python3 # skia
     removeReferencesTo
-    cmake
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   # All tests passes but at the end cargo prints for unknown reason:
   #   error: test failed, to rerun pass '--bin neovide'
@@ -89,40 +80,30 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = [
-    openssl
     SDL2
-    (fontconfig.overrideAttrs (_old: {
-      propagatedBuildInputs = [
-        # skia is not compatible with freetype 2.11.0
-        (freetype.overrideAttrs (old: rec {
-          version = "2.10.4";
-          src = fetchurl {
-            url = "mirror://savannah/${old.pname}/${old.pname}-${version}.tar.xz";
-            sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
-          };
-        }))
-      ];
-    }))
+    fontconfig
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
   ];
 
   postFixup = let
     libPath = lib.makeLibraryPath ([
-        libglvnd
-        libxkbcommon
-        xorg.libXcursor
-        xorg.libXext
-        xorg.libXrandr
-        xorg.libXi
-      ]
-      ++ lib.optionals enableWayland [wayland]);
+      libglvnd
+      libxkbcommon
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXrandr
+      xorg.libXi
+    ] ++ lib.optionals enableWayland [ wayland ]);
   in ''
-    # library skia embeds the path to its sources
-    remove-references-to -t "$SKIA_SOURCE_DIR" \
-      $out/bin/neovide
+      # library skia embeds the path to its sources
+      remove-references-to -t "$SKIA_SOURCE_DIR" \
+        $out/bin/neovide
 
-    wrapProgram $out/bin/neovide \
-      --prefix LD_LIBRARY_PATH : ${libPath}
-  '';
+      wrapProgram $out/bin/neovide \
+        --prefix LD_LIBRARY_PATH : ${libPath}
+    '';
 
   postInstall = ''
     for n in 16x16 32x32 48x48 256x256; do
@@ -133,14 +114,13 @@ rustPlatform.buildRustPackage rec {
     install -m444 -Dt $out/share/applications assets/neovide.desktop
   '';
 
-  disallowedReferences = [SKIA_SOURCE_DIR];
+  disallowedReferences = [ SKIA_SOURCE_DIR ];
 
   meta = with lib; {
     description = "This is a simple graphical user interface for Neovim.";
-    homepage = "https://github.com/Kethku/neovide";
-    license = with licenses; [mit];
-    maintainers = with maintainers; [ck3d];
-    platforms = platforms.all;
-    mainProgram = "neovide";
+    homepage = "https://github.com/neovide/neovide";
+    changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ ck3d ];
   };
 }

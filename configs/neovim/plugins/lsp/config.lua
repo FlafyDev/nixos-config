@@ -17,14 +17,47 @@ null.setup({
   },
 })
 
+require("lspsaga").setup({
+  preview = {
+    lines_above = 0,
+    lines_below = 10,
+  },
+  scroll_preview = {
+    scroll_down = "<C-f>",
+    scroll_up = "<C-b>",
+  },
+  request_timeout = 2000,
+  -- See Customizing Lspsaga's Appearance
+  ui = {
+    -- This option only works in Neovim 0.9
+    title = false,
+    -- Border type can be single, double, rounded, solid, shadow.
+    border = "rounded",
+    winblend = 0,
+    expand = "",
+    collapse = "",
+    code_action = "💡",
+    incoming = " ",
+    outgoing = " ",
+    hover = ' ',
+    kind = {},
+  },
+  lightbulb = {
+    enable = false,
+    enable_in_insert = false,
+    sign = false,
+    sign_priority = 40,
+    virtual_text = false,
+  },
+  -- For default options for each command, see below
+  -- finder = { ... },
+  -- code_action = { ... }
+  -- etc.
+})
+
 require("luasnip.loaders.from_vscode").lazy_load({
   paths = "@snippets@",
 })
-
-
--- require("luasnip.loaders.from_vscode").lazy_load({
---   paths = "/mnt/general/repos/RobertBrunhage/flutter-riverpod-snippets",
--- })
 
 local lsp_format = function(bufnr)
   local filetype = vim.api.nvim_exec("echo &filetype", true);
@@ -91,18 +124,20 @@ local on_attach = function(client, bufnr)
   })
 
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
+  vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', 'gh', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<leader>lf', lsp_format, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', 'L', function()
-    vim.cmd('CodeActionMenu')
-  end, bufopts)
-
   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, bufopts)
+
+  -- vim.keymap.set('n', 'L', ':Lspsaga code_action<CR>', bufopts)
+  vim.keymap.set('n', 'L', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', 'gh', ':Lspsaga lsp_finder<CR>', bufopts)
+
+  -- vim.keymap.set('n', 'L', ':CodeActionMenu', bufopts)
+
 
   if vim.bo[bufnr].filetype == "dart" then
     vim.api.nvim_create_user_command(
@@ -127,6 +162,39 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', '<leader>lo', ':FlutterOutlineToggle<CR>', bufopts)
     vim.keymap.set('n', '<leader>ldr', ':FlutterRestart<CR>', bufopts)
     vim.keymap.set('n', '<leader>ldl', ':FlutterLogToggle<CR>', bufopts)
+    vim.keymap.set('n', '<leader>ldw', function()
+      vim.lsp.buf.code_action({
+        filter = function(action, idx) return action.title == "Wrap with widget..." end,
+        apply = true,
+      })
+    end, bufopts)
+    vim.keymap.set('n', '<leader>ldq', function()
+      vim.lsp.buf.code_action({
+        filter = function(action, idx) return action.title == "Wrap with Builder" end,
+        apply = true,
+      })
+    end, bufopts)
+    vim.keymap.set('n', '<leader>ldf', function()
+      vim.lsp.buf.code_action({
+        filter = function(action, idx) return action.title == "Wrap with Column" end,
+        apply = true,
+      })
+    end, bufopts)
+    vim.keymap.set('n', '<leader>ldd', function()
+      vim.lsp.buf.code_action({
+        filter = function(action, idx) return action.title:find("^Remove") end,
+        apply = true,
+      })
+    end, bufopts)
+    vim.keymap.set('n', '<leader>ldj', function()
+      vim.lsp.buf.code_action({
+        filter = function(action, idx)
+          return action.kind:find("^quickfix")
+              and not action.title:find("Ignore")
+        end,
+        apply = true,
+      })
+    end, bufopts)
   end
 
   -- vim.keymap.set('n', '<leader>lgD', vim.lsp.buf.declaration, bufopts)
@@ -146,6 +214,7 @@ end
 -- }
 --
 -- local coq = require "coq"
+
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -268,12 +337,6 @@ flutter_tools.setup {
     on_attach = on_attach,
     capabilities = capabilities,
     flags = lsp_flags,
-    settings = {
-      showTodos = true,
-      completeFunctionCalls = true,
-      enableSnippets = true,
-      updateImportsOnRename = true, -- Whether to update imports and other directives when files are renamed. Required for `FlutterRename` command.
-    }
   },
   debugger = {
     enabled = true,

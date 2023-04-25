@@ -33,7 +33,7 @@ in
     configs = cfgs:
       with cfgs; [
         firefox
-        helix
+        # helix
         greetd
         direnv
         git
@@ -44,6 +44,7 @@ in
         fish
         # starship
         (neovim {neovide = false;})
+        # neovim-flake
         gtk
         qt
         hyprland
@@ -52,19 +53,19 @@ in
         utility-scripts
         utility-cli
         ssh
-        qutebrowser
-        chromium
+        # qutebrowser
+        # chromium
         fonts
-        bspwm
-        alacritty
-        picom
-        mouse-g502-xserver
-        wine
+        # bspwm
+        # alacritty
+        # picom
+        # mouse-g502-xserver
+        # wine
         deluge
-        remote-control
+        # remote-control
         cuda
-        waybar
-        steam
+        # waybar
+        # steam
       ];
 
     system = _: {

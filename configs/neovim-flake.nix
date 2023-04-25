@@ -1,7 +1,7 @@
 {
   inputs = {
     neovim-flake = {
-      url = "github:NotAShelf/neovim-flake";
+      url = "path:/mnt/general/repos/notashelf/neovim-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -17,7 +17,6 @@
         vim = {
           viAlias = true;
           vimAlias = true;
-          wordWrap = false;
           debugMode = {
             enable = false;
             level = 20;
@@ -26,50 +25,54 @@
         };
 
         vim.lsp = {
-          enable = true;
           formatOnSave = true;
-          lightbulb.enable = false;
-          dart.flutter-tools = {
-            enable = true;
-            color = {
-              highlightBackground = false;
-              highlightForeground = false;
-              virtualText = {
-                enable = true;
-              };
-            };
-          };
+          lspkind.enable = false;
+          lightbulb.enable = true;
           lspsaga.enable = false;
           nvimCodeActionMenu.enable = true;
-          trouble.enable = false;
+          trouble.enable = true;
           lspSignature.enable = true;
-          rust.enable = true;
-          python = true;
+        };
+
+        vim.languages = {
+          enableLSP = true;
+          enableFormat = true;
+          enableTreesitter = true;
+          enableExtraDiagnostics = true;
+
+          nix.enable = true;
+          html.enable = true;
           clang.enable = true;
-          sql = true;
-          ts = true;
-          nix = {
+          sql.enable = true;
+          rust = {
             enable = true;
-            formatter = "alejandra";
+            crates.enable = true;
           };
+          ts.enable = true;
+          go.enable = true;
+          zig.enable = true;
+          python.enable = true;
+          dart.enable = true;
+          dart.lsp.enable = true;
+          dart.flutter-tools.enable = false;
+          elixir.enable = true;
         };
 
         vim.visuals = {
           enable = true;
           nvimWebDevicons.enable = true;
-          scrollBar.enable = false;
-          smoothScroll.enable = false;
-          cellularAutomaton.enable = false;
+          scrollBar.enable = true;
+          smoothScroll.enable = true;
+          cellularAutomaton.enable = true;
           fidget-nvim.enable = true;
-          lspkind.enable = false; # Maybe enable
           indentBlankline = {
-            enable = false;
-            fillChar = "";
-            eolChar = "";
+            enable = true;
+            fillChar = null;
+            eolChar = null;
             showCurrContext = true;
           };
           cursorWordline = {
-            enable = false;
+            enable = true;
             lineTimeout = 0;
           };
         };
@@ -96,6 +99,9 @@
         vim.filetree = {
           nvimTreeLua = {
             enable = true;
+            renderer = {
+              rootFolderLabel = null;
+            };
             view = {
               width = 25;
             };
@@ -103,45 +109,40 @@
         };
 
         vim.tabline = {
-          nvimBufferline.enable = false;
+          nvimBufferline.enable = true;
         };
 
-        vim.treesitter = {
-          enable = true;
-          context.enable = true;
-        };
+        vim.treesitter.context.enable = true;
 
         vim.binds = {
           whichKey.enable = true;
           cheatsheet.enable = true;
         };
 
-        vim.telescope = {
-          enable = true;
-        };
-
-        vim.markdown = {
-          enable = true;
-          glow.enable = true;
-        };
+        vim.telescope.enable = true;
 
         vim.git = {
           enable = true;
           gitsigns.enable = true;
+          gitsigns.codeActions = true;
         };
 
         vim.minimap = {
           minimap-vim.enable = false;
-          codewindow.enable = false; # lighter, faster, and uses lua for configuration
+          codewindow.enable = true; # lighter, faster, and uses lua for configuration
         };
 
         vim.dashboard = {
           dashboard-nvim.enable = false;
-          alpha.enable = false;
+          alpha.enable = true;
         };
 
         vim.notify = {
           nvim-notify.enable = true;
+        };
+
+        vim.projects = {
+          project-nvim.enable = true;
         };
 
         vim.utility = {
@@ -149,21 +150,26 @@
           icon-picker.enable = true;
           venn-nvim.enable = false; # FIXME throws an error when its commands are ran manually
           diffview-nvim.enable = true;
+          motion = {
+            hop.enable = true;
+            leap.enable = true;
+          };
         };
 
         vim.notes = {
           obsidian.enable = false; # FIXME neovim fails to build if obsidian is enabled
           orgmode.enable = false;
-          mind-nvim.enable = false;
+          mind-nvim.enable = true;
           todo-comments.enable = true;
         };
 
         vim.terminal = {
-          toggleterm.enable = false;
+          toggleterm.enable = true;
         };
 
         vim.ui = {
-          noice.enable = false;
+          noice.enable = true;
+          smartcolumn.enable = true;
         };
 
         vim.assistant = {
@@ -172,7 +178,7 @@
         };
 
         vim.session = {
-          nvim-session-manager.enable = false;
+          nvim-session-manager.enable = true;
         };
 
         vim.gestures = {
@@ -181,14 +187,13 @@
 
         vim.comments = {
           comment-nvim.enable = true;
-          kommentary.enable = false;
         };
 
         vim.presence = {
           presence-nvim = {
             enable = true;
             auto_update = true;
-            image_text = "The One True Text Editor";
+            image_text = "The Superior Text Editor";
             client_id = "793271441293967371";
             main_image = "neovim";
             rich_presence = {

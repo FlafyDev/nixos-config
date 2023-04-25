@@ -1,7 +1,13 @@
 {
-  add = _: {
+  inputs = {
+    dart-flutter.url = "github:flafydev/dart-flutter-nix";
+    dart-flutter.inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  add = {dart-flutter, ...}: {
     overlays = _: [
       (_final: prev: {
+        inherit (dart-flutter) dart;
         nix = prev.nix.overrideAttrs (old: {
           patches =
             (old.patches or [])
@@ -18,6 +24,7 @@
 
     nix = {
       registry.nixpkgs.flake = inputs.nixpkgs;
+      registry.dart-flutter.flake = inputs.dart-flutter;
       nixPath = [
         "nixpkgs=${inputs.nixpkgs}"
       ];

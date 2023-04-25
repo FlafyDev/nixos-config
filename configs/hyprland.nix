@@ -87,8 +87,9 @@
                   natural_scroll=no
               }
 
-              kb_layout = us,il
-              kb_options = grp:alt_shift_toggle
+              # kb_layout = us,il
+              # kb_options = grp:sclk_toggle
+              kb_file = ${../shared/layout.xkb}
           }
 
           general {
@@ -226,12 +227,16 @@
           bind=ALTSHIFT,O,movetoworkspace,9
           bind=ALTSHIFT,P,movetoworkspace,10
 
+          # Specific window rules
           ${compileWindowRule "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"]}
           ${compileWindowRule "class:^(guifetch)$" ["float" "animation slide" "move 10 10"]}
           ${compileWindowRule "class:^(listen_blue)$" ["size 813 695" "float" "center"]}
+          ${compileWindowRule "class:^(neovide)$" ["tile"]}
+          ${compileWindowRule "class:^(firefox)$" ["opacity 0.999 0.999"]}
+
+          # General window rules
           ${compileWindowRule "floating:0" ["rounding 0"]}
           ${compileWindowRule "floating:1" ["rounding 5"]}
-          ${compileWindowRule "class:^(firefox)$" ["opacity 0.999 0.999"]}
         '';
     };
   };

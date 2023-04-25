@@ -16,11 +16,11 @@
         gtk-application-prefer-dark-theme = 1;
       };
 
-      cursorTheme = {
-        name = "Bibata-Modern-Ice";
-        size = 24;
-        package = pkgs.bibata-cursors;
-      };
+      # cursorTheme = {
+      #   name = "Bibata-Modern-Ice";
+      #   size = 24;
+      #   package = pkgs.bibata-cursors;
+      # };
 
       font = {
         name = "Roboto";

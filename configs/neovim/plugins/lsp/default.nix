@@ -24,6 +24,7 @@ in [
   # coq-thirdparty
   # coq-artifacts
   # vim-vsnip
+  lspsaga-nvim
   luasnip
   cmp_luasnip
   nvim-cmp

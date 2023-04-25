@@ -49,6 +49,8 @@ vim.opt.number = true;
 vim.opt.relativenumber = true;
 vim.opt.laststatus = 3;
 
+vim.o.guifont = "FiraCode Nerd Font Mono:h8";
+
 vim.g.neovide_transparency = 0;
 -- vim.g.neovide_cursor_vfx_mode = "torpedo";
 vim.g.neovide_cursor_animation_length = 0.1;
@@ -57,7 +59,7 @@ vim.g.neovide_hide_mouse_when_typing = true;
 vim.g.transparent_enabled = true;
 -- vim.g.neovide_floating_blur_amount_x = 2.0;
 -- vim.g.neovide_floating_blur_amount_y = 2.0;
--- vim.g.neovide_floating_opacity = 0.3;
+vim.g.neovide_floating_opacity = 0.0;
 
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "*",
