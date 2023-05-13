@@ -61,7 +61,7 @@
     services.sxhkd = {
       enable = true;
       keybindings = let
-        mod = "super";
+        mod = "alt";
         resizePixels = "20";
         playerctl = "${pkgs.playerctl}/bin/playerctl";
         pactl = "${pkgs.pulseaudio}/bin/pactl";

@@ -25,7 +25,7 @@
     ++ (with pkgs.vimPlugins; let
       inherit (pkgs.nur.repos.m15a) vimExtraPlugins;
     in [
-      vim-nix # Nix's treesitter grammar is broken. Using this one instead.
+      # vim-nix # Nix's treesitter grammar is broken. Using this one instead.
       nvim-web-devicons
       markdown-preview-nvim
       vim-visual-multi
@@ -120,15 +120,16 @@
       }
       {
         type = "lua";
-        plugin = nvim-treesitter.withPlugins (
-          _:
-            lib.filter (
-              g:
-              # Crashes neovim. Blacklist for now.
-                g.pname != "nix-grammar"
-            )
-            nvim-treesitter.allGrammars
-        );
+        plugin = nvim-treesitter.withPlugins (_: nvim-treesitter.allGrammars);
+        # plugin = nvim-treesitter.withPlugins (
+        #   _:
+        #     lib.filter (
+        #       g:
+        #       # Crashes neovim. Blacklist for now.
+        #         g.pname != "nix-grammar"
+        #     )
+        #     nvim-treesitter.allGrammars
+        # );
         config = ''
           require('nvim-treesitter.configs').setup {
             indent = { enable = true },

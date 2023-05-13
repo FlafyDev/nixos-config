@@ -1,18 +1,28 @@
 {
   inputs = {
     hyprland = {
-      url = "github:hyprwm/Hyprland/f3909cf2bfdd72aff69112f18c920ac6c9ca28f1";
+      # url = "github:hyprwm/Hyprland/cc01550aff70a0cbee5b62db5f4a08789244998f";
+      url = "github:hyprwm/Hyprland/v0.25.0";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hy3 = {
+      url = "github:outfoxxed/hy3";
+      inputs.hyprland.follows = "hyprland";
     };
   };
 
-  add = {hyprland, ...}: {
+  add = {
+    hyprland,
+    hy3,
+    ...
+  }: {
     modules = [hyprland.nixosModules.default];
     homeModules = [hyprland.homeManagerModules.default];
 
     overlays = _: [
-      hyprland.overlays.default
-      (_final: prev: {
+      # hyprland.overlays.default
+      (final: prev: {
+        hyprland = hyprland.packages.${prev.system}.default;
         hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
           export SDL_VIDEODRIVER=wayland
           export _JAVA_AWT_WM_NONREPARENTING=1;
@@ -28,6 +38,22 @@
           export NIXOS_OZONE_WL="1";
           ${hyprland.packages.${prev.system}.default}/bin/Hyprland "$@"
         '';
+        # hyprlandPlugins = {
+        #   inherit (hy3.packages.${prev.system}) hy3;
+        # };
+        hyprlandPlugins = final.callPackage ./plugins {};
+        # hyprlandPlugins = let
+        #   pkgs = import hyprland.inputs.nixpkgs {
+        #     inherit (prev) system;
+        #   };
+        # in {
+        #   hyprlens = pkgs.callPackage ./plugins/hyprlens.nix {
+        #     inherit (hyprland.packages.${prev.system}) hyprland;
+        #   };
+        #   hy3 = pkgs.callPackage ./plugins/hy3.nix {
+        #     inherit hyprland;
+        #   };
+        # };
       })
     ];
   };
@@ -48,6 +74,7 @@
   home = {
     pkgs,
     theme,
+    inputs,
     ...
   }: {
     home.packages = with pkgs; [
@@ -58,6 +85,10 @@
       enable = true;
       recommendedEnvironment = false;
       xwayland.enable = true;
+      plugins = with pkgs.hyprlandPlugins; [
+        hyprlens
+      ];
+      # hyprlens
       extraConfig = let
         playerctl = "${pkgs.playerctl}/bin/playerctl";
         pactl = "${pkgs.pulseaudio}/bin/pactl";
@@ -65,8 +96,18 @@
         compileWindowRule = window: rules: (builtins.concatStringsSep "\n" (map (rule: "windowrulev2=${rule},${window}") rules));
       in
         with theme.colors; ''
-          monitor=eDP-1,1920x1080@60,0x0,1
-          monitor=HDMI-A-1,1920x1080@60,1920x0,1
+          # monitor=eDP-1,1920x1080@60,1920x0,1
+          monitor=eDP-1,disable
+          monitor=HDMI-A-1,1920x1080@60,0x0,1
+          monitor=HDMI-A-1,addreserved,0,75,0,0
+
+          plugin {
+            hyprlens {
+              background=/home/flafydev/Pictures/wallpaper.png
+              nearest=1
+              tiled=1
+            }
+          }
 
           misc {
             vfr = true
@@ -74,7 +115,7 @@
             render_ahead_of_time=false
             swallow_regex=^(foot)$
             no_direct_scanout=true
-            animate_manual_resizes=true
+            animate_manual_resizes=false
           }
 
           input {
@@ -89,19 +130,20 @@
 
               # kb_layout = us,il
               # kb_options = grp:sclk_toggle
-              kb_file = ${../shared/layout.xkb}
+              kb_file = ${../../shared/layout.xkb}
           }
 
           general {
             sensitivity=0.2
 
-            gaps_in=1
-            gaps_out=10
+            gaps_in=4
+            gaps_out=8
             border_size=1
 
-            layout=master
-            col.active_border=rgb(${activeBorder})
-            col.inactive_border=rgba(75758555)
+            layout=dwindle
+            # col.active_border=rgba(${activeBorder.col}${activeBorder.opacity})
+            col.active_border=rgb(aaff00) rgba(ffaa00ff) rgba(ffaa00ff) rgba(ffaa00ff) rgb(aaff00) 45deg
+            col.inactive_border=rgba(${inactiveBorder.col}${inactiveBorder.opacity})
           }
 
           binds {
@@ -113,25 +155,28 @@
             rounding=0
             blur=1
             blur_xray=1
-            blur_size=5
+            blur_size=17
             blur_passes=3
             blur_ignore_opacity=1
             blur_new_optimizations=1
-            drop_shadow=0
+            drop_shadow=1
             shadow_range=20
-            shadow_render_power=0
-            col.shadow = 0x33220056
-            shadow_offset=5 5
+            shadow_render_power=2
+            col.shadow = rgba(00000044)
+            shadow_offset=0 0
           }
 
           bezier=mycurve,.32,.97,.53,.98
+          bezier=easeInOut,.5,0,.5,1
           bezier=overshot,.32,.97,.37,1.16
+
+          bezier=easeInOut,.5,0,.5,1
 
           animations {
             enabled=1
             animation=windowsMove,1,4,overshot
 
-            animation=windowsIn,1,3,overshot,slide
+            animation=windowsIn,1,3,mycurve
 
             animation=windowsOut,1,10,mycurve,slide
             animation=fadeIn,1,3,mycurve
@@ -172,8 +217,8 @@
           bind=ALT,G,togglefloating,
           bind=,Menu,exec,hyprctl switchxkblayout kmonad-kb-laptop next && hyprctl switchxkblayout kmonad-kb-hyperx next
           # bind=ALT,O,pseudo,
-          bind=ALT,M,exit,
-          bind=ALT,N,togglesplit,
+          bind=SHIFTALT,SEMICOLON,exit,
+          bind=ALT,A,togglesplit,
 
           bind=,XF86AudioPlay,exec,${playerctl} play-pause
           bind=,XF86AudioPrev,exec,${playerctl} previous
@@ -199,10 +244,10 @@
           binde=ALTSHIFT,K,resizeactive,0 -150
           binde=ALTSHIFT,L,resizeactive,150 0
 
-          bind=ALTSHIFTCTRL,L,movewindow,r
-          bind=ALTSHIFTCTRL,H,movewindow,l
-          bind=ALTSHIFTCTRL,K,movewindow,u
-          bind=ALTSHIFTCTRL,J,movewindow,d
+          bind=ALTCTRL,L,movewindow,r
+          bind=ALTCTRL,H,movewindow,l
+          bind=ALTCTRL,K,movewindow,u
+          bind=ALTCTRL,J,movewindow,d
 
           bind=SUPER,U,workspace,previous
           bind=ALT,Q,workspace,1
@@ -210,22 +255,22 @@
           bind=ALT,E,workspace,3
           bind=ALT,R,workspace,4
           bind=ALT,T,workspace,5
-          bind=ALT,Y,workspace,6
-          bind=ALT,U,workspace,7
-          bind=ALT,I,workspace,8
-          bind=ALT,O,workspace,9
-          bind=ALT,P,workspace,10
+          bind=ALT,Z,workspace,6
+          bind=ALT,X,workspace,7
+          bind=ALT,C,workspace,8
+          bind=ALT,V,workspace,9
+          bind=ALT,B,workspace,10
 
           bind=ALTSHIFT,Q,movetoworkspace,1
           bind=ALTSHIFT,W,movetoworkspace,2
           bind=ALTSHIFT,E,movetoworkspace,3
           bind=ALTSHIFT,R,movetoworkspace,4
           bind=ALTSHIFT,T,movetoworkspace,5
-          bind=ALTSHIFT,Y,movetoworkspace,6
-          bind=ALTSHIFT,U,movetoworkspace,7
-          bind=ALTSHIFT,I,movetoworkspace,8
-          bind=ALTSHIFT,O,movetoworkspace,9
-          bind=ALTSHIFT,P,movetoworkspace,10
+          bind=ALTSHIFT,Z,movetoworkspace,6
+          bind=ALTSHIFT,X,movetoworkspace,7
+          bind=ALTSHIFT,C,movetoworkspace,8
+          bind=ALTSHIFT,V,movetoworkspace,9
+          bind=ALTSHIFT,B,movetoworkspace,10
 
           # Specific window rules
           ${compileWindowRule "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"]}
@@ -237,6 +282,7 @@
           # General window rules
           ${compileWindowRule "floating:0" ["rounding 0"]}
           ${compileWindowRule "floating:1" ["rounding 5"]}
+          ${compileWindowRule "floating:0" ["noshadow"]}
         '';
     };
   };

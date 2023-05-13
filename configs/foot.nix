@@ -1,8 +1,42 @@
 {
-  home = _: {
+  home = {
+    lib,
+    theme,
+    ...
+  }: {
     programs.foot = {
       enable = true;
-      settings = {
+      settings = let
+        # TODO: Move this from here.
+        hexToDec = v: let
+          hexToInt = {
+            "0" = 0;
+            "1" = 1;
+            "2" = 2;
+            "3" = 3;
+            "4" = 4;
+            "5" = 5;
+            "6" = 6;
+            "7" = 7;
+            "8" = 8;
+            "9" = 9;
+            "a" = 10;
+            "b" = 11;
+            "c" = 12;
+            "d" = 13;
+            "e" = 14;
+            "f" = 15;
+          };
+          chars = lib.stringToCharacters v;
+          charsLen = lib.length chars;
+        in
+          lib.foldl
+          (a: v: a + v)
+          0
+          (lib.imap0
+            (k: v: hexToInt."${v}" * (lib.pow 16 (charsLen - k - 1)))
+            chars);
+      in {
         main = {
           term = "foot";
           # font = "monospace:size=11";
@@ -18,10 +52,11 @@
         cursor.color = "c0caf5 ffffff";
 
         colors = {
-          alpha = 0.2;
+          # alpha = hexToDec theme.colors.blurredBackgroundColor.opacity;
+          alpha = 0.7;
 
           foreground = "c0caf5";
-          background = "1a1b26";
+          background = theme.colors.blurredBackgroundColor.col;
           selection-foreground = "c0caf5";
           selection-background = "33467c";
           urls = "73daca";

@@ -7,7 +7,14 @@ in
       theme = {
         wallpaper = "/home/${username}/Pictures/wallpaper.png";
         colors = {
-          activeBorder = "29A4BD";
+          activeBorder.col = "29A4BD";
+          activeBorder.opacity = "ff";
+          inactiveBorder.col = "757585";
+          inactiveBorder.opacity = "55";
+          # blurredBackgroundColor.col = "1a1b26";
+          # blurredBackgroundColor.opacity = "33"; # hex
+          blurredBackgroundColor.col = "293300";
+          blurredBackgroundColor.opacity = "B2"; # hex
           base16 = {
             base00 = "182430";
             base01 = "243C54";
@@ -53,11 +60,12 @@ in
         utility-scripts
         utility-cli
         ssh
+        # emacs
         # qutebrowser
         # chromium
         fonts
-        # bspwm
-        # alacritty
+        bspwm
+        alacritty
         # picom
         # mouse-g502-xserver
         # wine
@@ -65,10 +73,12 @@ in
         # remote-control
         cuda
         # waybar
-        # steam
+        steam
+        webcord
       ];
 
     system = _: {
       time.timeZone = "Israel";
+      programs.adb.enable = true;
     };
   }

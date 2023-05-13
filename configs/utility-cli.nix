@@ -46,11 +46,13 @@
       htop
       tree
       # cp-maps
-      project-creator
+      # project-creator
       vdpauinfo
       pciutils
+      binutils
       intel-gpu-tools
       libva-utils
+      nur.repos.mic92.noise-suppression-for-voice
     ];
   };
 }

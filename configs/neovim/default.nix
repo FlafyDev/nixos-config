@@ -143,7 +143,7 @@
         ${builtins.readFile (
           pkgs.substituteAll {
             src = ./init.lua;
-            inherit (theme.colors) activeBorder;
+            activeBorder = theme.colors.activeBorder.col;
           }
         )}
         EOF

@@ -105,8 +105,8 @@
       };
     };
 
-    # boot.kernelParams = ["nouveau.modeset=1"];
     boot.kernelParams = [
+      # "nouveau.modeset=1"
       "video=HDMI-A-1:1920x1080@60"
     ];
 
@@ -152,12 +152,12 @@
 
       opengl = {
         enable = true;
-        extraPackages = with pkgs; [
-          intel-media-driver
-          # vaapiIntel
-          vaapiVdpau
-          libvdpau-va-gl
-        ];
+        # extraPackages = with pkgs; [
+        #   intel-media-driver
+        #   # vaapiIntel
+        #   vaapiVdpau
+        #   libvdpau-va-gl
+        # ];
         # setLdLibraryPath = true;
         # driSupport = true;
         # extraPackages = with pkgs; [

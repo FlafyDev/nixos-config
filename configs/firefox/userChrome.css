@@ -199,9 +199,10 @@ See the above repository for updates as well as full license text. */
 }
 
 #urlbar:not([breakout][breakout-extend]) > #urlbar-background {
-  background: #0f0f0f54 !important;
+  background: #0f0f0f44 !important;
   border: #00000061 !important;
   border: transparent !important;
+  outline: none !important;
 }
 
 
