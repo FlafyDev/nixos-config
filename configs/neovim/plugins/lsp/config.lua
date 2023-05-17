@@ -349,6 +349,8 @@ flutter_tools.setup {
   widget_guides = {
     enabled = true,
   },
+  flutter_path = "/nix/store/20xp1y63bmgc1l1ips6mcq62ggs8qv2x-flutter-wrapped-sdk-links/bin/flutter",
+  -- flutter_lookup_cmd = "dirname $(which flutter)";
 }
 
 
@@ -368,7 +370,7 @@ lspconfig['omnisharp'].setup {
   cmd = { "OmniSharp", "--languageserver", "--hostPID", tostring(pid) },
   capabilities = capabilities,
   -- root_dir = lspcfg_util.find_git_ancestor,
-  on_attach = function (client, bufnr)
+  on_attach = function(client, bufnr)
     -- https://github.com/OmniSharp/omnisharp-roslyn/issues/2483#issuecomment-1492605642
     local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
     for i, v in ipairs(tokenModifiers) do

@@ -103,9 +103,9 @@
 
           plugin {
             hyprlens {
-              background=/home/flafydev/Pictures/wallpaper.png
-              nearest=1
-              tiled=1
+              background=/home/flafydev/Pictures/greenery/green3blur.png
+              nearest=0
+              tiled=0
             }
           }
 
@@ -283,6 +283,7 @@
           ${compileWindowRule "floating:0" ["rounding 0"]}
           ${compileWindowRule "floating:1" ["rounding 5"]}
           ${compileWindowRule "floating:0" ["noshadow"]}
+          layerrule = noanim, ^(selection)$
         '';
     };
   };

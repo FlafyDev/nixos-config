@@ -1,7 +1,8 @@
 {
   inputs = {
     dart-flutter.url = "path:/mnt/general/repos/flafydev/dart-flutter-nix";
-    dart-flutter.inputs.nixpkgs.follows = "nixpkgs";
+    # dart-flutter.inputs.nixpkgs.follows = "nixpkgs";
+    dart-flutter.inputs.nixpkgs-small.follows = "nixpkgs-small";
   };
 
   add = {dart-flutter, ...}: {
@@ -32,6 +33,7 @@
     nix = {
       registry.nixpkgs.flake = inputs.nixpkgs;
       registry.dart-flutter.flake = inputs.dart-flutter;
+      registry.nixpkgs-small.flake = inputs.nixpkgs-small;
       nixPath = [
         "nixpkgs=${inputs.nixpkgs}"
       ];

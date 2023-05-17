@@ -23,7 +23,7 @@
       flake = false;
     };
     flutter-tools-nvim = {
-      url = "github:flafydev/flutter-tools.nvim";
+      url = "github:akinsho/flutter-tools.nvim";
       flake = false;
     };
     centerpad-nvim = {
@@ -92,6 +92,9 @@
                 pname = "flutter-tools.nvim";
                 version = "git";
                 src = inputs.flutter-tools-nvim;
+                patches = [
+                  ./flutter-tools-no-resolve.patch
+                ];
               };
               yuck-vim = buildVimPluginFrom2Nix {
                 pname = "yuck-vim";

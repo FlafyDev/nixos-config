@@ -53,7 +53,7 @@
 
         colors = {
           # alpha = hexToDec theme.colors.blurredBackgroundColor.opacity;
-          alpha = 0.7;
+          alpha = 0.0;
 
           foreground = "c0caf5";
           background = theme.colors.blurredBackgroundColor.col;
