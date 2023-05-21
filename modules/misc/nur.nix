@@ -11,12 +11,17 @@ in {
     enable = mkEnableOption "NUR";
   };
 
-  config = mkIf cfg.enable {
-    inputs.nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nixpkgs.overlays = [inputs.nur.overlay];
-  };
+  config = mkMerge [
+    {
+      inputs.nur = {
+        url = "github:nix-community/NUR";
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
+    }
+    (
+      mkIf cfg.enable {
+        nixpkgs.overlays = [inputs.nur.overlay];
+      }
+    )
+  ];
 }

@@ -18,81 +18,82 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    inputs =
-      if cfg.followNixpkgs
-      then {
-        hyprland = {
-          url = "github:hyprwm/Hyprland/v0.25.0";
-          inputs.nixpkgs.follows = "nixpkgs";
+  config = mkMerge [
+    {
+      inputs =
+        if cfg.followNixpkgs
+        then {
+          hyprland = {
+            url = "github:hyprwm/Hyprland/v0.25.0";
+            inputs.nixpkgs.follows = "nixpkgs";
+          };
+        }
+        else {
+          hyprland.url = "github:hyprwm/Hyprland/v0.25.0";
         };
-      }
-      else {
-        hyprland.url = "github:hyprwm/Hyprland/v0.25.0";
-      };
-
-    sysTopLevelModules = [
-      inputs.hyprland.nixosModules.default
-    ];
-
-    homeModules = [
-      inputs.hyprland.homeManagerModules.default
-    ];
-
-    nixpkgs.overlays = [
-      (final: prev: {
-        hyprland = inputs.hyprland.packages.${prev.system}.default;
-        hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
-          export SDL_VIDEODRIVER=wayland
-          export _JAVA_AWT_WM_NONREPARENTING=1;
-          export XCURSOR_SIZE=24;
-          export CLUTTER_BACKEND="wayland";
-          export XDG_SESSION_TYPE="wayland";
-          export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
-          export MOZ_ENABLE_WAYLAND="1";
-          export WLR_BACKEND="vulkan";
-          export QT_QPA_PLATFORM="wayland";
-          export GDK_BACKEND="wayland";
-          export TERM="foot";
-          export NIXOS_OZONE_WL="1";
-          ${inputs.hyprland.packages.${prev.system}.default}/bin/Hyprland "$@"
-        '';
-        hyprlandPlugins = final.callPackage ./plugins {};
-      })
-    ];
-
-    sys = {
-      # No use to add Hyprland's cachix if we use our own Nixpkgs
-      nix.settings = mkIf (!cfg.followNixpkgs) {
-        trusted-public-keys = [
-          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-        ];
-        substituters = [
-          "https://hyprland.cachix.org"
-        ];
-      };
-      xdg.portal.enable = true;
-      programs.hyprland.enable = true;
-    };
-
-    home = {
-      home.packages = with pkgs; [
-        hyprland-wrapped
+    }
+    (mkIf cfg.enable {
+      sysTopLevelModules = [
+        inputs.hyprland.nixosModules.default
       ];
-      wayland.windowManager.hyprland = {
-        enable = true;
-        recommendedEnvironment = true;
-        xwayland.enable = true;
-        plugins = with pkgs.hyprlandPlugins; [
-          hyprlens
+
+      homeModules = [
+        inputs.hyprland.homeManagerModules.default
+      ];
+
+      nixpkgs.overlays = [
+        (final: prev: {
+          hyprland = inputs.hyprland.packages.${prev.system}.default;
+          hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
+            export SDL_VIDEODRIVER=wayland
+            export _JAVA_AWT_WM_NONREPARENTING=1;
+            export XCURSOR_SIZE=24;
+            export CLUTTER_BACKEND="wayland";
+            export XDG_SESSION_TYPE="wayland";
+            export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
+            export MOZ_ENABLE_WAYLAND="1";
+            export WLR_BACKEND="vulkan";
+            export QT_QPA_PLATFORM="wayland";
+            export GDK_BACKEND="wayland";
+            export TERM="foot";
+            export NIXOS_OZONE_WL="1";
+            ${inputs.hyprland.packages.${prev.system}.default}/bin/Hyprland "$@"
+          '';
+          hyprlandPlugins = final.callPackage ./plugins {};
+        })
+      ];
+
+      sys = {
+        # No use to add Hyprland's cachix if we use our own Nixpkgs
+        nix.settings = mkIf (!cfg.followNixpkgs) {
+          trusted-public-keys = [
+            "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+          ];
+          substituters = [
+            "https://hyprland.cachix.org"
+          ];
+        };
+        xdg.portal.enable = true;
+        programs.hyprland.enable = true;
+      };
+
+      home = {
+        home.packages = with pkgs; [
+          hyprland-wrapped
         ];
-        extraConfig = let
-          playerctl = "${pkgs.playerctl}/bin/playerctl";
-          pactl = "${pkgs.pulseaudio}/bin/pactl";
-          pamixer = "${pkgs.pamixer}/bin/pamixer";
-          compileWindowRule = window: rules: (builtins.concatStringsSep "\n" (map (rule: "windowrulev2=${rule},${window}") rules));
-        in
-          ''
+        wayland.windowManager.hyprland = {
+          enable = true;
+          recommendedEnvironment = true;
+          xwayland.enable = true;
+          plugins = with pkgs.hyprlandPlugins; [
+            hyprlens
+          ];
+          extraConfig = let
+            playerctl = "${pkgs.playerctl}/bin/playerctl";
+            pactl = "${pkgs.pulseaudio}/bin/pactl";
+            pamixer = "${pkgs.pamixer}/bin/pamixer";
+            compileWindowRule = window: rules: (builtins.concatStringsSep "\n" (map (rule: "windowrulev2=${rule},${window}") rules));
+          in ''
             # monitor=eDP-1,1920x1080@60,1920x0,1
             monitor=eDP-1,disable
             monitor=HDMI-A-1,1920x1080@60,0x0,1
@@ -280,7 +281,8 @@ in {
             ${compileWindowRule "floating:0" ["noshadow"]}
             layerrule = noanim, ^(selection)$
           '';
+        };
       };
-    };
-  };
+    })
+  ];
 }

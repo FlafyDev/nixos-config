@@ -13,17 +13,26 @@
           inputs.nixpkgs.follows = "nixpkgs";
         };
       };
-      modules = [./configuration.nix];
+      modules = [
+        # ./modules
+        # ./hosts/hobi
+        # ./configs/flafy
+      ];
     };
 
   outputs = inputs: let
     combinedManager = import ./combined-manager;
   in {
     nixosConfigurations = {
-      default = combinedManager.mkNixosSystem {
+      hobi = combinedManager.mkNixosSystem {
         system = "x86_64-linux";
         inherit inputs;
-        modules = [./configuration.nix];
+        modules = [
+          # ./modules
+          # ./hosts/hobi
+          ./configuration.nix
+          # ./configs/flafy
+        ];
       };
     };
   };
