@@ -46,6 +46,9 @@
       lxde.lxrandr
       syncplay
       prismlauncher
+      unityhub
+      icu
+      glib
       # # libreoffice
       # # gimp-dev
       # # webcord-vencord

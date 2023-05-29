@@ -42,11 +42,13 @@
       distrobox
       wl-clipboard
       drm_info
+      libnotify
       # lang-to-docx
       htop
+      btop
       tree
       # cp-maps
-      # project-creator
+      project-creator
       vdpauinfo
       pciutils
       binutils

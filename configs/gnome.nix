@@ -5,7 +5,7 @@
         enable = true;
         dpi = 96;
         desktopManager.gnome.enable = true;
-        desktopManager.gdm.enable = true;
+        # desktopManager.gdm.enable = true;
 
         excludePackages = with pkgs; [
           xterm

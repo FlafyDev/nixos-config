@@ -28,7 +28,7 @@
             nmcli dev wifi
             ;;
           connect)
-            nmcli dev wifi connect $2 password $3
+            nmcli dev wifi connect "$2" password "$3"
             ;;
           disable)
             nmcli radio wifi off

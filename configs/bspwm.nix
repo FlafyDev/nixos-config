@@ -42,7 +42,7 @@
     workspaces = 6;
   in {
     home.file.".xinitrc".text = ''
-      exec bspwm
+      exec gnome-shell
     '';
 
     xsession.windowManager.bspwm = {

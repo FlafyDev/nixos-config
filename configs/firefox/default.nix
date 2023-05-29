@@ -4,9 +4,9 @@
       nur
     ];
 
-  system = _: {
+  system = {modulesPath, ...}: {
     environment.sessionVariables = {
-      DEFAULT_BROWSER = "firefox";
+      DEFAULT_BROWSER = builtins.trace modulesPath "firefox";
     };
   };
 

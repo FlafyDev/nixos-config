@@ -44,6 +44,7 @@ in
         greetd
         direnv
         git
+        # gnome
         mpv
         nix
         printer-4500
