@@ -5,8 +5,9 @@
   inputs,
   ...
 }:
-with lib; let
+let
   cfg = config.programs.neovim;
+  inherit (lib) mkEnableOption mkIf ;
 in {
   imports = [
     ./plugins.nix
@@ -17,11 +18,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.home.sessionVariables = {
+    hm.home.sessionVariables = {
       EDITOR = "nvim";
     };
 
-    home.programs.neovim = {
+    hm.programs.neovim = {
       enable = true;
 
       extraConfig = ''

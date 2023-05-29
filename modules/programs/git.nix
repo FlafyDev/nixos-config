@@ -3,21 +3,21 @@
   config,
   pkgs,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.git;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.git = {
     enable = mkEnableOption "git";
   };
 
   config = mkIf cfg.enable {
-    sys.environment.systemPackages = with pkgs; [
+    os.environment.systemPackages = with pkgs; [
       git
       gh
     ];
 
-    home.programs.git = {
+    hm.programs.git = {
       enable = true;
       userName = "FlafyDev";
       userEmail = "flafyarazi@gmail.com";

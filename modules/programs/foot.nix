@@ -2,16 +2,16 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.foot;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.foot = {
     enable = mkEnableOption "foot";
   };
 
   config = mkIf cfg.enable {
-    home.programs.foot = {
+    hm.programs.foot = {
       enable = true;
       settings = {
         main = {

@@ -4,10 +4,10 @@
   inputs,
   pkgs,
   ...
-}:
-with lib; let
+}: let
   inherit (config) theme;
   cfg = config.display.hyprland;
+  inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
 in {
   options.display.hyprland = {
     enable = mkEnableOption "hyprland";
@@ -33,15 +33,15 @@ in {
         };
     }
     (mkIf cfg.enable {
-      sysTopLevelModules = [
+      osModules = [
         inputs.hyprland.nixosModules.default
       ];
 
-      homeModules = [
+      hmModules = [
         inputs.hyprland.homeManagerModules.default
       ];
 
-      nixpkgs.overlays = [
+      os.nixpkgs.overlays = [
         (final: prev: {
           hyprland = inputs.hyprland.packages.${prev.system}.default;
           hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
@@ -63,7 +63,7 @@ in {
         })
       ];
 
-      sys = {
+      os = {
         # No use to add Hyprland's cachix if we use our own Nixpkgs
         nix.settings = mkIf (!cfg.followNixpkgs) {
           trusted-public-keys = [
@@ -77,7 +77,7 @@ in {
         programs.hyprland.enable = true;
       };
 
-      home = {
+      hm = {
         home.packages = with pkgs; [
           hyprland-wrapped
         ];

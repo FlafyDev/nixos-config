@@ -3,22 +3,22 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.fish;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.fish = {
     enable = mkEnableOption "fish";
   };
 
   config = mkIf cfg.enable {
-    sys = {
+    os = {
       users.defaultUserShell = pkgs.fish;
       environment.pathsToLink = ["/share/fish"];
       programs.fish.enable = true;
     };
 
-    home = {
+    hm = {
       programs.nix-index.enableFishIntegration = true;
       # programs.starship.enableFishIntegration = true;
       # programs.direnv.enableFishIntegration = true;

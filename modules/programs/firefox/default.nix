@@ -3,22 +3,22 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.firefox;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.firefox = {
     enable = mkEnableOption "firefox";
   };
 
   config = mkIf cfg.enable {
-    sys.environment.sessionVariables = {
+    os.environment.sessionVariables = {
       DEFAULT_BROWSER = "firefox";
     };
 
     nur.enable = true;
 
-    home.programs.firefox = let
+    hm.programs.firefox = let
       startpage = pkgs.substituteAll {
         src = ./startpage.html;
         # TODO

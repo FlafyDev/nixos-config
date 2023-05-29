@@ -3,9 +3,9 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.fonts;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.fonts = {
     enable = mkEnableOption "fonts";
@@ -55,8 +55,8 @@ in {
   in
     mkIf cfg.enable {
       unfree.allowed = ["corefonts"];
-      sys.fonts.fonts = fonts;
-      home.home.packages = fonts;
-      home.fonts.fontconfig.enable = true;
+      os.fonts.fonts = fonts;
+      hm.home.packages = fonts;
+      hm.fonts.fontconfig.enable = true;
     };
 }

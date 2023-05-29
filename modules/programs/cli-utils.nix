@@ -3,9 +3,9 @@
   config,
   pkgs,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.cli-utils;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.cli-utils = {
     enable = mkEnableOption "cli-utils";
@@ -69,7 +69,7 @@ in {
     updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} laptop fast "$@")'';
   in
     mkIf cfg.enable {
-      sys.environment.systemPackages = with pkgs; [
+      os.environment.systemPackages = with pkgs; [
         update
         updateBoot
         updateFast

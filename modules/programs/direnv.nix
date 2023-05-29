@@ -2,21 +2,21 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.direnv;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.direnv = {
     enable = mkEnableOption "direnv";
   };
 
   config = mkIf cfg.enable {
-    home.programs.direnv = {
+    hm.programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
     };
 
-    home.xdg.configFile."direnv/direnvrc".text = ''
+    hm.xdg.configFile."direnv/direnvrc".text = ''
       : ''${XDG_CACHE_HOME:=$HOME/.cache}
       declare -A direnv_layout_dirs
       direnv_layout_dir() {

@@ -3,9 +3,9 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.mpv;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.mpv = {
     enable = mkEnableOption "mpv";
@@ -13,9 +13,9 @@ in {
 
   config = mkIf cfg.enable {
     # Extends the Home Manager Mpv modules to allow Mpv scripts to add fonts.
-    homeModules = [./hm-mpv-fonts.nix];
+    hmModules = [./hm-mpv-fonts.nix];
 
-    nixpkgs.overlays = [
+    os.nixpkgs.overlays = [
       (_final: prev: {
         mpvScripts =
           prev.mpvScripts
@@ -25,7 +25,7 @@ in {
       })
     ];
 
-    home.programs.mpv = {
+    hm.programs.mpv = {
       enable = true;
       enableFonts = true;
       # package = mpv;

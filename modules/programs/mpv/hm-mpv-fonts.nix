@@ -2,9 +2,9 @@
   config,
   lib,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.mpv;
+  inherit (lib) mkIf mkMerge lists;
 in {
   options = {
     programs.mpv = {

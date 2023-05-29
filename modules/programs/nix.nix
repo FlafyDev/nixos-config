@@ -3,16 +3,16 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.nix;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.nix = {
     enable = mkEnableOption "nix";
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.overlays = [
+    os.nixpkgs.overlays = [
       (_final: prev: {
         nix = prev.nix.overrideAttrs (old: {
           patches =
@@ -24,7 +24,7 @@ in {
       })
     ];
 
-    sys.nix = {
+    os.nix = {
       enable = true;
       registry.nixpkgs.flake = inputs.nixpkgs;
       nixPath = [
@@ -48,7 +48,7 @@ in {
       };
     };
 
-    sys.programs.command-not-found.enable = false;
-    home.programs.nix-index.enable = true;
+    os.programs.command-not-found.enable = false;
+    hm.programs.nix-index.enable = true;
   };
 }

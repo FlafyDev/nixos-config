@@ -2,10 +2,10 @@
   lib,
   config,
   ...
-}:
-with lib; {
+}: let
+  inherit (lib) mkOption types;
+in {
   options.theme = {
-    # enable = mkEnableOption "theme";
     wallpaper = mkOption {
       type = types.anything;
       default = null;

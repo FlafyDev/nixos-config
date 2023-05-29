@@ -14,9 +14,9 @@
         };
       };
       modules = [
-        # ./modules
-        # ./hosts/hobi
-        # ./configs/flafy
+        ./modules
+        ./hosts/mera
+        ./configs/flafy
       ];
     };
 
@@ -24,14 +24,13 @@
     combinedManager = import ./combined-manager;
   in {
     nixosConfigurations = {
-      hobi = combinedManager.mkNixosSystem {
+      mera = combinedManager.mkNixosSystem {
         system = "x86_64-linux";
         inherit inputs;
         modules = [
-          # ./modules
-          # ./hosts/hobi
-          ./configuration.nix
-          # ./configs/flafy
+          ./modules
+          ./hosts/mera
+          ./configs/flafy
         ];
       };
     };

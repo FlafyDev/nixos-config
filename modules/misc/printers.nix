@@ -4,9 +4,9 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.printers;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.printers = {
     enable = mkEnableOption "printers";
@@ -15,7 +15,7 @@ in {
   config = mkIf cfg.enable {
     unfree.allowed = ["hplip"];
 
-    sys = {
+    os = {
       hardware.sane = {
         enable = true;
         extraBackends = [pkgs.hplipWithPlugin];

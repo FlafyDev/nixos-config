@@ -15,12 +15,11 @@ in {
     {
       inputs.nur = {
         url = "github:nix-community/NUR";
-        inputs.nixpkgs.follows = "nixpkgs";
       };
     }
     (
       mkIf cfg.enable {
-        nixpkgs.overlays = [inputs.nur.overlay];
+        os.nixpkgs.overlays = [inputs.nur.overlay];
       }
     )
   ];

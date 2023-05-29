@@ -1,5 +1,4 @@
-{lib, inputs, ...}:
-with lib; {
+{inputs, ...}: {
   inputs = {
     bufresize-nvim = {
       url = "github:kwkarlwang/bufresize.nvim";
@@ -30,7 +29,7 @@ with lib; {
       flake = false;
     };
   };
-  nixpkgs.overlays = [
+  os.nixpkgs.overlays = [
     (_final: prev: {
       vimPlugins =
         prev.vimPlugins

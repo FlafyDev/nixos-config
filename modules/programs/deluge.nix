@@ -3,16 +3,16 @@
   lib,
   config,
   ...
-}:
-with lib; let
+}: let
   cfg = config.programs.deluge;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.programs.deluge = {
     enable = mkEnableOption "deluge";
   };
 
   config = mkIf cfg.enable {
-    sys.services.deluge = {
+    os.services.deluge = {
       enable = true;
       web.enable = false;
       declarative = true;
