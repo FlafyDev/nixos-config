@@ -8,6 +8,8 @@
     ./hardware-configuration.nix
   ];
 
+  unfree.allowed = ["nvidia-x11" "nvidia-settings"];
+
   os = {
     networking.hostName = "mera";
     # systemd.services.NetworkManager-wait-online.enable = false;
