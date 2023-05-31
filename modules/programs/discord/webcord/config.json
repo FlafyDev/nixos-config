@@ -1,0 +1,82 @@
+{
+    "settings": {
+        "general": {
+            "menuBar": {
+                "hide": true
+            },
+            "tray": {
+                "disable": true
+            },
+            "taskbar": {
+                "flash": true
+            },
+            "window": {
+                "transparent": true,
+                "hideOnClose": true
+            }
+        },
+        "privacy": {
+            "blockApi": {
+                "science": true,
+                "typingIndicator": true,
+                "fingerprinting": true
+            },
+            "permissions": {
+                "video": true,
+                "audio": true,
+                "fullscreen": true,
+                "notifications": true,
+                "display-capture": true,
+                "background-sync": true
+            }
+        },
+        "advanced": {
+            "csp": {
+                "enabled": true
+            },
+            "cspThirdParty": {
+                "spotify": true,
+                "gif": true,
+                "hcaptcha": true,
+                "youtube": true,
+                "twitter": true,
+                "twitch": true,
+                "streamable": true,
+                "vimeo": true,
+                "soundcloud": true,
+                "paypal": true,
+                "audius": true,
+                "algolia": true,
+                "reddit": true,
+                "googleStorageApi": true
+            },
+            "currentInstance": {
+                "radio": 0
+            },
+            "devel": {
+                "enabled": true
+            },
+            "redirection": {
+                "warn": true
+            },
+            "optimize": {
+                "gpu": true
+            },
+            "webApi": {
+                "webGl": true
+            },
+            "unix": {
+                "autoscroll": false
+            }
+        }
+    },
+    "update": {
+        "notification": {
+            "version": "",
+            "till": ""
+        }
+    },
+    "screenShareStore": {
+        "audio": false
+    }
+}

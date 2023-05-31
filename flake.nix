@@ -1,24 +1,38 @@
 {
-  description = "A very basic flake";
+  description = "NixOS configuration";
 
-  inputs = import ./utils/mk-system-inputs-init.nix {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.05";
-    nixpkgs-small.url = "path:/mnt/general/repos/flafydev/nixpkgs";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+  inputs = let
+    combinedManager = import ./combined-manager;
+  in
+    combinedManager.mkInputs {
+      root = ./.;
+      initialInputs = {
+        nixpkgs.url = "github:nixos/nixpkgs/897876e4c484f1e8f92009fd11b7d988a121a4e7";
+        home-manager = {
+          url = "github:nix-community/home-manager";
+          inputs.nixpkgs.follows = "nixpkgs";
+        };
+      };
+      modules = [
+        ./modules
+        ./hosts/mera
+        ./configs/flafy
+      ];
     };
-  };
 
-  outputs = {nixpkgs, ...} @ inputs: {
+  outputs = inputs: let
+    combinedManager = import ./combined-manager;
+  in {
     nixosConfigurations = {
-      laptop = nixpkgs.lib.nixosSystem (
-        import ./profiles/normal.nix (import ./utils/mk-system.nix) {
-          inherit inputs;
-          system = import ./systems/laptop;
-        }
-      );
+      mera = combinedManager.mkNixosSystem {
+        system = "x86_64-linux";
+        inherit inputs;
+        modules = [
+          ./modules
+          ./hosts/mera
+          ./configs/flafy
+        ];
+      };
     };
   };
 }
