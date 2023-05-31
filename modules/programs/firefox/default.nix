@@ -6,7 +6,10 @@
 }: let
   cfg = config.programs.firefox;
   inherit (lib) mkEnableOption mkIf;
+  inherit (config) theme;
 in {
+  imports = [./addons.nix];
+
   options.programs.firefox = {
     enable = mkEnableOption "firefox";
   };
@@ -21,13 +24,11 @@ in {
     hm.programs.firefox = let
       startpage = pkgs.substituteAll {
         src = ./startpage.html;
-        # TODO
-        # inherit (theme) wallpaper;
+        inherit (theme) wallpaper;
       };
       userChrome = builtins.readFile (pkgs.substituteAll {
         src = ./userChrome.css;
-        # TODO
-        # inherit (theme) wallpaper;
+        backgroundColor = "#${theme.backgroundColor.toHexRGBA}";
       });
     in {
       enable = true;
@@ -35,11 +36,16 @@ in {
         settings = {};
         isDefault = true;
         inherit userChrome;
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        extensions = with pkgs.nur.repos.rycee.firefox-addons;
+        with pkgs.firefox-addons; [
           vimium-c
           sponsorblock
           ublock-origin
           bitwarden
+          sidebery
+          firefox-translations
+          better-history-ng
+          wayback-machine
         ];
       };
       package = with pkgs;

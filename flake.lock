@@ -1,5 +1,20 @@
 {
   "nodes": {
+    "assets": {
+      "locked": {
+        "lastModified": 1685451698,
+        "narHash": "sha256-MX7jkolkHKi+TMy1KDmxSQ7nXvjY/TDqzYuCHy3UqZ0=",
+        "owner": "FlafyDev",
+        "repo": "assets",
+        "rev": "eb8349a8d950bf9158805a18522bf16b2d821098",
+        "type": "github"
+      },
+      "original": {
+        "owner": "FlafyDev",
+        "repo": "assets",
+        "type": "github"
+      }
+    },
     "bufresize-nvim": {
       "flake": false,
       "locked": {
@@ -194,6 +209,7 @@
     },
     "root": {
       "inputs": {
+        "assets": "assets",
         "bufresize-nvim": "bufresize-nvim",
         "flutter-hooks-snippets": "flutter-hooks-snippets",
         "flutter-riverpod-snippets": "flutter-riverpod-snippets",

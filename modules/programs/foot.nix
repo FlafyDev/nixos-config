@@ -5,6 +5,7 @@
 }: let
   cfg = config.programs.foot;
   inherit (lib) mkEnableOption mkIf;
+  inherit (config) theme;
 in {
   options.programs.foot = {
     enable = mkEnableOption "foot";
@@ -29,13 +30,11 @@ in {
         cursor.color = "c0caf5 ffffff";
 
         colors = {
-          # TODO
-          # alpha = hexToDec theme.colors.blurredBackgroundColor.opacity;
-          alpha = 0.0;
+          background = theme.backgroundColor.toHexRGB;
+          alpha = theme.backgroundColor.toNormA;
+          # alpha = 0.0;
 
           foreground = "c0caf5";
-          # TDOO
-          # background = theme.colors.blurredBackgroundColor.col;
           selection-foreground = "c0caf5";
           selection-background = "33467c";
           urls = "73daca";

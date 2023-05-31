@@ -101,7 +101,7 @@ in {
 
             plugin {
               hyprlens {
-                background=/home/flafydev/Pictures/greenery/green3blur.png
+                background=${theme.wallpaperBlurred}
                 nearest=0
                 tiled=0
               }

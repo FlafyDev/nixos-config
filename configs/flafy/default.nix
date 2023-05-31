@@ -1,12 +1,18 @@
-_: {
+{pkgs, ...}: {
   users.main = "flafy";
 
-  display.greetd.enable = false;
+  display.greetd.enable = true;
   display.hyprland.enable = true;
   fonts.enable = true;
   printers.enable = true;
-  theme.wallpaper = "";
+
+  assets.enable = true;
+
+  theme.wallpaper = pkgs.assets.wallpapers.blue-layers.default;
+  theme.wallpaperBlurred = pkgs.assets.wallpapers.blue-layers.blurred;
+
   programs.firefox.enable = true;
+  gtk.enable = true;
   programs.mpv.enable = true;
   programs.neovim.enable = true;
   programs.cli-utils.enable = true;
@@ -17,4 +23,5 @@ _: {
   programs.git.enable = true;
   programs.nix.enable = true;
   programs.ssh.enable = true;
+  programs.discord.enable = true;
 }

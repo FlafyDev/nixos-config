@@ -109,10 +109,10 @@ in {
             '';
           }
 
-          {
-            plugin = barbecue-nvim;
-            config = "lua require('barbecue').setup({theme = 'tokyonight', show_modified = true,})";
-          }
+          # {
+          #   plugin = barbecue-nvim;
+          #   config = "lua require('barbecue').setup({theme = 'tokyonight', show_modified = true,})";
+          # }
           {
             type = "lua";
             plugin = indent-blankline-nvim;

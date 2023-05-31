@@ -157,6 +157,7 @@ See the above repository for updates as well as full license text. */
 
 #navigator-toolbox-background {
   appearance: none !important;
+  background: @backgroundColor@ !important;
 }
 
 #titlebar {
@@ -199,7 +200,7 @@ See the above repository for updates as well as full license text. */
 }
 
 #urlbar:not([breakout][breakout-extend]) > #urlbar-background {
-  background: #0f0f0f44 !important;
+  background: transparent !important;
   border: #00000061 !important;
   border: transparent !important;
   outline: none !important;

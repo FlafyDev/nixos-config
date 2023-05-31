@@ -11,6 +11,7 @@
   unfree.allowed = ["nvidia-x11" "nvidia-settings"];
 
   os = {
+    time.timeZone = "Israel";
     networking.hostName = "mera";
     # systemd.services.NetworkManager-wait-online.enable = false;
     boot = {
