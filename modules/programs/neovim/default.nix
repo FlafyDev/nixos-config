@@ -4,10 +4,9 @@
   config,
   inputs,
   ...
-}:
-let
+}: let
   cfg = config.programs.neovim;
-  inherit (lib) mkEnableOption mkIf ;
+  inherit (lib) mkEnableOption mkIf;
 in {
   imports = [
     ./plugins.nix
@@ -30,7 +29,7 @@ in {
         ${builtins.readFile (
           pkgs.substituteAll {
             src = ./config/init.lua;
-            activeBorder = "FF0000";
+            activeBorder = "29A4BD";
             # activeBorder = config.theme.colors.activeBorder.col;
           }
         )}

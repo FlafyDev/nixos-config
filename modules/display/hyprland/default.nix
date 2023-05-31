@@ -3,9 +3,9 @@
   config,
   inputs,
   pkgs,
+  theme,
   ...
 }: let
-  inherit (config) theme;
   cfg = config.display.hyprland;
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
 in {
@@ -97,7 +97,7 @@ in {
             # monitor=eDP-1,1920x1080@60,1920x0,1
             monitor=eDP-1,disable
             monitor=HDMI-A-1,1920x1080@60,0x0,1
-            monitor=HDMI-A-1,addreserved,0,75,0,0
+            monitor=HDMI-A-1,addreserved,0,40,0,0
 
             plugin {
               hyprlens {
@@ -134,12 +134,14 @@ in {
             general {
               sensitivity=0.2
 
-              gaps_in=4
-              gaps_out=8
+              gaps_in=1
+              gaps_out=4
               border_size=1
 
               layout=dwindle
-              col.active_border=rgb(aaff00) rgba(ffaa00ff) rgba(ffaa00ff) rgba(ffaa00ff) rgb(aaff00) 45deg
+              # col.active_border=rgb(aaff00) rgba(ffaa00ff) rgba(ffaa00ff) rgba(ffaa00ff) rgb(aaff00) 45deg
+              col.active_border=rgba(${theme.borderColor.active.toHexRGBA})
+              col.inactive_border=rgba(${theme.borderColor.inactive.toHexRGBA})
             }
 
             binds {
@@ -180,7 +182,7 @@ in {
 
               animation=border,1,5,mycurve
               # animation=fade,1,3,mycurve
-              animation=workspaces,0,3,mycurve,fade
+              animation=workspaces,1,3,default,slide
             }
 
             dwindle {
@@ -205,10 +207,12 @@ in {
             exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
             exec-once=hyprctl setcursor Bibata-Modern-Ice 24
 
+
             bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
             bind=ALT,S,fullscreen
             bind=ALT,F,exec,${pkgs.foot}/bin/footclient
             bind=ALT,V,exec,${pkgs.foot}/bin/footclient --app-id sideterm
+            bind=ALT,BACKSPACE,exec,${pkgs.foot}/bin/footclient --app-id middleterm
             bind=ALT,D,killactive,
             bind=ALT,G,togglefloating,
             bind=,Menu,exec,hyprctl switchxkblayout kmonad-kb-laptop next && hyprctl switchxkblayout kmonad-kb-hyperx next
@@ -251,25 +255,26 @@ in {
             bind=ALT,E,workspace,3
             bind=ALT,R,workspace,4
             bind=ALT,T,workspace,5
-            bind=ALT,Z,workspace,6
-            bind=ALT,X,workspace,7
-            bind=ALT,C,workspace,8
-            bind=ALT,V,workspace,9
-            bind=ALT,B,workspace,10
+            bind=ALT,Y,workspace,6
+            bind=ALT,U,workspace,7
+            bind=ALT,I,workspace,8
+            bind=ALT,O,workspace,9
+            bind=ALT,P,workspace,10
 
             bind=ALTSHIFT,Q,movetoworkspace,1
             bind=ALTSHIFT,W,movetoworkspace,2
             bind=ALTSHIFT,E,movetoworkspace,3
             bind=ALTSHIFT,R,movetoworkspace,4
             bind=ALTSHIFT,T,movetoworkspace,5
-            bind=ALTSHIFT,Z,movetoworkspace,6
-            bind=ALTSHIFT,X,movetoworkspace,7
-            bind=ALTSHIFT,C,movetoworkspace,8
-            bind=ALTSHIFT,V,movetoworkspace,9
-            bind=ALTSHIFT,B,movetoworkspace,10
+            bind=ALTSHIFT,Y,movetoworkspace,6
+            bind=ALTSHIFT,U,movetoworkspace,7
+            bind=ALTSHIFT,I,movetoworkspace,8
+            bind=ALTSHIFT,O,movetoworkspace,9
+            bind=ALTSHIFT,P,movetoworkspace,10
 
             # Specific window rules
             ${compileWindowRule "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"]}
+            ${compileWindowRule "class:^(middleterm)$" ["float" "size 750 550" "animation slide"]}
             ${compileWindowRule "class:^(guifetch)$" ["float" "animation slide" "move 10 10"]}
             ${compileWindowRule "class:^(listen_blue)$" ["size 813 695" "float" "center"]}
             ${compileWindowRule "class:^(neovide)$" ["tile"]}

@@ -2,11 +2,11 @@
   pkgs,
   lib,
   config,
+  theme,
   ...
 }: let
   cfg = config.programs.firefox;
   inherit (lib) mkEnableOption mkIf;
-  inherit (config) theme;
 in {
   imports = [./addons.nix];
 

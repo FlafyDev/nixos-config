@@ -1,11 +1,11 @@
 {
   lib,
   config,
+  theme,
   ...
 }: let
   cfg = config.programs.foot;
   inherit (lib) mkEnableOption mkIf;
-  inherit (config) theme;
 in {
   options.programs.foot = {
     enable = mkEnableOption "foot";

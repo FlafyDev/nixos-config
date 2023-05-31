@@ -2,17 +2,14 @@
   "nodes": {
     "assets": {
       "locked": {
-        "lastModified": 1685451698,
-        "narHash": "sha256-MX7jkolkHKi+TMy1KDmxSQ7nXvjY/TDqzYuCHy3UqZ0=",
-        "owner": "FlafyDev",
-        "repo": "assets",
-        "rev": "eb8349a8d950bf9158805a18522bf16b2d821098",
-        "type": "github"
+        "lastModified": 1685530283,
+        "narHash": "sha256-4973bMtAG1dAd01J12m09FNp/0pEOTX7ipCO5kQLVIs=",
+        "path": "/mnt/general/repos/flafydev/assets",
+        "type": "path"
       },
       "original": {
-        "owner": "FlafyDev",
-        "repo": "assets",
-        "type": "github"
+        "path": "/mnt/general/repos/flafydev/assets",
+        "type": "path"
       }
     },
     "bufresize-nvim": {

@@ -8,8 +8,7 @@
 
   assets.enable = true;
 
-  theme.wallpaper = pkgs.assets.wallpapers.blue-layers.default;
-  theme.wallpaperBlurred = pkgs.assets.wallpapers.blue-layers.blurred;
+  themes.themeName = "amoled";
 
   programs.firefox.enable = true;
   gtk.enable = true;
@@ -24,4 +23,5 @@
   programs.nix.enable = true;
   programs.ssh.enable = true;
   programs.discord.enable = true;
+  programs.gui-utils.enable = true;
 }

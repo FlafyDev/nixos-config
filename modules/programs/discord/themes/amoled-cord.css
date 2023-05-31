@@ -10,6 +10,10 @@
 
 @import url('https://luckfire.github.io/amoled-cord/src/amoled-cord.css');
 
+body {
+  background-color: @backgroundColor@ !important;
+}
+
 :root {
     /* --------- BASE THEME --------- */
     --blurple-replace: #7289DA;
@@ -18,12 +22,12 @@
     /* --background-secondary-alt: rgb(15, 15, 15); */
     /* --background-tertiary: black; */
 
-    --background-primary: #00000017 !important;
-    --background-secondary: #00000017 !important;
-    --background-secondary-alt: #00000017 !important;
-    --background-tertiary: #00000017 !important;
+    --background-primary: #00000000 !important;
+    --background-secondary: #00000000 !important;
+    --background-secondary-alt: #00000000 !important;
+    --background-tertiary: #00000000 !important;
 
-    --background-accent: rgb(15, 15, 15);
+    --background-accent: rgba(15, 15, 15, 0);
     --background-floating: black;
     --userarea-background: var(--background-tertiary);
     --header-primary: #fff;

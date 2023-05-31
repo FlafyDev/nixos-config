@@ -15,13 +15,13 @@ in {
     updateSystem = pkgs.writeShellScript "updateSystem" ''
       case $2 in
         fast)
-          nixos-rebuild test --fast --flake .?submodules=1#$1 --impure -L "''${@:3}"
+          nixos-rebuild test --fast --flake .?submodules=1 --impure -L "''${@:2}"
           ;;
         boot)
-          nixos-rebuild boot --flake .?submodules=1#$1 "''${@:3}"
+          nixos-rebuild boot --flake .?submodules=1 "''${@:2}"
           ;;
         *)
-          nixos-rebuild switch --flake .?submodules=1#$1 "''${@:2}"
+          nixos-rebuild switch --flake .?submodules=1 "''${@:2}"
           ;;
       esac
     '';
@@ -64,9 +64,9 @@ in {
       mv ./$1 ./''${newName}
       cat ''${newName} > ./$1
     '';
-    update = pkgs.writeShellScriptBin "update" ''(cd ${configLocation} ; sudo ${updateSystem} laptop "$@")'';
-    updateBoot = pkgs.writeShellScriptBin "update-boot" ''(cd ${configLocation} ; sudo ${updateSystem} laptop boot "$@")'';
-    updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} laptop fast "$@")'';
+    update = pkgs.writeShellScriptBin "update" ''(cd ${configLocation} ; sudo ${updateSystem} "$@")'';
+    updateBoot = pkgs.writeShellScriptBin "update-boot" ''(cd ${configLocation} ; sudo ${updateSystem} boot "$@")'';
+    updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} fast "$@")'';
   in
     mkIf cfg.enable {
       os.environment.systemPackages = with pkgs; [
@@ -90,6 +90,7 @@ in {
         wl-clipboard
         drm_info
         # lang-to-docx
+        ripgrep
         htop
         tree
         # cp-maps

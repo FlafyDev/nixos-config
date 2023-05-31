@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  theme,
   ...
 }: let
   cfg = config.programs.discord;
@@ -23,7 +24,11 @@ in {
     ];
 
     os.environment.systemPackages = with pkgs; [webcord-vencord];
-    hm.xdg.configFile."WebCord/Themes/amoled-cord".source = ./themes/amoled-cord.css;
+
+    hm.xdg.configFile."WebCord/Themes/amoled-cord".source = pkgs.substituteAll {
+      src = ./themes/amoled-cord.css;
+      backgroundColor = "#${theme.backgroundColor.toHexRGBA}";
+    };
     hm.xdg.configFile."WebCord/config.json".source = ./webcord/config.json;
   };
 }

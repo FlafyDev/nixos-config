@@ -1,6 +1,7 @@
 {
   lib,
   elib,
+  config,
   ...
 }: let
   inherit (lib) mkOption types;
@@ -22,12 +23,28 @@ in {
 
     backgroundColor = mkOption {
       type = types.raw;
-      default = elib.mkColor 0 0 0 100;
       description = ''
         The color to use on top of the blur.
       '';
     };
+
+    borderColor.active = mkOption {
+      type = types.raw;
+      description = ''
+        The color to for active window border.
+      '';
+    };
+
+    borderColor.inactive = mkOption {
+      type = types.raw;
+      description = ''
+        The color to for inactive window border.
+      '';
+    };
   };
 
-  config.elib.enable = true;
+  config = {
+    elib.enable = true;
+    _module.args.theme = config.theme;
+  };
 }
