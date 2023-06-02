@@ -10,10 +10,6 @@
 
 @import url('https://luckfire.github.io/amoled-cord/src/amoled-cord.css');
 
-body {
-  background-color: @backgroundColor@ !important;
-}
-
 :root {
     /* --------- BASE THEME --------- */
     --blurple-replace: #7289DA;
@@ -64,3 +60,8 @@ body {
     --background-accent-3: rgb(15, 15, 15, 0.3);
     --background-floating-2: rgba(0, 0, 0, 0.2);
 }
+
+body {
+  background-color: @backgroundColor@ !important;
+}
+

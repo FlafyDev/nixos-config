@@ -7,7 +7,7 @@
   ...
 }: let
   cfg = config.display.hyprland;
-  inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
+  inherit (lib) mkEnableOption mkOption mkIf mkMerge types optionalAttrs;
 in {
   options.display.hyprland = {
     enable = mkEnableOption "hyprland";
@@ -20,17 +20,11 @@ in {
 
   config = mkMerge [
     {
-      inputs =
-        if cfg.followNixpkgs
-        then {
-          hyprland = {
-            url = "github:hyprwm/Hyprland/v0.25.0";
-            inputs.nixpkgs.follows = "nixpkgs";
-          };
-        }
-        else {
-          hyprland.url = "github:hyprwm/Hyprland/v0.25.0";
-        };
+      inputs.hyprland =
+        {url = "github:hyprwm/Hyprland/v0.25.0";}
+        // (optionalAttrs cfg.followNixpkgs {
+          inputs.nixpkgs.follows = "nixpkgs";
+        });
     }
     (mkIf cfg.enable {
       osModules = [
