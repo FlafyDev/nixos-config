@@ -36,8 +36,8 @@ in {
               (old.patches or [])
               ++ (
                 map
-                (file: "${combinedManager}/${file}")
-                (lib.attrNames (lib.filterAttrs (_: type: type == "regular") (builtins.readDir combinedManager)))
+                (file: "${combinedManager}/nix-patches/${file}")
+                (lib.attrNames (lib.filterAttrs (_: type: type == "regular") (builtins.readDir "${combinedManager}/nix-patches")))
               );
           });
         })
