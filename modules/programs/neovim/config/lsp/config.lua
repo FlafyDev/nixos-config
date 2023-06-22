@@ -82,7 +82,7 @@ local on_attach = function(client, bufnr)
       group = augroup,
       buffer = bufnr,
       callback = function()
-        lsp_format(bufnr)
+        -- lsp_format(bufnr)
       end,
     })
   end
@@ -349,7 +349,7 @@ flutter_tools.setup {
   widget_guides = {
     enabled = true,
   },
-  flutter_path = "/nix/store/20xp1y63bmgc1l1ips6mcq62ggs8qv2x-flutter-wrapped-sdk-links/bin/flutter",
+  -- flutter_path = "/nix/store/20xp1y63bmgc1l1ips6mcq62ggs8qv2x-flutter-wrapped-sdk-links/bin/flutter",
   -- flutter_lookup_cmd = "dirname $(which flutter)";
 }
 

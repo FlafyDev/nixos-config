@@ -37,7 +37,7 @@ in {
 
       os.nixpkgs.overlays = [
         (final: prev: {
-          hyprland = inputs.hyprland.packages.${prev.system}.default;
+          hyprland = inputs.hyprland.packages.${prev.system}.hyprland-nvidia;
           hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
             export SDL_VIDEODRIVER=wayland
             export _JAVA_AWT_WM_NONREPARENTING=1;

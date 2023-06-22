@@ -3,6 +3,7 @@
   lib,
   config,
   pkgs,
+  combinedManager,
   ...
 }: let
   cfg = config.programs.nix;
@@ -20,22 +21,24 @@ in {
         inputs.nixpkgs.follows = "nixpkgs";
       };
     }
-    (mkIf (cfg.enable && cfg.cm-patch) {
-      os.nixpkgs.overlays = [
-        (_final: prev: {
-          nix-super = inputs.nix-super.packages.${prev.system}.default;
-        })
-      ];
-    })
     (mkIf (cfg.enable && !cfg.cm-patch) {
       os.nixpkgs.overlays = [
         (_final: prev: {
-          nix = prev.nix.overrideAttrs (old: {
+          nix-patched = inputs.nix-super.packages.${prev.system}.default;
+        })
+      ];
+    })
+    (mkIf (cfg.enable && cfg.cm-patch) {
+      os.nixpkgs.overlays = [
+        (_final: prev: {
+          nix-patched = prev.nixVersions.nix_2_16.overrideAttrs (old: {
             patches =
               (old.patches or [])
-              ++ [
-                ../../combined-manager/nix-patches/evaluable-inputs.patch
-              ];
+              ++ (
+                map
+                (file: "${combinedManager}/${file}")
+                (lib.attrNames (lib.filterAttrs (_: type: type == "regular") (builtins.readDir combinedManager)))
+              );
           });
         })
       ];
@@ -43,7 +46,7 @@ in {
     (mkIf cfg.enable {
       os.nix = {
         enable = true;
-        package = pkgs.nix-super;
+        package = pkgs.nix-patched;
         registry = mapAttrs (_name: value: {flake = value;}) (with inputs; {
           inherit nixpkgs;
           default = nixpkgs;
@@ -69,6 +72,12 @@ in {
         };
       };
 
+      os.environment.systemPackages = [
+        (pkgs.flutter.override {
+          supportsAndroid = false;
+          supportsLinuxDesktop = true; # true by default
+        })
+      ];
       os.programs.command-not-found.enable = false;
       hm.programs.nix-index.enable = true;
     })

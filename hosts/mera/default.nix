@@ -8,15 +8,18 @@
     ./hardware-configuration.nix
   ];
 
-  unfree.allowed = ["nvidia-x11" "nvidia-settings"];
+  unfree.allowed = ["nvidia-x11" "nvidia-settings" "nvidia-persistenced"];
 
   os = {
+    environment.sessionVariables.LIBVA_DRIVER_NAME = "nvidia";
+    # environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "nvidia";
+
     time.timeZone = "Israel";
     networking.hostName = "mera";
     # systemd.services.NetworkManager-wait-online.enable = false;
     boot = {
       kernelPackages = pkgs.linuxPackages_6_1;
-      # blacklistedKernelModules = ["nouveau"];
+      blacklistedKernelModules = ["nouveau"];
       supportedFilesystems = ["ntfs"];
       # kernelPatches = [
       #   {
@@ -27,9 +30,6 @@
       #     '';
       #   }
       # ];
-      plymouth = {
-        enable = true;
-      };
       loader = {
         # systemd-boot.enable = true;
         efi = {
@@ -38,7 +38,6 @@
         };
         grub = {
           enable = true;
-          version = 2;
           devices = ["nodev"];
           efiSupport = true;
           useOSProber = true;
@@ -75,17 +74,26 @@
     boot.kernelParams = [
       # "nouveau.modeset=1"
       "video=HDMI-A-1:1920x1080@60"
+      "nohibernate"
     ];
 
     hardware.nvidia = {
+      open = false;
       modesetting.enable = true;
-      powerManagement.enable = false;
+      powerManagement = {
+        enable = true;
+        finegrained = true;
+      };
+      nvidiaSettings = false;
+      nvidiaPersistenced = true;
+      forceFullCompositionPipeline = true;
+      package = osConfig.boot.kernelPackages.nvidiaPackages.stable;
       prime = {
         offload.enable = true;
+        offload.enableOffloadCmd = true;
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
       };
-      package = osConfig.boot.kernelPackages.nvidiaPackages.latest;
     };
     services.xserver = {
       videoDrivers = ["nvidia"];
@@ -119,6 +127,10 @@
 
       opengl = {
         enable = true;
+        driSupport = true;
+        driSupport32Bit = true;
+        extraPackages = with pkgs; [nvidia-vaapi-driver];
+        extraPackages32 = with pkgs.pkgsi686Linux; [nvidia-vaapi-driver];
         # extraPackages = with pkgs; [
         #   intel-media-driver
         #   # vaapiIntel

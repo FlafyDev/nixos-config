@@ -15,13 +15,13 @@ in {
     updateSystem = pkgs.writeShellScript "updateSystem" ''
       case $2 in
         fast)
-          nixos-rebuild test --fast --flake .?submodules=1 --impure -L "''${@:2}"
+          nixos-rebuild test --fast --flake --impure -L "''${@:2}"
           ;;
         boot)
-          nixos-rebuild boot --flake .?submodules=1 "''${@:2}"
+          nixos-rebuild boot --flake "''${@:2}"
           ;;
         *)
-          nixos-rebuild switch --flake .?submodules=1 "''${@:2}"
+          nixos-rebuild switch --flake "''${@:2}"
           ;;
       esac
     '';
@@ -95,6 +95,9 @@ in {
         tree
         # cp-maps
         # project-creator
+        btop
+        wf-recorder
+        slurp
         vdpauinfo
         pciutils
         binutils

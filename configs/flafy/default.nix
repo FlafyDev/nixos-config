@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   users.main = "flafy";
 
   display.greetd.enable = true;
@@ -9,6 +9,8 @@
   assets.enable = true;
 
   themes.themeName = "amoled";
+
+  games.enable = true;
 
   programs.firefox.enable = true;
   gtk.enable = true;
