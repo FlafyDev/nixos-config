@@ -106,7 +106,6 @@ in {
               enable_swallow=false
               render_ahead_of_time=false
               swallow_regex=^(foot)$
-              no_direct_scanout=true
               animate_manual_resizes=false
             }
 

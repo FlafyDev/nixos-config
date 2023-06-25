@@ -2,14 +2,17 @@
   "nodes": {
     "assets": {
       "locked": {
-        "lastModified": 1685530283,
-        "narHash": "sha256-4973bMtAG1dAd01J12m09FNp/0pEOTX7ipCO5kQLVIs=",
-        "path": "/mnt/general/repos/flafydev/assets",
-        "type": "path"
+        "lastModified": 1687521903,
+        "narHash": "sha256-9SEmRsVq+/o5MLq0T8H5sW8S9lAQNgB/UbZ48yepbnI=",
+        "owner": "FlafyDev",
+        "repo": "assets",
+        "rev": "031b8e9895e4eae168a41a7c52f567732eb54e2e",
+        "type": "github"
       },
       "original": {
-        "path": "/mnt/general/repos/flafydev/assets",
-        "type": "path"
+        "owner": "FlafyDev",
+        "repo": "assets",
+        "type": "github"
       }
     },
     "bufresize-nvim": {
@@ -99,11 +102,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1685865037,
-        "narHash": "sha256-atwfu0IUL2f6oWFt3KG1uqPTj7DxUoYW7+KVOv+o5DY=",
+        "lastModified": 1687506590,
+        "narHash": "sha256-CSou9mrG9h/WVRjCptfTrATVxvhmtdQXElmWV/ZkrAs=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "57ed23cd29e7b72518e19d2917e2b2880a94162c",
+        "rev": "d2b6f2d154bf6b27a93ed895392f80c503df7cfa",
         "type": "github"
       },
       "original": {
@@ -230,15 +233,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1685873149,
-        "narHash": "sha256-BRWgg+PZRxueygq6lqVVB72YCIm3Kl2mMcvqKa8UejI=",
+        "lastModified": 1687412861,
+        "narHash": "sha256-Z/g0wbL68C+mSGerYS2quv9FXQ1RRP082cAC0Bh4vcs=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "962cc00249dd42d748d9b9e7109521978aab8a48",
+        "rev": "e603dc5f061ca1d8a19b3ede6a8cf9c9fcba6cdc",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }

@@ -10,7 +10,7 @@ in
     lockFile = ./flake.lock;
 
     initialInputs = {
-      nixpkgs.url = "github:nixos/nixpkgs";
+      nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
       home-manager = {
         url = "github:nix-community/home-manager";
         inputs.nixpkgs.follows = "nixpkgs";
@@ -18,6 +18,14 @@ in
     };
 
     configurations = {
+      ope = {
+        system = "x86_64-linux";
+        modules = [
+          ./modules
+          ./hosts/ope
+          ./configs/flafy
+        ];
+      };
       mera = {
         system = "x86_64-linux";
         modules = [
