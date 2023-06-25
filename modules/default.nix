@@ -1,23 +1,25 @@
 {lib, ...}: let
+  inherit (lib) attrNames optional foldlAttrs hasSuffix;
+  inherit (builtins) elem readDir;
+
   concatPaths = path1: path2: (toString path1) + "/" + (toString path2);
   getModules = ignoreDefault: path: let
-    files = builtins.readDir path;
-    moduleDirectory =
-      if ignoreDefault
-      then null
-      else lib.lists.findFirst (f: f == "default.nix") null (lib.attrsets.attrNames files);
+    files = readDir path;
+    isModuleDirectory = !ignoreDefault && elem "default.nix" (attrNames files);
   in
-    if moduleDirectory != null
-    then [(concatPaths path moduleDirectory)]
+    if isModuleDirectory
+    then [(concatPaths path "default.nix")]
     else
-      lib.lists.flatten (lib.attrsets.mapAttrsToList (name: type:
-        if (type == "regular")
-        then
-          if (ignoreDefault && name == "default.nix")
-          then []
-          else [(concatPaths path name)]
-        else getModules false (concatPaths path name))
-      files);
+      foldlAttrs (
+        acc: name: type:
+          acc
+          ++ (
+            if (type == "regular")
+            then optional (name != "default.nix" && hasSuffix "nix" name) (concatPaths path name)
+            else getModules false (concatPaths path name)
+          )
+      ) []
+      files;
 in {
   imports = getModules true ./.;
 }
