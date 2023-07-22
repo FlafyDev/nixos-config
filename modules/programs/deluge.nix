@@ -12,12 +12,13 @@ in {
   };
 
   config = mkIf cfg.enable {
+    users.groups = ["deluge"];
     os.services.deluge = {
       enable = true;
       web.enable = false;
       declarative = true;
       config = {
-        download_location = "/mnt/general/downloads";
+        download_location = "/share/downloads";
         allow_remote = true;
         daemon_port = 58846;
         listen_ports = [6881 6889];

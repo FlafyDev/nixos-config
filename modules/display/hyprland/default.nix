@@ -35,6 +35,33 @@ in {
         inputs.hyprland.homeManagerModules.default
       ];
 
+      os.environment.systemPackages = [
+        pkgs.sway
+        # (( pkgs.sway.override {
+        #   wlroots =
+        #     pkgs.wlroots.overrideAttrs
+        #     (old: {
+        #       version = "0.17.0-dev";
+        #
+        #       src = pkgs.fetchFromGitLab {
+        #         domain = "gitlab.freedesktop.org";
+        #         owner = "wlroots";
+        #         repo = "wlroots";
+        #         rev = "6830bfc17fd94709e2cdd4da0af989f102a26e59";
+        #         hash = "sha256-GGEjkQO9m7YLYIXIXM76HWdhjg4Ye+oafOtyaFAYKI4=";
+        #       };
+        #
+        #       buildInputs =
+        #         old.buildInputs
+        #         ++ (with pkgs; [
+        #           hwdata
+        #           libdisplay-info-new
+        #           libliftoff-new
+        #         ]);
+        #     });
+        # } ))
+      ];
+
       os.nixpkgs.overlays = [
         (final: prev: {
           hyprland = inputs.hyprland.packages.${prev.system}.hyprland-nvidia;
@@ -103,7 +130,7 @@ in {
 
             misc {
               vfr = true
-              enable_swallow=false
+              enable_swallow=true
               render_ahead_of_time=false
               swallow_regex=^(foot)$
               animate_manual_resizes=false
@@ -194,12 +221,14 @@ in {
               always_center_master=false
             }
 
+            exec-once=${pkgs.mako}/bin/mako
             exec-once=${pkgs.swaybg}/bin/swaybg --image ${theme.wallpaper}
             # exec-once=[workspace special] firefox
             exec-once=${pkgs.foot}/bin/foot --server
-            exec-once=exec ${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store
             exec-once=hyprctl setcursor Bibata-Modern-Ice 24
 
+            exec-once = ${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store #Stores only text data
+            exec-once = ${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store #Stores only image data
 
             bind=,Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png
             bind=ALT,S,fullscreen

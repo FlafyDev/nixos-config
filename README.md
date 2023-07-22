@@ -10,6 +10,6 @@ This config uses [Combined Manager](https://github.com/FlafyDev/combined-manager
 
 ### Declarative TODO
 - Firefox Extensions settings (Sidebery, remember bitwarden account, enable extensions by default)
-- Vencord settings
 - Secrets (SSH keys)
+- Use as little Home Manager as possible
 

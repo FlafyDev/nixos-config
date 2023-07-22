@@ -38,12 +38,6 @@ in {
             autopair
             done
           ]);
-        shellAliases = {
-          ll = "${pkgs.exa}/bin/exa -la";
-          ls = "${pkgs.exa}/bin/exa";
-          batp = "${pkgs.bat}/bin/bat -P";
-          cpwd = "pwd | wl-copy";
-        };
       };
     };
   };

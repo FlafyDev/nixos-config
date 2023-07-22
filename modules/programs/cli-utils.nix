@@ -69,7 +69,13 @@ in {
     updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} fast "$@")'';
   in
     mkIf cfg.enable {
-      os.environment.systemPackages = with pkgs; [
+      os.environment.systemPackages = with pkgs; let
+        bin = writeShellScriptBin;
+      in [
+        (bin "fl" ''${exa}/bin/exa -la "$@"'') 
+        (bin "batp" ''${bat}/bin/bat -P "$@"'') 
+        (bin "cpwd" "pwd | wl-copy") 
+
         update
         updateBoot
         updateFast
@@ -97,6 +103,8 @@ in {
         # project-creator
         btop
         wf-recorder
+        libnotify
+        xdg-utils
         slurp
         vdpauinfo
         pciutils

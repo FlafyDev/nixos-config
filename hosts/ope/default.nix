@@ -9,6 +9,10 @@
   ];
 
   os = {
+    environment.systemPackages = with pkgs; [
+      vulkan-validation-layers
+    ];
+
     # Time and locale
     time.timeZone = "Asia/Jerusalem";
     i18n.defaultLocale = "en_IL";
@@ -61,7 +65,6 @@
 
     services.upower.enable = true;
 
-
     boot.kernelParams = [
       "video=HDMI-A-1:1920x1080@60"
     ];
@@ -78,6 +81,11 @@
         };
       };
       opentabletdriver.enable = true;
+      opengl = {
+        enable = true;
+        driSupport = true;
+        driSupport32Bit = true;
+      };
     };
 
     security = {
@@ -96,7 +104,6 @@
       tlp = {
         enable = false;
       };
-
     };
   };
 

@@ -21,15 +21,19 @@ in {
           webcord = prev.webcord.overrideAttrs (old: {
             patches = (old.patches or []) ++ [./webcord/unwritable-config.patch];
           });
-          
+
           # Patch vencord
           vencord-web-extension = prev.vencord-web-extension.overrideAttrs (old: {
-            patches = (old.patches or []) ++ [(prev.runCommand "vencord-settings-patch" {
-              nativeBuildInputs = with prev; [ jq ];
-            } ''
-              export settings=$(jq -c '.settings' < ${./vencord/exported-settings.json})
-              substituteAll ${./vencord/declarative-settings.patch} $out
-            '')];
+            patches =
+              (old.patches or [])
+              ++ [
+                (prev.runCommand "vencord-settings-patch" {
+                    nativeBuildInputs = with prev; [jq];
+                  } ''
+                    export settings=$(jq -c '.settings' < ${./vencord/exported-settings.json})
+                    substituteAll ${./vencord/declarative-settings.patch} $out
+                  '')
+              ];
           });
         };
       })

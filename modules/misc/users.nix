@@ -13,6 +13,12 @@ in {
         List of package names that are allowed to be installed dispite being unfree.
       '';
     };
+    groups = mkOption {
+      type = with types; listOf str;
+      description = ''
+        Extra groups the main user will be apart of.
+      '';
+    };
   };
 
   config = {
@@ -26,16 +32,17 @@ in {
         uid = 1000;
         hashedPassword = "$y$j9T$lBa.z5DPjmFIpGgdlajll.$M3ioCotjdUW178tOJpGT7OtK../klyeSZQV2zjYblf8";
         isNormalUser = true;
-        extraGroups = [
-          "wheel"
-          "video"
-          "networkmanager"
-          "adbusers"
-          "scanner"
-          "lp"
-          "docker"
-          "deluge"
-        ];
+        extraGroups =
+          [
+            "wheel"
+            "video"
+            "networkmanager"
+            "adbusers"
+            "scanner"
+            "lp"
+            "docker"
+          ]
+          ++ cfg.groups;
       };
       users.mutableUsers = false;
     };

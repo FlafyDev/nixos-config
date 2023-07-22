@@ -1,6 +1,7 @@
 _: {
   users.main = "flafy";
 
+  android.enable = true;
   display.greetd.enable = true;
   display.hyprland.enable = true;
   fonts.enable = true;
@@ -10,14 +11,17 @@ _: {
 
   themes.themeName = "amoled";
 
+  os.virtualisation.docker.enable = true;
+
   games.enable = true;
 
   programs.firefox.enable = true;
   gtk.enable = true;
   programs.mpv.enable = true;
+  programs.vscode.enable = true;
   programs.neovim.enable = true;
   programs.cli-utils.enable = true;
-  programs.deluge.enable = true;
+  programs.transmission.enable = true;
   programs.direnv.enable = true;
   programs.fish.enable = true;
   programs.foot.enable = true;

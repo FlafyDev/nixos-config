@@ -15,7 +15,7 @@ in {
     os.nixpkgs.overlays = [
       (_final: prev: {
         adwaita-dark-amoled = prev.callPackage ./adwaita-dark-amoled.nix {};
-        colloid-dark-edit = prev.callPackage ./colloid-dark-edit {};
+        colloid-dark-edit = prev.callPackage ./colloid-dark-edit.nix {};
       })
     ];
     hm = {
@@ -48,10 +48,10 @@ in {
         theme = {
           # name = "Tokyonight-Moon-BL"; # Moon = Night ?
           # package = pkgs.tokyo-night-gtk;
-          name = "Adwaita-dark-amoled"; # Moon = Night ?
-          package = pkgs.adwaita-dark-amoled;
-          # name = "Colloid-Dark-edit"; # Moon = Night ?
-          # package = pkgs.colloid-dark-edit;
+          # name = "Adwaita-dark-amoled"; # Moon = Night ?
+          # package = pkgs.adwaita-dark-amoled;
+          name = "Colloid-Dark-Edit"; # Moon = Night ?
+          package = pkgs.colloid-dark-edit;
         };
       };
     };

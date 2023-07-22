@@ -126,7 +126,7 @@
                 "enabled": false
             },
             "FakeNitro": {
-                "enabled": true,
+                "enabled": false,
                 "enableEmojiBypass": true,
                 "enableStickerBypass": true,
                 "enableStreamQualityBypass": true,
