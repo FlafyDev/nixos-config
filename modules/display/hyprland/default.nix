@@ -21,22 +21,27 @@ in {
   config = mkMerge [
     {
       inputs.hyprland =
-        {url = "github:hyprwm/Hyprland/v0.25.0";}
+        {url = "github:hyprwm/Hyprland/v0.27.2";}
         // (optionalAttrs cfg.followNixpkgs {
           inputs.nixpkgs.follows = "nixpkgs";
         });
+      inputs.flutter_background_bar = {
+        url = "github:flafydev/flutter_background_bar";
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
     }
     (mkIf cfg.enable {
       osModules = [
-        inputs.hyprland.nixosModules.default
+        # inputs.hyprland.nixosModules.default
       ];
 
       hmModules = [
-        inputs.hyprland.homeManagerModules.default
+        # inputs.hyprland.homeManagerModules.default
       ];
 
       os.environment.systemPackages = [
         pkgs.sway
+        pkgs.flutter-background-bar
         # (( pkgs.sway.override {
         #   wlroots =
         #     pkgs.wlroots.overrideAttrs
@@ -63,8 +68,9 @@ in {
       ];
 
       os.nixpkgs.overlays = [
+        inputs.flutter_background_bar.overlays.default
         (final: prev: {
-          hyprland = inputs.hyprland.packages.${prev.system}.hyprland-nvidia;
+          hyprland = inputs.hyprland.packages.${prev.system}.hyprland;
           hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
             export SDL_VIDEODRIVER=wayland
             export _JAVA_AWT_WM_NONREPARENTING=1;
@@ -78,6 +84,11 @@ in {
             export GDK_BACKEND="wayland";
             export TERM="foot";
             export NIXOS_OZONE_WL="1";
+
+            # Temporary until Flutter Background Bar has a config file
+            export FB_DESKTOP_BACKGROUND=${theme.wallpaper};
+            export FB_OS_LOGO=${./icon.png};
+            export FB_DESKTOP_BACKGROUND_TOP=${theme.wallpaperTop};
             ${inputs.hyprland.packages.${prev.system}.default}/bin/Hyprland "$@"
           '';
           hyprlandPlugins = final.callPackage ./plugins {};
@@ -104,7 +115,7 @@ in {
         ];
         wayland.windowManager.hyprland = {
           enable = true;
-          recommendedEnvironment = true;
+          # recommendedEnvironment = true;
           xwayland.enable = true;
           plugins = with pkgs.hyprlandPlugins; [
             hyprlens
@@ -119,6 +130,8 @@ in {
             monitor=eDP-1,disable
             monitor=HDMI-A-1,1920x1080@60,0x0,1
             monitor=HDMI-A-1,addreserved,0,40,0,0
+            monitor=HDMI-A-2,1920x1080@60,0x0,1
+            monitor=HDMI-A-2,addreserved,0,40,0,0
 
             plugin {
               hyprlens {
@@ -223,6 +236,7 @@ in {
 
             exec-once=${pkgs.mako}/bin/mako
             exec-once=${pkgs.swaybg}/bin/swaybg --image ${theme.wallpaper}
+            exec-once=${pkgs.flutter-background-bar}/bin/flutter_background_bar
             # exec-once=[workspace special] firefox
             exec-once=${pkgs.foot}/bin/foot --server
             exec-once=hyprctl setcursor Bibata-Modern-Ice 24

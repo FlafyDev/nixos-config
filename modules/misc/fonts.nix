@@ -55,7 +55,7 @@ in {
   in
     mkIf cfg.enable {
       unfree.allowed = ["corefonts"];
-      os.fonts.fonts = fonts;
+      os.fonts.packages = fonts;
       hm.home.packages = fonts;
       hm.fonts.fontconfig.enable = true;
     };

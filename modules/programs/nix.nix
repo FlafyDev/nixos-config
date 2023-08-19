@@ -16,9 +16,15 @@ in {
 
   config = mkMerge [
     {
-      inputs.nix-super = {
-        url = "github:privatevoid-net/nix-super";
-        inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nix-super = {
+          url = "github:privatevoid-net/nix-super";
+          inputs.nixpkgs.follows = "nixpkgs";
+        };
+        nix-index-database = {
+          url = "github:Mic92/nix-index-database";
+          inputs.nixpkgs.follows = "nixpkgs";
+        };
       };
     }
     (mkIf (cfg.enable && !cfg.cm-patch) {
@@ -44,6 +50,12 @@ in {
       ];
     })
     (mkIf cfg.enable {
+      osModules = [
+        inputs.nix-index-database.nixosModules.nix-index
+      ];
+      hmModules = [
+        inputs.nix-index-database.hmModules.nix-index
+      ];
       os.nix = {
         enable = true;
         package = pkgs.nix-patched;

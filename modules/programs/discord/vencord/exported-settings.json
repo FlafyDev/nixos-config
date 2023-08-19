@@ -60,7 +60,7 @@
                 "enabled": true
             },
             "AnonymiseFileNames": {
-                "enabled": true
+                "enabled": false
             },
             "WebRichPresence (arRPC)": {
                 "enabled": false

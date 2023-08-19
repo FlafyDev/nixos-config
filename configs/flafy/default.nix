@@ -11,12 +11,12 @@ _: {
 
   themes.themeName = "amoled";
 
-  os.virtualisation.docker.enable = true;
-
+  vm.enable = true;
   games.enable = true;
 
   programs.firefox.enable = true;
   gtk.enable = true;
+  programs.gnome.enable = false;
   programs.mpv.enable = true;
   programs.vscode.enable = true;
   programs.neovim.enable = true;

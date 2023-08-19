@@ -1,0 +1,17 @@
+00:00:00.000 [INFO] [libseat] [libseat/backend/seatd.c:64] Could not connect to socket /run/seatd.sock: No such file or directory
+00:00:00.000 [INFO] [libseat] [libseat/libseat.c:76] Backend 'seatd' failed to open seat, skipping
+00:00:00.004 [INFO] [libseat] [libseat/libseat.c:73] Seat opened with backend 'logind'
+00:00:00.004 [INFO] [backend/session/session.c:109] Successfully loaded libseat session
+00:00:00.004 [ERROR] [libseat] [libseat/backend/logind.c:129] Could not stat path '/dev/dri/by-path/pci-0000'
+00:00:00.004 [ERROR] [backend/session/session.c:321] Failed to open device: '/dev/dri/by-path/pci-0000': No such file or directory
+00:00:00.004 [ERROR] [backend/session/session.c:410] Unable to open /dev/dri/by-path/pci-0000 as DRM device
+00:00:00.004 [ERROR] [libseat] [libseat/backend/logind.c:129] Could not stat path '03'
+00:00:00.004 [ERROR] [backend/session/session.c:321] Failed to open device: '03': No such file or directory
+00:00:00.004 [ERROR] [backend/session/session.c:410] Unable to open 03 as DRM device
+00:00:00.004 [ERROR] [libseat] [libseat/backend/logind.c:129] Could not stat path '00.0-card'
+00:00:00.004 [ERROR] [backend/session/session.c:321] Failed to open device: '00.0-card': No such file or directory
+00:00:00.004 [ERROR] [backend/session/session.c:410] Unable to open 00.0-card as DRM device
+00:00:00.004 [ERROR] [backend/backend.c:217] Found 0 GPUs, cannot create backend
+00:00:00.004 [ERROR] [backend/backend.c:383] Failed to open any DRM device
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  wlr_backend_autocreate() failed!

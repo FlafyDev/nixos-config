@@ -14,6 +14,14 @@ in {
       '';
     };
 
+    wallpaperTop = mkOption {
+      type = types.raw;
+      description = ''
+        The top layer of the wallpaper.
+        Usually used to simulate depth.
+      '';
+    };
+
     wallpaperBlurred = mkOption {
       type = types.raw;
       description = ''
