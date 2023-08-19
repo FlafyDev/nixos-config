@@ -8,12 +8,9 @@
     ./hardware-configuration.nix
   ];
 
-  os = {
-    # environment.sessionVariables = {
-    #   DRI_PRIME="pci-0000_12_00_0";
-    #   WLR_DRM_DEVICES=''$(readlink -f "/dev/dri/by-path/pci-0000:12:00.0-card")'';
-    # };
+  vm.gpu = ["1002:73df" "1002:ab28"];
 
+  os = {
     environment.systemPackages = let
       offload-gpu = pkgs.writeShellScriptBin "offload-gpu" ''
         export DRI_PRIME="pci-0000_03_00_0"
