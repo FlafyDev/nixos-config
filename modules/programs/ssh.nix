@@ -10,7 +10,7 @@ in {
     enable = mkEnableOption "ssh";
 
     server = mkOption {
-      type = with types; listOf bool;
+      type = with types; bool;
       default = false;
       description = "Whether to start an SSH server.";
     };
@@ -18,7 +18,7 @@ in {
 
   config = mkMerge [
     (mkIf (cfg.enable && cfg.server) {
-      services.openssh = {
+      os.services.openssh = {
         enable = true;
         # require public key authentication for better security
         settings.PasswordAuthentication = false;

@@ -33,7 +33,7 @@ in
         modules = [
           ./modules
           ./hosts/mera
-          ./configs/flafy
+          ./configs/server
         ];
       };
     };

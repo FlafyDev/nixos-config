@@ -15,6 +15,7 @@ in {
     };
     groups = mkOption {
       type = with types; listOf str;
+      default = [];
       description = ''
         Extra groups the main user will be apart of.
       '';
