@@ -26,7 +26,7 @@ in {
       unfree.allowed = ["unityhub"];
       hmModules = [inputs.guifetch.homeManagerModules.default];
       hm.programs.guifetch = {
-        enable = true;
+        enable = false; # TODO: enable this
         config = {
           backgroundColor = "${theme.backgroundColor.toHexARGB}";
         };

@@ -27,7 +27,7 @@ in {
     (mkIf cfg.enable {
       os.environment.systemPackages = [
         pkgs.sway
-        pkgs.flutter-background-bar
+        # pkgs.flutter-background-bar # TODO: uncomment this
         # (( pkgs.sway.override {
         #   wlroots =
         #     pkgs.wlroots.overrideAttrs
@@ -105,6 +105,7 @@ in {
             pactl = "${pkgs.pulseaudio}/bin/pactl";
             pamixer = "${pkgs.pamixer}/bin/pamixer";
             compileWindowRule = window: rules: (builtins.concatStringsSep "\n" (map (rule: "windowrulev2=${rule},${window}") rules));
+            # exec-once=${pkgs.flutter-background-bar}/bin/flutter_background_bar
           in ''
             # monitor=eDP-1,1920x1080@60,1920x0,1
             monitor=eDP-1,disable
@@ -218,7 +219,6 @@ in {
 
             exec-once=${pkgs.mako}/bin/mako
             exec-once=${pkgs.swaybg}/bin/swaybg --image ${theme.wallpaper}
-            exec-once=${pkgs.flutter-background-bar}/bin/flutter_background_bar
             # exec-once=[workspace special] firefox
             exec-once=${pkgs.foot}/bin/foot --server
             exec-once=hyprctl setcursor Bibata-Modern-Ice 24
