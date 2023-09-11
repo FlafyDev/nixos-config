@@ -11,6 +11,7 @@ _: {
 
   themes.themeName = "amoled";
 
+  localhosts.enable = true;
   vm.enable = true;
   games.enable = true;
 

@@ -169,9 +169,11 @@
                 "saveZoomValues": true,
                 "preventCarouselFromClosingOnClick": true,
                 "invertScroll": true,
-                "zoom": 2,
-                "size": 100,
-                "zoomSpeed": 0.5
+                "zoom": 2.9,
+                "size": 460,
+                "zoomSpeed": 0.5,
+                "nearestNeighbour": false,
+                "square": false
             },
             "InvisibleChat": {
                 "enabled": false

@@ -37,6 +37,7 @@ in {
           [
             "wheel"
             "video"
+            "audio"
             "networkmanager"
             "adbusers"
             "scanner"

@@ -172,16 +172,15 @@ in {
           }
           {
             type = "lua";
-            plugin = nvim-treesitter.withPlugins (_: nvim-treesitter.allGrammars);
-            # plugin = nvim-treesitter.withPlugins (
-            #   _:
-            #     lib.filter (
-            #       g:
-            #       # Crashes neovim. Blacklist for now.
-            #         g.pname != "nix-grammar"
-            #     )
-            #     nvim-treesitter.allGrammars
-            # );
+            # plugin = nvim-treesitter.withPlugins (_: nvim-treesitter.allGrammars);
+            plugin = nvim-treesitter.withPlugins (
+              _:
+                lib.filter (
+                  # Slows neovim on indent. Blacklist for now.
+                  g: g.pname != "dart-grammar"
+                )
+                nvim-treesitter.allGrammars
+            );
             config = ''
               require('nvim-treesitter.configs').setup {
                 indent = { enable = true },

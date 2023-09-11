@@ -18,9 +18,12 @@ in {
       (_final: prev: {
         webcord-vencord = prev.webcord-vencord.override {
           # Patch webcord
-          webcord = prev.webcord.overrideAttrs (old: {
+          webcord = (prev.callPackage ./webcord/screenshare-audio.nix {}).overrideAttrs (old: {
             patches = (old.patches or []) ++ [./webcord/unwritable-config.patch];
           });
+          # webcord = prev.webcord.overrideAttrs (old: rec {
+          #   patches = (old.patches or []) ++ [./webcord/unwritable-config.patch];
+          # });
 
           # Patch vencord
           vencord-web-extension = prev.vencord-web-extension.overrideAttrs (old: {

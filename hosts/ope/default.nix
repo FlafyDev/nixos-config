@@ -66,7 +66,9 @@
         unbind_gpu "$gpu"
 
         # Put the system to sleep for 3 seconds
-        rtcwake -m mem -s 3
+        if [ $# -lt 2 ]; then
+          rtcwake -m mem -s 3
+        fi
 
         # Wait for another 3 seconds
         sleep 3
@@ -102,6 +104,7 @@
     # Networking
     networking = {
       hostName = "ope";
+      interfaces.enp14s0.wakeOnLan.enable = true;
       networkmanager = {
         enable = true;
         # insertNameservers = ["1.1.1.1"];

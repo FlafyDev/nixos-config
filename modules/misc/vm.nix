@@ -20,7 +20,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = ["libvirtd" "vboxusers"];
+    users.groups = ["libvirtd"];
     os = {
       boot.initrd.kernelModules = [
         "vfio_pci"
@@ -57,9 +57,6 @@ in {
         virt-manager
         looking-glass-client
       ];
-
-      virtualisation.virtualbox.host.enable = true;
-      users.extraGroups.vboxusers.members = ["user-with-access-to-virtualbox"];
 
       virtualisation.docker.enable = true;
       virtualisation.libvirtd = {

@@ -72,7 +72,7 @@ in {
       os.environment.systemPackages = with pkgs; let
         bin = writeShellScriptBin;
       in [
-        (bin "fl" ''${exa}/bin/exa -la "$@"'') 
+        (bin "fl" ''${exa}/bin/exa -lga "$@"'') 
         (bin "batp" ''${bat}/bin/bat -P "$@"'') 
         (bin "cpwd" "pwd | wl-copy") 
 

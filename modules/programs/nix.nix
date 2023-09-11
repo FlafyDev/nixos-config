@@ -30,14 +30,14 @@ in {
     (mkIf (cfg.enable && !cfg.cm-patch) {
       os.nixpkgs.overlays = [
         (_final: prev: {
-          nix-patched = inputs.nix-super.packages.${prev.system}.default;
+          nix = inputs.nix-super.packages.${prev.system}.default;
         })
       ];
     })
     (mkIf (cfg.enable && cfg.cm-patch) {
       os.nixpkgs.overlays = [
         (_final: prev: {
-          nix-patched = prev.nixVersions.nix_2_16.overrideAttrs (old: {
+          nix = prev.nixVersions.nix_2_16.overrideAttrs (old: {
             patches =
               (old.patches or [])
               ++ (
@@ -58,7 +58,7 @@ in {
       ];
       os.nix = {
         enable = true;
-        package = pkgs.nix-patched;
+        # package = pkgs.nix-patched;
         registry = mapAttrs (_name: value: {flake = value;}) (with inputs; {
           inherit nixpkgs;
           default = nixpkgs;

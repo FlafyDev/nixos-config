@@ -11,34 +11,20 @@
 in {
   options.display.hyprland = {
     enable = mkEnableOption "hyprland";
-    followNixpkgs = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Follow nixpkgs";
-    };
   };
 
   config = mkMerge [
     {
-      inputs.hyprland =
-        {url = "github:hyprwm/Hyprland/v0.27.2";}
-        // (optionalAttrs cfg.followNixpkgs {
-          inputs.nixpkgs.follows = "nixpkgs";
-        });
+      inputs.hyprland = {
+        url = "github:hyprwm/Hyprland";
+        flake = false;
+      };
       inputs.flutter_background_bar = {
         url = "github:flafydev/flutter_background_bar";
         inputs.nixpkgs.follows = "nixpkgs";
       };
     }
     (mkIf cfg.enable {
-      osModules = [
-        # inputs.hyprland.nixosModules.default
-      ];
-
-      hmModules = [
-        # inputs.hyprland.homeManagerModules.default
-      ];
-
       os.environment.systemPackages = [
         pkgs.sway
         pkgs.flutter-background-bar
@@ -70,7 +56,10 @@ in {
       os.nixpkgs.overlays = [
         inputs.flutter_background_bar.overlays.default
         (final: prev: {
-          hyprland = inputs.hyprland.packages.${prev.system}.hyprland;
+          # hyprland = inputs.hyprland.packages.${prev.system}.hyprland;
+          hyprland = prev.hyprland.overrideAttrs (old: {
+            src = inputs.hyprland;
+          });
           hyprland-wrapped = prev.writeShellScriptBin "hyprland" ''
             export SDL_VIDEODRIVER=wayland
             export _JAVA_AWT_WM_NONREPARENTING=1;
@@ -89,22 +78,13 @@ in {
             export FB_DESKTOP_BACKGROUND=${theme.wallpaper};
             export FB_OS_LOGO=${./icon.png};
             export FB_DESKTOP_BACKGROUND_TOP=${theme.wallpaperTop};
-            ${inputs.hyprland.packages.${prev.system}.default}/bin/Hyprland "$@"
+            ${final.hyprland}/bin/Hyprland "$@"
           '';
           hyprlandPlugins = final.callPackage ./plugins {};
         })
       ];
 
       os = {
-        # No use to add Hyprland's cachix if we use our own Nixpkgs
-        nix.settings = mkIf (!cfg.followNixpkgs) {
-          trusted-public-keys = [
-            "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-          ];
-          substituters = [
-            "https://hyprland.cachix.org"
-          ];
-        };
         xdg.portal.enable = true;
         programs.hyprland.enable = true;
       };
@@ -184,17 +164,19 @@ in {
 
             decoration {
               rounding=0
-              blur=1
-              blur_xray=1
-              blur_size=17
-              blur_passes=3
-              blur_ignore_opacity=1
-              blur_new_optimizations=1
               drop_shadow=1
               shadow_range=20
               shadow_render_power=2
               col.shadow = rgba(00000044)
               shadow_offset=0 0
+              blur {
+                enabled=1
+                size=17
+                passes=3
+                ignore_opacity=1
+                xray=1
+                new_optimizations=1
+              }
             }
 
             bezier=mycurve,.32,.97,.53,.98

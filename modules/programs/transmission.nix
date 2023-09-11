@@ -20,6 +20,7 @@ in {
 
     os.services.transmission = {
       enable = true;
+      package = pkgs.transmission_4;
       settings = {
         download-dir = "/share/torrents/transmission/downloaded/";
         watch-dir = "/share/torrents/transmission/watch/";
