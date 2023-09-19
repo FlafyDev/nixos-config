@@ -28,7 +28,6 @@ in {
     hm.programs.mpv = {
       enable = true;
       enableFonts = true;
-      # package = mpv;
       config = {
         vo = "gpu";
         profile = "gpu-hq";

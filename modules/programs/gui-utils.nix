@@ -18,7 +18,7 @@ in {
       inputs = {
         guifetch = {
           url = "github:flafydev/guifetch";
-          inputs.nixpkgs.follows = "nixpkgs";
+          # inputs.nixpkgs.follows = "nixpkgs";
         };
       };
     }
@@ -26,7 +26,7 @@ in {
       unfree.allowed = ["unityhub"];
       hmModules = [inputs.guifetch.homeManagerModules.default];
       hm.programs.guifetch = {
-        enable = false; # TODO: enable this
+        enable = true;
         config = {
           backgroundColor = "${theme.backgroundColor.toHexARGB}";
         };

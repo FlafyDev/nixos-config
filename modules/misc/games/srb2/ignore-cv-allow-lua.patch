@@ -1,0 +1,13 @@
+diff --git a/src/command.c b/src/command.c
+index e1a4352..8b073df 100644
+--- a/src/command.c
++++ b/src/command.c
+@@ -2525,7 +2525,7 @@ static boolean CV_Immutable(const consvar_t *var)
+ 	{
+ 		if (!(var->flags & CV_ALLOWLUA))
+ 		{
+-			return true;
++			// return true;
+ 		}
+ 	}
+ 

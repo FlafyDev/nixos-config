@@ -56,6 +56,7 @@ in {
       environment.systemPackages = with pkgs; [
         virt-manager
         looking-glass-client
+        guestfs-tools
       ];
 
       virtualisation.docker.enable = true;

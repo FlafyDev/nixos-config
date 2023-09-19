@@ -69,6 +69,7 @@ in {
     updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} fast "$@")'';
   in
     mkIf cfg.enable {
+      unfree.allowed = ["unrar"];
       os.environment.systemPackages = with pkgs; let
         bin = writeShellScriptBin;
       in [
@@ -111,6 +112,8 @@ in {
         binutils
         intel-gpu-tools
         libva-utils
+        ffmpeg
+        unrar
         # nur.repos.mic92.noise-suppression-for-voice
       ];
     };

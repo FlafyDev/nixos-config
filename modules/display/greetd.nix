@@ -17,7 +17,7 @@ in {
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd \"offload-igpu hyprland\"";
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd \"offload-igpu Hyprland\"";
           user = hmConfig.home.username;
         };
       };

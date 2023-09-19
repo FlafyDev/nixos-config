@@ -48,25 +48,25 @@ in {
     _module.args.elib = pkgs.elib;
     os.nixpkgs.overlays = [
       (_final: prev: {
-        elib =
-          prev.lib
-          // {
-            mkColor = r: g: b: a: rec {
-              inherit r g b a;
-              hex = {
-                r = decToHex r;
-                g = decToHex g;
-                b = decToHex b;
-                a = decToHex a;
-              };
-              toHexRGB = hex.r + hex.g + hex.b;
-              toHexRGBA = hex.r + hex.g + hex.b + hex.a;
-              toHexARGB = hex.a + hex.r + hex.g + hex.b;
-              toHexA = hex.a;
-              toDecA = a;
-              toNormA = a / 255.0;
+        elib = {
+          mkColor = r: g: b: a: rec {
+            inherit r g b a;
+            hex = {
+              r = decToHex r;
+              g = decToHex g;
+              b = decToHex b;
+              a = decToHex a;
             };
+            toHexRGB = hex.r + hex.g + hex.b;
+            toHexRGBA = hex.r + hex.g + hex.b + hex.a;
+            toHexARGB = hex.a + hex.r + hex.g + hex.b;
+            toHexA = hex.a;
+            toDecA = a;
+            toNormA = a / 255.0;
           };
+          flPkgs = input: input.packages.${pkgs.system}.default; # flPkgs inputs.guifetch
+          flPkgs' = input: name: input.packages.${pkgs.system}.${name}; # flPkgs inputs.guifetch "guifetch"
+        };
       })
     ];
   };

@@ -1,16 +1,16 @@
 {pkgs, ...}: {
   users.main = "flafy";
 
-  os.services = {
-    xserver = {
-      enable = true;
-      dpi = 96;
-      videoDrivers = ["amdgpu"];
-      autorun = false;
-    };
-  };
-  os.services.xserver.desktopManager.plasma5.enable = true;
-  os.programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
+  # os.services = {
+  #   xserver = {
+  #     enable = true;
+  #     dpi = 96;
+  #     videoDrivers = ["amdgpu"];
+  #     autorun = false;
+  #   };
+  # };
+  # os.services.xserver.desktopManager.plasma5.enable = true;
+  # os.programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
 
   android.enable = true;
   display.greetd.enable = true;
@@ -19,6 +19,9 @@
   printers.enable = true;
 
   assets.enable = true;
+
+  secrets.enable = true;
+  secrets.autoBitwardenSession.enable = true;
 
   themes.themeName = "amoled";
 

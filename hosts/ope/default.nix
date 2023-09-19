@@ -123,7 +123,7 @@
     };
 
     boot = {
-      kernelPackages = pkgs.linuxPackages_6_4;
+      kernelPackages = pkgs.linuxPackages_latest;
       supportedFilesystems = ["ntfs"];
       loader = {
         # systemd-boot.enable = true;
@@ -157,15 +157,15 @@
         };
       };
       opentabletdriver.enable = true;
-      opengl = {
-        enable = true;
-        driSupport = true;
-        driSupport32Bit = true;
-        extraPackages = with pkgs; [
-          vaapiVdpau
-          libvdpau-va-gl
-        ];
-      };
+      # opengl = {
+      #   enable = true;
+      #   driSupport = true;
+      #   driSupport32Bit = true;
+      #   extraPackages = with pkgs; [
+      #     vaapiVdpau
+      #     libvdpau-va-gl
+      #   ];
+      # };
     };
 
     security = {
