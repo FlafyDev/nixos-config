@@ -42,8 +42,8 @@ in {
       # remotePlay.openFirewall = true;
       # dedicatedServer.openFirewall = true;
     };
-    hm.wayland.windowManager.hyprland.settings.exec-once = [
-      ''env DISPLAY=:${toString config.display.hyprland.headlessXorg.num} steam -login flafythrow $(getPassword flafythrow)''
+    hm.wayland.windowManager.hyprland.settings.exec-once = mkIf cfg.autoLaunchSteam.enable [
+      ''env DISPLAY=:${toString config.display.hyprland.headlessXorg.num} steam -login flafythrow $(get-password "flafythrow steam")''
     ];
 
     hm.xdg.configFile."retroarch/retroarch.cfg".source = ./retroarch.cfg;
@@ -70,14 +70,19 @@ in {
           # Undertale
           ''~/Games/wine-prefixes/undertale/drive_c/users/flafy/AppData/Local/UNDERTALE''
           # Sonic Robo Blast 2
+          ''~/.srb2/addons''
+          ''~/.srb2/autoexec.cfg''
           ''~/.srb2/config.cfg''
+          ''~/.srb2/custom_gamedata.dat''
+          ''~/.srb2/custom_gamedata1.ssg''
           ''~/.srb2/gamedata.dat''
           ''~/.srb2/srb2sav1.ssg''
-          ''~/.srb2/addons''
           # TheXTech SMBX
-          ''/home/flafy/Games/data/windows/thextech-smbx/settings''
+          ''~/Games/data/windows/thextech-smbx/settings''
           # Pokemon Fire Red
-          ''/home/flafy/.config/retroarch/saves/Pokemon\ -\ Fire\ Red\ Version\ \(U\)\ \(V1.1\).srm''
+          ''~/.config/retroarch/saves/Pokemon\ -\ Fire\ Red\ Version\ \(U\)\ \(V1.1\).srm''
+          # Baldur's Gate 3
+          ''~/Games/wine-prefixes/baldurs-gate-3/pfx/drive_c/users/Public/Documents/OnlineFix/1086940''
         ];
       in
         pkgs.writeShellScriptBin "backup-game-saves" ''
@@ -246,7 +251,6 @@ in {
               (sloth.concat' sloth.homeDir ''/.steam'')
             ];
           };
-          # Requires steam running
           spelunky-2 = bubbleWrapGame {
             data = "windows/spelunky-2";
             winePrefix = "spelunky-2";

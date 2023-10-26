@@ -48,6 +48,7 @@ vim.opt.expandtab = true;
 vim.opt.number = true;
 vim.opt.relativenumber = true;
 vim.opt.laststatus = 3;
+-- vim.opt.textwidth = 120;
 
 vim.o.guifont = "FiraCode Nerd Font Mono:h8";
 

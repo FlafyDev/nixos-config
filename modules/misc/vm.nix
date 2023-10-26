@@ -31,7 +31,6 @@ in {
 
       boot.kernelParams = [
         "amd_iommu=on"
-        # TODO don't hardcode
         "vfio-pci.ids=${concatStringsSep "," cfg.gpu}"
         "iommu=pt"
         "video=efifb:off"

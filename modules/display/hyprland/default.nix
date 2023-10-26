@@ -30,10 +30,12 @@ in {
       inputs.flutter_background_bar = {
         url = "github:flafydev/flutter_background_bar";
       };
+      inputs.hyprland = {
+        url = "github:hyprwm/Hyprland/tearing-v3";
+      };
     }
     (mkIf cfg.enable {
       os.environment.systemPackages = [
-        pkgs.sway
         (elib.flPkgs inputs.flutter_background_bar)
       ];
 
@@ -45,9 +47,10 @@ in {
       hm.wayland.windowManager.hyprland = {
         enable = true;
         xwayland.enable = true;
-        plugins = with plugins; [
-          hyprlens
-        ];
+        package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+        # plugins = with plugins; [
+        #   hyprlens
+        # ];
         settings = let
           playerctl = "${pkgs.playerctl}/bin/playerctl";
           pactl = "${pkgs.pulseaudio}/bin/pactl";
@@ -62,6 +65,7 @@ in {
           env = mapAttrsToList (name: value: "${name},${toString value}") {
             SDL_VIDEODRIVER = "wayland";
             _JAVA_AWT_WM_NONREPARENTING = 1;
+            WLR_DRM_NO_ATOMIC = 1;
             XCURSOR_SIZE = 24;
             CLUTTER_BACKEND = "wayland";
             XDG_SESSION_TYPE = "wayland";
@@ -78,7 +82,11 @@ in {
             FB_OS_LOGO = ./icon.png;
             FB_DESKTOP_BACKGROUND_TOP = theme.wallpaperTop;
           };
-          layerrule = "noanim, ^(selection)$";
+          layerrule = [
+            "noanim, ^(selection)$"
+            "blur,^(anyrun)$"
+            "ignorealpha ${toString ( theme.popupBackgroundColor.toNormA - 0.01 )},^(anyrun)$"
+          ];
           monitor = [
             "eDP-1,disable"
             "HDMI-A-1,1920x1080@60,0x0,1"
@@ -87,11 +95,11 @@ in {
             "HDMI-A-2,addreserved,0,40,0,0"
           ];
           plugins = {
-            hyprlens = {
-              background = toString theme.wallpaperBlurred;
-              nearest = 0;
-              tiled = 0;
-            };
+            # hyprlens = {
+            #   background = toString theme.wallpaperBlurred;
+            #   nearest = 0;
+            #   tiled = 0;
+            # };
           };
           misc = {
             vfr = true;
@@ -122,10 +130,8 @@ in {
 
             layout = "dwindle";
             # col.active_border=rgb(aaff00) rgba(ffaa00ff) rgba(ffaa00ff) rgba(ffaa00ff) rgb(aaff00) 45deg
-            col = {
-              active_border = "rgba(${theme.borderColor.active.toHexRGBA})";
-              inactive_border = "rgba(${theme.borderColor.inactive.toHexRGBA})";
-            };
+            "col.active_border" = "rgba(${theme.borderColor.active.toHexRGBA})";
+            "col.inactive_border" = "rgba(${theme.borderColor.inactive.toHexRGBA})";
           };
           binds = {
             workspace_back_and_forth = 0;
@@ -136,12 +142,12 @@ in {
             drop_shadow = 1;
             shadow_range = 20;
             shadow_render_power = 2;
-            col.shadow = "rgba(00000044)";
+            "col.shadow" = "rgba(00000044)";
             shadow_offset = "0 0";
             blur = {
               enabled = 1;
-              size = 17;
-              passes = 3;
+              size = 4;
+              passes = 4;
               ignore_opacity = 1;
               xray = 1;
               new_optimizations = 1;
@@ -179,7 +185,7 @@ in {
             "${elib.flPkgs inputs.flutter_background_bar}/bin/flutter_background_bar"
             "hyprctl setcursor Bibata-Modern-Ice 24"
 
-            (mkIf cfg.headlessXorg.enable "${pkgs.xorg.xorgserver}/Xvfb :${toString cfg.headlessXorg.num} -screen 0 1024x768x24")
+            (mkIf cfg.headlessXorg.enable "${pkgs.xorg.xorgserver}/bin/Xvfb :${toString cfg.headlessXorg.num} -screen 0 1024x768x24")
 
             "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store #Stores only text data"
             "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store #Stores only image data"
@@ -195,6 +201,8 @@ in {
             "ALT,D,killactive,"
             "ALT,G,togglefloating,"
             ",Menu,exec,hyprctl switchxkblayout kmonad-kb-laptop next && hyprctl switchxkblayout kmonad-kb-hyperx next"
+
+            "ALT,SEMICOLON,exec,anyrun"
 
             "SHIFTALT,SEMICOLON,exit,"
             "ALT,A,togglesplit,"
@@ -254,7 +262,7 @@ in {
             "ALT,mouse:273,resizewindow"
           ];
           windowrulev2 = let
-            rulesForWindow = window: map (rule: "windowrulev2=${rule},${window}");
+            rulesForWindow = window: map (rule: "${rule},${window}");
           in
             []
             # Specific window rules

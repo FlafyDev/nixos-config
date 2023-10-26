@@ -337,6 +337,9 @@ flutter_tools.setup {
     on_attach = on_attach,
     capabilities = capabilities,
     flags = lsp_flags,
+		settings = {
+			lineLength = vim.o.textwidth
+		},
   },
   debugger = {
     enabled = true,

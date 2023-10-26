@@ -25,6 +25,9 @@ in {
           url = "github:Mic92/nix-index-database";
           inputs.nixpkgs.follows = "nixpkgs";
         };
+        nixpkgs-local = {
+          url = "path:/home/flafy/repos/nixos/nixpkgs";
+        };
       };
     }
     (mkIf (cfg.enable && !cfg.cm-patch) {
@@ -84,8 +87,12 @@ in {
         };
       };
 
-      os.environment.systemPackages = [
-        (pkgs.flutter.override {
+      os.environment.systemPackages = let 
+        localPkgs = import inputs.nixpkgs-local {
+          inherit (pkgs) system;
+        };
+      in [
+        (localPkgs.flutter.override {
           supportsAndroid = false;
           supportsLinuxDesktop = true; # true by default
         })

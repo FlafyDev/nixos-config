@@ -91,6 +91,7 @@ in
 
             bind.dev = [
               "/dev/snd"
+              "/dev/input"
             ];
 
             env = {};

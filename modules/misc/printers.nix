@@ -3,6 +3,7 @@
   pkgs,
   lib,
   config,
+  osConfig,
   ...
 }: let
   cfg = config.printers;
@@ -16,12 +17,32 @@ in {
     unfree.allowed = ["hplip"];
 
     os = {
+      system.nssModules = pkgs.lib.optional (!osConfig.services.avahi.nssmdns) pkgs.nssmdns;
+      system.nssDatabases.hosts = with pkgs.lib;
+        optionals (!osConfig.services.avahi.nssmdns) (mkMerge [
+          (mkBefore ["mdns4_minimal [NOTFOUND=return]"]) # before resolve
+          (mkAfter ["mdns4"]) # after dns
+        ]);
+
       hardware.sane = {
         enable = true;
         extraBackends = [pkgs.hplipWithPlugin];
       };
 
+      networking.firewall = {
+        allowedUDPPorts = [631 5353];
+        allowedTCPPorts = [631];
+      };
+
       services = {
+        avahi = {
+          enable = true;
+          nssmdns = false;
+          publish = {
+            enable = true;
+            userServices = true;
+          };
+        };
         printing = {
           enable = true;
           drivers = with pkgs; [
@@ -29,7 +50,6 @@ in {
             hplipWithPlugin
           ];
         };
-        avahi.enable = true;
         ipp-usb.enable = true;
       };
     };

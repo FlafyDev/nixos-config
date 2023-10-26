@@ -43,6 +43,7 @@ in {
             "scanner"
             "lp"
             "docker"
+            "dialout"
           ]
           ++ cfg.groups;
       };

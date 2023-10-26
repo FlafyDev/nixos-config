@@ -3,6 +3,7 @@
   config,
   pkgs,
   inputs,
+  elib,
   theme,
   ...
 }: let
@@ -20,11 +21,22 @@ in {
           url = "github:flafydev/guifetch";
           # inputs.nixpkgs.follows = "nixpkgs";
         };
+        flarrent = {
+          url = "github:flafydev/flarrent";
+          # inputs.nixpkgs.follows = "nixpkgs";
+        };
       };
     }
     (mkIf cfg.enable {
       unfree.allowed = ["unityhub"];
       hmModules = [inputs.guifetch.homeManagerModules.default];
+      hm.xdg.configFile."flarrent/config.json".text = builtins.toJSON {
+        color = "ff69bcff";
+        backgroundColor = theme.backgroundColor.toHexARGB;
+        connection = "transmission:http://localhost:9091/transmission/rpc";
+        smoothScroll = false;
+        animateOnlyOnFocus = true;
+      };
       hm.programs.guifetch = {
         enable = true;
         config = {
@@ -32,6 +44,7 @@ in {
         };
       };
       os.environment.systemPackages = with pkgs; [
+        (elib.flPkgs inputs.flarrent)
         chromium
         gnome.eog
         mate.engrampa

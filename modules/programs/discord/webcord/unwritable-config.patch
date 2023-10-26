@@ -1,27 +1,16 @@
 diff --git a/sources/code/main/modules/config.ts b/sources/code/main/modules/config.ts
-index 4390832..31fe819 100644
+index cee6519..ff54e0b 100644
 --- a/sources/code/main/modules/config.ts
 +++ b/sources/code/main/modules/config.ts
-@@ -2,7 +2,7 @@
-  * configManager
-  */
- 
--import { readFileSync, existsSync, rmSync, writeFileSync } from "fs";
-+import { readFileSync, existsSync, rmSync } from "fs";
- import {
-   app,
-   BrowserWindow,
-@@ -146,12 +146,12 @@ class Config<T> {
-   /** Default configuration values. */
+@@ -147,11 +147,11 @@ class Config<T> {
    private readonly defaultConfig;
    protected spaces = 4;
--  #write(object: unknown) {
+   #write(object: unknown) {
 -    const decodedData = JSON.stringify(object, null, this.spaces);
 -    let encodedData:string|Buffer = decodedData;
 -    if(this.#pathExtension === FileExt.Encrypted)
 -      encodedData = safeStorage.encryptString(decodedData);
 -    writeFileSync(this.#path+this.#pathExtension,encodedData);
-+  #write(_object: unknown) {
 +    // const decodedData = JSON.stringify(object, null, this.spaces);
 +    // let encodedData:string|Buffer = decodedData;
 +    // if(this.#pathExtension === FileExt.Encrypted)

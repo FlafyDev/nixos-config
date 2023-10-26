@@ -2,6 +2,7 @@
   pkgs,
   osConfig,
   lib,
+  inputs,
   ...
 }: {
   osModules = [
@@ -10,7 +11,24 @@
 
   vm.gpu = ["1002:73df" "1002:ab28"];
 
+  # inputs = {
+  #   nixos-old-stable.url = "github:nixos/nixpkgs/b3a285628a6928f62cdf4d09f4e656f7ecbbcafb";
+  # };
+
   os = {
+    # system.replaceRuntimeDependencies = let
+    #   oldPkgs = import inputs.nixos-old-stable {inherit (pkgs) system;};
+    # in [
+    #   {
+    #     original = pkgs.mesa;
+    #     replacement = oldPkgs.mesa;
+    #   }
+    #   {
+    #     original = pkgs.mesa.drivers;
+    #     replacement = oldPkgs.mesa.drivers;
+    #   }
+    # ];
+
     environment.systemPackages = let
       offload-gpu = pkgs.writeShellScriptBin "offload-gpu" ''
         export DRI_PRIME="pci-0000_03_00_0"
@@ -103,6 +121,11 @@
 
     # Networking
     networking = {
+      firewall = {
+        enable = false;
+        allowedUDPPorts = [53317];
+        allowedTCPPorts = [53317];
+      };
       hostName = "ope";
       interfaces.enp14s0.wakeOnLan.enable = true;
       networkmanager = {

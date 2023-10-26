@@ -15,7 +15,7 @@ in {
     users.groups = ["transmission"];
 
     os.environment.systemPackages = with pkgs; [
-      transmission-remote-gtk
+      # transmission-remote-gtk
     ];
 
     os.services.transmission = {
@@ -28,6 +28,11 @@ in {
         incomplete-dir-enabled = false;
         script-torrent-done-enabled = true;
         downloadDirPermissions = "770";
+        speed-limit-down-enabled = false;
+        speed-limit-up = 300;
+        speed-limit-up-enabled = true;
+        alt-speed-down = 3500;
+        alt-speed-up = 300;
       };
     };
   };

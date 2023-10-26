@@ -36,6 +36,13 @@ in {
       '';
     };
 
+    popupBackgroundColor = mkOption {
+      type = types.raw;
+      description = ''
+        The color to use on top of the blur.
+      '';
+    };
+
     borderColor.active = mkOption {
       type = types.raw;
       description = ''

@@ -52,9 +52,9 @@
                 pname = "flutter-tools.nvim";
                 version = "git";
                 src = flutter-tools-nvim;
-                patches = [
-                  ./flutter-tools-no-resolve.patch
-                ];
+                # patches = [
+                #   ./flutter-tools-no-resolve.patch
+                # ];
               };
               transparent-nvim = buildVimPluginFrom2Nix {
                 pname = "transparent-nvim";

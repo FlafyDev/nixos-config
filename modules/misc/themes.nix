@@ -24,7 +24,9 @@ in {
       wallpaper = wallpapers.windows11-flower.default;
       wallpaperTop = wallpapers.windows11-flower.top;
       wallpaperBlurred = wallpapers.windows11-flower.blurred;
-      backgroundColor = mkColor 0 0 0 153;
+      # backgroundColor = mkColor 0 0 0 153;
+      backgroundColor = mkColor 0 0 0 100;
+      popupBackgroundColor = mkColor 0 0 0 50;
       borderColor.active = mkColor 117 117 133 85;
       borderColor.inactive = mkColor 117 117 133 85;
     })

@@ -14,9 +14,13 @@
 
   android.enable = true;
   display.greetd.enable = true;
-  display.hyprland.enable = true;
+  display.hyprland = {
+    enable = true;
+    headlessXorg.enable = true;
+  };
   fonts.enable = true;
   printers.enable = true;
+  bitwarden.enable = true;
 
   assets.enable = true;
 
@@ -28,21 +32,24 @@
   localhosts.enable = true;
   vm.enable = true;
   games.enable = true;
-
-  programs.firefox.enable = true;
   gtk.enable = true;
-  programs.gnome.enable = false;
-  programs.mpv.enable = true;
-  programs.vscode.enable = true;
-  programs.neovim.enable = true;
-  programs.cli-utils.enable = true;
-  programs.transmission.enable = true;
-  programs.direnv.enable = true;
-  programs.fish.enable = true;
-  programs.foot.enable = true;
-  programs.git.enable = true;
-  programs.nix.enable = true;
-  programs.ssh.enable = true;
-  programs.discord.enable = true;
-  programs.gui-utils.enable = true;
+
+  programs = {
+    anyrun.enable = true;
+    firefox.enable = true;
+    gnome.enable = false;
+    mpv.enable = true;
+    vscode.enable = true;
+    neovim.enable = true;
+    cli-utils.enable = true;
+    transmission.enable = true;
+    direnv.enable = true;
+    fish.enable = true;
+    foot.enable = true;
+    git.enable = true;
+    nix.enable = true;
+    ssh.enable = true;
+    discord.enable = true;
+    gui-utils.enable = true;
+  };
 }
