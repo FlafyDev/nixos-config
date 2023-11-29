@@ -11,23 +11,30 @@
 
   vm.gpu = ["1002:73df" "1002:ab28"];
 
-  # inputs = {
-  #   nixos-old-stable.url = "github:nixos/nixpkgs/b3a285628a6928f62cdf4d09f4e656f7ecbbcafb";
-  # };
+  inputs = {
+    nixos-old-stable.url = "github:nixos/nixpkgs/nixos-unstable";
+  };
 
   os = {
-    # system.replaceRuntimeDependencies = let
-    #   oldPkgs = import inputs.nixos-old-stable {inherit (pkgs) system;};
-    # in [
-    #   {
-    #     original = pkgs.mesa;
-    #     replacement = oldPkgs.mesa;
-    #   }
-    #   {
-    #     original = pkgs.mesa.drivers;
-    #     replacement = oldPkgs.mesa.drivers;
-    #   }
-    # ];
+    system.replaceRuntimeDependencies = let
+      # oldPkgs = import inputs.nixos-old-stable {inherit (pkgs) system;};
+      newMesa = pkgs.callPackage ./custom-mesa {};
+    in [
+      {
+        original = pkgs.mesa;
+        replacement = newMesa;
+      }
+      {
+        original = pkgs.mesa.drivers;
+        replacement = newMesa.drivers;
+      }
+    ];
+    # hardware.opengl.package = let
+    #   newMesa = pkgs.mesa.overrideAttrs (old: {
+    #     patches = (old.patches or []) ++ [./mesa-pr.patch];
+    #   });
+    # in
+    #   newMesa.drivers;
 
     environment.systemPackages = let
       offload-gpu = pkgs.writeShellScriptBin "offload-gpu" ''
@@ -162,6 +169,17 @@
 
     services.upower.enable = true;
 
+    boot.kernelModules = ["v4l2loopback"];
+    boot.extraModulePackages = [
+      osConfig.boot.kernelPackages.v4l2loopback.out
+    ];
+    # Set initial kernel module settings
+    boot.extraModprobeConfig = ''
+      # exclusive_caps: Skype, Zoom, Teams etc. will only show device when actually streaming
+      # card_label: Name of virtual camera, how it'll show up in Skype, Zoom, Teams
+      # https://github.com/umlaeute/v4l2loopback
+      options v4l2loopback exclusive_caps=1 card_label="Virtual Camera"
+    '';
     boot.kernelParams = [
       # "amdgpu.sg_display=0"
       "video=HDMI-A-1:1920x1080@60"
@@ -180,15 +198,15 @@
         };
       };
       opentabletdriver.enable = true;
-      # opengl = {
-      #   enable = true;
-      #   driSupport = true;
-      #   driSupport32Bit = true;
-      #   extraPackages = with pkgs; [
-      #     vaapiVdpau
-      #     libvdpau-va-gl
-      #   ];
-      # };
+      opengl = {
+        enable = true;
+        driSupport = true;
+        driSupport32Bit = true;
+        extraPackages = with pkgs; [
+          vaapiVdpau
+          libvdpau-va-gl
+        ];
+      };
     };
 
     security = {

@@ -160,7 +160,7 @@ in {
             }: [
               (sloth.concat' sloth.homeDir ''/.config/retroarch'')
             ];
-            pathPackages = [pkgs.retroarchFull];
+            pathPackages = [pkgs.retroarch];
           };
           srb2 = bubbleWrapGame {
             script = _: ''
@@ -291,7 +291,8 @@ in {
     in [
       backup-game-saves
       launch-game
-      pkgs.retroarchFull
+      pkgs.wine64
+      pkgs.retroarch
     ];
   };
 }

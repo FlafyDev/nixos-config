@@ -7,10 +7,8 @@
   libpulseaudio,
   lib,
   xdg-utils,
-  electron_24,
+  electron_24-bin,
   makeDesktopItem,
-  swc,
-  which,
 }: let
   inherit (lib) makeLibraryPath;
 in
@@ -30,7 +28,6 @@ in
     nativeBuildInputs = [
       copyDesktopItems
       python3
-      which
       # swc
     ];
 
@@ -41,7 +38,7 @@ in
 
     # npm install will error when electron tries to download its binary
     # we don't need it anyways since we wrap the program with our nixpkgs electron
-    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
     # remove husky commit hooks, errors and aren't needed for packaging
     postPatch = ''
@@ -65,14 +62,6 @@ in
       #   # })
       ./custom-build.patch
     ];
-
-    nodePipewire = let
-      nodePipewireVersion = "1.0.14";
-    in
-      builtins.fetchTarball {
-        url = "https://github.com/kakxem/node-pipewire/releases/download/${nodePipewireVersion}/node-v108-linux-x64.tar.gz";
-        sha256 = "046fhaqz06sdnvrmvq02i2k1klv90sgyz24iz3as0hmr6v90ldm1";
-      };
 
     # override installPhase so we can copy the only folders that matter
     # installPhase = ''
@@ -100,11 +89,18 @@ in
         pipewire
       ];
       binPath = lib.makeBinPath [xdg-utils];
+      nodePipewire = let
+        nodePipewireVersion = "1.0.14";
+      in
+        builtins.fetchTarball {
+          url = "https://github.com/kakxem/node-pipewire/releases/download/${nodePipewireVersion}/node-v108-linux-x64.tar.gz";
+          sha256 = "046fhaqz06sdnvrmvq02i2k1klv90sgyz24iz3as0hmr6v90ldm1";
+        };
     in ''
       runHook preInstall
 
       # Remove dev deps that aren't necessary for running the app
-      # npm prune --omit=dev
+      npm prune --omit=dev
 
       mkdir -p $out/lib/node_modules/webcord
       mkdir -p $out/lib/node_modules/webcord/node_modules/node-pipewire
@@ -114,7 +110,7 @@ in
       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
       # Add xdg-utils to path via suffix, per PR #181171
-      makeWrapper '${lib.getExe electron_24}' $out/bin/webcord \
+      makeWrapper '${lib.getExe electron_24-bin}' $out/bin/webcord \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
         --suffix PATH : "${binPath}" \
         --add-flags "--ozone-platform-hint=auto" \
@@ -139,6 +135,6 @@ in
       homepage = "https://github.com/kakxem/WebCord/tree/feature/screenshare-with-audio";
       license = licenses.mit;
       maintainers = with maintainers; [huantian];
-      platforms = electron_24.meta.platforms;
+      platforms = electron_24-bin.meta.platforms;
     };
   }

@@ -34,6 +34,21 @@
   games.enable = true;
   gtk.enable = true;
 
+  # TEMP
+  os.nixpkgs.overlays = [
+    (final: prev: {
+      makeDBusConf = {
+        suidHelper,
+        serviceDirectories,
+        apparmor ? "disabled",
+      }:
+        prev.makeDBusConf {
+          serviceDirectories = serviceDirectories ++ ["/home/flafy/.testshare"];
+          inherit suidHelper apparmor;
+        };
+    })
+  ];
+
   programs = {
     anyrun.enable = true;
     firefox.enable = true;
@@ -46,6 +61,7 @@
     direnv.enable = true;
     fish.enable = true;
     foot.enable = true;
+    alacritty.enable = true;
     git.enable = true;
     nix.enable = true;
     ssh.enable = true;

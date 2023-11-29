@@ -12,7 +12,7 @@
             },
             "window": {
                 "transparent": true,
-                "hideOnClose": true
+                "hideOnClose": false
             }
         },
         "privacy": {
@@ -54,13 +54,13 @@
                 "radio": 0
             },
             "devel": {
-                "enabled": true
+                "enabled": false
             },
             "redirection": {
                 "warn": true
             },
             "optimize": {
-                "gpu": true
+                "gpu": false
             },
             "webApi": {
                 "webGl": true

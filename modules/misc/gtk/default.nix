@@ -37,7 +37,7 @@ in {
 
         font = {
           name = "Roboto";
-          package = pkgs.roboto;
+          package = pkgs.google-fonts;
         };
 
         iconTheme = {

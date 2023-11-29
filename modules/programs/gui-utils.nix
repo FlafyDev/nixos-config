@@ -35,7 +35,7 @@ in {
         backgroundColor = theme.backgroundColor.toHexARGB;
         connection = "transmission:http://localhost:9091/transmission/rpc";
         smoothScroll = false;
-        animateOnlyOnFocus = true;
+        animateOnlyOnFocus = false;
       };
       hm.programs.guifetch = {
         enable = true;
@@ -62,6 +62,7 @@ in {
         syncplay
         prismlauncher
         unityhub
+        thunderbird
         icu
         glib
       ];

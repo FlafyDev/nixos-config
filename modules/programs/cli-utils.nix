@@ -94,6 +94,7 @@ in {
         eza
         service-wrapper
         distrobox
+        usbutils
         wl-clipboard
         drm_info
         # lang-to-docx

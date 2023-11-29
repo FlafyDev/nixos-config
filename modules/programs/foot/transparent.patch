@@ -1,0 +1,13 @@
+ diff --git a/render.c b/render.c
+index 48957a0a..6730f892 100644
+--- a/render.c
++++ b/render.c
+@@ -534,7 +534,7 @@ render_cell(struct terminal *term, pixman_image_t *pix,
+         }
+ 
+         else if (cell->attrs.bg_src == COLOR_DEFAULT) {
+-            if (term->window->is_fullscreen) {
++            if (false) {
+                 /*
+                  * Note: disable transparency when fullscreened.
+                  *

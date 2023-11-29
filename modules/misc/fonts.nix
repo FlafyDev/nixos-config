@@ -22,13 +22,14 @@ in {
           # "DroidSansMono"
         ];
       })
-      carlito
-      corefonts
-      source-sans
-      # cantarell-fonts
-      dejavu_fonts
-      source-code-pro # Default monospace font in 3.32
-      source-sans
+      # carlito
+      # corefonts
+      # source-sans
+      # # cantarell-fonts
+      # dejavu_fonts
+      # source-code-pro # Default monospace font in 3.32
+      # source-sans
+      google-fonts
       # noto-fonts
       # noto-fonts-cjk
       # noto-fonts-emoji
@@ -40,7 +41,7 @@ in {
       # proggyfonts
       # material-icons
       # material-design-icons
-      roboto
+      # roboto
       # work-sans
       # comic-neue
       # twemoji-color-font

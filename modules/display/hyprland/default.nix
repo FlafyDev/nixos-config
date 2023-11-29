@@ -31,7 +31,7 @@ in {
         url = "github:flafydev/flutter_background_bar";
       };
       inputs.hyprland = {
-        url = "github:hyprwm/Hyprland/tearing-v3";
+        url = "github:hyprwm/Hyprland/5b8cfdf2efc44106b61e60c642fd964823fd89f3";
       };
     }
     (mkIf cfg.enable {
@@ -85,7 +85,7 @@ in {
           layerrule = [
             "noanim, ^(selection)$"
             "blur,^(anyrun)$"
-            "ignorealpha ${toString ( theme.popupBackgroundColor.toNormA - 0.01 )},^(anyrun)$"
+            "ignorealpha ${toString (theme.popupBackgroundColor.toNormA - 0.01)},^(anyrun)$"
           ];
           monitor = [
             "eDP-1,disable"
@@ -106,6 +106,7 @@ in {
             enable_swallow = true;
             swallow_regex = "^(foot)$";
             animate_manual_resizes = false;
+            force_default_wallpaper = 0;
           };
           input = {
             follow_mouse = 1;
@@ -127,6 +128,7 @@ in {
             gaps_in = 1;
             gaps_out = 4;
             border_size = 1;
+            allow_tearing = true;
 
             layout = "dwindle";
             # col.active_border=rgb(aaff00) rgba(ffaa00ff) rgba(ffaa00ff) rgba(ffaa00ff) rgb(aaff00) 45deg
@@ -151,6 +153,8 @@ in {
               ignore_opacity = 1;
               xray = 1;
               new_optimizations = 1;
+              noise = 0.03;
+              contrast = 1.0;
             };
           };
           animations = {
@@ -195,7 +199,7 @@ in {
           bind = [
             '',Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png''
             "ALT,S,fullscreen"
-            "ALT,F,exec,${pkgs.foot}/bin/footclient"
+            "ALT,F,exec,${pkgs.alacritty}/bin/alacritty"
             "ALT,V,exec,${pkgs.foot}/bin/footclient --app-id sideterm"
             "ALT,BACKSPACE,exec,${pkgs.foot}/bin/footclient --app-id middleterm"
             "ALT,D,killactive,"
@@ -267,6 +271,7 @@ in {
             []
             # Specific window rules
             ++ (rulesForWindow "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"])
+            ++ (rulesForWindow "class:^(looking-glass-client)$" ["immediate"])
             ++ (rulesForWindow "class:^(middleterm)$" ["float" "size 750 550" "animation slide"])
             ++ (rulesForWindow "class:^(guifetch)$" ["float" "animation slide" "move 10 10"])
             ++ (rulesForWindow "class:^(listen_blue)$" ["size 813 695" "float" "center"])

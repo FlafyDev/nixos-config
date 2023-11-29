@@ -12,6 +12,17 @@ in {
   };
 
   config = mkIf cfg.enable {
+    os.nixpkgs.overlays = [
+      (_final: prev: {
+        foot = prev.foot.overrideAttrs (old: {
+          patches =
+            (old.patches or [])
+            ++ [
+              ./transparent.patch
+            ];
+        });
+      })
+    ];
     hm.programs.foot = {
       enable = true;
       settings = {

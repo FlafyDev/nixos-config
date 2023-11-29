@@ -2,7 +2,6 @@
   inputs,
   lib,
   config,
-  pkgs,
   combinedManager,
   ...
 }: let
@@ -24,9 +23,6 @@ in {
         nix-index-database = {
           url = "github:Mic92/nix-index-database";
           inputs.nixpkgs.follows = "nixpkgs";
-        };
-        nixpkgs-local = {
-          url = "path:/home/flafy/repos/nixos/nixpkgs";
         };
       };
     }
@@ -87,16 +83,6 @@ in {
         };
       };
 
-      os.environment.systemPackages = let 
-        localPkgs = import inputs.nixpkgs-local {
-          inherit (pkgs) system;
-        };
-      in [
-        (localPkgs.flutter.override {
-          supportsAndroid = false;
-          supportsLinuxDesktop = true; # true by default
-        })
-      ];
       os.programs.command-not-found.enable = false;
       hm.programs.nix-index.enable = true;
     })
