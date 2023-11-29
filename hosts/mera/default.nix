@@ -46,6 +46,7 @@
     };
 
     services.upower.enable = true;
+    services.logind.lidSwitch = "ignore";
 
     networking = {
       networkmanager = {
@@ -61,13 +62,19 @@
       useDHCP = false;
       interfaces = {
         wlp3s0.useDHCP = true;
-        enp4s0.useDHCP = true;
+        enp4s0 = {
+          useDHCP = true;
+          ipv4.addresses = [{
+            address = "10.0.0.41";
+            prefixLength = 24;
+          }];
+        };
       };
 
       firewall = {
         enable = true;
-        allowedTCPPorts = [58846 25565];
-        allowedUDPPorts = [58846 25565];
+        allowedTCPPorts = [58846 25565 80 21 22];
+        allowedUDPPorts = [58846 25565 80 21 22];
       };
     };
 

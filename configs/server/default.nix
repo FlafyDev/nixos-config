@@ -12,5 +12,18 @@ _: {
   programs.nix.enable = true;
   programs.ssh.enable = true;
   programs.ssh.server = true;
-}
+  users.groups = [ "sftpuser" ];
+  games.services.minecraft.enable = true;
 
+  os.services.vsftpd = {
+    enable = true;
+    #   cannot chroot && write
+    #    chrootlocalUser = true;
+    writeEnable = true;
+    localUsers = true;
+    # userlist = ["martyn" "cam"];
+    # userlistEnable = true;
+    # anonymousUserNoPassword = true;
+    # anonymousUser = true;
+  };
+}
