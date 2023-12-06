@@ -134,7 +134,15 @@
         allowedTCPPorts = [53317];
       };
       hostName = "ope";
-      interfaces.enp14s0.wakeOnLan.enable = true;
+      interfaces.enp14s0 = {
+        ipv4.addresses = [
+          {
+            address = "10.0.0.42";
+            prefixLength = 24;
+          }
+        ];
+        wakeOnLan.enable = true;
+      };
       networkmanager = {
         enable = true;
         # insertNameservers = ["1.1.1.1"];

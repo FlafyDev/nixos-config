@@ -64,7 +64,10 @@
     alacritty.enable = true;
     git.enable = true;
     nix.enable = true;
-    ssh.enable = true;
+    ssh = {
+      enable = true;
+      server = true;
+    };
     discord.enable = true;
     gui-utils.enable = true;
   };

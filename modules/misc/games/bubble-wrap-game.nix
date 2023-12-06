@@ -18,7 +18,7 @@ in
     networking ? false,
   }: let
     scriptPackage = writeShellScriptBin "game" ''
-      export PATH=''$PATH:${makeBinPath (pathPackages ++ [coreutils-full])}
+      export PATH="''$PATH:${makeBinPath (pathPackages ++ [coreutils-full])}"
       ${script {
         data =
           if data != null
