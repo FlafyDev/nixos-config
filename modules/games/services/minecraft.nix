@@ -2,6 +2,7 @@
   inputs,
   lib,
   config,
+  elib,
   ...
 }:
 with lib; let
@@ -28,7 +29,7 @@ in {
           servers.vanilla = {
             enable = true;
             jvmOpts = "-Xmx512M"; # Avoid OOM
-            package = pkgs.vanillaServers.vanilla-1_20_2;
+            package = elib.flLPkgs' inputs.nix-minecraft ["vanillaServers" "vanilla-1_20_2"];
             serverProperties = {
               server-port = 25565;
               level-type = "flat"; # Make the test lighter

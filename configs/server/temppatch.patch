@@ -1,0 +1,14 @@
+diff --git a/src/vs/platform/actions/common/actions.ts b/src/vs/platform/actions/common/actions.ts
+index df156d0..40796d8 100644
+--- a/src/vs/platform/actions/common/actions.ts
++++ b/src/vs/platform/actions/common/actions.ts
+@@ -562,7 +562,8 @@ export function registerAction2(ctor: { new(): Action2 }): IDisposable {
+ 	const disposables = new DisposableStore();
+ 	const action = new ctor();
+ 
+-	const { f1, menu, keybinding, description, ...command } = action.desc;
++	const { f1, menu, description, ...command } = action.desc;
++	const keybinding: any = [];
+ 
+ 	// command
+ 	disposables.add(CommandsRegistry.registerCommand({

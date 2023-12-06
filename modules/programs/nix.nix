@@ -3,10 +3,24 @@
   lib,
   config,
   combinedManager,
+  pkgs,
   ...
 }: let
   cfg = config.programs.nix;
   inherit (lib) mkEnableOption mkIf mkMerge mapAttrs;
+  package =
+    if !cfg.cm-patch
+    then inputs.nix-super.packages.${pkgs.system}.default
+    else
+      pkgs.nixVersions.nix_2_16.overrideAttrs (old: {
+        patches =
+          (old.patches or [])
+          ++ (
+            map
+            (file: "${combinedManager}/nix-patches/${file}")
+            (lib.attrNames (lib.filterAttrs (_: type: type == "regular") (builtins.readDir "${combinedManager}/nix-patches")))
+          );
+      });
 in {
   options.programs.nix = {
     enable = mkEnableOption "nix";
@@ -26,28 +40,20 @@ in {
         };
       };
     }
-    (mkIf (cfg.enable && !cfg.cm-patch) {
-      os.nixpkgs.overlays = [
-        (_final: prev: {
-          nix = inputs.nix-super.packages.${prev.system}.default;
-        })
-      ];
-    })
-    (mkIf (cfg.enable && cfg.cm-patch) {
-      os.nixpkgs.overlays = [
-        (_final: prev: {
-          nix = prev.nixVersions.nix_2_16.overrideAttrs (old: {
-            patches =
-              (old.patches or [])
-              ++ (
-                map
-                (file: "${combinedManager}/nix-patches/${file}")
-                (lib.attrNames (lib.filterAttrs (_: type: type == "regular") (builtins.readDir "${combinedManager}/nix-patches")))
-              );
-          });
-        })
-      ];
-    })
+    # (mkIf (cfg.enable && !cfg.cm-patch) {
+    #   os.nixpkgs.overlays = [
+    #     (_final: prev: {
+    #       ;
+    #     })
+    #   ];
+    # })
+    # (mkIf (cfg.enable && cfg.cm-patch) {
+    #   os.nixpkgs.overlays = [
+    #     (_final: prev: {
+    #       nix = ;
+    #     })
+    #   ];
+    # })
     (mkIf cfg.enable {
       osModules = [
         inputs.nix-index-database.nixosModules.nix-index
@@ -57,7 +63,7 @@ in {
       ];
       os.nix = {
         enable = true;
-        # package = pkgs.nix-patched;
+        inherit package;
         registry = mapAttrs (_name: value: {flake = value;}) (with inputs; {
           inherit nixpkgs;
           default = nixpkgs;

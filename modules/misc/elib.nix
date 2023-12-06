@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  inherit (lib) mod elemAt stringLength mkEnableOption mkIf;
+  inherit (lib) mod elemAt stringLength mkEnableOption mkIf foldl';
   decToHex = let
     intToHex = [
       "0"
@@ -65,7 +65,9 @@ in {
             toNormA = a / 255.0;
           };
           flPkgs = input: input.packages.${pkgs.system}.default; # flPkgs inputs.guifetch
-          flPkgs' = input: name: input.packages.${pkgs.system}.${name}; # flPkgs inputs.guifetch "guifetch"
+          flPkgs' = input: foldl' (sum: n: sum.${n}) input.packages.${pkgs.system}; # flPkgs' inputs.guifetch [ "guifetch" ]
+          flLPkgs = input: input.legacyPackages.${pkgs.system}.default; # flLPkgs inputs.guifetch
+          flLPkgs' = input: foldl' (sum: n: sum.${n}) input.legacyPackages.${pkgs.system}; # flLPkgs' inputs.guifetch [ "guifetch" ]
         };
       })
     ];

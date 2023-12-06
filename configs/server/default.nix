@@ -1,7 +1,23 @@
-_: {
+{pkgs, ...}: {
   users.main = "server";
 
   printers.enable = true;
+  
+  os.services.openvscode-server = {
+    enable = true;
+    user = "server";
+    withoutConnectionToken = true;
+    package = pkgs.openvscode-server.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [
+        ./temppatch.patch
+      ];
+    });
+    host = "0.0.0.0";
+    port = 58846; 
+  };
+  os.nixpkgs.config.permittedInsecurePackages = [
+                "nodejs-16.20.2"
+              ];
 
   programs.neovim.enable = true;
   programs.cli-utils.enable = true;
@@ -13,7 +29,7 @@ _: {
   programs.ssh.enable = true;
   programs.ssh.server = true;
   users.groups = [ "sftpuser" ];
-  games.services.minecraft.enable = true;
+  games.services.minecraft.enable = false;
 
   os.services.vsftpd = {
     enable = true;

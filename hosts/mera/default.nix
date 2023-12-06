@@ -61,7 +61,7 @@
 
       useDHCP = false;
       interfaces = {
-        wlp3s0.useDHCP = true;
+        wlp3s0.useDHCP = false; # No WiFi !
         enp4s0 = {
           useDHCP = true;
           ipv4.addresses = [{
