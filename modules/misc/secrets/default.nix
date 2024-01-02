@@ -3,12 +3,18 @@
   lib,
   config,
   osConfig,
+  hmConfig,
   pkgs,
+  elib,
+  ssh,
   ...
 }:
 with lib; let
   cfg = config.secrets;
-  inherit (lib) mkOption types;
+  secretsDir = ../../../secrets;
+  inherit (lib) mkOption types foldl';
+  inherit (elib) concatPaths;
+  inherit (builtins) readDir;
 in {
   options.secrets = {
     enable = mkEnableOption "secrets";
@@ -34,7 +40,7 @@ in {
         os.systemd.services.bitwarden-session = {
           wantedBy = ["default.target"];
 
-          serviceConfig.User = "flafy";
+          serviceConfig.User = config.users.main;
           serviceConfig.ExecStart = let
             bw = "${pkgs.bitwarden-cli}/bin/bw";
             script = pkgs.writeShellScript "bw-session" ''
@@ -50,20 +56,69 @@ in {
       }
     )
     (
-      mkIf
-      cfg.enable {
+      mkIf cfg.enable {
         osModules = [inputs.agenix.nixosModules.default];
 
-        os.age.secrets = {
-          bitwarden = {
-            file = ./secrets/bitwarden.age;
-            mode = "400";
-            owner = "flafy";
-            group = "users";
+        _module.args.ssh = foldl' (
+          acc: host:
+            acc
+            // {
+              ${host} = foldl' (acc: key:
+                acc
+                // {
+                  ${key} = {
+                    private = osConfig.age.secrets."${host}-${key}".path;
+                    public = concatPaths [secretsDir "ssh-keys" host key "public"];
+                  };
+                }) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys" host])));
+            }
+        ) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys"])));
+
+        hm.home.file = let
+          inherit (config.users) host;
+        in
+          foldl' (acc: key:
+            acc
+            // {
+              ".ssh/${key}".source = hmConfig.lib.file.mkOutOfStoreSymlink osConfig.age.secrets."${host}-${key}".path;
+            }) {} (
+            if (pathExists (concatPaths [secretsDir "ssh-keys" host]))
+            then (attrNames (readDir (concatPaths [secretsDir "ssh-keys" host])))
+            else []
+          );
+
+        os.age.secrets = let
+          sshKeys = foldl' (
+            acc: host:
+              acc
+              // (foldl' (acc: key:
+                acc
+                // {
+                  "${host}-${key}" = {
+                    file = concatPaths [secretsDir "ssh-keys" host key "private.age"];
+                    mode = "400";
+                    owner = config.users.main;
+                    group = "users";
+                  };
+                }) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys" host]))))
+          ) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys"])));
+        in
+          sshKeys
+          // {
+            bitwarden = {
+              file = builtins.trace ( ./. ) ( concatPaths [secretsDir "other" "bitwarden.age"] );
+              mode = "400";
+              owner = config.users.main;
+              group = "users";
+            };
           };
-        };
+
         os.age.identityPaths = [
-          "/home/flafy/.ssh/agenix"
+          "/home/${config.users.main}/.ssh/agenix"
+        ];
+
+        os.environment.systemPackages = [
+          (elib.flPkgs inputs.agenix)
         ];
 
         # hm.systemd.user.services.bitwarden-session = {

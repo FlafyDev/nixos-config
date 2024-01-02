@@ -5,7 +5,6 @@ This config uses [Combined Manager](https://github.com/FlafyDev/combined-manager
 
 `hosts` - Machine specific configuration files.  
 `modules` - Personalized nix modules.  
-`configs` - "user"-like configurations.  
 
 
 ### Declarative TODO

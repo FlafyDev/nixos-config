@@ -5,6 +5,7 @@
   ...
 }: let
   inherit (lib) mod elemAt stringLength mkEnableOption mkIf foldl';
+  inherit (builtins) substring;
   decToHex = let
     intToHex = [
       "0"
@@ -64,6 +65,7 @@ in {
             toDecA = a;
             toNormA = a / 255.0;
           };
+          concatPaths = paths: substring 1 (-1) (foldl' (acc: path: "${acc}/${path}") "" paths);
           flPkgs = input: input.packages.${pkgs.system}.default; # flPkgs inputs.guifetch
           flPkgs' = input: foldl' (sum: n: sum.${n}) input.packages.${pkgs.system}; # flPkgs' inputs.guifetch [ "guifetch" ]
           flLPkgs = input: input.legacyPackages.${pkgs.system}.default; # flLPkgs inputs.guifetch

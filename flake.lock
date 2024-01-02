@@ -9,11 +9,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1694793763,
-        "narHash": "sha256-y6gTE1C9mIoSkymRYyzCmv62PFgy+hbZ5j8fuiQK5KI=",
+        "lastModified": 1701216516,
+        "narHash": "sha256-jKSeJn+7hZ1dZdiH1L+NWUGT2i/BGomKAJ54B9kT06Q=",
         "owner": "ryantm",
         "repo": "agenix",
-        "rev": "572baca9b0c592f71982fca0790db4ce311e3c75",
+        "rev": "13ac9ac6d68b9a0896e3d43a082947233189e247",
         "type": "github"
       },
       "original": {
@@ -77,6 +77,22 @@
       "original": {
         "owner": "FlafyDev",
         "repo": "assets",
+        "type": "github"
+      }
+    },
+    "bad-time-simulator": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1704047384,
+        "narHash": "sha256-RgZM7hWQ8thIvSaXQzfRi1Bf43rC1lvC1LanmbOhg34=",
+        "owner": "flafydev",
+        "repo": "bad-time-simulator-compiled",
+        "rev": "562c6dfe641174abc70739cf879d341f6f7e0dbd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "flafydev",
+        "repo": "bad-time-simulator-compiled",
         "type": "github"
       }
     },
@@ -650,11 +666,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1701220839,
-        "narHash": "sha256-mD8SYyQ47zvHcHWe2TfPgSDZhrh+rd7o1Qxc012ikaQ=",
+        "lastModified": 1703812100,
+        "narHash": "sha256-JN8qbWz6OPEEPwP+AmfAmlhPE19RqUqND6hGAeK2Od0=",
         "owner": "infinidoge",
         "repo": "nix-minecraft",
-        "rev": "0fa82d954e4f9a2f14b43f9301232447b90184e9",
+        "rev": "7d23e6f5635499a34d09950981cf42bb072f4fa2",
         "type": "github"
       },
       "original": {
@@ -683,22 +699,6 @@
       "original": {
         "owner": "privatevoid-net",
         "repo": "nix-super",
-        "type": "github"
-      }
-    },
-    "nixos-old-stable": {
-      "locked": {
-        "lastModified": 1700390070,
-        "narHash": "sha256-de9KYi8rSJpqvBfNwscWdalIJXPo8NjdIZcEJum1mH0=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "e4ad989506ec7d71f7302cc3067abd82730a4beb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -909,6 +909,7 @@
         "anyrun": "anyrun",
         "anyrun-nixos-options": "anyrun-nixos-options",
         "assets": "assets",
+        "bad-time-simulator": "bad-time-simulator",
         "bufresize-nvim": "bufresize-nvim",
         "flake-parts": "flake-parts_3",
         "flarrent": "flarrent",
@@ -924,7 +925,6 @@
         "nix-index-database": "nix-index-database",
         "nix-minecraft": "nix-minecraft",
         "nix-super": "nix-super",
-        "nixos-old-stable": "nixos-old-stable",
         "nixpak": "nixpak",
         "nixpkgs": "nixpkgs_7",
         "nur": "nur",

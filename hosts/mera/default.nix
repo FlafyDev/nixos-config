@@ -1,219 +1,79 @@
 {
   pkgs,
-  osConfig,
-  lib,
+  config,
+  ssh,
   ...
 }: {
-  osModules = [
-    ./hardware-configuration.nix
+  imports = [./hardware];
+
+  users.main = "server";
+  users.host = "mera";
+
+
+
+  secrets.enable = true;
+  printers.enable = true;
+  os.networking.hostName = config.users.host;
+
+  bitwarden.enable = true;
+
+  os.services.openvscode-server = {
+    enable = true;
+    user = "server";
+    withoutConnectionToken = true;
+    package = pkgs.openvscode-server.overrideAttrs (old: {
+      patches =
+        (old.patches or [])
+        ++ [
+          ./temppatch.patch
+        ];
+    });
+    # host = "0.0.0.0";
+    # port = 58846;
+  };
+  os.nixpkgs.config.permittedInsecurePackages = [
+    "nodejs-16.20.2"
   ];
 
-  unfree.allowed = ["nvidia-x11" "nvidia-settings" "nvidia-persistenced"];
+  games.services.badTimeSimulator.enable = true;
+  programs.neovim.enable = true;
+  programs.cli-utils.enable = true;
+  # programs.transmission.enable = true;
+  programs.direnv.enable = true;
+  programs.fish.enable = true;
+  programs.git.enable = true;
+  programs.nix.enable = true;
+  programs.ssh = {
+    enable = true;
 
-  os = {
-    environment.sessionVariables.LIBVA_DRIVER_NAME = "nvidia";
-    # environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "nvidia";
-
-    time.timeZone = "Israel";
-    networking.hostName = "mera";
-    # systemd.services.NetworkManager-wait-online.enable = false;
-    boot = {
-      kernelPackages = pkgs.linuxPackages_6_1;
-      blacklistedKernelModules = ["nouveau"];
-      supportedFilesystems = ["ntfs"];
-      # kernelPatches = [
-      #   {
-      #     name = "nouveau-try";
-      #     patch = null;
-      #     extraConfig = ''
-      #       CONFIG_FRAMEBUFFER_CONSOLE y
-      #     '';
-      #   }
-      # ];
-      loader = {
-        # systemd-boot.enable = true;
-        efi = {
-          canTouchEfiVariables = true;
-          efiSysMountPoint = "/boot/efi";
-        };
-        grub = {
-          enable = true;
-          devices = ["nodev"];
-          efiSupport = true;
-          useOSProber = true;
-        };
+    matchBlocks = {
+      ope = {
+        identitiesOnly = true;
+        identityFile = ["~/.ssh/mera_to_ope"];
       };
     };
 
-    services.upower.enable = true;
-    services.logind.lidSwitch = "ignore";
+    server = {
+      enable = true;
 
-    networking = {
-      networkmanager = {
-        enable = true;
-        insertNameservers = ["1.1.1.1"];
-      };
-
-      dhcpcd = {
-        wait = "background";
-        extraConfig = "noarp";
-      };
-
-      useDHCP = false;
-      interfaces = {
-        wlp3s0.useDHCP = false; # No WiFi !
-        enp4s0 = {
-          useDHCP = true;
-          ipv4.addresses = [{
-            address = "10.0.0.41";
-            prefixLength = 24;
-          }];
-        };
-      };
-
-      firewall = {
-        enable = true;
-        allowedTCPPorts = [58846 25565 80 21 22];
-        allowedUDPPorts = [58846 25565 80 21 22];
-      };
-    };
-
-    boot.kernelParams = [
-      # "nouveau.modeset=1"
-      "video=HDMI-A-1:1920x1080@60"
-      "nohibernate"
-    ];
-
-    hardware.nvidia = {
-      open = false;
-      modesetting.enable = true;
-      powerManagement = {
-        enable = true;
-        finegrained = true;
-      };
-      nvidiaSettings = false;
-      nvidiaPersistenced = true;
-      forceFullCompositionPipeline = true;
-      package = osConfig.boot.kernelPackages.nvidiaPackages.stable;
-      prime = {
-        offload.enable = true;
-        offload.enableOffloadCmd = true;
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
-      };
-    };
-    services.xserver = {
-      videoDrivers = ["nvidia"];
-      # deviceSection = ''
-      #   Option "DRI" "2"
-      #   Option "TearFree" "true"
-      # '';
-    };
-
-    # specialisation = {
-    #   nvidiaSync.configuration = {
-    #     hardware.nvidia.prime.sync.enable = lib.mkForce true;
-    #   };
-    # };
-
-    hardware = {
-      # bumblebee.enable = true;
-      pulseaudio.enable = lib.mkForce false;
-      # pulseaudio.enable = true;
-      bluetooth = {
-        enable = true;
-        hsphfpd.enable = false;
-        # package = pkgs.bluez;
-        settings = {
-          General = {
-            Experimental = true;
-          };
-        };
-      };
-      opentabletdriver.enable = true;
-
-      opengl = {
-        enable = true;
-        driSupport = true;
-        driSupport32Bit = true;
-        extraPackages = with pkgs; [nvidia-vaapi-driver];
-        extraPackages32 = with pkgs.pkgsi686Linux; [nvidia-vaapi-driver];
-        # extraPackages = with pkgs; [
-        #   intel-media-driver
-        #   # vaapiIntel
-        #   vaapiVdpau
-        #   libvdpau-va-gl
-        # ];
-        # setLdLibraryPath = true;
-        # driSupport = true;
-        # extraPackages = with pkgs; [
-        #   libglvnd
-        #   intel-media-driver
-        #   vaapiVdpau
-        #   vaapi-intel-hybrid
-        #   vaapiIntel
-        #   libvdpau-va-gl
-        #   nvidia-vaapi-driver
-        #   libva
-        # ];
-      };
-    };
-
-    # wake up on external usb devices
-    # powerManagement.powerDownCommands = ''
-    #   echo enabled > /sys/bus/usb/devices/usb1/power/wakeup
-    #   echo enabled > /sys/bus/usb/devices/usb2/power/wakeup
-    # '';
-
-    # specialisation = {
-    #   external-display.configuration = {
-    #     system.nixos.tags = [ "external-display" ];
-    #     hardware.nvidia.prime.offload.enable = lib.mkForce false;
-    #     hardware.nvidia.powerManagement.enable = lib.mkForce false;
-    #   };
-    # };
-
-    programs.light.enable = false;
-
-    security = {
-      rtkit.enable = true;
-      pam.loginLimits = [
-        {
-          domain = "*";
-          type = "soft";
-          item = "nofile"; # max FD count
-          value = "unlimited";
-        }
+      users.${config.users.main}.keyFiles = [
+        ssh.ope.ope_to_mera.public
       ];
-    };
-
-    services = {
-      # pipewire = {
-      #   enable = true;
-      #   # alsa.enable = true;
-      #   # pulse.enable = true;
-      #   # media-session.enable = true;
-      #   wireplumber.enable = true;
-      #   # If you want to use JACK applications, uncomment this
-      #   #jack.enable = true;
-      # }
-      tlp = {
-        enable = false;
-      };
-
-      pipewire = {
-        enable = true;
-        alsa.enable = true;
-        jack.enable = true;
-        pulse.enable = true;
-        wireplumber.enable = true;
-      };
-
-      # openssh.enable = true;
-      # blueman.enable = true;
     };
   };
 
-  os.system.stateVersion = "23.05";
-  hm.home.stateVersion = "23.05";
+
+  users.groups = ["sftpuser"];
+
+  os.services.vsftpd = {
+    enable = true;
+    #   cannot chroot && write
+    #    chrootlocalUser = true;
+    writeEnable = true;
+    localUsers = true;
+    # userlist = ["martyn" "cam"];
+    # userlistEnable = true;
+    # anonymousUserNoPassword = true;
+    # anonymousUser = true;
+  };
 }

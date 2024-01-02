@@ -69,7 +69,7 @@ in {
     updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} fast "$@")'';
   in
     mkIf cfg.enable {
-      unfree.allowed = ["unrar"];
+      unfree.allowed = ["unrar" "ngrok"];
       os.environment.systemPackages = with pkgs; let
         bin = writeShellScriptBin;
       in [
@@ -84,6 +84,7 @@ in {
         makeConfigEditable
         wifi
 
+        jq
         nano
         wget
         parted
@@ -101,6 +102,7 @@ in {
         ripgrep
         htop
         tree
+        ngrok
         # cp-maps
         # project-creator
         btop

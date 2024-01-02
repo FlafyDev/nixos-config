@@ -45,6 +45,7 @@ in {
       };
       os.environment.systemPackages = with pkgs; [
         (elib.flPkgs inputs.flarrent)
+        kdenlive
         chromium
         gnome.eog
         mate.engrampa

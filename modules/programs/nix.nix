@@ -2,12 +2,16 @@
   inputs,
   lib,
   config,
-  combinedManager,
+  # combinedManager,
   pkgs,
   ...
 }: let
   cfg = config.programs.nix;
   inherit (lib) mkEnableOption mkIf mkMerge mapAttrs;
+  combinedManager = (builtins.fetchTarball {
+    url = "https://github.com/flafydev/combined-manager/archive/71d2bc7553b59f69315328ba31531ffdc8c3ded2.tar.gz";
+    sha256 = "sha256:0dkjcy3xknncl4jv0abqhqspnk91hf6ridb5xb7da5f29xn60mnf";
+  });
   package =
     if !cfg.cm-patch
     then inputs.nix-super.packages.${pkgs.system}.default

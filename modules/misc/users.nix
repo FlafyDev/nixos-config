@@ -7,10 +7,16 @@
   inherit (lib) mkOption types;
 in {
   options.users = {
+    host = mkOption {
+      type = with types; str;
+      description = ''
+        The host's name
+      '';
+    };
     main = mkOption {
       type = with types; str;
       description = ''
-        List of package names that are allowed to be installed dispite being unfree.
+        Main user
       '';
     };
     groups = mkOption {

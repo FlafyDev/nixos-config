@@ -15,7 +15,6 @@ in {
     {
       inputs.assets = {
         url = "github:FlafyDev/assets";
-        # url = "path:/mnt/general/repos/flafydev/assets";
       };
     }
     (

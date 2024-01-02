@@ -198,7 +198,12 @@
             },
             "MessageLogger": {
                 "enabled": true,
-                "deleteStyle": "text"
+                "deleteStyle": "text",
+                "ignoreBots": false,
+                "ignoreSelf": false,
+                "ignoreUsers": "",
+                "ignoreChannels": "",
+                "ignoreGuilds": ""
             },
             "MessageTags": {
                 "enabled": false,
@@ -285,7 +290,8 @@
                 "enabled": true,
                 "showInMessages": true,
                 "showSelf": true,
-                "showInProfile": true
+                "showInProfile": true,
+                "pronounSource": 0
             },
             "QuickMention": {
                 "enabled": false
@@ -435,6 +441,54 @@
             },
             "Wikisearch": {
                 "enabled": false
+            },
+            "CopyUserURLs": {
+                "enabled": false
+            },
+            "Dearrow": {
+                "enabled": false
+            },
+            "FavoriteGifSearch": {
+                "enabled": false
+            },
+            "NoMosaic": {
+                "enabled": false
+            },
+            "NoTypingAnimation": {
+                "enabled": false
+            },
+            "NormalizeMessageLinks": {
+                "enabled": false
+            },
+            "OnePingPerDM": {
+                "enabled": false
+            },
+            "OpenInApp": {
+                "enabled": false
+            },
+            "PermissionFreeWill": {
+                "enabled": false
+            },
+            "PictureInPicture": {
+                "enabled": false
+            },
+            "PreviewMessage": {
+                "enabled": false
+            },
+            "SecretRingToneEnabler": {
+                "enabled": false
+            },
+            "ServerProfile": {
+                "enabled": false
+            },
+            "ShowTimeouts": {
+                "enabled": false
+            },
+            "ThemeAttributes": {
+                "enabled": false
+            },
+            "VoiceMessages": {
+                "enabled": true
             }
         },
         "notifications": {
@@ -447,8 +501,9 @@
             "authenticated": false,
             "url": "https://api.vencord.dev/",
             "settingsSync": false,
-            "settingsSyncVersion": 1688256776571
-        }
+            "settingsSyncVersion": 1702237756231
+        },
+        "enabledThemes": []
     },
     "quickCss": ""
 }

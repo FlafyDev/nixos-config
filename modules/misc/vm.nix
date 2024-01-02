@@ -37,7 +37,7 @@ in {
       ];
 
       services.udev.extraRules = ''
-        SUBSYSTEM=="kvmfr", KERNEL=="kvmfr0", OWNER="flafy", GROUP="kvm", MODE="0660"
+        SUBSYSTEM=="kvmfr", KERNEL=="kvmfr0", OWNER="${config.users.main}", GROUP="kvm", MODE="0660"
       '';
 
       boot.extraModprobeConfig = ''
