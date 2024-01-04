@@ -10,29 +10,40 @@
   users.host = "ope";
 
   os = {
+    services.prometheus = {
+      enable = true;
+      listenAddress = "10.10.10.10";
+      port = 4000;
+      # exporters.smokeping.enable = true;
+      # exporters.smokeping.hosts  = [ "www.github.com" ];
+      globalConfig = {
+        scrape_interval = "15s";
+        evaluation_interval = "15s";
+      };
+
+      scrapeConfigs = [
+        # {
+        #   job_name = "prometheus";
+        #   static_configs = [{
+        #       targets = ["localhost:9374"];
+        #     }
+        #   ];
+        # }
+      ];
+    };
     networking = {
-      hostName = config.users.host;
       firewall = {
         allowedUDPPorts = [51820 53317];
       };
       wireguard = {
         enable = true;
-        interfaces.wg0 = {
+        interfaces.wg_vps = {
           ips = [ "10.10.10.10/32" ];
-          privateKeyFile = "";
+          privateKeyFile = ssh.ope.ope_wg_vps.private;
           peers = [{
-            # Public key of the server (not a file path).
-            publicKey = "";
-
-            # Forward all the traffic via VPN.
+            publicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
             allowedIPs = [ "10.10.10.1/32" ];
-            # Or forward only particular subnets
-            #allowedIPs = [ "10.100.0.1" "91.108.12.0/22" ];
-
-            # Set this to the server IP and port.
-            endpoint = "167.71.36.213:51820"; # ToDo: route to endpoint not automatically configured https://wiki.archlinux.org/index.php/WireGuard#Loop_routing https://discourse.nixos.org/t/solved-minimal-firewall-setup-for-wireguard-client/7577
-
-            # Send keepalives every 25 seconds. Important to keep NAT tables alive.
+            endpoint = "167.71.36.213:51820";
             persistentKeepalive = 25;
           }];
         };
@@ -110,19 +121,19 @@
   games.services.minecraft.enable = true;
 
   # TEMP
-  os.nixpkgs.overlays = [
-    (final: prev: {
-      makeDBusConf = {
-        suidHelper,
-        serviceDirectories,
-        apparmor ? "disabled",
-      }:
-        prev.makeDBusConf {
-          serviceDirectories = serviceDirectories ++ ["/home/flafy/.testshare"];
-          inherit suidHelper apparmor;
-        };
-    })
-  ];
+  # os.nixpkgs.overlays = [
+  #   (final: prev: {
+  #     makeDBusConf = {
+  #       suidHelper,
+  #       serviceDirectories,
+  #       apparmor ? "disabled",
+  #     }:
+  #       prev.makeDBusConf {
+  #         serviceDirectories = serviceDirectories ++ ["/home/flafy/.testshare"];
+  #         inherit suidHelper apparmor;
+  #       };
+  #   })
+  # ];
 
   programs = {
     anyrun.enable = true;
@@ -145,11 +156,11 @@
       matchBlocks = {
         mera = {
           identitiesOnly = true;
-          identityFile = ["~/.ssh/ope_to_mera"];
+          identityFile = [ssh.ope.ope_to_mera.private];
         };
         "github.com" = {
           identitiesOnly = true;
-          identityFile = ["~/.ssh/ope_flafydev_github"];
+          identityFile = [ssh.ope.ope_flafydev_github.private];
         };
       };
 

@@ -61,7 +61,7 @@ in {
           PasswordAuthentication = false;
           KbdInteractiveAuthentication = false;
           # GatewayPorts = "yes";
-          # PermitRootLogin = "without-password";
+          PermitRootLogin = "yes";
         };
       };
       os.users.users =

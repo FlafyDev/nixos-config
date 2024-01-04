@@ -13,7 +13,7 @@
 
   secrets.enable = true;
   printers.enable = true;
-  os.networking.hostName = config.users.host;
+  # os.networking.hostName = config.users.host;
 
   bitwarden.enable = true;
 
@@ -49,7 +49,7 @@
     matchBlocks = {
       ope = {
         identitiesOnly = true;
-        identityFile = ["~/.ssh/mera_to_ope"];
+        identityFile = [ssh.mera.mera_to_ope.private];
       };
     };
 
@@ -57,6 +57,9 @@
       enable = true;
 
       users.${config.users.main}.keyFiles = [
+        ssh.ope.ope_to_mera.public
+      ];
+      users.root.keyFiles = [
         ssh.ope.ope_to_mera.public
       ];
     };

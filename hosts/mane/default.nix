@@ -19,33 +19,102 @@ in {
   ];
 
   os = {
+    services = {
+prometheus = {
+  enable = true;
+
+};
+      nginx = {
+        enable = true;
+        virtualHosts."flafy.me" = {
+          locations."/" = {
+            proxyPass = "http://10.10.10.10:4000";
+            extraConfig = ''
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+            '';
+          };
+        };
+        # streamConfig = ''
+        #   server {
+        #       listen 10.10.10.10:47984 tcp;  # Replace with the IP address assigned to the WireGuard interface
+        #       proxy_pass flafy.me:47984;  # Replace with your actual service IP and port
+        #   }
+        #
+        #   server {
+        #       listen 10.10.10.10:47989 tcp;
+        #       proxy_pass flafy.me:47989;
+        #   }
+        #
+        #   server {
+        #       listen 10.10.10.10:48010 udp;
+        #       proxy_pass flafy.me:48010;
+        #   }
+        #
+        #   server {
+        #       listen 10.10.10.10:47998 udp;
+        #       proxy_pass flafy.me:47998;
+        #   }
+        #
+        #   server {
+        #       listen 10.10.10.10:47999 udp;
+        #       proxy_pass flafy.me:47999;
+        #   }
+        #
+        #   server {
+        #       listen 10.10.10.10:48000 udp;
+        #       proxy_pass flafy.me:48000;
+        #   }
+        #
+        #   server {
+        #       listen 10.10.10.10:48002 udp;
+        #       proxy_pass flafy.me:48002;
+        #   }
+        # '';
+      };
+
+      vsftpd = {
+        enable = true;
+        #   cannot chroot && write
+        #    chrootlocalUser = true;
+        writeEnable = true;
+        localUsers = true;
+        # userlist = ["martyn" "cam"];
+        # userlistEnable = true;
+        # anonymousUserNoPassword = true;
+        # anonymousUser = true;
+      };
+    };
+
     networking = {
       firewall = {
-        allowedUDPPorts = [51820];
+        enable = true;
+        allowedUDPPorts = [51820 48002 48010];
+        allowedTCPPorts = [80 443 48010 47989 47984 3001];
+        allowedUDPPortRanges = [
+          {
+            from = 47998;
+            to = 48000;
+          }
+        ];
       };
       wireguard = {
         enable = true;
-        interfaces.wg0 = {
-          ips = [ "10.10.10.1/24" ];
+        interfaces.wg_vps = {
+          ips = ["10.10.10.1/24"];
           listenPort = 51820;
-          privateKeyFile = "";
-          peers = [{
-            # Public key of the server (not a file path).
-            publicKey = "";
-
-            # Forward all the traffic via VPN.
-            allowedIPs = [ "10.10.10.10/32" ];
-          }];
+          privateKeyFile = ssh.mane.mane_wg_vps.private;
+          peers = [
+            {
+              publicKey = builtins.readFile ssh.ope.ope_wg_vps.public;
+              allowedIPs = ["10.10.10.10/32"];
+            }
+          ];
         };
       };
     };
-  };
-
-
-  os.networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [3000 80];
-    # allowedUDPPorts = [58846 25565 80 21 22];
   };
 
   os.virtualisation.digitalOcean.setSshKeys = false;
@@ -55,7 +124,7 @@ in {
 
   users.main = "vps";
   users.host = "mane";
-  os.networking.hostName = config.users.host;
+  # os.networking.hostName = config.users.host;
 
   secrets.enable = true;
   # printers.enable = true;
@@ -95,19 +164,10 @@ in {
       users.${config.users.main}.keyFiles = [
         ssh.ope.ope_to_mane.public
       ];
+      users.root.keyFiles = [
+        ssh.ope.ope_to_mane.public
+      ];
     };
   };
   users.groups = ["sftpuser"];
-
-  os.services.vsftpd = {
-    enable = true;
-    #   cannot chroot && write
-    #    chrootlocalUser = true;
-    writeEnable = true;
-    localUsers = true;
-    # userlist = ["martyn" "cam"];
-    # userlistEnable = true;
-    # anonymousUserNoPassword = true;
-    # anonymousUser = true;
-  };
 }

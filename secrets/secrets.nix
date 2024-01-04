@@ -9,7 +9,7 @@ let
       user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBCMFb8CoNiwcYM0XgGw2m0rMUP065/q+7VfssGH5ebL server@mera";
     };
     mane = {
-      user = "";
+      user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPn84OxYt3K7HwfpNPfA1cqbLMMlz3DjVEINeoVFD/it vps@mane";
     };
   };
 

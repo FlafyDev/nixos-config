@@ -63,6 +63,7 @@ in {
             "easeInOut,.5,0,.5,1"
           ];
           env = mapAttrsToList (name: value: "${name},${toString value}") {
+            WLR_NO_HARDWARE_CURSORS = 1; # For Sunshine... Let's see if I notice anything...
             SDL_VIDEODRIVER = "wayland";
             _JAVA_AWT_WM_NONREPARENTING = 1;
             WLR_DRM_NO_ATOMIC = 1;

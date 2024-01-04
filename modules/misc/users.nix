@@ -30,6 +30,7 @@ in {
 
   config = {
     os = {
+      networking.hostName = cfg.host;
       users.users.root = {
         group = "root";
         hashedPassword = "$y$j9T$s7BZx6bB6XXKsM.nGXaeq/$rUV6f4K8c1SuxPe0HnngsFhgDDTa9Cj1oWKGfaPuik5";

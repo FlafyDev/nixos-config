@@ -43,7 +43,7 @@ in {
       # dedicatedServer.openFirewall = true;
     };
     hm.wayland.windowManager.hyprland.settings.exec-once = mkIf cfg.autoLaunchSteam.enable [
-      ''env DISPLAY=:${toString config.display.hyprland.headlessXorg.num} steam -login flafythrow $(get-password "flafythrow steam")''
+      ''env DISPLAY=:${toString config.display.hyprland.headlessXorg.num} steam -login flafythrow $(${pkgs.get-password}/bin/get-password "flafythrow steam")''
     ];
 
     hm.xdg.configFile."retroarch/retroarch.cfg".source = ./retroarch.cfg;
@@ -111,7 +111,7 @@ in {
           # TODO: Don't hardcode sftp server.
           # TODO: Declarative password
           ${pkgs.restic}/bin/restic backup ${concatStringsSep " " savefiles} --repo sftp:server@mera:backups/game-saves \
-              --password-command "get-password restic-game-saves"
+              --password-command "${pkgs.get-password}/bin/get-password restic-game-saves"
 
           sudo umount /mnt/winvm
           sudo ${pkgs.qemu}/bin/qemu-nbd --disconnect /dev/nbd0
