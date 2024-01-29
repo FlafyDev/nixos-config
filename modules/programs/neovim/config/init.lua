@@ -94,6 +94,13 @@ vim.cmd('set clipboard+=unnamedplus');
 vim.cmd('set signcolumn=yes');
 -- vim.cmd('TransparentEnable');
 
+local function autoscroll(buf, win)
+  if not win then return end
+  -- if the dev log is focused don't scroll it as it will block the user from perusing
+  if vim.api.nvim_get_current_win() == win then return end
+  local buf_length = vim.api.nvim_buf_line_count(buf)
+  local success, err = pcall(vim.api.nvim_win_set_cursor, win, { buf_length, 0 })
+end
 
 vim.api.nvim_create_user_command(
   'FlutterLogToggle',
@@ -109,6 +116,17 @@ vim.api.nvim_create_user_command(
 
     pcall(function()
       vim.api.nvim_command 'belowright split + __FLUTTER_DEV_LOG__ | resize 15'
+
+      local wins = vim.api.nvim_list_wins()
+
+      for _, id in pairs(wins) do
+        local bufnr = vim.api.nvim_win_get_buf(id)
+        if vim.api.nvim_buf_get_name(bufnr):match '.*/([^/]+)$' == '__FLUTTER_DEV_LOG__' then
+          autoscroll(bufnr, id)
+          return vim.api.nvim_win_close(id, true)
+        end
+      end
+
     end)
   end,
   { nargs = 0 }

@@ -12,7 +12,42 @@ in {
   };
 
   config = let
-    updateSystem = pkgs.writeShellScript "updateSystem" ''
+    build-system = pkgs.writeShellScriptBin "build-system" ''
+      while [ "$#" -gt 0 ]; do
+        i="$1"; shift 1
+        case "$i" in
+          --op)
+            operation="$1"
+            shift 1
+            ;;
+          --host)
+            host="$1"
+            shift 1
+            ;;
+        esac
+      done
+
+      if [ ! -z "$host" ]; then
+        case $host in
+          "mera")
+            ssh_host="mera.lan1.flafy.me"
+            ;;
+          "mane")
+            ssh_host="flafy.me"
+            ;;
+          "ope")
+            exit 1
+            ;;
+          *)
+            exit 1
+            ;;
+        esac
+
+        nixos-rebuild $operation --flake .#$host --option eval-cache false -L -v --target-host root@$ssh_host |& ${pkgs.nix-output-monitor}/bin/nom
+      else
+        sudo nixos-rebuild $operation --flake .# --option eval-cache false -L -v |& ${pkgs.nix-output-monitor}/bin/nom
+      fi
+
       case $2 in
         fast)
           nixos-rebuild test --fast --flake --impure -L "''${@:2}"
@@ -64,9 +99,6 @@ in {
       mv ./$1 ./''${newName}
       cat ''${newName} > ./$1
     '';
-    update = pkgs.writeShellScriptBin "update" ''(cd ${configLocation} ; sudo ${updateSystem} "$@")'';
-    updateBoot = pkgs.writeShellScriptBin "update-boot" ''(cd ${configLocation} ; sudo ${updateSystem} boot "$@")'';
-    updateFast = pkgs.writeShellScriptBin "update-fast" ''(cd ${configLocation} ; sudo ${updateSystem} fast "$@")'';
   in
     mkIf cfg.enable {
       unfree.allowed = ["unrar" "ngrok"];
@@ -77,9 +109,7 @@ in {
         (bin "batp" ''${bat}/bin/bat -P "$@"'') 
         (bin "cpwd" "pwd | wl-copy") 
 
-        update
-        updateBoot
-        updateFast
+        build-system
         nvidia-offload
         makeConfigEditable
         wifi

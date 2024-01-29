@@ -31,7 +31,7 @@ in {
         url = "github:flafydev/flutter_background_bar";
       };
       inputs.hyprland = {
-        url = "github:hyprwm/Hyprland/5b8cfdf2efc44106b61e60c642fd964823fd89f3";
+        url = "github:hyprwm/Hyprland/v0.34.0";
       };
     }
     (mkIf cfg.enable {
@@ -41,7 +41,11 @@ in {
 
       os = {
         xdg.portal.enable = true;
-        programs.hyprland.enable = true;
+        programs.hyprland = {
+          enable = true;
+          package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+          portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+        };
       };
 
       hm.wayland.windowManager.hyprland = {
@@ -271,6 +275,7 @@ in {
           in
             []
             # Specific window rules
+            ++ (rulesForWindow "title:^()$,class:^(steam)$" ["stayfocused" "minsize 1 1"])
             ++ (rulesForWindow "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"])
             ++ (rulesForWindow "class:^(looking-glass-client)$" ["immediate"])
             ++ (rulesForWindow "class:^(middleterm)$" ["float" "size 750 550" "animation slide"])

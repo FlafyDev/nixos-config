@@ -2,15 +2,24 @@
   inputs,
   lib,
   config,
-  elib,
   pkgs,
   ...
-}:
-with lib; let
-  cfg = config.games.services.badTimeSimulator;
+}: let
+  inherit (lib) mkEnableOption mkOption types mkIf mkMerge;
+  cfg = config.services.games.badTimeSimulator;
 in {
-  options.games.services.badTimeSimulator = {
+  options.services.games.badTimeSimulator = {
     enable = mkEnableOption "badTimeSimulator";
+    port = mkOption {
+      type = types.int;
+      default = 8001;
+      description = "Port to run the server on.";
+    };
+    hostname = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Hostname to run the server on.";
+    };
   };
 
   config = mkMerge [
@@ -31,12 +40,17 @@ in {
             isSystemUser = true;
             group = "badtimesimulator";
           };
-          groups.badtimesimulator = { };
+          groups.badtimesimulator = {};
         };
         os.systemd.services.bad-time-simulator = {
-          after = ["network.target"];
+          after = ["network-online.target"];
+          wantedBy = ["multi-user.target"];
+          wants = ["network-online.target"];
+          startLimitIntervalSec = 60;
           description = "Start Bad Time Simulator server.";
           serviceConfig = {
+            Restart = "always";
+            RestartSec = "10s";
             # username that systemd will look for; if it exists, it will start a service associated with that user
             User = "badtimesimulator";
             # the command to execute when the service starts up
@@ -46,7 +60,7 @@ in {
                 import socketserver
 
                 # Set the port number you want to use
-                port = 8001
+                port = ${toString cfg.port}
 
                 # Choose the handler you want to use (in this case, SimpleHTTPRequestHandler)
                 # handler = http.server.SimpleHTTPRequestHandler
@@ -59,7 +73,7 @@ in {
 
 
                 # Create the server
-                httpd = socketserver.TCPServer(("0.0.0.0", port), handler)
+                httpd = socketserver.TCPServer(("${cfg.hostname}", port), handler)
 
                 # Print a message to indicate that the server is running
                 print(f"Serving on port {port}")

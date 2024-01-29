@@ -67,9 +67,9 @@
         # Unbind GPU if necessary
         unbind_gpu "$gpu"
 
-        # Put the system to sleep for 3 seconds
+        # Put the system to sleep for 6 seconds
         if [ $# -lt 2 ]; then
-          rtcwake -m mem -s 3
+          rtcwake -m mem -s 6
         fi
 
         # Wait for another 3 seconds

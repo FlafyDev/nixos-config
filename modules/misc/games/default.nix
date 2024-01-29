@@ -291,7 +291,8 @@ in {
     in [
       backup-game-saves
       launch-game
-      pkgs.wine64
+      pkgs.wineWowPackages.stable
+      pkgs.gamescope
       pkgs.retroarch
     ];
   };

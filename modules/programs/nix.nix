@@ -8,10 +8,10 @@
 }: let
   cfg = config.programs.nix;
   inherit (lib) mkEnableOption mkIf mkMerge mapAttrs;
-  combinedManager = (builtins.fetchTarball {
+  combinedManager = builtins.fetchTarball {
     url = "https://github.com/flafydev/combined-manager/archive/71d2bc7553b59f69315328ba31531ffdc8c3ded2.tar.gz";
     sha256 = "sha256:0dkjcy3xknncl4jv0abqhqspnk91hf6ridb5xb7da5f29xn60mnf";
-  });
+  };
   package =
     if !cfg.cm-patch
     then inputs.nix-super.packages.${pkgs.system}.default
@@ -68,6 +68,20 @@ in {
       os.nix = {
         enable = true;
         inherit package;
+
+        # buildMachines = [
+        #   {
+        #     system = "x86_64-darwin";
+        #     sshUser = "root";
+        #     sshKey = "/root/.ssh/ope_to_mac";
+        #     maxJobs = 4;
+        #     hostName = "mac1-guest";
+        #     # protocol = "ssh-ng";
+        #     # supportedFeatures = ["nixos-test" "benchmark" "kvm" "big-parallel"];
+        #   }
+        # ];
+        distributedBuilds = true;
+
         registry = mapAttrs (_name: value: {flake = value;}) (with inputs; {
           inherit nixpkgs;
           default = nixpkgs;
@@ -75,6 +89,7 @@ in {
         nixPath = [
           "nixpkgs=${inputs.nixpkgs}"
         ];
+          # builders = ssh://root@mac1-guest?ssh-key=/home/flafy/.ssh/ope_to_mac&remote-program=/nix/var/nix/profiles/default/bin/nix-store x86_64-darwin
         extraOptions = ''
           experimental-features = nix-command flakes
         '';

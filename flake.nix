@@ -1,10 +1,9 @@
 let
-  combinedManager = import /home/flafy/repos/flafydev/combined-manager
-;
-  # combinedManager = import (builtins.fetchTarball {
-  #   url = "https://github.com/flafydev/combined-manager/archive/71d2bc7553b59f69315328ba31531ffdc8c3ded2.tar.gz";
-  #   sha256 = "sha256:0dkjcy3xknncl4jv0abqhqspnk91hf6ridb5xb7da5f29xn60mnf";
-  # });
+  # combinedManager = import /home/flafy/repos/flafydev/combined-manager;
+  combinedManager = import (builtins.fetchTarball {
+    url = "https://github.com/flafydev/combined-manager/archive/8a9043cdfa3596a4bd0e6c685726cfa7fdfa4e6d.tar.gz";
+    sha256 = "sha256:1pvjn8j5rmr2g717bh1dgj6a8zi7ffmpm5nmhjrq1mcvbyi9kdyk";
+  });
 in
   combinedManager.mkFlake {
     description = "NixOS configuration";
@@ -12,7 +11,7 @@ in
     lockFile = ./flake.lock;
 
     initialInputs = {
-      nixpkgs.url = "github:nixos/nixpkgs/970a59bd19eff3752ce552935687100c46e820a5";
+      nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
       home-manager = {
         url = "github:nix-community/home-manager";
         inputs.nixpkgs.follows = "nixpkgs";

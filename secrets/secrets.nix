@@ -13,6 +13,9 @@ let
     };
   };
 
+  # Can edit all secrets;
+  masterPC = ope;
+
   inherit (publicKeys) ope mera;
   inherit (builtins) readDir attrNames foldl' substring;
 
@@ -26,6 +29,7 @@ let
         // {
           ${concatPaths ["ssh-keys" host key "private.age"]}.publicKeys = [
             publicKeys.${host}.user
+            masterPC.user
           ];
         }) {} (attrNames (readDir (concatPaths [./ssh-keys host]))))
   ) {} (attrNames (readDir ./ssh-keys));
@@ -35,6 +39,22 @@ in
     "other/bitwarden.age".publicKeys = [
       ope.user
       mera.user
+      masterPC.user
+    ];
+    "other/flafy_me-cert.age".publicKeys = [
+      ope.user
+      mera.user
+      masterPC.user
+    ];
+    "other/flafy_me-key.age".publicKeys = [
+      ope.user
+      mera.user
+      masterPC.user
+    ];
+    "other/flafy_me-pass.age".publicKeys = [
+      ope.user
+      mera.user
+      masterPC.user
     ];
 
     # sshKeys.publicKeys = [

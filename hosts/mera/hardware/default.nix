@@ -69,12 +69,6 @@
           }];
         };
       };
-
-      firewall = {
-        enable = true;
-        allowedTCPPorts = [58846 8001 25565 80 21 22 3001];
-        allowedUDPPorts = [58846 25565 80 21 22];
-      };
     };
 
     boot.kernelParams = [

@@ -2,14 +2,13 @@
   inputs,
   lib,
   config,
-  elib,
   pkgs,
   ...
 }:
 with lib; let
-  cfg = config.games.services.minecraft;
+  cfg = config.services.games.minecraft;
 in {
-  options.games.services.minecraft = {
+  options.services.games.minecraft = {
     enable = mkEnableOption "minecraft";
   };
 

@@ -106,10 +106,28 @@ in {
           sshKeys
           // {
             bitwarden = {
-              file = builtins.trace ( ./. ) ( concatPaths [secretsDir "other" "bitwarden.age"] );
+              file = concatPaths [secretsDir "other" "bitwarden.age"];
               mode = "400";
               owner = config.users.main;
               group = "users";
+            };
+            flafy_me-cert = {
+              file = concatPaths [secretsDir "other" "flafy_me-cert.age"];
+              mode = "440";
+              owner = config.users.main;
+              group = "nginx";
+            };
+            flafy_me-key = {
+              file = concatPaths [secretsDir "other" "flafy_me-key.age"];
+              mode = "440";
+              owner = config.users.main;
+              group = "nginx";
+            };
+            flafy_me-pass = {
+              file = concatPaths [secretsDir "other" "flafy_me-pass.age"];
+              mode = "440";
+              owner = config.users.main;
+              group = "nginx";
             };
           };
 

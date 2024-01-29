@@ -7,7 +7,7 @@
   libpulseaudio,
   lib,
   xdg-utils,
-  electron_24-bin,
+  electron_28,
   makeDesktopItem,
 }: let
   inherit (lib) makeLibraryPath;
@@ -110,7 +110,7 @@ in
       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
       # Add xdg-utils to path via suffix, per PR #181171
-      makeWrapper '${lib.getExe electron_24-bin}' $out/bin/webcord \
+      makeWrapper '${lib.getExe electron_28}' $out/bin/webcord \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
         --suffix PATH : "${binPath}" \
         --add-flags "--ozone-platform-hint=auto" \
@@ -135,6 +135,6 @@ in
       homepage = "https://github.com/kakxem/WebCord/tree/feature/screenshare-with-audio";
       license = licenses.mit;
       maintainers = with maintainers; [huantian];
-      platforms = electron_24-bin.meta.platforms;
+      platforms = electron_28.meta.platforms;
     };
   }

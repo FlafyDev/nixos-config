@@ -50,6 +50,10 @@ in {
         '';
       };
     };
+
+    sftp = {
+      enable = mkEnableOption "sftp";
+    };
   };
 
   config = mkMerge [
@@ -98,6 +102,15 @@ in {
       # hm.home.sessionVariables = {
       #   SSH_AUTH_SOCK = "/run/user/1000/keyring/ssh";
       # };
+    })
+    (mkIf (cfg.enable && cfg.sftp.enable) {
+      users.groups = ["sftpuser"];
+
+      os.services.vsftpd = {
+        enable = true;
+        writeEnable = true;
+        localUsers = true;
+      };
     })
   ];
 }
