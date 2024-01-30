@@ -120,7 +120,6 @@
     };
   };
 
-
   # os.services = {
   #   xserver = {
   #     enable = true;
@@ -206,6 +205,7 @@
 
   android.enable = true;
   display.greetd.enable = true;
+  display.greetd.command = "offload-igpu Hyprland";
   display.hyprland = {
     enable = true;
     headlessXorg.enable = true;

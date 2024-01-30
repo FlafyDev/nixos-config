@@ -27,17 +27,17 @@ in {
 
   config = mkMerge [
     {
-      inputs.flutter_background_bar = {
-        url = "github:flafydev/flutter_background_bar";
-      };
+      # inputs.flutter_background_bar = {
+      #   url = "github:flafydev/flutter_background_bar";
+      # };
       inputs.hyprland = {
         url = "github:hyprwm/Hyprland/v0.34.0";
       };
     }
     (mkIf cfg.enable {
-      os.environment.systemPackages = [
-        (elib.flPkgs inputs.flutter_background_bar)
-      ];
+      # os.environment.systemPackages = [
+      #   (elib.flPkgs inputs.flutter_background_bar)
+      # ];
 
       os = {
         xdg.portal.enable = true;
@@ -191,7 +191,7 @@ in {
           exec-once = [
             "${pkgs.mako}/bin/mako"
             "${pkgs.foot}/bin/foot --server"
-            "${elib.flPkgs inputs.flutter_background_bar}/bin/flutter_background_bar"
+            # "${elib.flPkgs inputs.flutter_background_bar}/bin/flutter_background_bar"
             "hyprctl setcursor Bibata-Modern-Ice 24"
 
             (mkIf cfg.headlessXorg.enable "${pkgs.xorg.xorgserver}/bin/Xvfb :${toString cfg.headlessXorg.num} -screen 0 1024x768x24")
