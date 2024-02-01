@@ -16,14 +16,17 @@ in {
       users.defaultUserShell = pkgs.fish;
       environment.pathsToLink = ["/share/fish"];
       programs.fish.enable = true;
+
+      documentation.man.generateCaches = false; # NixOS
     };
 
-    hm = {
-      programs.nix-index.enableFishIntegration = true;
+    hm.programs = {
+      nix-index.enableFishIntegration = true;
       # programs.starship.enableFishIntegration = true;
       # programs.direnv.enableFishIntegration = true;
+      man.generateCaches = false; # home-manager
 
-      programs.fish = {
+      fish = {
         enable = true;
         interactiveShellInit = ''
           set fish_greeting

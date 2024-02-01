@@ -28,6 +28,7 @@
 in {
   options.programs.nix = {
     enable = mkEnableOption "nix";
+    patch = mkEnableOption "patch";
     cm-patch = mkEnableOption "combined-manager-patch" // {default = true;};
   };
 
@@ -67,7 +68,7 @@ in {
       ];
       os.nix = {
         enable = true;
-        inherit package;
+        package = mkIf cfg.patch package;
 
         # buildMachines = [
         #   {

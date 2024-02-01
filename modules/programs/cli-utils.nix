@@ -24,11 +24,18 @@ in {
             host="$1"
             shift 1
             ;;
+          --custom)
+            custom="$1"
+            shift 1
+            ;;
         esac
       done
 
       if [ ! -z "$host" ]; then
         case $host in
+          "bara")
+            ssh_host="bara.lan1.flafy.me"
+            ;;
           "mera")
             ssh_host="mera.lan1.flafy.me"
             ;;
@@ -43,22 +50,10 @@ in {
             ;;
         esac
 
-        nixos-rebuild $operation --flake .#$host --option eval-cache false -L -v --target-host root@$ssh_host |& ${pkgs.nix-output-monitor}/bin/nom
+        nixos-rebuild $operation --flake .#$host --option eval-cache false -L -v --target-host root@$ssh_host $custom |& ${pkgs.nix-output-monitor}/bin/nom
       else
-        sudo nixos-rebuild $operation --flake .# --option eval-cache false -L -v |& ${pkgs.nix-output-monitor}/bin/nom
+        sudo nixos-rebuild $operation --flake .# --option eval-cache false -L -v $custom |& ${pkgs.nix-output-monitor}/bin/nom
       fi
-
-      case $2 in
-        fast)
-          nixos-rebuild test --fast --flake --impure -L "''${@:2}"
-          ;;
-        boot)
-          nixos-rebuild boot --flake "''${@:2}"
-          ;;
-        *)
-          nixos-rebuild switch --flake "''${@:2}"
-          ;;
-      esac
     '';
     configLocation = "/mnt/general/repos/flafydev/nixos-config";
     nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''

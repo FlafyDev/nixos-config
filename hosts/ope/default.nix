@@ -93,8 +93,10 @@
     networking = {
       firewall = {
         enable = true;
-        allowedUDPPorts = [51820 53317];
-        allowedTCPPorts = [53317 48010 47990 47989 47984 9100 3004 40004 40002 40003 80 443];
+            # TCP: 47984, 47989, 48010
+            # UDP: 47998-48000, 48002, 48010
+        allowedUDPPorts = [51820 53317 51821];
+        allowedTCPPorts = [53317 48010 47990 47989 47984 9100 3004 40004 40002 40003 80 443 58846 48002];
         allowedUDPPortRanges = [
           {
             from = 47998;
@@ -104,17 +106,32 @@
       };
       wireguard = {
         enable = true;
-        interfaces.wg_vps = {
-          ips = ["10.10.10.10/32"];
-          privateKeyFile = ssh.ope.ope_wg_vps.private;
-          peers = [
-            {
-              publicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
-              allowedIPs = ["10.10.10.1/32"];
-              endpoint = "flafy.me:51820";
-              persistentKeepalive = 25;
-            }
-          ];
+        interfaces = {
+          wg_private = {
+            listenPort = 51821;
+            ips = ["10.10.11.10/32"];
+            privateKeyFile = ssh.ope.ope_wg_private.private;
+            peers = [
+              {
+                publicKey = builtins.readFile ssh.bara.bara_wg_private.public;
+                allowedIPs = ["10.10.11.12/32"];
+                # endpoint = "flafy.me:51820";
+                persistentKeepalive = 25;
+              }
+            ];
+          };
+          wg_vps = {
+            ips = ["10.10.10.10/32"];
+            privateKeyFile = ssh.ope.ope_wg_vps.private;
+            peers = [
+              {
+                publicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
+                allowedIPs = ["10.10.10.1/32"];
+                endpoint = "flafy.me:51820";
+                persistentKeepalive = 25;
+              }
+            ];
+          };
         };
       };
     };
@@ -153,7 +170,8 @@
   os.services.openvscode-server = {
     enable = true;
     user = config.users.main;
-    withoutConnectionToken = false;
+    # This is going through a private wireguard interface(named "private"). So no need for a token.
+    withoutConnectionToken = true;
     # package = pkgs.openvscode-server.overrideAttrs (old: {
     #   patches =
     #     (old.patches or [])
@@ -161,8 +179,8 @@
     #       ../mera/temppatch.patch
     #     ];
     # });
-    # host = "0.0.0.0";
-    # port = 58846;
+    host = "ope.private.flafy.me";
+    port = 58846;
   };
   os.nixpkgs.config.permittedInsecurePackages = [
     "nodejs-16.20.2"
@@ -208,7 +226,15 @@
   display.greetd.command = "offload-igpu Hyprland";
   display.hyprland = {
     enable = true;
+    sunshine.enable = true;
     headlessXorg.enable = true;
+    monitors = [
+      "eDP-1,disable"
+      "HDMI-A-1,1920x1080@60,0x0,1"
+      "HDMI-A-1,addreserved,0,40,0,0"
+      "HDMI-A-2,1920x1080@60,0x0,1"
+      "HDMI-A-2,addreserved,0,40,0,0"
+    ];
   };
   fonts.enable = true;
   printers.enable = true;
@@ -256,13 +282,25 @@
     alacritty.enable = true;
     git.enable = true;
     nix.enable = true;
+    nix.patch = true;
     ssh = {
       enable = true;
 
       matchBlocks = {
-        mera = {
+        mera-lan = {
+          hostname = "mera.lan1.flafy.me";
           identitiesOnly = true;
           identityFile = [ssh.ope.ope_to_mera.private];
+        };
+        bara-lan = {
+          hostname = "bara.lan1.flafy.me";
+          identitiesOnly = true;
+          identityFile = [ssh.ope.ope_to_bara.private];
+        };
+        bara-private = {
+          hostname = "bara.private.flafy.me";
+          identitiesOnly = true;
+          identityFile = [ssh.ope.ope_to_bara.private];
         };
         "github.com" = {
           identitiesOnly = true;
@@ -273,7 +311,7 @@
       server = {
         enable = true;
         users.${config.users.main}.keyFiles = [
-          ssh.mera.mera_to_ope.public
+          ssh.bara.bara_to_ope.public
         ];
       };
     };

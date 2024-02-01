@@ -15,10 +15,11 @@ in {
     #   "mera" = "10.0.0.41";
     # };
     os.networking.extraHosts = ''
+      10.0.0.35    bara.lan1.flafy.me
       10.0.0.41    mera.lan1.flafy.me
       10.0.0.42    ope.lan1.flafy.me
-      127.0.0.1    justatest.me
-      127.0.0.1    emoji.justatest.me
+      10.10.11.10  ope.private.flafy.me
+      10.10.11.12  bara.private.flafy.me
     '';
   };
 }

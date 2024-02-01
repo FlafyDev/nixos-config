@@ -10,9 +10,30 @@
   cfg = config.display.hyprland;
   plugins = pkgs.callPackage ./plugins {};
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types mapAttrsToList;
+
+  powerButtonScript = pkgs.writeShellScript "power-button" ''
+    hyprctl dispatch dpms toggle
+  '';
 in {
   options.display.hyprland = {
     enable = mkEnableOption "hyprland";
+    monitors = mkOption {
+      type = with types; listOf str;
+      default = [];
+      description = ''
+        A list of monitors.
+      '';
+    };
+    sunshine = {
+      enable = mkEnableOption "hyprland-sunshine";
+      package = mkOption {
+        type = with types; package;
+        default = pkgs.sunshine;
+        description = ''
+          Sunshine package.
+        '';
+      };
+    };
     headlessXorg = {
       enable = mkEnableOption "hyprland-headless-xorg";
       num = mkOption {
@@ -92,13 +113,7 @@ in {
             "blur,^(anyrun)$"
             "ignorealpha ${toString (theme.popupBackgroundColor.toNormA - 0.01)},^(anyrun)$"
           ];
-          monitor = [
-            "eDP-1,disable"
-            "HDMI-A-1,1920x1080@60,0x0,1"
-            "HDMI-A-1,addreserved,0,40,0,0"
-            "HDMI-A-2,1920x1080@60,0x0,1"
-            "HDMI-A-2,addreserved,0,40,0,0"
-          ];
+          monitor = cfg.monitors;
           plugins = {
             # hyprlens = {
             #   background = toString theme.wallpaperBlurred;
@@ -194,22 +209,31 @@ in {
             # "${elib.flPkgs inputs.flutter_background_bar}/bin/flutter_background_bar"
             "hyprctl setcursor Bibata-Modern-Ice 24"
 
+            (mkIf cfg.sunshine.enable (pkgs.writeShellScript "sunshine-launcher" ''
+              while true; do
+                "${cfg.sunshine.package}/bin/sunshine" || true
+                sleep 1
+              done
+            ''))
+
             (mkIf cfg.headlessXorg.enable "${pkgs.xorg.xorgserver}/bin/Xvfb :${toString cfg.headlessXorg.num} -screen 0 1024x768x24")
 
             "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store #Stores only text data"
             "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store #Stores only image data"
-            # "${pkgs.swaybg}/bin/swaybg --image ${theme.wallpaper}"
+            "${pkgs.swaybg}/bin/swaybg --image ${theme.wallpaper} --mode fill"
             # "[workspace special] firefox"
           ];
           bind = [
             '',Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png''
             "ALT,S,fullscreen"
-            "ALT,F,exec,${pkgs.alacritty}/bin/alacritty"
+            "ALT,F,exec,${pkgs.foot}/bin/foot"
             "ALT,V,exec,${pkgs.foot}/bin/footclient --app-id sideterm"
             "ALT,BACKSPACE,exec,${pkgs.foot}/bin/footclient --app-id middleterm"
             "ALT,D,killactive,"
             "ALT,G,togglefloating,"
             ",Menu,exec,hyprctl switchxkblayout kmonad-kb-laptop next && hyprctl switchxkblayout kmonad-kb-hyperx next"
+
+            ",XF86PowerOff,exec,${powerButtonScript}"
 
             "ALT,SEMICOLON,exec,anyrun"
 

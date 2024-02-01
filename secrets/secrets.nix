@@ -11,12 +11,15 @@ let
     mane = {
       user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPn84OxYt3K7HwfpNPfA1cqbLMMlz3DjVEINeoVFD/it vps@mane";
     };
+    bara = {
+      user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICC4kn/2R1/ED6zy4MTxbRNeISNhtbJUwG5s0qSIYQzY phone@bara";
+    };
   };
 
   # Can edit all secrets;
   masterPC = ope;
 
-  inherit (publicKeys) ope mera;
+  inherit (publicKeys) ope mera bara;
   inherit (builtins) readDir attrNames foldl' substring;
 
   concatPaths = paths: substring 1 (-1) (foldl' (acc: path: "${acc}/${toString path}") "" paths);
@@ -39,6 +42,7 @@ in
     "other/bitwarden.age".publicKeys = [
       ope.user
       mera.user
+      bara.user
       masterPC.user
     ];
     "other/flafy_me-cert.age".publicKeys = [

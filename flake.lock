@@ -600,54 +600,17 @@
     "mobile-nixos": {
       "flake": false,
       "locked": {
-        "lastModified": 1694727595,
-        "narHash": "sha256-mwDJFRcspcYYaz9/kWtz6/KnCc8dPgi80zHdkDFCRVU=",
+        "lastModified": 1705008488,
+        "narHash": "sha256-Gj97fDFZaK6gLb3ayZgTTtD+MFE1YjoyYHWkB1TIAe0=",
         "owner": "nixos",
         "repo": "mobile-nixos",
-        "rev": "92910bbba6ed6e1da81a9818c2f1f0e1b2ac1b3f",
+        "rev": "56e55df7b07b5e5c6d050732d851cec62b41df95",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "master",
+        "ref": "development",
         "repo": "mobile-nixos",
-        "type": "github"
-      }
-    },
-    "mobile-nixos-home-manager": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1689616149,
-        "narHash": "sha256-EacB1l1za0KdwwWIra/TTepjWZWkTtsaWoQ+G5FZHCY=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "8c350c2069ac3eed6344fa62e3249afa0ce2728c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "8c350c2069ac3eed6344fa62e3249afa0ce2728c",
-        "type": "github"
-      }
-    },
-    "mobile-nixos-nixpkgs": {
-      "locked": {
-        "lastModified": 1689679375,
-        "narHash": "sha256-LHUC52WvyVDi9PwyL1QCpaxYWBqp4ir4iL6zgOkmcb8=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "684c17c429c42515bafb3ad775d2a710947f3d67",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "684c17c429c42515bafb3ad775d2a710947f3d67",
         "type": "github"
       }
     },
@@ -920,8 +883,6 @@
         "lspsaga": "lspsaga",
         "lspsaga-nvim": "lspsaga-nvim",
         "mobile-nixos": "mobile-nixos",
-        "mobile-nixos-home-manager": "mobile-nixos-home-manager",
-        "mobile-nixos-nixpkgs": "mobile-nixos-nixpkgs",
         "nix-index-database": "nix-index-database",
         "nix-minecraft": "nix-minecraft",
         "nix-super": "nix-super",

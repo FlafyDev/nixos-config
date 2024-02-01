@@ -127,12 +127,21 @@ in {
             family = "ip";
             enable = true;
 
-                  # tcp dport 23-65535 dnat to 10.10.10.10:23-65535
+            # tcp dport 23-65535 dnat to 10.10.10.10:23-65535
             content = ''
               chain prerouting {
                   type nat hook prerouting priority 0 ;
                   tcp dport 80 dnat to 10.10.10.11:80
                   tcp dport 443 dnat to 10.10.10.11:443
+                  udp dport 51821 dnat to 10.10.10.10:51821
+
+                  tcp dport 47984 dnat to 10.10.10.10:47984
+                  tcp dport 47989 dnat to 10.10.10.10:47989
+                  tcp dport 48010 dnat to 10.10.10.10:48010
+
+                  udp dport 47998-48000 dnat to 10.10.10.10:47998-48000
+                  udp dport 48002 dnat to 10.10.10.10:48002
+                  udp dport 48010 dnat to 10.10.10.10:48010
               }
 
               chain postrouting {
@@ -145,7 +154,7 @@ in {
       };
       firewall = {
         enable = true;
-        allowedUDPPorts = [51820 48002 48010];
+        allowedUDPPorts = [51820 48002 48010 51821];
         allowedTCPPorts = [80 443 48010 47989 47984 3001 4000 3004];
         allowedUDPPortRanges = [
           {

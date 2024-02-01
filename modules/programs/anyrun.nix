@@ -38,6 +38,7 @@
 
         config = {
           y.fraction = 0.2;
+          width = { fraction = 0.3; };
           closeOnClick = true;
           hidePluginInfo = true;
           showResultsImmediately = true;
