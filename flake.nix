@@ -1,9 +1,9 @@
 let
-  combinedManager = import /home/flafy/repos/flafydev/combined-manager;
-  # combinedManager = import (builtins.fetchTarball {
-  #   url = "https://github.com/flafydev/combined-manager/archive/8a9043cdfa3596a4bd0e6c685726cfa7fdfa4e6d.tar.gz";
-  #   sha256 = "sha256:1pvjn8j5rmr2g717bh1dgj6a8zi7ffmpm5nmhjrq1mcvbyi9kdyk";
-  # });
+  # combinedManager = import /home/flafy/repos/flafydev/combined-manager;
+  combinedManager = builtins.fetchTarball {
+    url = "https://github.com/flafydev/combined-manager/archive/c9cc0428a15d01417f96015f88fd874233b9cc42.tar.gz";
+    sha256 = "sha256:188nwnr9vg4wwd98zm0fvwqwyraisaqqkxxlx1qm0x02pnbr904h";
+  };
 in
   combinedManager.mkFlake {
     description = "NixOS configuration";

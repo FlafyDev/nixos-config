@@ -12,7 +12,6 @@
     mkIf
     foldlAttrs
     mapAttrs
-    mapAttrs'
     concatStringsSep
     hasInfix
     mkMerge
@@ -28,12 +27,12 @@
       value = listToAttrs (
         map (port: {
           name = port;
-          value = [cfg.settings.outgoingAddress]; ## TODO: Array?
+          value = [cfg.${config.users.host}.settings.outgoingAddress];
         }) (
           foldl' (
             acc: config':
               acc
-              ++ (config'.networking.vpsForwarding.${config.users.host}.${protocol}.ports or [])
+              ++ (config'.networking.vpsForwarding.${config.users.host}.${protocol} or [])
           ) []
           (attrValues configs)
         )
@@ -41,61 +40,48 @@
     }
   ) ["tcp" "udp"]);
 
-  # networking.allowedPorts.tcp."58846" = [ "ope.wg_private.flafy.me" ];
-  portsToAllowThis =
-    mapAttrs (
-      host: config': let
-        address = "${config.users.host}.${configs.${host}.networking.vpsForwarding.${host}.settings.wireguardInterface}.flafy.me";
-      in
-        mapAttrs (_protocol: ports:
-          listToAttrs (map (port: {
-            name = port;
-            value = [address];
-          })
-          ports))
-        {inherit (config') udp tcp;}
+  portsToAllowThis = foldl' (acc: protocolsConfig: acc // protocolsConfig) {} (
+    attrValues (
+      mapAttrs (
+        host: config': let
+          address = "${config.users.host}.${configs.${host}.networking.vpsForwarding.${host}.settings.wireguardInterface}.flafy.me";
+        in
+          mapAttrs (_protocol: ports:
+            listToAttrs (map (port: {
+                name = port;
+                value = [address];
+              })
+              ports))
+          {inherit (config') udp tcp;}
+      )
+      cfg
     )
-    cfg;
+  );
 
-  # portsToAllowVps = listToAttrs (map (
-  #   protocol: {
-  #     name = protocol;
-  #     value = listToAttrs (
-  #       map (port: {
-  #         name = port;
-  #         value = ["${config.users.host}.${configs.${host}.networking.vpsForwarding.${host}.settings.wireguardInterface}.flafy.me"];
-  #       }) (
-  #         foldl' (
-  #           acc: config':
-  #             acc
-  #             ++ (config'.networking.vpsForwarding.${config.users.host}.${protocol}.ports or [])
-  #         ) []
-  #         (attrValues configs)
-  #       )
-  #     );
-  #   }
-  # ) ["tcp" "udp"]);
-
-  rules =
-    (mapAttrs (host: config': let
-      address = "${config.users.host}.${configs.${host}.networking.vpsForwarding.${host}.settings.wireguardInterface}.flafy.me";
-    in
-      concatStringsSep "\n" (foldlAttrs (acc: protocol: ports:
+  rules = concatStringsSep "\n" (
+    foldlAttrs (
+      acc: protocol: ports:
         acc
         ++ (
-          map (port: let
-            # Should this even be allowed?
-            port' =
-              if hasInfix "," port
-              then "{${port}}"
-              else port;
-          in "${protocol} dport ${port'} dnat to ${resolveHostname address}:${port'}")
+          foldlAttrs (
+            acc: port: addresses: let
+              port' =
+                if hasInfix "," port
+                then "{${port}}"
+                else port;
+            in
+              acc
+              ++ (
+                map
+                (address: "${protocol} dport ${port'} dnat to ${resolveHostname address}:${port'}")
+                addresses
+              )
+          ) []
           ports
-        )) []
-      {inherit (config') tcp udp;}))
-    cfg)
-    .${config.users.host}
-    or "";
+        )
+    ) []
+    portsToAllowVps
+  );
 in {
   options.networking.vpsForwarding = mkOption {
     type = with types;
@@ -151,7 +137,7 @@ in {
 
   config = mkIf config.networking.enable (mkMerge [
     {
-      os.networking.nftables = {
+      os.networking.nftables = mkIf ((cfg.${config.users.host}.settings or {}) != {}) {
         enable = true;
         tables = {
           tunnel = {
@@ -164,22 +150,7 @@ in {
               chain prerouting {
                   type nat hook prerouting priority 0 ;
 
-
                   ${rules}
-
-
-
-                  # tcp dport 80 dnat to 10.10.10.11:80
-                  # tcp dport 443 dnat to 10.10.10.11:443
-                  # udp dport 51821 dnat to 10.10.10.10:51821
-
-                  # tcp dport 47984 dnat to 10.10.10.10:47984
-                  # tcp dport 47989 dnat to 10.10.10.10:47989
-                  # tcp dport 48010 dnat to 10.10.10.10:48010
-                  #
-                  # udp dport 47998-48000 dnat to 10.10.10.10:47998-48000
-                  # udp dport 48002 dnat to 10.10.10.10:48002
-                  # udp dport 48010 dnat to 10.10.10.10:48010
               }
 
               chain postrouting {
@@ -191,8 +162,8 @@ in {
         };
       };
       networking.allowedPorts = mkMerge [
-        # portsToAllowVps
-        (builtins.trace portsToAllowThis.mane.tcp."80" portsToAllowThis)
+        portsToAllowVps
+        portsToAllowThis
       ];
     }
   ]);

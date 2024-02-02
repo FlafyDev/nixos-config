@@ -19,16 +19,5 @@
     "nodejs-16.20.2"
   ];
 
-  # networking.vpsForwarding.udp."58846" = true;
   networking.allowedPorts.tcp."58846" = [ "ope.wg_private.flafy.me" ];
-  # networking.allowedPorts.tcp."58846-58847" = [ "ope.wg_private.flafy.me" ];
-  # networking.allowedPorts.tcp."{80,443}" = [ "ope.wg_private.flafy.me" ];
-
-  # os.networking.firewall.allowedTCPPorts = [58846];
-
-  # Allows the port in the firewall and tells the vps machine to forward the port from from this machine. 
-  # vpsForwarding.udp = [ ]
-  # vpsForwarding.tcp = [ 58846 ];
-
-  # TODO: config to tunnel port to mane
 }

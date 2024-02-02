@@ -31,5 +31,4 @@
   };
 
   networking.vpsForwarding.mane.udp = [ "51821" ];
-  # networking.allowedPorts.tcp."51821" = [ "ope.wg_private.flafy.me" ];
 }

@@ -1,21 +1,10 @@
-{
-  lib,
-  root,
-  configs,
-  ...
-}: {
-  imports = [./hardware]; # ++ ((import (root + "/utils") {inherit lib;}).getModules (toString ./modules));
+_: {
+  imports = [./hardware];
 
   users.main = "flafy";
   users.host = "ope";
 
   os = {
-    programs.ssh.extraConfig = ''
-      Host mac1-guest
-      Hostname 127.0.0.1
-      Port 2222
-      Compression yes
-    '';
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
     services.prometheus = {
       enable = true;
@@ -31,22 +20,9 @@
         evaluation_interval = "15s";
       };
     };
-    networking = {
-      firewall = {
-        enable = true;
-        #   allowedUDPPorts = [51820 53317 51821];
-        #   allowedTCPPorts = [53317 48010 47990 47989 47984 9100 3004 40004 40002 40003 80 443 58846 48002];
-        #   allowedUDPPortRanges = [
-        #     {
-        #       from = 47998;
-        #       to = 48000;
-        #     }
-        #   ];
-      };
-    };
-  };
 
-  networking.enable = true;
+    networking.firewall.enable = true;
+  };
 
   os.services.nginx = {
     enable = true;
@@ -79,46 +55,28 @@
     ];
   };
 
-  # os.networking.nftables = {
-  #   enable = true;
-  #   tables = {
-  #     limit_bandwidth = {
-  #       name = "limit_bandwidth";
-  #       family = "inet";
-  #       enable = false;
-  #
-  #       content = ''
-  #         chain input {
-  #           type filter hook input priority filter; policy accept;
-  #           # iifname enp14s0 limit rate over 3500 kbytes/second drop
-  #         }
-  #
-  #         chain output {
-  #           type filter hook output priority filter; policy accept;
-  #           # oifname enp14s0 limit rate over 3500 kbytes/second drop
-  #         }
-  #       '';
-  #     };
-  #     allow_ports = {
-  #       name = "allow_ports";
-  #       family = "inet";
-  #       enable = false;
-  #       content = ''
-  #         chain input {
-  #           type filter hook input priority 0;
-  #
-  #           iif lo accept
-  #
-  #           ct state established,related accept
-  #
-  #           tcp dport {9100,58846} accept
-  #
-  #           drop
-  #         }
-  #       '';
-  #     };
-  #   };
-  # };
+  os.networking.nftables = {
+    enable = true;
+    tables = {
+      limit_bandwidth = {
+        name = "limit_bandwidth";
+        family = "inet";
+        enable = false;
+
+        content = ''
+          chain input {
+            type filter hook input priority filter; policy accept;
+            # iifname enp14s0 limit rate over 3500 kbytes/second drop
+          }
+
+          chain output {
+            type filter hook output priority filter; policy accept;
+            # oifname enp14s0 limit rate over 3500 kbytes/second drop
+          }
+        '';
+      };
+    };
+  };
 
   android.enable = true;
   display.greetd.enable = true;
@@ -142,6 +100,8 @@
 
   assets.enable = true;
 
+  networking.enable = true;
+
   secrets.enable = true;
 
   themes.themeName = "amoled";
@@ -149,21 +109,6 @@
   vm.enable = true;
   games.enable = true;
   gtk.enable = true;
-
-  # TEMP
-  # os.nixpkgs.overlays = [
-  #   (final: prev: {
-  #     makeDBusConf = {
-  #       suidHelper,
-  #       serviceDirectories,
-  #       apparmor ? "disabled",
-  #     }:
-  #       prev.makeDBusConf {
-  #         serviceDirectories = serviceDirectories ++ ["/home/flafy/.testshare"];
-  #         inherit suidHelper apparmor;
-  #       };
-  #   })
-  # ];
 
   programs = {
     anyrun.enable = true;
