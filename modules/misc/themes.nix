@@ -1,12 +1,12 @@
 {
   lib,
-  elib,
+  utils,
   config,
   pkgs,
   ...
 }: let
   inherit (lib) mkOption types mkIf mkMerge;
-  inherit (elib) mkColor;
+  inherit (utils) mkColor;
   inherit (pkgs.assets) wallpapers;
   cfg = config.themes;
 in {

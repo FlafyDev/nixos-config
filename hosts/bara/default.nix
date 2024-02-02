@@ -59,7 +59,7 @@
           identityFile = [ssh.bara.bara_to_ope.private];
         };
         ope-private = {
-          hostname = "ope.private.flafy.me";
+          hostname = "ope.wg_private.flafy.me";
           identitiesOnly = true;
           identityFile = [ssh.bara.bara_to_ope.private];
         };

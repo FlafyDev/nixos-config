@@ -18,6 +18,10 @@ in {
     })
   ];
 
+  networking.enable = true;
+  networking.vpsForwarding.mane.settings.outgoingAddress = "flafy.me";
+  networking.vpsForwarding.mane.settings.wireguardInterface = "wg_vps";
+
   os = {
     services = {
       grafana = {
@@ -53,56 +57,6 @@ in {
           }
         ];
       };
-      # nginx = {
-      #   enable = true;
-      #   virtualHosts."flafy.me" = {
-      #     locations."/" = {
-      #       proxyPass = "https://10.10.10.10:443";
-      #       extraConfig = ''
-      #         proxy_set_header Host $host;
-      #         proxy_set_header X-Real-IP $remote_addr;
-      #         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      #         proxy_set_header X-Forwarded-Proto $scheme;
-      #       '';
-      #     };
-      #   };
-      #   # streamConfig = ''
-      #   #   server {
-      #   #       listen 10.10.10.10:47984 tcp;  # Replace with the IP address assigned to the WireGuard interface
-      #   #       proxy_pass flafy.me:47984;  # Replace with your actual service IP and port
-      #   #   }
-      #   #
-      #   #   server {
-      #   #       listen 10.10.10.10:47989 tcp;
-      #   #       proxy_pass flafy.me:47989;
-      #   #   }
-      #   #
-      #   #   server {
-      #   #       listen 10.10.10.10:48010 udp;
-      #   #       proxy_pass flafy.me:48010;
-      #   #   }
-      #   #
-      #   #   server {
-      #   #       listen 10.10.10.10:47998 udp;
-      #   #       proxy_pass flafy.me:47998;
-      #   #   }
-      #   #
-      #   #   server {
-      #   #       listen 10.10.10.10:47999 udp;
-      #   #       proxy_pass flafy.me:47999;
-      #   #   }
-      #   #
-      #   #   server {
-      #   #       listen 10.10.10.10:48000 udp;
-      #   #       proxy_pass flafy.me:48000;
-      #   #   }
-      #   #
-      #   #   server {
-      #   #       listen 10.10.10.10:48002 udp;
-      #   #       proxy_pass flafy.me:48002;
-      #   #   }
-      #   # '';
-      # };
 
       vsftpd = {
         enable = true;
@@ -121,36 +75,36 @@ in {
     networking = {
       nftables = {
         enable = true;
-        tables = {
-          tunnel = {
-            name = "tunnel";
-            family = "ip";
-            enable = true;
-
-            # tcp dport 23-65535 dnat to 10.10.10.10:23-65535
-            content = ''
-              chain prerouting {
-                  type nat hook prerouting priority 0 ;
-                  tcp dport 80 dnat to 10.10.10.11:80
-                  tcp dport 443 dnat to 10.10.10.11:443
-                  udp dport 51821 dnat to 10.10.10.10:51821
-
-                  tcp dport 47984 dnat to 10.10.10.10:47984
-                  tcp dport 47989 dnat to 10.10.10.10:47989
-                  tcp dport 48010 dnat to 10.10.10.10:48010
-
-                  udp dport 47998-48000 dnat to 10.10.10.10:47998-48000
-                  udp dport 48002 dnat to 10.10.10.10:48002
-                  udp dport 48010 dnat to 10.10.10.10:48010
-              }
-
-              chain postrouting {
-                  type nat hook postrouting priority 100 ;
-                  masquerade
-              }
-            '';
-          };
-        };
+        # tables = {
+        #   tunnel = {
+        #     name = "tunnel";
+        #     family = "ip";
+        #     enable = true;
+        #
+        #     # tcp dport 23-65535 dnat to 10.10.10.10:23-65535
+        #     content = ''
+        #       chain prerouting {
+        #           type nat hook prerouting priority 0 ;
+        #           tcp dport 80 dnat to 10.10.10.11:80
+        #           tcp dport 443 dnat to 10.10.10.11:443
+        #           udp dport 51821 dnat to 10.10.10.10:51821
+        #
+        #           # tcp dport 47984 dnat to 10.10.10.10:47984
+        #           # tcp dport 47989 dnat to 10.10.10.10:47989
+        #           # tcp dport 48010 dnat to 10.10.10.10:48010
+        #           #
+        #           # udp dport 47998-48000 dnat to 10.10.10.10:47998-48000
+        #           # udp dport 48002 dnat to 10.10.10.10:48002
+        #           # udp dport 48010 dnat to 10.10.10.10:48010
+        #       }
+        #
+        #       chain postrouting {
+        #           type nat hook postrouting priority 100 ;
+        #           masquerade
+        #       }
+        #     '';
+        #   };
+        # };
       };
       firewall = {
         enable = true;

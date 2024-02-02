@@ -3,7 +3,7 @@
   config,
   pkgs,
   inputs,
-  elib,
+  utils,
   theme,
   ...
 }: let
@@ -44,7 +44,7 @@ in {
         };
       };
       os.environment.systemPackages = with pkgs; [
-        (elib.flPkgs inputs.flarrent)
+        (utils.flPkgs inputs.flarrent)
         kdenlive
         chromium
         gnome.eog

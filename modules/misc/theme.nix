@@ -1,6 +1,5 @@
 {
   lib,
-  elib,
   config,
   ...
 }: let
@@ -59,7 +58,6 @@ in {
   };
 
   config = {
-    elib.enable = true;
     _module.args.theme = config.theme;
   };
 }

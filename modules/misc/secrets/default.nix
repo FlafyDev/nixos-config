@@ -5,15 +5,14 @@
   osConfig,
   hmConfig,
   pkgs,
-  elib,
-  ssh,
+  utils,
   ...
 }:
 with lib; let
   cfg = config.secrets;
   secretsDir = ../../../secrets;
   inherit (lib) mkOption types foldl';
-  inherit (elib) concatPaths;
+  inherit (utils) concatPaths;
   inherit (builtins) readDir;
 in {
   options.secrets = {
@@ -136,7 +135,7 @@ in {
         ];
 
         os.environment.systemPackages = [
-          (elib.flPkgs inputs.agenix)
+          (utils.flPkgs inputs.agenix)
         ];
 
         # hm.systemd.user.services.bitwarden-session = {

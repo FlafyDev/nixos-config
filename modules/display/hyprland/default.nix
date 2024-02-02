@@ -3,7 +3,6 @@
   config,
   inputs,
   pkgs,
-  elib,
   theme,
   ...
 }: let

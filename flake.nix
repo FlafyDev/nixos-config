@@ -19,75 +19,16 @@ in
       flake-parts.url = "github:hercules-ci/flake-parts";
     };
 
-    configurations = {
-      ope = {
-        system = "x86_64-linux";
-        modules = [
-          ./modules
-          ./hosts/ope
-        ];
-      };
-      mera = {
-        system = "x86_64-linux";
-        modules = [
-          ./modules
-          ./hosts/mera
-        ];
-      };
-      mane = {
-        system = "x86_64-linux";
-        modules = [
-          ./modules
-          ./hosts/mane
-        ];
-      };
-      bara3 = {
-        system = "aarch64-linux";
-        modules = [
-          ./modules
-          ./hosts/bara
-        ];
-      };
-      bara = {
-        system = "aarch64-linux";
-        inputOverrides = inputs: {
-          # nixpkgs = inputs.mobile-nixos-nixpkgs;
-          # home-manager = inputs.mobile-nixos-home-manager;
-        };
-        # useHomeManager = false;
-        modules = [
-          ./modules
-          ./hosts/bara
-        ];
-      };
+    configurations = builtins.mapAttrs (host: cfg:
+      cfg // {modules = [({lib, ...}: {imports = (import ./utils {inherit lib;}).getModulesForHost host;})];}) {
+      ope.system = "x86_64-linux";
+      mera.system = "x86_64-linux";
+      mane.system = "x86_64-linux";
+      bara.system = "aarch64-linux";
     };
 
-    outputs = inputs @ {
-      flake-parts,
-      nixpkgs,
-      ...
-    }:
+    outputs = inputs @ {flake-parts, ...}:
       flake-parts.lib.mkFlake {inherit inputs;} {
-        flake.nixosConfigurations = {
-          bara2 = inputs.mobile-nixos-nixpkgs.lib.nixosSystem {
-            system = "aarch64-linux";
-            modules = [
-              (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "oneplus-enchilada";})
-              ({
-                pkgs,
-                lib,
-                modules,
-                ...
-              }: {
-                nixpkgs.config.allowUnfreePredicate = builtins.trace modules (pkg:
-                  builtins.elem (lib.getName pkg) [
-                    "oneplus-sdm845-firmware-xz"
-                    "oneplus-sdm845-firmware"
-                  ]);
-              })
-            ];
-          };
-        };
         systems = [
           "x86_64-linux"
           "aarch64-linux"
