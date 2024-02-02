@@ -2,6 +2,7 @@
   config,
   configs,
   lib,
+  resolveHostname,
   ...
 }: let
   inherit
@@ -11,6 +12,7 @@
     mkIf
     foldlAttrs
     mapAttrs
+    mapAttrs'
     concatStringsSep
     hasInfix
     mkMerge
@@ -20,13 +22,13 @@
     ;
   cfg = config.networking.vpsForwarding;
 
-  portsToAllow = listToAttrs (map (
+  portsToAllowVps = listToAttrs (map (
     protocol: {
       name = protocol;
       value = listToAttrs (
         map (port: {
           name = port;
-          value = cfg.settings.outgoingAddress;
+          value = [cfg.settings.outgoingAddress]; ## TODO: Array?
         }) (
           foldl' (
             acc: config':
@@ -38,6 +40,41 @@
       );
     }
   ) ["tcp" "udp"]);
+
+  # networking.allowedPorts.tcp."58846" = [ "ope.wg_private.flafy.me" ];
+  portsToAllowThis =
+    mapAttrs (
+      host: config': let
+        address = "${config.users.host}.${configs.${host}.networking.vpsForwarding.${host}.settings.wireguardInterface}.flafy.me";
+      in
+        mapAttrs (_protocol: ports:
+          listToAttrs (map (port: {
+            name = port;
+            value = [address];
+          })
+          ports))
+        {inherit (config') udp tcp;}
+    )
+    cfg;
+
+  # portsToAllowVps = listToAttrs (map (
+  #   protocol: {
+  #     name = protocol;
+  #     value = listToAttrs (
+  #       map (port: {
+  #         name = port;
+  #         value = ["${config.users.host}.${configs.${host}.networking.vpsForwarding.${host}.settings.wireguardInterface}.flafy.me"];
+  #       }) (
+  #         foldl' (
+  #           acc: config':
+  #             acc
+  #             ++ (config'.networking.vpsForwarding.${config.users.host}.${protocol}.ports or [])
+  #         ) []
+  #         (attrValues configs)
+  #       )
+  #     );
+  #   }
+  # ) ["tcp" "udp"]);
 
   rules =
     (mapAttrs (host: config': let
@@ -52,7 +89,7 @@
               if hasInfix "," port
               then "{${port}}"
               else port;
-          in "${protocol} dport ${port'} dnat to ${address}:${port'}")
+          in "${protocol} dport ${port'} dnat to ${resolveHostname address}:${port'}")
           ports
         )) []
       {inherit (config') tcp udp;}))
@@ -153,7 +190,10 @@ in {
           };
         };
       };
-      networking.allowedPorts = builtins.trace portsToAllow portsToAllow;
+      networking.allowedPorts = mkMerge [
+        # portsToAllowVps
+        (builtins.trace portsToAllowThis.mane.tcp."80" portsToAllowThis)
+      ];
     }
   ]);
 }

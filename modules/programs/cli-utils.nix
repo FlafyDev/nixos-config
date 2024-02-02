@@ -96,7 +96,7 @@ in {
     '';
   in
     mkIf cfg.enable {
-      unfree.allowed = ["unrar" "ngrok"];
+      unfree.allowed = ["unrar"];
       os.environment.systemPackages = with pkgs; let
         bin = writeShellScriptBin;
       in [
@@ -127,7 +127,6 @@ in {
         ripgrep
         htop
         tree
-        ngrok
         # cp-maps
         # project-creator
         btop

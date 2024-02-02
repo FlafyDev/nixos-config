@@ -34,14 +34,14 @@
     networking = {
       firewall = {
         enable = true;
-        allowedUDPPorts = [51820 53317 51821];
-        allowedTCPPorts = [53317 48010 47990 47989 47984 9100 3004 40004 40002 40003 80 443 58846 48002];
-        allowedUDPPortRanges = [
-          {
-            from = 47998;
-            to = 48000;
-          }
-        ];
+        #   allowedUDPPorts = [51820 53317 51821];
+        #   allowedTCPPorts = [53317 48010 47990 47989 47984 9100 3004 40004 40002 40003 80 443 58846 48002];
+        #   allowedUDPPortRanges = [
+        #     {
+        #       from = 47998;
+        #       to = 48000;
+        #     }
+        #   ];
       };
     };
   };
@@ -146,7 +146,6 @@
 
   themes.themeName = "amoled";
 
-  localhosts.enable = true;
   vm.enable = true;
   games.enable = true;
   gtk.enable = true;

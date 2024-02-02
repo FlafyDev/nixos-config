@@ -88,7 +88,6 @@
   secrets.enable = true;
   secrets.autoBitwardenSession.enable = true; # TODO: remove redundant 
   bitwarden.enable = true;
-  localhosts.enable = true;
   # programs.discord.enable = true;
 
   display.hyprland = {

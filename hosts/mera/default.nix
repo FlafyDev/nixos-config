@@ -2,6 +2,7 @@
   pkgs,
   config,
   osConfig,
+  resolveHostname,
   ssh,
   ...
 }: {
@@ -12,6 +13,10 @@
 
   secrets.enable = true;
   printers.enable = true;
+
+  networking.enable = true;
+  networking.vpsForwarding.mane.tcp = ["80" "443"];
+  networking.allowedPorts.tcp."22" = ["mera.lan1.flafy.me"];
 
   os.services.nginx = let
     sslConfig = {
@@ -24,12 +29,12 @@
     enable = true;
     defaultListen = [
       {
-        addr = "10.10.10.11";
+        addr = resolveHostname "mera.wg_vps.flafy.me";
         ssl = true;
         port = 443;
       }
       {
-        addr = "10.10.10.11";
+        addr = resolveHostname "mera.wg_vps.flafy.me";
         ssl = false;
         port = 80;
       }
@@ -101,8 +106,8 @@
   os.networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [58846 8001 25565 80 21 22 3001 40004 40002 40003 443];
-      allowedUDPPorts = [51820 58846 25565 80 21 22];
+      # allowedTCPPorts = [58846 8001 25565 80 21 22 3001 40004 40002 40003 443];
+      # allowedUDPPorts = [51820 58846 25565 80 21 22];
     };
     wireguard = {
       enable = true;

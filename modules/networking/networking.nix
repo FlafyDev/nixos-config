@@ -1,10 +1,16 @@
 {
   lib,
+  config,
   ...
 }: let
-  inherit (lib) mkOption types mkEnableOption;
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.networking;
 in {
   options.networking = {
-    enable = mkEnableOption "nftables";
+    enable = mkEnableOption "networking";
+  };
+
+  config = mkIf cfg.enable {
+    localhosts.enable = true;
   };
 }

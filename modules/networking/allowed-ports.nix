@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  resolveHostname,
   ...
 }: let
   inherit
@@ -12,21 +13,22 @@
     mapAttrs
     concatStringsSep
     hasInfix
+    elem
     ;
   cfg = config.networking.allowedPorts;
 
-  allowedPorts' =
-    mapAttrs (
-      _protocol: ports:
-        mapAttrs (
-          _port: addresses:
-            if builtins.elem "0.0.0.0" addresses
-            then true
-            else addresses
-        )
-        ports
-    )
-    cfg;
+  # allowedPorts' =
+  #   mapAttrs (
+  #     _protocol: ports:
+  #       mapAttrs (
+  #         _port: addresses:
+  #           if builtins.elem "0.0.0.0" addresses
+  #           then true
+  #           else addresses
+  #       )
+  #       ports
+  #   )
+  #   cfg;
 
   rules = concatStringsSep "\n" (foldlAttrs (acc: protocol: ports:
     acc
@@ -41,23 +43,21 @@
         in
           acc
           ++ (
-            if addresses == true
+            if (elem "0.0.0.0" addresses) || (elem "*" addresses)
             then ["${protocol} dport ${port'} accept"]
-            else if addresses == false
-            then []
-            else map (address: "ip saddr ${address} ${protocol} dport ${port'} accept") addresses
+            else map (address: "ip saddr ${resolveHostname address} ${protocol} dport ${port'} accept\nip daddr ${resolveHostname address} ${protocol} dport ${port'} accept") addresses
           )
       ) []
       ports
     )) []
-  allowedPorts');
+  cfg);
 in {
   options.networking.allowedPorts = mkOption {
-    type = with types; attrsOf (attrsOf (either (listOf str) bool));
+    type = with types; attrsOf (attrsOf (listOf str));
     default = {};
     description = ''
       Which ports should be allowed to be accessed by the outside world.
-      `allowedPorts.<tcp/udp>.<port> = [ addresses ] or boolean`
+      `allowedPorts.<tcp/udp>.<port> = [ addresses ]`
     '';
   };
 
@@ -76,6 +76,9 @@ in {
               iif lo accept
 
               ct state established,related accept
+
+              ip6 nexthdr icmpv6 accept
+              ip protocol icmp accept
 
               ${rules}
 
