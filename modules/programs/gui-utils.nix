@@ -23,7 +23,7 @@ in {
         };
         flarrent = {
           url = "github:flafydev/flarrent";
-          # inputs.nixpkgs.follows = "nixpkgs";
+          inputs.nixpkgs.follows = "nixpkgs";
         };
       };
     }
@@ -44,7 +44,7 @@ in {
         };
       };
       os.environment.systemPackages = with pkgs; [
-        (utils.flPkgs inputs.flarrent)
+        # (utils.flPkgs inputs.flarrent) # TODO: Uncomment when updating Nixpkgs
         kdenlive
         chromium
         gnome.eog

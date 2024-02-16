@@ -1,4 +1,10 @@
-{ssh, ...}: {
+{
+  ssh,
+  utils,
+  ...
+}: let
+  inherit (utils) domains;
+in {
   os.networking.wireguard = {
     enable = true;
     interfaces.wg_vps = {
@@ -8,7 +14,7 @@
         {
           publicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
           allowedIPs = ["10.10.10.1/32"];
-          endpoint = "flafy.me:51820";
+          endpoint = "${domains.personal}:51820";
           persistentKeepalive = 25;
         }
       ];

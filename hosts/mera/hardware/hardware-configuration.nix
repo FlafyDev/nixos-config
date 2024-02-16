@@ -12,28 +12,54 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" "sdhci_pci"];
+  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "usb_storage" "nvme" "usbhid" "sd_mod" "sdhci_pci"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-intel"];
   boot.extraModulePackages = [];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/bebcd4c4-dac0-4b47-aa45-8dcf6f93fcc9";
-    fsType = "ext4";
-  };
+  # fileSystems."/" = {
+  #   device = "/dev/disk/by-uuid/d215832b-ff9e-4ada-b268-6295942996e4";
+  #   fsType = "btrfs";
+  #   options = ["subvol=@"];
+  # };
+  #
+  # fileSystems."/boot" = {
+  #   device = "/dev/disk/by-uuid/C6E0-6098";
+  #   fsType = "vfat";
+  # };
 
-  fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/DB0C-E614";
+  # fileSystems."/mnt/general" = {
+  #   device = "/dev/disk/by-uuid/23e60b41-48d2-4b32-8cc8-bf52e0b305f4";
+  #   fsType = "ext4";
+  # };
+
+  # fileSystems."/" = {
+  #   device = "none";
+  #   fsType = "tmpfs";
+  #   options = ["size=3G" "mode=755"]; # mode=755 so only root can write to those files
+  # };
+  # fileSystems."/home/server" = {
+  #   device = "none";
+  #   fsType = "tmpfs"; # Can be stored on normal drive or on tmpfs as well
+  #   options = ["size=4G" "mode=777"];
+  # };
+  # # can be LUKS encrypted
+  # fileSystems."/nix" = {
+  #   device = "/dev/disk/by-uuid/23e60b41-48d2-4b32-8cc8-bf52e0b305f4";
+  #   fsType = "ext4";
+  # };
+  # fileSystems."/boot/efi" = {
+  #   device = "/dev/disk/by-uuid/DB0C-E614";
+  #   fsType = "vfat";
+  # };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/714F-1D82";
     fsType = "vfat";
   };
 
-  fileSystems."/mnt/general" = {
-    device = "/dev/disk/by-uuid/23e60b41-48d2-4b32-8cc8-bf52e0b305f4";
-    fsType = "ext4";
-  };
-
   swapDevices = [
-    {device = "/dev/disk/by-uuid/fb42ceb6-f42a-4708-9485-b7358a10d970";}
+    {device = "/dev/disk/by-uuid/7958d243-5ac0-4118-a393-b4b660694bcc";}
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

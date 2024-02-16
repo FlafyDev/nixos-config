@@ -14,27 +14,36 @@ let
     bara = {
       user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICC4kn/2R1/ED6zy4MTxbRNeISNhtbJUwG5s0qSIYQzY phone@bara";
     };
+    noro = {
+      user = "";
+    };
   };
 
   # Can edit all secrets;
-  masterPC = ope;
+  master = ope.user;
 
   inherit (publicKeys) ope mera bara;
-  inherit (builtins) readDir attrNames foldl' substring;
+  inherit (builtins) readDir attrNames foldl' substring pathExists;
 
   concatPaths = paths: substring 1 (-1) (foldl' (acc: path: "${acc}/${toString path}") "" paths);
 
   sshKeys = foldl' (
     acc: host:
       acc
-      // (foldl' (acc: key:
+      // (foldl' (acc: key: let
+        localPath = concatPaths ["ssh-keys" host key "private.age"];
+      in
         acc
-        // {
-          ${concatPaths ["ssh-keys" host key "private.age"]}.publicKeys = [
-            publicKeys.${host}.user
-            masterPC.user
-          ];
-        }) {} (attrNames (readDir (concatPaths [./ssh-keys host]))))
+        // (
+          if pathExists (concatPaths [./. localPath])
+          then {
+            ${localPath}.publicKeys = [
+              publicKeys.${host}.user
+              master
+            ];
+          }
+          else {}
+        )) {} (attrNames (readDir (concatPaths [./ssh-keys host]))))
   ) {} (attrNames (readDir ./ssh-keys));
 in
   sshKeys
@@ -43,22 +52,16 @@ in
       ope.user
       mera.user
       bara.user
-      masterPC.user
+      master
     ];
-    "other/flafy_me-cert.age".publicKeys = [
+    "other/porkbun.age".publicKeys = [
       ope.user
       mera.user
-      masterPC.user
+      master
     ];
-    "other/flafy_me-key.age".publicKeys = [
-      ope.user
+    "other/mail/flafy_dev/flafy.age".publicKeys = [
       mera.user
-      masterPC.user
-    ];
-    "other/flafy_me-pass.age".publicKeys = [
-      ope.user
-      mera.user
-      masterPC.user
+      master
     ];
 
     # sshKeys.publicKeys = [

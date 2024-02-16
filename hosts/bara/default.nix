@@ -3,9 +3,13 @@
   inputs,
   config,
   lib,
+  utils,
   ssh,
   ...
-}: {
+}: let
+  inherit (utils) domains getHostname;
+
+in {
   imports = [
     ./hardware
   ];
@@ -18,6 +22,11 @@
     enable = false;
     desktopManager.plasma5.mobile.enable = false;
   };
+
+  networking.enable = true;
+  networking.allowedPorts.tcp."22" = ["*"];
+
+  gtk.enable = true;
 
   # os.mobile.boot.stage-1.kernel.modules = [
   #   "wireguard"
@@ -34,7 +43,7 @@
           {
             publicKey = builtins.readFile ssh.ope.ope_wg_private.public;
             allowedIPs = ["10.10.11.10/32"];
-            endpoint = "flafy.me:51821";
+            endpoint = "${domains.personal}:51821";
             persistentKeepalive = 25;
           }
         ];
@@ -54,12 +63,12 @@
 
       matchBlocks = {
         ope-lan = {
-          hostname = "ope.lan1.flafy.me";
+          hostname = getHostname "ope.lan1";
           identitiesOnly = true;
           identityFile = [ssh.bara.bara_to_ope.private];
         };
         ope-private = {
-          hostname = "ope.wg_private.flafy.me";
+          hostname = getHostname "ope.wg_private";
           identitiesOnly = true;
           identityFile = [ssh.bara.bara_to_ope.private];
         };
@@ -86,7 +95,7 @@
     fish.enable = true;
   };
   secrets.enable = true;
-  secrets.autoBitwardenSession.enable = true; # TODO: remove redundant 
+  secrets.autoBitwardenSession.enable = true; # TODO: remove redundant
   bitwarden.enable = true;
   # programs.discord.enable = true;
 

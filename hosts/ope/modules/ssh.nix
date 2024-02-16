@@ -1,25 +1,32 @@
 {
   ssh,
   config,
+  utils,
   ...
-}: {
+}: let
+  inherit (utils) getHostname;
+
+in {
+  networking.vpsForwarding.mane.tcp = ["22->8337"];
+
   networking.allowedPorts.tcp."22" = ["*"];
+
   programs.ssh = {
     enable = true;
 
     matchBlocks = {
       mera-lan = {
-        hostname = "mera.lan1.flafy.me";
+        hostname = getHostname "mera.lan1";
         identitiesOnly = true;
         identityFile = [ssh.ope.ope_to_mera.private];
       };
       bara-lan = {
-        hostname = "bara.lan1.flafy.me";
+        hostname = getHostname "bara.lan1";
         identitiesOnly = true;
         identityFile = [ssh.ope.ope_to_bara.private];
       };
       bara-private = {
-        hostname = "bara.wg_private.flafy.me";
+        hostname = getHostname "bara.wg_private";
         identitiesOnly = true;
         identityFile = [ssh.ope.ope_to_bara.private];
       };
@@ -33,6 +40,7 @@
       enable = true;
       users.${config.users.main}.keyFiles = [
         ssh.bara.bara_to_ope.public
+        ssh.noro.noro_to_ope.public
       ];
     };
   };

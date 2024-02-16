@@ -2,8 +2,9 @@
   pkgs,
   osConfig,
   lib,
+  inputs,
   ...
-}: {
+}:{
   osModules = [
     ./hardware-configuration.nix
   ];
@@ -12,35 +13,23 @@
 
   os = {
     environment.sessionVariables.LIBVA_DRIVER_NAME = "nvidia";
-    # environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "nvidia";
 
     time.timeZone = "Israel";
-    # systemd.services.NetworkManager-wait-online.enable = false;
     boot = {
       kernelPackages = pkgs.linuxPackages_6_1;
       blacklistedKernelModules = ["nouveau"];
       supportedFilesystems = ["ntfs"];
-      # kernelPatches = [
-      #   {
-      #     name = "nouveau-try";
-      #     patch = null;
-      #     extraConfig = ''
-      #       CONFIG_FRAMEBUFFER_CONSOLE y
-      #     '';
-      #   }
-      # ];
       loader = {
-        # systemd-boot.enable = true;
+        systemd-boot.enable = true;
         efi = {
           canTouchEfiVariables = true;
-          efiSysMountPoint = "/boot/efi";
         };
-        grub = {
-          enable = true;
-          devices = ["nodev"];
-          efiSupport = true;
-          useOSProber = true;
-        };
+        # grub = {
+        #   enable = true;
+        #   devices = ["nodev"];
+        #   efiSupport = true;
+        #   useOSProber = true;
+        # };
       };
     };
 
@@ -63,10 +52,12 @@
         wlp3s0.useDHCP = false; # No WiFi !
         enp4s0 = {
           useDHCP = true;
-          ipv4.addresses = [{
-            address = "10.0.0.41";
-            prefixLength = 24;
-          }];
+          ipv4.addresses = [
+            {
+              address = "10.0.0.41";
+              prefixLength = 24;
+            }
+          ];
         };
       };
     };

@@ -110,23 +110,17 @@ in {
               owner = config.users.main;
               group = "users";
             };
-            flafy_me-cert = {
-              file = concatPaths [secretsDir "other" "flafy_me-cert.age"];
+            porkbun = {
+              file = concatPaths [secretsDir "other" "porkbun.age"];
               mode = "440";
-              owner = config.users.main;
-              group = "nginx";
+              owner = "acme";
+              group = "acme";
             };
-            flafy_me-key = {
-              file = concatPaths [secretsDir "other" "flafy_me-key.age"];
+            "mail.flafy_dev.flafy" = {
+              file = concatPaths [secretsDir "other" "mail" "flafy_dev" "flafy.age"];
               mode = "440";
-              owner = config.users.main;
-              group = "nginx";
-            };
-            flafy_me-pass = {
-              file = concatPaths [secretsDir "other" "flafy_me-pass.age"];
-              mode = "440";
-              owner = config.users.main;
-              group = "nginx";
+              owner = "virtualMail";
+              group = "virtualMail";
             };
           };
 

@@ -2,10 +2,12 @@
   lib,
   config,
   pkgs,
+  utils,
   ...
 }: let
   cfg = config.programs.cli-utils;
   inherit (lib) mkEnableOption mkIf;
+  inherit (utils) getHostname domains;
 in {
   options.programs.cli-utils = {
     enable = mkEnableOption "cli-utils";
@@ -34,13 +36,13 @@ in {
       if [ ! -z "$host" ]; then
         case $host in
           "bara")
-            ssh_host="bara.lan1.flafy.me"
+            ssh_host="${getHostname "bara.lan1"}"
             ;;
           "mera")
-            ssh_host="mera.lan1.flafy.me"
+            ssh_host="${getHostname "mera.lan1"}"
             ;;
           "mane")
-            ssh_host="flafy.me"
+            ssh_host="${domains.personal}"
             ;;
           "ope")
             exit 1
@@ -50,12 +52,11 @@ in {
             ;;
         esac
 
-        nixos-rebuild $operation --flake .#$host --option eval-cache false -L -v --target-host root@$ssh_host $custom |& ${pkgs.nix-output-monitor}/bin/nom
+        sudo -E -u flafy nixos-rebuild $operation --flake .#$host --option eval-cache false -L --target-host root@$ssh_host $custom |& ${pkgs.nix-output-monitor}/bin/nom
       else
-        sudo nixos-rebuild $operation --flake .# --option eval-cache false -L -v $custom |& ${pkgs.nix-output-monitor}/bin/nom
+        sudo nixos-rebuild $operation --flake .# --option eval-cache false -L $custom |& ${pkgs.nix-output-monitor}/bin/nom
       fi
     '';
-    configLocation = "/mnt/general/repos/flafydev/nixos-config";
     nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
       export __NV_PRIME_RENDER_OFFLOAD=1
       export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0

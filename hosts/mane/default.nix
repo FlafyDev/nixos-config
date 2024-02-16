@@ -2,11 +2,12 @@
   pkgs,
   config,
   ssh,
+  utils,
   lib,
   ...
 }: let
-  inherit (lib) optional;
-  inherit (builtins) pathExists;
+  inherit (utils) domains;
+  inherit (lib) optional pathExists;
 in {
   osModules = [
     ({modulesPath, ...}: {
@@ -24,21 +25,44 @@ in {
   networking = {
     enable = true;
     vpsForwarding.mane.settings = {
-      outgoingAddress = "flafy.me";
+      outgoingAddress = domains.personal;
       wireguardInterface = "wg_vps";
     };
   };
+
+  # os.networking.nftables = {
+  #   enable = true;
+  #   tables = {
+  #     limit_bandwidth = {
+  #       name = "traceall";
+  #       family = "ip";
+  #       enable = true;
+  #
+  #       content = ''
+  #         chain prerouting {
+  #             type filter hook prerouting priority -350; policy accept;
+  #             meta nftrace set 1
+  #         }
+  #
+  #         chain output {
+  #             type filter hook output priority -350; policy accept;
+  #             meta nftrace set 1
+  #         }
+  #       '';
+  #     };
+  #   };
+  # };
 
   os = {
     services = {
       grafana = {
         enable = true;
         settings = {
-          server = {
+          server = rec {
             http_addr = "0.0.0.0";
             http_port = 4000;
-            domain = "flafy.me";
-            root_url = "http://flafy.me:4000/"; # Not needed if it is `https://your.domain/`
+            domain = domains.personal;
+            root_url = "http://${domain}:4000/"; # Not needed if it is `https://your.domain/`
             serve_from_sub_path = true;
           };
         };
@@ -62,8 +86,6 @@ in {
         ];
       };
     };
-    boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-    networking.firewall.enable = true;
   };
 
   os.virtualisation.digitalOcean.setSshKeys = false;

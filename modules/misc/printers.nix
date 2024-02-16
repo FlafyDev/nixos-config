@@ -16,6 +16,9 @@ in {
   config = mkIf cfg.enable {
     unfree.allowed = ["hplip"];
 
+    networking.allowedPorts.tcp."631" = ["*"];
+    networking.allowedPorts.udp."631,5353" = ["*"];
+
     os = {
       system.nssModules = pkgs.lib.optional (!osConfig.services.avahi.nssmdns) pkgs.nssmdns;
       system.nssDatabases.hosts = with pkgs.lib;
@@ -30,8 +33,8 @@ in {
       };
 
       networking.firewall = {
-        allowedUDPPorts = [631 5353];
         allowedTCPPorts = [631];
+        allowedUDPPorts = [631 5353];
       };
 
       services = {

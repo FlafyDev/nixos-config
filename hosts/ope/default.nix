@@ -1,4 +1,10 @@
-_: {
+{
+  lib,
+  utils,
+  ...
+}: let
+  inherit (utils) getHostname domains;
+in {
   imports = [./hardware];
 
   users.main = "flafy";
@@ -12,7 +18,7 @@ _: {
       exporters.node = {
         enable = true;
         port = 9100;
-        listenAddress = "ope.wg_private.flafy.me";
+        listenAddress = getHostname "ope.wg_private";
       };
 
       globalConfig = {
@@ -20,13 +26,11 @@ _: {
         evaluation_interval = "15s";
       };
     };
-
-    networking.firewall.enable = true;
   };
 
   os.services.nginx = {
     enable = true;
-    virtualHosts."emoji.flafy.me" = {
+    virtualHosts."emoji.${domains.personal}" = {
       listen = [
         {
           addr = "0.0.0.0";
@@ -66,12 +70,12 @@ _: {
         content = ''
           chain input {
             type filter hook input priority filter; policy accept;
-            # iifname enp14s0 limit rate over 3500 kbytes/second drop
+            iifname enp14s0 limit rate over 1500 kbytes/second drop
           }
 
           chain output {
             type filter hook output priority filter; policy accept;
-            # oifname enp14s0 limit rate over 3500 kbytes/second drop
+            oifname enp14s0 limit rate over 1500 kbytes/second drop
           }
         '';
       };
@@ -81,9 +85,16 @@ _: {
   android.enable = true;
   display.greetd.enable = true;
   display.greetd.command = "offload-igpu Hyprland";
+
+  # TCP: 47984, 47989, 48010
+  # UDP: 47998-48000, 48002, 48010
+
+  networking.allowedPorts.tcp."47984,47989,48010" = [(getHostname "ope.wg_private")];
+  networking.allowedPorts.udp."47998-48000" = [(getHostname "ope.wg_private")];
+  networking.allowedPorts.udp."48002,48010" = [(getHostname "ope.wg_private")];
+
   display.hyprland = {
     enable = true;
-    sunshine.enable = true;
     headlessXorg.enable = true;
     monitors = [
       "eDP-1,disable"
@@ -109,6 +120,51 @@ _: {
   vm.enable = true;
   games.enable = true;
   gtk.enable = true;
+
+  networking.exposeLocalhost.tcp = ["9091"];
+  networking.allowedPorts.tcp."9091" = [(getHostname "ope.wg_private")];
+
+  # os.networking.nftables = {
+  #   tables = {
+  #     allow_ports = {
+  #       name = "allow_ports";
+  #       family = "inet";
+  #       enable = true;
+  #       content = ''
+  #         chain input {
+  #           type filter hook input priority 0;
+  #
+  #           iif lo accept
+  #
+  #           ct state established,related accept
+  #
+  #           ip6 nexthdr icmpv6 accept
+  #           ip protocol icmp accept
+  #
+  #           tcp dport 9091 accept
+  #
+  #           icmp type echo-request  accept comment "allow ping"
+  #
+  #           icmpv6 type != { nd-redirect, 139 } accept comment "Accept all ICMPv6 messages except redirects and node information queries (type 139).  See RFC 4890, section 4.4."
+  #           ip6 daddr fe80::/64 udp dport 546 accept comment "DHCPv6 client"
+  #
+  #           drop
+  #         }
+  #       '';
+  #     };
+  #   };
+  # };
+
+  networking.allowedPorts.tcp."8096" = ["*"];
+  os.services.jellyfin = {
+    enable = true;
+  };
+  # os.systemd.services.jellyfin.serviceConfig.Group = lib.mkForce "jellyfin,transmission";
+  os.users.users.jellyfin = {
+    extraGroups = [
+      "transmission"
+    ];
+  };
 
   programs = {
     anyrun.enable = true;

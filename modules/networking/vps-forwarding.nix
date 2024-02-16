@@ -2,12 +2,16 @@
   config,
   configs,
   lib,
-  resolveHostname,
+  utils,
   ...
 }: let
+  inherit (utils) resolveHostname getHostname;
   inherit
     (lib)
     mkOption
+    splitString
+    last
+    head
     types
     mkIf
     foldlAttrs
@@ -21,12 +25,19 @@
     ;
   cfg = config.networking.vpsForwarding;
 
+  processPort = port:
+    if hasInfix "," port
+    then "{${port}}"
+    else port;
+
   portsToAllowVps = listToAttrs (map (
     protocol: {
       name = protocol;
       value = listToAttrs (
-        map (port: {
-          name = port;
+        map (port: let
+          portTo = processPort (last (splitString "->" port));
+        in {
+          name = portTo;
           value = [cfg.${config.users.host}.settings.outgoingAddress];
         }) (
           foldl' (
@@ -40,15 +51,44 @@
     }
   ) ["tcp" "udp"]);
 
+  # Forwarding rules
+  rules = concatStringsSep "\n" (
+    foldl' (
+      acc: protocol:
+        acc
+        ++ (
+          foldlAttrs (
+            acc: host: config': let
+              ports = config'.networking.vpsForwarding.${config.users.host}.${protocol} or [];
+              address = "${host}.${getHostname cfg.${config.users.host}.settings.wireguardInterface}";
+            in
+              acc
+              ++ (foldl' (acc: port: let
+                portFrom = processPort (head (splitString "->" port));
+                portTo = processPort (last (splitString "->" port));
+              in
+                acc
+                ++ [
+                  "${protocol} dport ${portTo} dnat to ${resolveHostname address}:${portFrom}"
+                ]) []
+              ports)
+          ) []
+          configs
+        )
+    ) [] ["tcp" "udp"]
+  );
+
   portsToAllowThis = foldl' (acc: protocolsConfig: acc // protocolsConfig) {} (
     attrValues (
       mapAttrs (
         host: config': let
-          address = "${config.users.host}.${configs.${host}.networking.vpsForwarding.${host}.settings.wireguardInterface}.flafy.me";
+          address = "${config.users.host}.${getHostname configs.${host}.networking.vpsForwarding.${host}.settings.wireguardInterface}";
         in
           mapAttrs (_protocol: ports:
-            listToAttrs (map (port: {
-                name = port;
+            listToAttrs (map (port: let
+                portFrom = processPort (head (splitString "->" port));
+              in {
+                name = portFrom;
                 value = [address];
               })
               ports))
@@ -56,31 +96,6 @@
       )
       cfg
     )
-  );
-
-  rules = concatStringsSep "\n" (
-    foldlAttrs (
-      acc: protocol: ports:
-        acc
-        ++ (
-          foldlAttrs (
-            acc: port: addresses: let
-              port' =
-                if hasInfix "," port
-                then "{${port}}"
-                else port;
-            in
-              acc
-              ++ (
-                map
-                (address: "${protocol} dport ${port'} dnat to ${resolveHostname address}:${port'}")
-                addresses
-              )
-          ) []
-          ports
-        )
-    ) []
-    portsToAllowVps
   );
 in {
   options.networking.vpsForwarding = mkOption {
@@ -106,18 +121,20 @@ in {
               type = with types;
                 submodule (
                   _: {
-                    options.wireguardInterface = mkOption {
-                      type = types.str;
-                      description = ''
-                        Wireguard interface to use for VPS forwarding.
-                      '';
-                    };
-                    options.outgoingAddress = mkOption {
-                      type = types.str;
-                      default = "0.0.0.0";
-                      description = ''
-                        Outgoing address for VPS forwarding.
-                      '';
+                    options = {
+                      wireguardInterface = mkOption {
+                        type = types.str;
+                        description = ''
+                          Wireguard interface to use for VPS forwarding.
+                        '';
+                      };
+                      outgoingAddress = mkOption {
+                        type = types.str;
+                        default = "0.0.0.0";
+                        description = ''
+                          Outgoing address for VPS forwarding.
+                        '';
+                      };
                     };
                   }
                 );
@@ -145,17 +162,17 @@ in {
             family = "ip";
             enable = true;
 
-            # tcp dport 23-65535 dnat to 10.10.10.10:23-65535
             content = ''
               chain prerouting {
                   type nat hook prerouting priority 0 ;
 
-                  ${rules}
+                  ${builtins.trace rules rules}
               }
 
               chain postrouting {
                   type nat hook postrouting priority 100 ;
                   masquerade
+                  #oifname ens3 ip saddr 10.10.12.1/24 masquerade
               }
             '';
           };

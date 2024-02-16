@@ -1,4 +1,10 @@
-{config, ...}: {
+{
+  config,
+  utils,
+  ...
+}: let
+  inherit (utils) getHostname;
+in {
   os.services.openvscode-server = {
     enable = true;
     user = config.users.main;
@@ -11,7 +17,7 @@
     #       ../mera/temppatch.patch
     #     ];
     # });
-    host = "ope.wg_private.flafy.me";
+    host = getHostname "ope.wg_private";
     port = 58846;
   };
 
@@ -19,5 +25,5 @@
     "nodejs-16.20.2"
   ];
 
-  networking.allowedPorts.tcp."58846" = [ "ope.wg_private.flafy.me" ];
+  networking.allowedPorts.tcp."58846" = [(getHostname "ope.wg_private")];
 }

@@ -22,6 +22,7 @@ in {
       enable = true;
       package = pkgs.transmission_4;
       settings = {
+        rpc-whitelist-enabled = false;
         download-dir = "/share/torrents/transmission/downloaded/";
         watch-dir = "/share/torrents/transmission/watch/";
         watch-dir-enabled = true;

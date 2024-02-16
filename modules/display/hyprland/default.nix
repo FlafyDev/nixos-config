@@ -23,16 +23,6 @@ in {
         A list of monitors.
       '';
     };
-    sunshine = {
-      enable = mkEnableOption "hyprland-sunshine";
-      package = mkOption {
-        type = with types; package;
-        default = pkgs.sunshine;
-        description = ''
-          Sunshine package.
-        '';
-      };
-    };
     headlessXorg = {
       enable = mkEnableOption "hyprland-headless-xorg";
       num = mkOption {
@@ -207,13 +197,6 @@ in {
             "${pkgs.foot}/bin/foot --server"
             # "${elib.flPkgs inputs.flutter_background_bar}/bin/flutter_background_bar"
             "hyprctl setcursor Bibata-Modern-Ice 24"
-
-            (mkIf cfg.sunshine.enable (pkgs.writeShellScript "sunshine-launcher" ''
-              while true; do
-                "${cfg.sunshine.package}/bin/sunshine" || true
-                sleep 1
-              done
-            ''))
 
             (mkIf cfg.headlessXorg.enable "${pkgs.xorg.xorgserver}/bin/Xvfb :${toString cfg.headlessXorg.num} -screen 0 1024x768x24")
 
