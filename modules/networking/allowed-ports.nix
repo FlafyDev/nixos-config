@@ -45,8 +45,8 @@
           ++ (
             if (elem "0.0.0.0" addresses) || (elem "*" addresses)
             then ["${protocol} dport ${port'} accept"]
-            else if (elem port' config.networking.exposeLocalhost.${protocol})
-            then map (address: "${protocol} dport ${port'} accept\nip daddr ${resolveHostname address} ${protocol} dport ${port'} accept") addresses
+            # else if (elem port' config.networking.exposeLocalhost.${protocol})
+            # then map (address: "${protocol} dport ${port'} accept\nip daddr ${resolveHostname address} ${protocol} dport ${port'} accept") addresses
             else map (address: "ip saddr ${resolveHostname address} ${protocol} dport ${port'} accept\nip daddr ${resolveHostname address} ${protocol} dport ${port'} accept") addresses
           )
       ) []

@@ -19,79 +19,9 @@ in {
     })
   ];
 
-  os.networking.nftables = {
-    enable = true;
-    tables = lib.mkForce {
-      limit_bandwidth = {
-        name = "traceall";
-        family = "ip";
-        enable = true;
-
-        content = ''
-          chain prerouting {
-              type filter hook prerouting priority -350; policy accept;
-              meta nftrace set 1
-          }
-
-          chain output {
-              type filter hook output priority -350; policy accept;
-              meta nftrace set 1
-          }
-        '';
-      };
-      tunnel = {
-        name = "tunnel";
-        family = "inet";
-        enable = true;
-
-        content = ''
-          chain prerouting {
-            type nat hook prerouting priority 0 ;
-
-            tcp dport 5000 dnat ip to 10.10.10.10:5000
-          }
-
-          chain postrouting {
-            type nat hook postrouting priority 100 ;
-
-            oifname ens3 ip saddr 10.10.10.10 masquerade
-          }
-          chain input {
-            type filter hook input priority 0; policy accept;
-            accept
-          }
-
-          chain forward {
-            type filter hook forward priority 0; policy accept;
-            accept
-          }
-
-          chain output {
-            type filter hook output priority 0; policy accept;
-            accept
-          }
-        '';
-      };
-    };
-  };
-
-  # TEMP22
-  networking.allowedPorts.tcp."5000" = ["*"];
-
-  users.main = "vps";
-  users.host = "mane";
-
-  networking = {
-    enable = true;
-    vpsForwarding.mane.settings = {
-      outgoingAddress = domains.personal;
-      wireguardInterface = "wg_vps";
-    };
-  };
-
   # os.networking.nftables = {
   #   enable = true;
-  #   tables = {
+  #   tables = lib.mkForce {
   #     limit_bandwidth = {
   #       name = "traceall";
   #       family = "ip";
@@ -109,8 +39,53 @@ in {
   #         }
   #       '';
   #     };
+  #     tunnel = {
+  #       name = "tunnel";
+  #       family = "inet";
+  #       enable = true;
+  #
+  #       content = ''
+  #         chain prerouting {
+  #           type nat hook prerouting priority 0 ;
+  #
+  #           tcp dport 5000 dnat ip to 10.10.10.10:5000
+  #         }
+  #
+  #         chain postrouting {
+  #           type nat hook postrouting priority 100 ;
+  #
+  #           oifname ens3 ip saddr 10.10.10.10 masquerade
+  #         }
+  #         chain input {
+  #           type filter hook input priority 0; policy accept;
+  #           accept
+  #         }
+  #
+  #         chain forward {
+  #           type filter hook forward priority 0; policy accept;
+  #           accept
+  #         }
+  #
+  #         chain output {
+  #           type filter hook output priority 0; policy accept;
+  #           accept
+  #         }
+  #       '';
+  #     };
   #   };
   # };
+  #
+  # # TEMP22
+  # networking.allowedPorts.tcp."5000" = ["*"];
+
+  networking.forwardPorts."10.10.10.10".tcp = ["5000"];
+  networking.forwardPorts."10.10.10.10".masquerade = false;
+  networking.allowedPorts.tcp."5000" = ["*"];
+
+  networking.enable = true;
+
+  users.main = "vps";
+  users.host = "mane";
 
   os = {
     services = {

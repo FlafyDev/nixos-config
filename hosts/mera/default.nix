@@ -53,7 +53,7 @@ in {
     };
   };
 
-  networking.vpsForwarding.mane.tcp = ["143" "993" "587" "465"];
+  # networking.vpsForwarding.mane.tcp = ["143" "993" "587" "465"];
   services.mailserver = {
     enable = true;
     host = domains.personal;

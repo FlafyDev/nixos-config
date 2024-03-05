@@ -14,6 +14,7 @@
     concatStringsSep
     hasInfix
     foldl'
+    attrNames
     ;
   cfg = config.networking.forwardPorts;
 
@@ -31,59 +32,63 @@
             acc: protocol:
               acc
               ++ (
-                foldl' (acc: port: let
-                  portFrom = processPort (head (splitString "->" port));
-                  portTo = processPort (last (splitString "->" port));
-                in
-                  acc
-                  ++ [
-                    "${protocol} dport ${portFrom} dnat ip to ${ip}:${portTo}"
-                  ]) []
+                foldl' (
+                  acc: port: let
+                    portFrom = processPort (head (splitString "->" port));
+                    portTo = processPort (last (splitString "->" port));
+                  in
+                    acc
+                    ++ [
+                      "${protocol} dport ${portFrom} dnat ip to ${ip}:${portTo}"
+                    ]
+                ) []
                 cfg.${ip}.${protocol}
               )
           ) [] ["tcp" "udp"]
         )
-    ) []
+    ) [] (attrNames cfg)
   );
 
   postroutingRules = concatStringsSep "\n" (
     foldl' (
       acc: ip: acc ++ ["ip daddr ${ip} masquerade"]
-    ) []
+    ) [] (attrNames cfg)
   );
 in {
   options.networking.forwardPorts = mkOption {
     default = {};
     type = types.attrsOf (types.submodule {
-      masquerade = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Use masquerade.
-        '';
-      };
-      # allowPorts = mkOption {
-      #   type = types.bool;
-      #   default = true;
-      #   description = ''
-      #     Automatically allow the ports in `networking.allowedPorts`.
-      #   '';
-      # };
-      tcp = mkOption {
-        type = with types; listOf str;
-        default = [];
-        description = ''
-          Which ports should be expose and accessable by the outside world.
-          `networking.forwardPorts.<ip>.<tcp/udp> = [ ports ]`
-        '';
-      };
-      udp = mkOption {
-        type = with types; listOf str;
-        default = [];
-        description = ''
-          Which ports should be expose and accessable by the outside world.
-          `networking.forwardPorts.<ip>.<tcp/udp> = [ ports ]`
-        '';
+      options = {
+        masquerade = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Use masquerade.
+          '';
+        };
+        # allowPorts = mkOption {
+        #   type = types.bool;
+        #   default = true;
+        #   description = ''
+        #     Automatically allow the ports in `networking.allowedPorts`.
+        #   '';
+        # };
+        tcp = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Which ports should be expose and accessable by the outside world.
+            `networking.forwardPorts.<ip>.<tcp/udp> = [ ports ]`
+          '';
+        };
+        udp = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Which ports should be expose and accessable by the outside world.
+            `networking.forwardPorts.<ip>.<tcp/udp> = [ ports ]`
+          '';
+        };
       };
     });
   };

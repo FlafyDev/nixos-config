@@ -7,7 +7,7 @@
   inherit (utils) getHostname;
 
 in {
-  networking.vpsForwarding.mane.tcp = ["22->8337"];
+  # networking.vpsForwarding.mane.tcp = ["22->8337"];
 
   networking.allowedPorts.tcp."22" = ["*"];
 

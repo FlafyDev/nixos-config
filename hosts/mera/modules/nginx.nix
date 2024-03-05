@@ -8,7 +8,7 @@
   inherit (utils) resolveHostname getHostname domains;
   inherit (lib) mkOption types mkDefault;
 in {
-  networking.vpsForwarding.mane.tcp = ["80" "443"];
+  # networking.vpsForwarding.mane.tcp = ["80" "443"];
   os = {options, ...}: {
     options.services.nginx.virtualHosts = mkOption {
       type = types.attrsOf (types.submodule (_: {

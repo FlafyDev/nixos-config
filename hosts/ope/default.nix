@@ -11,66 +11,6 @@ in {
   users.main = "flafy";
   users.host = "ope";
 
-  containers.testcon = {
-    autoStart = true;
-    # privateNetwork = true;
-    extraFlags = ["--network-namespace-path=/run/netns/vpn"];
-    hostAddress = "10.10.15.10";
-    localAddress = "10.10.15.11";
-    hostAddress6 = "fc00::1";
-    localAddress6 = "fc00::2";
-
-    # vpnForwards = {
-    #   enable = true;
-    #   mane = {
-    #     tcp.ports = ["27->2200"];
-    #     udp.ports = ["27->2200"];
-    #   };
-    # };
-
-    bindMounts = {
-      "/etc/resolv.conf" = {
-        hostPath = toString (pkgs.writeText "resolv.conf" ''
-          nameserver 9.9.9.9
-          nameserver 1.1.1.1
-        '');
-        isReadOnly = true;
-      };
-    };
-
-    forwardPorts = [
-      {
-        protocol = "tcp";
-        hostPort = 5000;
-        containerPort = 5000;
-      }
-    ];
-
-    config = {
-      config,
-      pkgs,
-      lib,
-      ...
-    }: {
-      services = {
-        games = {
-          badTimeSimulator = {
-            enable = true;
-            hostname = "0.0.0.0";
-            port = 5000;
-          };
-        };
-      };
-
-      networking = {
-        enable = true;
-        allowedPorts = [1000];
-      };
-
-      system.stateVersion = "23.11";
-      networking.useHostResolvConf = lib.mkForce false;
-    };
-  };
 
   os = {
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
