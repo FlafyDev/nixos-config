@@ -78,8 +78,10 @@ in {
   # # TEMP22
   # networking.allowedPorts.tcp."5000" = ["*"];
 
-  networking.forwardPorts."10.10.10.10".tcp = ["5000"];
-  networking.forwardPorts."10.10.10.10".masquerade = false;
+  networking.forwardPorts.${utils.resolveHostname "ope.wg_vps"} = {
+    tcp = ["5000"];
+    masquerade = false;
+  };
   networking.allowedPorts.tcp."5000" = ["*"];
 
   networking.enable = true;

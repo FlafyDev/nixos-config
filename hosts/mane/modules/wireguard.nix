@@ -26,8 +26,8 @@ in {
 
             # Forward WireGuard traffic.
             # Allow WireGuard traffic to access the internet via wan.
-            iifname "ens3" oifname "wg_vpn" accept;
-            iifname "wg_vpn" oifname "ens3" accept;
+            iifname "ens3" oifname "wg_vps" accept;
+            iifname "wg_vps" oifname "ens3" accept;
             iifname "ens3" accept;
           }
 
@@ -35,8 +35,7 @@ in {
             type nat hook postrouting priority 100;
 
             # Masquerade WireGuard traffic.
-            # All WireGuard traffic will look like it comes from the servers IP address.
-            oifname ens3 ip saddr 10.10.12.1/32 masquerade
+            oifname "ens3" ip saddr 10.10.10.10 masquerade
           }
         '';
       };

@@ -15,6 +15,7 @@
     hasInfix
     foldl'
     attrNames
+    filterAttrs
     ;
   cfg = config.networking.forwardPorts;
 
@@ -52,7 +53,7 @@
   postroutingRules = concatStringsSep "\n" (
     foldl' (
       acc: ip: acc ++ ["ip daddr ${ip} masquerade"]
-    ) [] (attrNames cfg)
+    ) [] (attrNames (filterAttrs (_name: value: value.masquerade) cfg))
   );
 in {
   options.networking.forwardPorts = mkOption {
