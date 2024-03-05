@@ -1,0 +1,17 @@
+diff --git a/src/egl/drivers/dri2/platform_wayland.c b/src/egl/drivers/dri2/platform_wayland.c
+index 3dc73215be1..293f2a0ef0d 100644
+--- a/src/egl/drivers/dri2/platform_wayland.c
++++ b/src/egl/drivers/dri2/platform_wayland.c
+@@ -1670,6 +1670,12 @@ dri2_wl_swap_buffers_with_damage(_EGLDisplay *disp,
+                                  dri2_surf->base.Height,
+                                  0, 0, dri2_surf->base.Width,
+                                  dri2_surf->base.Height, 0);
++
++      if (dri2_dpy->flush) {
++         __DRIdrawable *dri_drawable = dri2_dpy->vtbl->get_dri_drawable(draw);
++
++         dri2_dpy->flush->flush(dri_drawable);
++      }
+    }
+ 
+    wl_surface_commit(dri2_surf->wl_surface_wrapper);

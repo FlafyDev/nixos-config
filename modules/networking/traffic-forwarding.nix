@@ -1,3 +1,4 @@
+{}
 # {
 #   config,
 #   configs,
@@ -175,16 +176,13 @@
 #
 #                   iifname {${concatStringsSep "," cfg.${config.users.host}.settings.excludeInterfaces}} accept;
 #
-#                   ## TEMP22
-#                   tcp dport 5000 dnat ip to 10.10.10.10:5000
-#
 #                   ${rules}
 #               }
 #
 #               chain postrouting {
 #                   type nat hook postrouting priority 100 ;
 #                   masquerade
-#                   # oifname ens3 ip saddr 10.10.12.1/24 masquerade
+#                   #oifname ens3 ip saddr 10.10.12.1/24 masquerade
 #               }
 #             '';
 #           };
@@ -197,4 +195,4 @@
 #     }
 #   ]);
 # }
-{}
+#

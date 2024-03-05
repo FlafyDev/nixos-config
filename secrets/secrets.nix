@@ -35,14 +35,20 @@ let
       in
         acc
         // (
-          if pathExists (concatPaths [./. localPath])
-          then {
+          {
             ${localPath}.publicKeys = [
               publicKeys.${host}.user
               master
             ];
           }
-          else {}
+          # if pathExists (concatPaths [./. localPath])
+          # then {
+          #   ${localPath}.publicKeys = [
+          #     publicKeys.${host}.user
+          #     master
+          #   ];
+          # }
+          # else {}
         )) {} (attrNames (readDir (concatPaths [./ssh-keys host]))))
   ) {} (attrNames (readDir ./ssh-keys));
 in
@@ -60,6 +66,11 @@ in
       master
     ];
     "other/mail/flafy_dev/flafy.age".publicKeys = [
+      mera.user
+      master
+    ];
+    # SYNCV3_SECRET=$(openssl rand -base64 32)
+    "other/matrix_sliding_sync_secret.age".publicKeys = [
       mera.user
       master
     ];

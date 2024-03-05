@@ -1,6 +1,7 @@
 {
   lib,
   utils,
+  pkgs,
   ...
 }: let
   inherit (utils) getHostname domains;
@@ -9,6 +10,67 @@ in {
 
   users.main = "flafy";
   users.host = "ope";
+
+  containers.testcon = {
+    autoStart = true;
+    # privateNetwork = true;
+    extraFlags = ["--network-namespace-path=/run/netns/vpn"];
+    hostAddress = "10.10.15.10";
+    localAddress = "10.10.15.11";
+    hostAddress6 = "fc00::1";
+    localAddress6 = "fc00::2";
+
+    # vpnForwards = {
+    #   enable = true;
+    #   mane = {
+    #     tcp.ports = ["27->2200"];
+    #     udp.ports = ["27->2200"];
+    #   };
+    # };
+
+    bindMounts = {
+      "/etc/resolv.conf" = {
+        hostPath = toString (pkgs.writeText "resolv.conf" ''
+          nameserver 9.9.9.9
+          nameserver 1.1.1.1
+        '');
+        isReadOnly = true;
+      };
+    };
+
+    forwardPorts = [
+      {
+        protocol = "tcp";
+        hostPort = 5000;
+        containerPort = 5000;
+      }
+    ];
+
+    config = {
+      config,
+      pkgs,
+      lib,
+      ...
+    }: {
+      services = {
+        games = {
+          badTimeSimulator = {
+            enable = true;
+            hostname = "0.0.0.0";
+            port = 5000;
+          };
+        };
+      };
+
+      networking = {
+        enable = true;
+        allowedPorts = [1000];
+      };
+
+      system.stateVersion = "23.11";
+      networking.useHostResolvConf = lib.mkForce false;
+    };
+  };
 
   os = {
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
@@ -65,17 +127,17 @@ in {
       limit_bandwidth = {
         name = "limit_bandwidth";
         family = "inet";
-        enable = false;
+        enable = true;
 
         content = ''
           chain input {
             type filter hook input priority filter; policy accept;
-            iifname enp14s0 limit rate over 1500 kbytes/second drop
+            iifname enp14s0 limit rate over 2800 kbytes/second drop
           }
 
           chain output {
             type filter hook output priority filter; policy accept;
-            oifname enp14s0 limit rate over 1500 kbytes/second drop
+            oifname enp14s0 limit rate over 2800 kbytes/second drop
           }
         '';
       };
@@ -121,8 +183,8 @@ in {
   games.enable = true;
   gtk.enable = true;
 
-  networking.exposeLocalhost.tcp = ["9091"];
-  networking.allowedPorts.tcp."9091" = [(getHostname "ope.wg_private")];
+  # networking.exposeLocalhost.tcp = ["9091"];
+  # networking.allowedPorts.tcp."9091" = [(getHostname "ope.wg_private")];
 
   # os.networking.nftables = {
   #   tables = {
@@ -155,7 +217,7 @@ in {
   #   };
   # };
 
-  networking.allowedPorts.tcp."8096" = ["*"];
+  # networking.allowedPorts.tcp."8096" = ["*"];
   os.services.jellyfin = {
     enable = true;
   };

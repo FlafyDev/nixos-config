@@ -46,6 +46,8 @@ in {
         inputs.nixos-mailserver.nixosModules.mailserver
       ];
 
+      os.services.postfix.config.inet_protocols = "ipv4";
+
       os.mailserver = {
         enable = true;
         debug = true;

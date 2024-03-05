@@ -5,7 +5,11 @@
   inputs,
   config,
   ...
-}: {
+}: let
+  newMesa = pkgs.mesa.overrideAttrs (old: {
+    patches = (old.patches or []) ++ [./mesa.patch];
+  });
+in {
   osModules = [
     ./hardware-configuration.nix
   ];
@@ -13,6 +17,17 @@
   vm.gpu = ["1002:73df" "1002:ab28"];
 
   os = {
+    system.replaceRuntimeDependencies = [
+      {
+        original = pkgs.mesa;
+        replacement = newMesa;
+      }
+      {
+        original = pkgs.mesa.drivers;
+        replacement = newMesa.drivers;
+      }
+    ];
+
     environment.systemPackages = let
       offload-gpu = pkgs.writeShellScriptBin "offload-gpu" ''
         export DRI_PRIME="pci-0000_03_00_0"
@@ -190,6 +205,7 @@
       };
       opentabletdriver.enable = true;
       opengl = {
+        # package = newMesa.drivers;
         enable = true;
         driSupport = true;
         driSupport32Bit = true;

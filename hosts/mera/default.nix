@@ -18,6 +18,7 @@ in {
 
   networking.enable = true;
 
+
   # networking.allowedPorts.tcp."22" = ["*"];
   # programs.ssh = {
   #   enable = true;
@@ -51,7 +52,6 @@ in {
       minecraft.enable = false;
     };
   };
-
 
   networking.vpsForwarding.mane.tcp = ["143" "993" "587" "465"];
   services.mailserver = {

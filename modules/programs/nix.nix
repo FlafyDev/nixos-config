@@ -2,10 +2,14 @@
   inputs,
   lib,
   config,
-  combinedManager,
   pkgs,
   ...
 }: let
+
+  combinedManager = (builtins.fetchTarball {
+    url = "https://github.com/flafydev/combined-manager/archive/c9cc0428a15d01417f96015f88fd874233b9cc42.tar.gz";
+    sha256 = "sha256:188nwnr9vg4wwd98zm0fvwqwyraisaqqkxxlx1qm0x02pnbr904h";
+  });
   cfg = config.programs.nix;
   inherit (lib) mkEnableOption mkIf mkMerge mapAttrs;
   package =
