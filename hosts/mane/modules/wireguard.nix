@@ -35,7 +35,7 @@ in {
             type nat hook postrouting priority 100;
 
             # Masquerade WireGuard traffic.
-            oifname "ens3" ip saddr 10.10.10.10 masquerade
+            oifname "ens3" ip saddr 10.10.10.0/24 masquerade
           }
         '';
       };

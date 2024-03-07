@@ -21,7 +21,7 @@
   hostnames = {
     "bara.lan1.${cfg.domains.personal}" = "10.0.0.35";
     "mera.lan1.${cfg.domains.personal}" = "10.0.0.41";
-    "ope.lan1.${cfg.domains.personal}" = "10.0.0.42";
+    "ope.lan1.${cfg.domains.personal}" = "10.0.0.15";
 
     "ope.wg_private.${cfg.domains.personal}" = "10.10.11.10";
     "bara.wg_private.${cfg.domains.personal}" = "10.10.11.12";
@@ -44,7 +44,7 @@ in {
       {
         "bara.lan1.${cfg.domains.personal}" = "10.0.0.35";
         "mera.lan1.${cfg.domains.personal}" = "10.0.0.41";
-        "ope.lan1.${cfg.domains.personal}" = "10.0.0.42";
+        "ope.lan1.${cfg.domains.personal}" = "10.0.0.15";
 
         "ope.wg_private.${cfg.domains.personal}" = "10.10.11.10";
         "bara.wg_private.${cfg.domains.personal}" = "10.10.11.12";

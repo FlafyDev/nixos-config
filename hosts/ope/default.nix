@@ -11,6 +11,44 @@ in {
   users.main = "flafy";
   users.host = "ope";
 
+  # os.networking.nftables = {
+  #   enable = true;
+  #   tables = lib.mkForce {
+  #     tunnel = {
+  #       name = "tunnel";
+  #       family = "inet";
+  #       enable = true;
+  #
+  #       content = ''
+  #         chain prerouting {
+  #           type nat hook prerouting priority 0 ;
+  #
+  #           tcp dport 5000 dnat ip to 10.10.10.10:5000
+  #         }
+  #
+  #         chain postrouting {
+  #           type nat hook postrouting priority 100 ;
+  #
+  #           oifname ens3 ip saddr 10.10.10.10 masquerade
+  #         }
+  #         chain input {
+  #           type filter hook input priority 0; policy accept;
+  #           accept
+  #         }
+  #
+  #         chain forward {
+  #           type filter hook forward priority 0; policy accept;
+  #           accept
+  #         }
+  #
+  #         chain output {
+  #           type filter hook output priority 0; policy accept;
+  #           accept
+  #         }
+  #       '';
+  #     };
+  #   };
+  # };
 
   os = {
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
@@ -61,28 +99,28 @@ in {
     ];
   };
 
-  os.networking.nftables = {
-    enable = true;
-    tables = {
-      limit_bandwidth = {
-        name = "limit_bandwidth";
-        family = "inet";
-        enable = true;
-
-        content = ''
-          chain input {
-            type filter hook input priority filter; policy accept;
-            iifname enp14s0 limit rate over 2800 kbytes/second drop
-          }
-
-          chain output {
-            type filter hook output priority filter; policy accept;
-            oifname enp14s0 limit rate over 2800 kbytes/second drop
-          }
-        '';
-      };
-    };
-  };
+  # os.networking.nftables = {
+  #   enable = true;
+  #   tables = {
+  #     limit_bandwidth = {
+  #       name = "limit_bandwidth";
+  #       family = "inet";
+  #       enable = true;
+  #
+  #       content = ''
+  #         chain input {
+  #           type filter hook input priority filter; policy accept;
+  #           iifname enp14s0 limit rate over 2800 kbytes/second drop
+  #         }
+  #
+  #         chain output {
+  #           type filter hook output priority filter; policy accept;
+  #           oifname enp14s0 limit rate over 2800 kbytes/second drop
+  #         }
+  #       '';
+  #     };
+  #   };
+  # };
 
   android.enable = true;
   display.greetd.enable = true;
