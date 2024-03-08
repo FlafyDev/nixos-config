@@ -6,6 +6,7 @@
   combinedManager,
   utils,
   inputs,
+  pkgs,
   ...
 }: let
   inherit (lib) mkOption mapAttrs types __curPos mkDefault head;
@@ -69,6 +70,8 @@ in {
                                       #           then { inherit (host.osConfig.nixpkgs) hostPlatform; }
                                       #           else { inherit (host.osConfig.nixpkgs) localSystem; }
                                       # ;
+
+                                      networking.useHostResolvConf = lib.mkForce false;
                                       boot.isContainer = true;
                                       networking.useDHCP = false;
                                     };
@@ -78,7 +81,8 @@ in {
                               ++ (getModules (toString ../../modules))
                               ++ (map (x: x.value) defs);
                             prefix = ["containers" name];
-                            inherit (config) specialArgs;
+
+                            specialArgs = {configs = {};} // config.specialArgs;
                             useHomeManager = false;
 
                             # The system is inherited from the host above.
@@ -102,7 +106,20 @@ in {
     os.containers =
       mapAttrs (
         _name: containerConfig:
-          builtins.removeAttrs containerConfig ["pkgs" "config"]
+          (builtins.removeAttrs containerConfig ["pkgs" "config"])
+          // {
+            bindMounts =
+              {
+                "/etc/resolv.conf" = {
+                  hostPath = toString (pkgs.writeText "resolv.conf" ''
+                    nameserver 9.9.9.9
+                    nameserver 1.1.1.1
+                  '');
+                  isReadOnly = true;
+                };
+              }
+              // containerConfig.bindMounts;
+          }
       )
       cfg;
   };

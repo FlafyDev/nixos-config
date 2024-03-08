@@ -2,6 +2,7 @@
   config,
   pkgs,
   osConfig,
+  secrets,
   inputs,
   lib,
   ...
@@ -64,7 +65,7 @@ in {
         loginAccounts = {
           # Personal
           "flafy@${cfg.host}" = {
-            hashedPasswordFile = osConfig.age.secrets."mail.flafy_dev.flafy".path;
+            hashedPasswordFile = secrets."mail.flafy_dev.flafy";
           };
           # "user1@example.com" = {
           #   hashedPasswordFile = "/a/file/containing/a/hashed/password";

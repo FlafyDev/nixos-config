@@ -13,11 +13,12 @@ in {
   users.main = "server";
   users.host = "mera";
 
+  # boot.enableContainers = false;
+
   secrets.enable = true;
   printers.enable = true;
 
   networking.enable = true;
-
 
   # networking.allowedPorts.tcp."22" = ["*"];
   # programs.ssh = {
@@ -53,36 +54,13 @@ in {
     };
   };
 
-  # networking.vpsForwarding.mane.tcp = ["143" "993" "587" "465"];
-  services.mailserver = {
-    enable = true;
-    host = domains.personal;
-    cert = "_.${domains.personal}";
-  };
-
-  os.security.acme = {
-    acceptTerms = true;
-    defaults.email = "flafyarazi@gmail.com";
-    certs."flafy.dev" = {
-      domain = "flafy.dev";
-      group = "nginx";
-      dnsProvider = "porkbun";
-      # env file with PORKBUN_SECRET_API_KEY PORKBUN_API_KEY
-      credentialsFile = osConfig.age.secrets.porkbun.path;
-    };
-    certs."_.flafy.dev" = {
-      domain = "*.flafy.dev";
-      group = "nginx";
-      dnsProvider = "porkbun";
-      # env file with PORKBUN_SECRET_API_KEY PORKBUN_API_KEY
-      credentialsFile = osConfig.age.secrets.porkbun.path;
-    };
-  };
-
-  services.matrix = {
-    enable = true;
-    host = domains.personal;
-  };
+  # networking.vpnNamespace.vpn.ports.tcp = ["25" "143" "993" "587" "465"];
+  #
+  # containers.maneVpn.config.services.mailserver = {
+  #   enable = true;
+  #   host = domains.personal;
+  #   cert = "_.${domains.personal}";
+  # };
 
   programs = {
     git.enable = true;

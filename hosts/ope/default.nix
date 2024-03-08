@@ -11,45 +11,6 @@ in {
   users.main = "flafy";
   users.host = "ope";
 
-  # os.networking.nftables = {
-  #   enable = true;
-  #   tables = lib.mkForce {
-  #     tunnel = {
-  #       name = "tunnel";
-  #       family = "inet";
-  #       enable = true;
-  #
-  #       content = ''
-  #         chain prerouting {
-  #           type nat hook prerouting priority 0 ;
-  #
-  #           tcp dport 5000 dnat ip to 10.10.10.10:5000
-  #         }
-  #
-  #         chain postrouting {
-  #           type nat hook postrouting priority 100 ;
-  #
-  #           oifname ens3 ip saddr 10.10.10.10 masquerade
-  #         }
-  #         chain input {
-  #           type filter hook input priority 0; policy accept;
-  #           accept
-  #         }
-  #
-  #         chain forward {
-  #           type filter hook forward priority 0; policy accept;
-  #           accept
-  #         }
-  #
-  #         chain output {
-  #           type filter hook output priority 0; policy accept;
-  #           accept
-  #         }
-  #       '';
-  #     };
-  #   };
-  # };
-
   os = {
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
     services.prometheus = {
@@ -99,29 +60,6 @@ in {
     ];
   };
 
-  # os.networking.nftables = {
-  #   enable = true;
-  #   tables = {
-  #     limit_bandwidth = {
-  #       name = "limit_bandwidth";
-  #       family = "inet";
-  #       enable = true;
-  #
-  #       content = ''
-  #         chain input {
-  #           type filter hook input priority filter; policy accept;
-  #           iifname enp14s0 limit rate over 2800 kbytes/second drop
-  #         }
-  #
-  #         chain output {
-  #           type filter hook output priority filter; policy accept;
-  #           oifname enp14s0 limit rate over 2800 kbytes/second drop
-  #         }
-  #       '';
-  #     };
-  #   };
-  # };
-
   android.enable = true;
   display.greetd.enable = true;
   display.greetd.command = "offload-igpu Hyprland";
@@ -160,51 +98,6 @@ in {
   vm.enable = true;
   games.enable = true;
   gtk.enable = true;
-
-  # networking.exposeLocalhost.tcp = ["9091"];
-  # networking.allowedPorts.tcp."9091" = [(getHostname "ope.wg_private")];
-
-  # os.networking.nftables = {
-  #   tables = {
-  #     allow_ports = {
-  #       name = "allow_ports";
-  #       family = "inet";
-  #       enable = true;
-  #       content = ''
-  #         chain input {
-  #           type filter hook input priority 0;
-  #
-  #           iif lo accept
-  #
-  #           ct state established,related accept
-  #
-  #           ip6 nexthdr icmpv6 accept
-  #           ip protocol icmp accept
-  #
-  #           tcp dport 9091 accept
-  #
-  #           icmp type echo-request  accept comment "allow ping"
-  #
-  #           icmpv6 type != { nd-redirect, 139 } accept comment "Accept all ICMPv6 messages except redirects and node information queries (type 139).  See RFC 4890, section 4.4."
-  #           ip6 daddr fe80::/64 udp dport 546 accept comment "DHCPv6 client"
-  #
-  #           drop
-  #         }
-  #       '';
-  #     };
-  #   };
-  # };
-
-  # networking.allowedPorts.tcp."8096" = ["*"];
-  os.services.jellyfin = {
-    enable = true;
-  };
-  # os.systemd.services.jellyfin.serviceConfig.Group = lib.mkForce "jellyfin,transmission";
-  os.users.users.jellyfin = {
-    extraGroups = [
-      "transmission"
-    ];
-  };
 
   programs = {
     anyrun.enable = true;

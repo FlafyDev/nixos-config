@@ -58,6 +58,7 @@ in {
       mkIf cfg.enable {
         osModules = [inputs.agenix.nixosModules.default];
 
+        _module.args.secrets = lib.mapAttrs (_name: value: value.path) osConfig.age.secrets;
         _module.args.ssh = foldl' (
           acc: host:
             acc

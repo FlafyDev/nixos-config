@@ -67,13 +67,6 @@ in {
             Use masquerade.
           '';
         };
-        # allowPorts = mkOption {
-        #   type = types.bool;
-        #   default = true;
-        #   description = ''
-        #     Automatically allow the ports in `networking.allowedPorts`.
-        #   '';
-        # };
         tcp = mkOption {
           type = with types; listOf str;
           default = [];

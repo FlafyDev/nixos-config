@@ -3,6 +3,7 @@
   lib,
   config,
   osConfig,
+  secrets,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf mkOption types;
@@ -270,7 +271,8 @@ in {
       # It's also possible to use PostgreSQL.
       settings = {
         homeserver = {
-          address = "https://matrix.${cfg.host}";
+          # address = "https://matrix.${cfg.host}";
+          address = "http://[::1]:8008";
           domain = cfg.host;
         };
         appservice = {
@@ -326,7 +328,7 @@ in {
       enable = true;
       settings.SYNCV3_SERVER = "https://matrix.${cfg.host}";
       settings.SYNCV3_BINDADDR = "127.0.0.1:8009";
-      environmentFile = osConfig.age.secrets.matrix-sliding-sync.path;
+      environmentFile = secrets.matrix-sliding-sync;
     };
   };
 }

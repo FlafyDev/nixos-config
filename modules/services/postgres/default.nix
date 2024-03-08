@@ -63,6 +63,7 @@ in {
   config = mkIf cfg.enable {
     os.services.postgresql = {
       enable = true;
+      package = pkgs.postgresql_14;
 
       ensureDatabases =
         mapAttrsToList (name: _value: name)
@@ -82,19 +83,19 @@ in {
         cfg.comb)}
       '';
 
-      initialScript =
-        pkgs.writeText "custom-postgres-init.sql"
-        (concatStringsSep "\n"
-          (mapAttrsToList (_name: value: value.initSql) cfg.comb));
+      # initialScript =
+      #   pkgs.writeText "custom-postgres-init.sql"
+      #   (concatStringsSep "\n"
+      #     (mapAttrsToList (_name: value: value.initSql) cfg.comb));
     };
 
-    os.systemd.services.postgresql.postStart = mkAfter ''
-      ${concatStringsSep "\n" (mapAttrsToList (name: value: "$PSQL -tAf ${
-        pkgs.writeText "${name}-custom-postgres-init.sql" ''
-          \c ${name};
-          ${value.extraSql}
-        ''
-      }") (filterAttrs (_name: value: value.extraSql != "") cfg.comb))}
-    '';
+    # os.systemd.services.postgresql.postStart = mkAfter ''
+    #   ${concatStringsSep "\n" (mapAttrsToList (name: value: "$PSQL -tAf ${
+    #     pkgs.writeText "${name}-custom-postgres-init.sql" ''
+    #       \c ${name};
+    #       ${value.extraSql}
+    #     ''
+    #   }") (filterAttrs (_name: value: value.extraSql != "") cfg.comb))}
+    # '';
   };
 }

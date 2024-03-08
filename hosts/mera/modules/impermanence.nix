@@ -65,26 +65,26 @@ in {
       "/persist2" = {
         hideMounts = true;
         directories = [
-          {
-            directory = "/var/lib/acme";
-            user = "acme";
-            group = "acme";
-          }
-          {
-            directory = "/var/lib/matrix-synapse";
-            user = "matrix-synapse";
-            group = "matrix-synapse";
-          }
-          {
-            directory = "/var/lib/mautrix-whatsapp";
-            user = "mautrix-whatsapp";
-            group = "mautrix-whatsapp";
-          }
-          {
-            directory = "/var/lib/emoji-drawing";
-            user = "emoji-drawing";
-            group = "emoji-drawing";
-          }
+          # {
+          #   directory = "/var/lib/acme";
+          #   user = "acme";
+          #   group = "acme";
+          # }
+          # {
+          #   directory = "/var/lib/matrix-synapse";
+          #   user = "matrix-synapse";
+          #   group = "matrix-synapse";
+          # }
+          # {
+          #   directory = "/var/lib/mautrix-whatsapp";
+          #   user = "mautrix-whatsapp";
+          #   group = "mautrix-whatsapp";
+          # }
+          # {
+          #   directory = "/var/lib/emoji-drawing";
+          #   user = "emoji-drawing";
+          #   group = "emoji-drawing";
+          # }
           {
             directory = "/var/vmail";
             user = "virtualMail";
@@ -95,11 +95,11 @@ in {
             user = "opendkim";
             group = "opendkim";
           }
-          {
-            directory = "/var/lib/postgresql";
-            user = "postgresql";
-            group = "postgresql";
-          }
+          # {
+          #   directory = "/var/lib/postgresql";
+          #   user = "postgresql";
+          #   group = "postgresql";
+          # }
         ];
       };
       "/persist" = {

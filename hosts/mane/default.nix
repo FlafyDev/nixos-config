@@ -19,6 +19,29 @@ in {
     })
   ];
 
+  os.networking.nftables = {
+    enable = true;
+    tables = {
+      traceall = {
+        name = "traceall";
+        family = "ip";
+        enable = true;
+
+        content = ''
+          chain prerouting {
+              type filter hook prerouting priority -350; policy accept;
+              meta nftrace set 1
+          }
+
+          chain output {
+              type filter hook output priority -350; policy accept;
+              meta nftrace set 1
+          }
+        '';
+      };
+    };
+  };
+
   networking.enable = true;
 
   users.main = "vps";
