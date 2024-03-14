@@ -251,6 +251,27 @@ in {
               (sloth.concat' sloth.homeDir ''/.steam'')
             ];
           };
+          geometry-dash = bubbleWrapGame {
+            data = "windows/geometry-dash";
+            winePrefix = "geometry-dash";
+            script = {data}: ''
+              export WINEDLLOVERRIDES="XInput9_1_0.dll=n,b"
+              export STEAM_COMPAT_CLIENT_INSTALL_PATH=~/.local/share/Steam/
+              export STEAM_COMPAT_DATA_PATH=$WINEPREFIX
+              export PROTON_LOG=1
+              export PROTON_LOG_DIR=/home/flafy/.steam/logs
+              env -C ${data} steam-run ~/.local/share/Steam/steamapps/common/Proton\ -\ Experimental/proton run GeometryDash.exe
+            '';
+            pathPackages = [pkgs.steam-run];
+            networking = true;
+            extraRW = {
+              envSuffix,
+              sloth,
+            }: [
+              (sloth.concat' sloth.homeDir ''/.local/share/Steam'')
+              (sloth.concat' sloth.homeDir ''/.steam'')
+            ];
+          };
           spelunky-2 = bubbleWrapGame {
             data = "windows/spelunky-2";
             winePrefix = "spelunky-2";

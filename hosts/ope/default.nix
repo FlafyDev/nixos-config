@@ -11,6 +11,39 @@ in {
   users.main = "flafy";
   users.host = "ope";
 
+  os.networking.nftables = {
+    enable = true;
+    tables = lib.mkForce {
+      # virutalmachine = {
+      #   name = "virutalmachine";
+      #   family = "inet";
+      #   enable = true;
+      #
+      #   content = ''
+      #      chain postrouting {
+      #         type nat hook postrouting priority 100; policy accept;
+      #
+      #         # ip saddr 192.168.122.0/24 masquerade
+      #         oifname != "virbr0" iifname "virbr0" masquerade
+      #      }
+      #
+      #      chain input {
+      #         type filter hook forward priority 0; policy drop;
+      #
+      #         iifname "virbr0" accept comment "accept from virtual VM"
+      #      }
+      #
+      #      chain forward {
+      #         type filter hook forward priority 0; policy drop;
+      #
+      #         iifname "virbr0" accept comment "accept VM interface as input"
+      #         oifname "virbr0" accept comment "accept VM interface as output"
+      #      }
+      #   '';
+      # };
+    };
+  };
+
   os = {
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
     services.prometheus = {

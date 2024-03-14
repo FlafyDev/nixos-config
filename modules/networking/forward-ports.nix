@@ -37,10 +37,15 @@
                   acc: port: let
                     portFrom = processPort (head (splitString "->" port));
                     portTo = processPort (last (splitString "->" port));
+                    iifname = "iifname \"${cfg.${ip}.fromInterface}\"";
                   in
                     acc
                     ++ [
-                      "${protocol} dport ${portFrom} dnat ip to ${ip}:${portTo}"
+                      "${
+                        if cfg.${ip}.fromInterface != null
+                        then iifname
+                        else ""
+                      } ${protocol} dport ${portFrom} dnat ip to ${ip}:${portTo}"
                     ]
                 ) []
                 cfg.${ip}.${protocol}
@@ -65,6 +70,13 @@ in {
           default = false;
           description = ''
             Use masquerade.
+          '';
+        };
+        fromInterface = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Which interface should be used for the forward ports.
           '';
         };
         tcp = mkOption {

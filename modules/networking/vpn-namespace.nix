@@ -78,6 +78,7 @@
                 ${ip} = {
                   tcp = values.ports.tcp ++ (acc.${ip}.tcp or []);
                   udp = values.ports.udp ++ (acc.${ip}.udp or []);
+                  fromInterface = "ens3";
                   masquerade = false;
                 };
               }

@@ -211,7 +211,8 @@ in {
       # It's also possible to use PostgreSQL.
       settings = {
         homeserver = {
-          address = "https://matrix.${cfg.host}";
+          # address = "https://matrix.${cfg.host}";
+          address = "http://[::1]:8008";
           domain = cfg.host;
         };
         appservice = {

@@ -102,6 +102,9 @@ in {
 
               ${rules}
 
+              iifname "virbr0" accept comment "accept from virtual VM"
+              accept
+
               icmp type echo-request  accept comment "allow ping"
 
               icmpv6 type != { nd-redirect, 139 } accept comment "Accept all ICMPv6 messages except redirects and node information queries (type 139).  See RFC 4890, section 4.4."

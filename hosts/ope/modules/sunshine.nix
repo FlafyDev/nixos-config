@@ -1,10 +1,10 @@
 {utils, ...}: let
   inherit (utils) getHostname;
 in {
-  # networking.vpnNamespace.vpn.ports = {
-  #   tcp = ["47984" "47989" "48010"];
-  #   udp = ["47998-48000" "48002" "48010"];
-  # };
+  networking.vpnNamespace.vpn.ports = {
+    tcp = ["47984" "47989" "48010"];
+    udp = ["47998-48000" "48002" "48010"];
+  };
 
   programs.sunshine = {
     enable = true;

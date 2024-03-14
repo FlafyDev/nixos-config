@@ -6,7 +6,7 @@
 }: {
   inputs = {
     mobile-nixos = {
-      url = "github:nixos/mobile-nixos/development";
+      url = "github:nixos/mobile-nixos/8f9ce9d7e7e71b2d018039332e04c5be78f0a6b7";
       # url = "github:nixos/mobile-nixos/master";
       flake = false;
     };
@@ -27,22 +27,27 @@
   ];
 
   os = {
-    hardware.sensor.iio.enable = true;
-    mobile.beautification = {
-      silentBoot = lib.mkDefault true;
-      splash = lib.mkDefault true;
+    hardware = {
+      sensor.iio.enable = true;
+
+      bluetooth.enable = true;
+      pulseaudio.enable = lib.mkDefault true;
     };
+    mobile = {
+      boot.stage-1.networking.enable = true;
+      beautification = {
+        silentBoot = lib.mkDefault true;
+        splash = lib.mkDefault true;
+      };
+    };
+    networking = {
+      # mkDefault to help out users wanting pipewire
+      networkmanager.enable = true;
+      wireless.enable = false;
 
-    hardware.bluetooth.enable = true;
-    hardware.pulseaudio.enable = lib.mkDefault true; # mkDefault to help out users wanting pipewire
-    networking.networkmanager.enable = true;
-    networking.wireless.enable = false;
+      # Ensures any rndis config from stage-1 is not clobbered by NetworkManager
+      networkmanager.unmanaged = ["rndis0" "usb0"];
+    };
     powerManagement.enable = true;
-
-    # Ensures any rndis config from stage-1 is not clobbered by NetworkManager
-    networking.networkmanager.unmanaged = ["rndis0" "usb0"];
-
-    # Setup USB gadget networking in initrd...
-    mobile.boot.stage-1.networking.enable = lib.mkDefault true;
   };
 }

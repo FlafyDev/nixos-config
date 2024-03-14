@@ -1,0 +1,142 @@
+diff --git a/cmake/FindSystemd.cmake b/cmake/FindSystemd.cmake
+deleted file mode 100644
+index c41ca64..0000000
+--- a/cmake/FindSystemd.cmake
++++ /dev/null
+@@ -1,34 +0,0 @@
+-# - Try to find Systemd
+-# Once done this will define
+-#
+-# SYSTEMD_FOUND - system has systemd
+-# SYSTEMD_USER_UNIT_INSTALL_DIR - the systemd system unit install directory
+-# SYSTEMD_SYSTEM_UNIT_INSTALL_DIR - the systemd user unit install directory
+-
+-IF (NOT WIN32)
+-
+-    find_package(PkgConfig QUIET)
+-    if(PKG_CONFIG_FOUND)
+-        pkg_check_modules(SYSTEMD "systemd")
+-    endif()
+-
+-    if (SYSTEMD_FOUND)
+-        execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE}
+-            --variable=systemduserunitdir systemd
+-            OUTPUT_VARIABLE SYSTEMD_USER_UNIT_INSTALL_DIR)
+-
+-        string(REGEX REPLACE "[ \t\n]+" "" SYSTEMD_USER_UNIT_INSTALL_DIR
+-            "${SYSTEMD_USER_UNIT_INSTALL_DIR}")
+-
+-        execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE}
+-            --variable=systemdsystemunitdir systemd
+-            OUTPUT_VARIABLE SYSTEMD_SYSTEM_UNIT_INSTALL_DIR)
+-
+-        string(REGEX REPLACE "[ \t\n]+" "" SYSTEMD_SYSTEM_UNIT_INSTALL_DIR
+-            "${SYSTEMD_SYSTEM_UNIT_INSTALL_DIR}")
+-
+-        mark_as_advanced(SYSTEMD_USER_UNIT_INSTALL_DIR SYSTEMD_SYSTEM_UNIT_INSTALL_DIR)
+-
+-    endif ()
+-
+-ENDIF ()
+diff --git a/cmake/FindUdev.cmake b/cmake/FindUdev.cmake
+deleted file mode 100644
+index 8343f79..0000000
+--- a/cmake/FindUdev.cmake
++++ /dev/null
+@@ -1,28 +0,0 @@
+-# - Try to find Udev
+-# Once done this will define
+-#
+-# UDEV_FOUND - system has udev
+-# UDEV_RULES_INSTALL_DIR - the udev rules install directory
+-
+-IF (NOT WIN32)
+-
+-    find_package(PkgConfig QUIET)
+-    if(PKG_CONFIG_FOUND)
+-        pkg_check_modules(UDEV "udev")
+-    endif()
+-
+-    if (UDEV_FOUND)
+-        execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE}
+-            --variable=udevdir udev
+-            OUTPUT_VARIABLE UDEV_RULES_INSTALL_DIR)
+-
+-        string(REGEX REPLACE "[ \t\n]+" "" UDEV_RULES_INSTALL_DIR
+-            "${UDEV_RULES_INSTALL_DIR}")
+-
+-        set(UDEV_RULES_INSTALL_DIR "${UDEV_RULES_INSTALL_DIR}/rules.d")
+-
+-        mark_as_advanced(UDEV_RULES_INSTALL_DIR)
+-
+-    endif ()
+-
+-ENDIF ()
+diff --git a/cmake/packaging/linux.cmake b/cmake/packaging/linux.cmake
+index 8563414..517224d 100644
+--- a/cmake/packaging/linux.cmake
++++ b/cmake/packaging/linux.cmake
+@@ -8,13 +8,10 @@ if(${SUNSHINE_BUILD_APPIMAGE} OR ${SUNSHINE_BUILD_FLATPAK})
+     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sunshine.service"
+             DESTINATION "${SUNSHINE_ASSETS_DIR}/systemd/user")
+ else()
+-    find_package(Systemd)
+-    find_package(Udev)
+-
+     install(FILES "${SUNSHINE_SOURCE_ASSETS_DIR}/linux/misc/85-sunshine.rules"
+-            DESTINATION "${UDEV_RULES_INSTALL_DIR}")
++            DESTINATION "${CMAKE_INSTALL_LIBDIR}/udev/rules.d")
+     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sunshine.service"
+-            DESTINATION "${SYSTEMD_USER_UNIT_INSTALL_DIR}")
++            DESTINATION "${CMAKE_INSTALL_LIBDIR}/systemd/user")
+ endif()
+ 
+ # Post install
+diff --git a/docker/debian-bookworm.dockerfile b/docker/debian-bookworm.dockerfile
+index d664ff8..618971e 100644
+--- a/docker/debian-bookworm.dockerfile
++++ b/docker/debian-bookworm.dockerfile
+@@ -61,7 +61,6 @@ apt-get install -y --no-install-recommends \
+   libxtst-dev \
+   nodejs \
+   npm \
+-  udev \
+   wget
+ if [[ "${TARGETPLATFORM}" == 'linux/amd64' ]]; then
+   apt-get install -y --no-install-recommends \
+diff --git a/docker/debian-bullseye.dockerfile b/docker/debian-bullseye.dockerfile
+index 5f607c2..711fc08 100644
+--- a/docker/debian-bullseye.dockerfile
++++ b/docker/debian-bullseye.dockerfile
+@@ -60,7 +60,6 @@ apt-get install -y --no-install-recommends \
+   libxfixes-dev \
+   libxrandr-dev \
+   libxtst-dev \
+-  udev \
+   wget
+ if [[ "${TARGETPLATFORM}" == 'linux/amd64' ]]; then
+   apt-get install -y --no-install-recommends \
+diff --git a/docker/ubuntu-20.04.dockerfile b/docker/ubuntu-20.04.dockerfile
+index 4a1dcf4..8d24ec5 100644
+--- a/docker/ubuntu-20.04.dockerfile
++++ b/docker/ubuntu-20.04.dockerfile
+@@ -61,7 +61,6 @@ apt-get install -y --no-install-recommends \
+   libxfixes-dev \
+   libxrandr-dev \
+   libxtst-dev \
+-  udev \
+   wget
+ if [[ "${TARGETPLATFORM}" == 'linux/amd64' ]]; then
+   apt-get install -y --no-install-recommends \
+diff --git a/docker/ubuntu-22.04.dockerfile b/docker/ubuntu-22.04.dockerfile
+index fa2d5e1..7977288 100644
+--- a/docker/ubuntu-22.04.dockerfile
++++ b/docker/ubuntu-22.04.dockerfile
+@@ -60,7 +60,6 @@ apt-get install -y --no-install-recommends \
+   libxfixes-dev \
+   libxrandr-dev \
+   libxtst-dev \
+-  udev \
+   wget
+ if [[ "${TARGETPLATFORM}" == 'linux/amd64' ]]; then
+   apt-get install -y --no-install-recommends \

@@ -27,15 +27,25 @@ in
       bara.system = "aarch64-linux";
     };
 
-    outputs = inputs @ {flake-parts, ...}:
+    outputs = inputs @ {
+      self,
+      flake-parts,
+      ...
+    }:
       flake-parts.lib.mkFlake {inherit inputs;} {
         systems = [
           "x86_64-linux"
           "aarch64-linux"
         ];
-        perSystem = {pkgs, ...}: {
+        perSystem = {
+          pkgs,
+          lib,
+          ...
+        }: {
           formatter = pkgs.alejandra;
+          packages = {
+            bara-iso = self.nixosConfigurations.bara.config.mobile.outputs.default;
+          };
         };
       };
   }
-

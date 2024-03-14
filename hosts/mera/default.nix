@@ -44,15 +44,15 @@ in {
   #   };
   # };
 
-  services = {
-    games = {
-      badTimeSimulator = {
-        enable = true;
-        port = 40004;
-      };
-      minecraft.enable = false;
-    };
-  };
+  # services = {
+  #   games = {
+  #     badTimeSimulator = {
+  #       enable = true;
+  #       port = 40004;
+  #     };
+  #     minecraft.enable = false;
+  #   };
+  # };
 
   # networking.vpnNamespace.vpn.ports.tcp = ["25" "143" "993" "587" "465"];
   #
