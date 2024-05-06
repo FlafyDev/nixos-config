@@ -129,9 +129,22 @@ in {
               owner = "matrix-sliding-sync";
               group = "matrix-sliding-sync";
             };
+            lastfm-flafydev = {
+              file = concatPaths [secretsDir "other" "lastfm-flafydev.age"];
+              mode = "440";
+              owner = "mpdscribble";
+              group = "mpdscribble";
+            };
+            slskd = {
+              file = concatPaths [secretsDir "other" "slskd.age"];
+              mode = "440";
+              owner = "slskd";
+              group = "root";
+            };
           };
 
         os.age.identityPaths = [
+          "/persist/home/${config.users.main}/.ssh/agenix"
           "/home/${config.users.main}/.ssh/agenix"
         ];
 

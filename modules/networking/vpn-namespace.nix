@@ -6,7 +6,7 @@
   pkgs,
   ...
 }: let
-  inherit (utils) resolveHostname getHostname;
+  inherit (utils) resolveHostname getHostname domains;
   inherit
     (lib)
     mkOption
@@ -129,6 +129,19 @@
       ) {}
       cfg;
 
+    # chain postrouting {
+    #     type nat hook postrouting priority 100; policy accept;
+    #     oifname "enp14s0" ip saddr 10.10.15.11/24 masquerade
+    # }
+    #
+    # chain forward {
+    #     type filter hook forward priority 0; policy drop;
+    #     iifname "enp14s0" oifname "vethhost0" accept
+    #     oifname "enp14s0" iifname "vethhost0" accept
+    # }
+
+    # nftableConfigs =
+
     wireguardConfigs =
       foldlAttrs (
         acc: namespace: values:
@@ -148,7 +161,11 @@
                 ${ip} netns exec ${namespace} ip addr add 10.10.15.11/24 dev vethvpn0 || true
                 ${ip} link set vethhost0 up || true
                 ${ip} netns exec ${namespace} ip link set vethvpn0 up || true
-                # ${ip} netns exec ${namespace} ip link set lo up || true
+                ${ip} netns exec vpn ip route add ${resolveHostname domains.personal} via 10.10.15.10
+              '';
+              postSetup = ''
+                # I don't know why without delay Wireguard doesn't work
+                (sleep 1 && ${ip} netns exec ${namespace} ip link set lo up) || true &
               '';
             };
           }
@@ -156,10 +173,10 @@
       cfg;
   in {
     networking = {
-      forwardPorts."10.10.15.11" = {
+      forwardPorts."10.10.15.11" = mkIf (length (attrValues lanCfgs) > 0) {
         tcp = tcpPorts;
         udp = udpPorts;
-        masquerade = mkIf (length (attrValues lanCfgs) > 0) true;
+        masquerade =  true;
       };
       allowedPorts = {
         tcp = foldl' (acc: port:
@@ -180,6 +197,30 @@
     containers = containerConfigs;
 
     os.networking.wireguard.interfaces = wireguardConfigs;
+
+    os.networking.nftables = {
+      enable = true;
+      tables = {
+        containers_local_internet_access = {
+          name = "containers_local_internet_access";
+          family = "ip";
+          enable = false;
+
+          content = ''
+            chain postrouting {
+                type nat hook postrouting priority 100; policy accept;
+                ip saddr 10.10.15.11/24 masquerade
+            }
+
+            chain forward {
+                type filter hook forward priority 0; policy drop;
+                oifname "vethhost0" accept
+                iifname "vethhost0" accept
+            }
+          '';
+        };
+      };
+    };
   };
 in {
   options.networking.vpnNamespace = mkOption {

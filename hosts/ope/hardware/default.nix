@@ -17,16 +17,16 @@ in {
   vm.gpu = ["1002:73df" "1002:ab28"];
 
   os = {
-    system.replaceRuntimeDependencies = [
-      {
-        original = pkgs.mesa;
-        replacement = newMesa;
-      }
-      {
-        original = pkgs.mesa.drivers;
-        replacement = newMesa.drivers;
-      }
-    ];
+    # system.replaceRuntimeDependencies = [
+    #   {
+    #     original = pkgs.mesa;
+    #     replacement = newMesa;
+    #   }
+    #   {
+    #     original = pkgs.mesa.drivers;
+    #     replacement = newMesa.drivers;
+    #   }
+    # ];
 
     environment.systemPackages = let
       offload-gpu = pkgs.writeShellScriptBin "offload-gpu" ''

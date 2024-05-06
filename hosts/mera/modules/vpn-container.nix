@@ -11,6 +11,7 @@
       containers = ["maneVpn2"];
       vpnHost = "mane";
       vpnWgInterface = "wg_vps";
+      lanForward = true;
     };
   };
 

@@ -2,83 +2,151 @@
   lib,
   utils,
   pkgs,
+  inputs,
   ...
 }: let
   inherit (utils) getHostname domains;
 in {
+  inputs.tempnixpkgs.url = "github:nixos/nixpkgs/f480f9d09e4b4cf87ee6151eba068197125714de";
+  os.environment.systemPackages = let
+    tempnixpkgs = import inputs.tempnixpkgs {inherit (pkgs) system;};
+  in [
+    tempnixpkgs.devenv
+  ];
   imports = [./hardware];
 
   users.main = "flafy";
   users.host = "ope";
 
-  os.networking.nftables = {
-    enable = true;
-    tables = lib.mkForce {
-      # virutalmachine = {
-      #   name = "virutalmachine";
-      #   family = "inet";
-      #   enable = true;
-      #
-      #   content = ''
-      #      chain postrouting {
-      #         type nat hook postrouting priority 100; policy accept;
-      #
-      #         # ip saddr 192.168.122.0/24 masquerade
-      #         oifname != "virbr0" iifname "virbr0" masquerade
-      #      }
-      #
-      #      chain input {
-      #         type filter hook forward priority 0; policy drop;
-      #
-      #         iifname "virbr0" accept comment "accept from virtual VM"
-      #      }
-      #
-      #      chain forward {
-      #         type filter hook forward priority 0; policy drop;
-      #
-      #         iifname "virbr0" accept comment "accept VM interface as input"
-      #         oifname "virbr0" accept comment "accept VM interface as output"
-      #      }
-      #   '';
-      # };
-    };
-  };
+  # os.services.pipewire.wireplumber.extraLuaConfig.bluetooth."headphones-no-switch" = ''
+  #   wireplumber.settings = {
+  #     bluetooth.autoswitch-to-headset-profile = false
+  #   }
+  # '';
+
+  # os.systemd.services = {
+  #   docker.serviceConfig.NetworkNamespacePath = "/var/run/netns/vpn";
+  # };
+  # os.networking.nftables = {
+  #   enable = true;
+  #   tables = lib.mkForce {
+  #     # traceall = {
+  #     #   name = "traceall";
+  #     #   family = "ip";
+  #     #   enable = true;
+  #     #
+  #     #   content = ''
+  #     #     chain prerouting {
+  #     #         type filter hook prerouting priority -350; policy accept;
+  #     #         meta nftrace set 1
+  #     #     }
+  #     #
+  #     #     chain output {
+  #     #         type filter hook output priority -350; policy accept;
+  #     #         meta nftrace set 1
+  #     #     }
+  #     #   '';
+  #     # };
+  #     # nattest = {
+  #     #   name = "nattest";
+  #     #   family = "ip";
+  #     #   enable = true;
+  #     #
+  #     #   content = ''
+  #     #     chain postrouting {
+  #     #         type nat hook postrouting priority 100; policy accept;
+  #     #         oifname "enp14s0" ip saddr 10.10.15.11/24 masquerade
+  #     #     }
+  #     #
+  #     #     chain forward {
+  #     #         type filter hook forward priority 0; policy drop;
+  #     #         iifname "enp14s0" oifname "vethhost0" accept
+  #     #         oifname "enp14s0" iifname "vethhost0" accept
+  #     #     }
+  #     #   '';
+  #     # };
+  #     # virutalmachine = {
+  #     #   name = "virutalmachine";
+  #     #   family = "inet";
+  #     #   enable = true;
+  #     #
+  #     #   content = ''
+  #     #      chain postrouting {
+  #     #         type nat hook postrouting priority 100; policy accept;
+  #     #
+  #     #         # ip saddr 192.168.122.0/24 masquerade
+  #     #         oifname != "virbr0" iifname "virbr0" masquerade
+  #     #      }
+  #     #
+  #     #      chain input {
+  #     #         type filter hook forward priority 0; policy drop;
+  #     #
+  #     #         iifname "virbr0" accept comment "accept from virtual VM"
+  #     #      }
+  #     #
+  #     #      chain forward {
+  #     #         type filter hook forward priority 0; policy drop;
+  #     #
+  #     #         iifname "virbr0" accept comment "accept VM interface as input"
+  #     #         oifname "virbr0" accept comment "accept VM interface as output"
+  #     #      }
+  #     #   '';
+  #     # };
+  #   };
+  # };
+
+  unfree.allowed = [
+    "teamviewer-15.38.3"
+  ];
 
   os = {
-    boot.binfmt.emulatedSystems = ["aarch64-linux"];
-    services.prometheus = {
-      enable = true;
-      port = 4000;
-      exporters.node = {
+    services = {
+      # TODO: enable when updating
+      # pipewire.wireplumber.extraConfig = {
+      #   "no-bluetooth-headphones-switch" = {
+      #     "wireplumber.settings" = {
+      #       bluetooth.autoswitch-to-headset-profile = false;
+      #     };
+      #   };
+      # };
+
+      teamviewer.enable = true;
+      prometheus = {
         enable = true;
-        port = 9100;
-        listenAddress = getHostname "ope.wg_private";
+        port = 4000;
+        exporters.node = {
+          enable = true;
+          port = 9100;
+          listenAddress = getHostname "ope.wg_private";
+        };
+
+        globalConfig = {
+          scrape_interval = "15s";
+          evaluation_interval = "15s";
+        };
       };
 
-      globalConfig = {
-        scrape_interval = "15s";
-        evaluation_interval = "15s";
+      nginx = {
+        enable = true;
+        virtualHosts."emoji.${domains.personal}" = {
+          listen = [
+            {
+              addr = "0.0.0.0";
+              port = 3004;
+              ssl = false;
+            }
+          ];
+          locations."/api" = {
+            proxyPass = "http://localhost:40003";
+          };
+          locations."/" = {
+            proxyPass = "http://localhost:40002";
+          };
+        };
       };
     };
-  };
-
-  os.services.nginx = {
-    enable = true;
-    virtualHosts."emoji.${domains.personal}" = {
-      listen = [
-        {
-          addr = "0.0.0.0";
-          port = 3004;
-          ssl = false;
-        }
-      ];
-      locations."/api" = {
-        proxyPass = "http://localhost:40003";
-      };
-      locations."/" = {
-        proxyPass = "http://localhost:40002";
-      };
-    };
+    nixpkgs.config.allowUnfree = true;
+    boot.binfmt.emulatedSystems = ["aarch64-linux"];
   };
 
   os.security = {
@@ -110,9 +178,9 @@ in {
     monitors = [
       "eDP-1,disable"
       "HDMI-A-1,1920x1080@60,0x0,1"
-      "HDMI-A-1,addreserved,0,40,0,0"
+      "HDMI-A-1,addreserved,0,24,0,0"
       "HDMI-A-2,1920x1080@60,0x0,1"
-      "HDMI-A-2,addreserved,0,40,0,0"
+      "HDMI-A-2,addreserved,0,24,0,0"
     ];
   };
   fonts.enable = true;

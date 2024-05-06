@@ -21,7 +21,7 @@ in {
 
   config = mkIf (cfg.enable && cfg.hyprlandIntegration.enable) {
     hm.wayland.windowManager.hyprland.settings.exec-once = [
-      (pkgs.writeShellScript "sunshine-launcher" ''
+      (pkgs.writeShellScript "remote-control-launcher" ''
         while true; do
           "${cfg.package}/bin/sunshine" || true
           sleep 1

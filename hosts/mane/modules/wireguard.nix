@@ -44,20 +44,41 @@ in {
 
   os.networking.wireguard = {
     enable = true;
-    interfaces.wg_vps = {
-      ips = ["10.10.10.1/24"];
-      listenPort = 51820;
-      privateKeyFile = ssh.mane.mane_wg_vps.private;
-      peers = [
-        {
-          publicKey = builtins.readFile ssh.ope.ope_wg_vps.public;
-          allowedIPs = ["10.10.10.10/32"];
-        }
-        {
-          publicKey = builtins.readFile ssh.mera.mera_wg_vps.public;
-          allowedIPs = ["10.10.10.11/32"];
-        }
-      ];
+    interfaces = {
+      wg_private = {
+        ips = ["10.10.11.1/24"];
+        listenPort = 51821;
+        privateKeyFile = ssh.mane.mane_wg_private.private;
+        peers = [
+          {
+            publicKey = builtins.readFile ssh.ope.ope_wg_vps.public;
+            allowedIPs = ["10.10.11.10/32"];
+          }
+          {
+            publicKey = builtins.readFile ssh.mera.bara_wg_vps.public;
+            allowedIPs = ["10.10.11.12/32"];
+          }
+          {
+            publicKey = builtins.readFile ssh.mera.noro_wg_vps.public;
+            allowedIPs = ["10.10.11.13/32"];
+          }
+        ];
+      };
+      wg_vps = {
+        ips = ["10.10.10.1/24"];
+        listenPort = 51820;
+        privateKeyFile = ssh.mane.mane_wg_vps.private;
+        peers = [
+          {
+            publicKey = builtins.readFile ssh.ope.ope_wg_vps.public;
+            allowedIPs = ["10.10.10.10/32"];
+          }
+          {
+            publicKey = builtins.readFile ssh.mera.mera_wg_vps.public;
+            allowedIPs = ["10.10.10.11/32"];
+          }
+        ];
+      };
     };
   };
 

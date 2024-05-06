@@ -47,6 +47,7 @@ in {
   users.main = "vps";
   users.host = "mane";
 
+  networking.allowedPorts.tcp."4000" = ["*"];
   os = {
     services = {
       grafana = {

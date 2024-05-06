@@ -74,6 +74,14 @@ in
       mera.user
       master
     ];
+    "other/lastfm-flafydev.age".publicKeys = [
+      mera.user
+      master
+    ];
+    "other/slskd.age".publicKeys = [
+      mera.user
+      master
+    ];
 
     # sshKeys.publicKeys = [
     #   ope.user

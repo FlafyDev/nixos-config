@@ -125,6 +125,7 @@ in {
           directories = [
             ".ssh"
             ".local/share"
+            "machine-learning"
             "backups"
           ];
           # directories = [

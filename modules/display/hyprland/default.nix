@@ -41,7 +41,11 @@ in {
       #   url = "github:flafydev/flutter_background_bar";
       # };
       inputs.hyprland = {
-        url = "github:hyprwm/Hyprland/v0.34.0";
+        # url = "github:hyprwm/Hyprland/v0.34.0";
+        # url = "github:hyprwm/Hyprland/045c3fbd854090b2b60ca025fedd3e62498ed1ec";
+        # url = "github:hyprwm/Hyprland/53afa0bb62888aa3580a1e0d9e3bce5d05b9af80?submodules=1";
+        url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+        # inputs.nixpkgs.follows = "nixpkgs";
       };
     }
     (mkIf cfg.enable {
@@ -55,6 +59,10 @@ in {
           enable = true;
           package = inputs.hyprland.packages.${pkgs.system}.hyprland;
           portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+        };
+        nix.settings = {
+          substituters = ["https://hyprland.cachix.org"];
+          trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
         };
       };
 
@@ -72,7 +80,7 @@ in {
         in {
           bezier = [
             "mycurve,.32,.97,.53,.98"
-            "easeInOut,.5,0,.5,1"
+            "expoOut,0.19,1.0,0.22,1.0"
             "overshot,.32,.97,.37,1.16"
             "easeInOut,.5,0,.5,1"
           ];
@@ -114,7 +122,7 @@ in {
             vfr = true;
             enable_swallow = true;
             swallow_regex = "^(foot)$";
-            animate_manual_resizes = false;
+            animate_manual_resizes = true;
             force_default_wallpaper = 0;
           };
           input = {
@@ -135,7 +143,7 @@ in {
             sensitivity = 0.2;
 
             gaps_in = 1;
-            gaps_out = 4;
+            gaps_out = 2;
             border_size = 1;
             allow_tearing = true;
 
@@ -150,6 +158,8 @@ in {
           };
           decoration = {
             rounding = 0;
+            dim_inactive = true;
+            dim_strength = 0.2;
             drop_shadow = 1;
             shadow_range = 20;
             shadow_render_power = 2;
@@ -169,13 +179,14 @@ in {
           animations = {
             enabled = 1;
             animation = [
-              "windowsMove,1,4,overshot"
-              "windowsIn,1,3,mycurve"
-              "windowsOut,1,10,mycurve,slide"
-              "fadeIn,1,3,mycurve"
+              "windowsMove,0,4,expoOut"
+              "windowsIn,0,4,expoOut"
+              "windowsOut,0,4,mycurve"
+              "fadeIn,0,3,mycurve"
               "fadeOut,1,3,mycurve"
-              "border,1,5,mycurve"
-              "workspaces,1,3,default,slide"
+              "fadeDim,1,1,expoOut"
+              "border,1,4,expoOut"
+              "workspaces,0,2,expoOut,fade"
             ];
           };
           dwindle = {
@@ -201,8 +212,10 @@ in {
             (mkIf cfg.headlessXorg.enable "${pkgs.xorg.xorgserver}/bin/Xvfb :${toString cfg.headlessXorg.num} -screen 0 1024x768x24")
 
             "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store #Stores only text data"
+            "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.xclip}/bin/xclip -selection clipboard"
             "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store #Stores only image data"
             "${pkgs.swaybg}/bin/swaybg --image ${theme.wallpaper} --mode fill"
+            "${pkgs.snapcast}/bin/snapclient --host 10.0.0.2 -s 3 --port 1704"
             # "[workspace special] firefox"
           ];
           bind = [
@@ -231,10 +244,10 @@ in {
             "ALT,K,movefocus,u"
             "ALT,L,movefocus,r"
 
-            "ALTCTRL,L,movewindow,r"
-            "ALTCTRL,H,movewindow,l"
-            "ALTCTRL,K,movewindow,u"
-            "ALTCTRL,J,movewindow,d"
+            "ALTCTRL,L,swapwindow,r"
+            "ALTCTRL,H,swapwindow,l"
+            "ALTCTRL,K,swapwindow,u"
+            "ALTCTRL,J,swapwindow,d"
 
             "SUPER,U,workspace,previous"
             "ALT,Q,workspace,1"

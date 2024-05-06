@@ -17,10 +17,10 @@ in {
   users.main = "phone";
   users.host = "bara";
 
-  os.services.xserver = {
-    enable = true;
-    desktopManager.plasma5.mobile.enable = true;
-  };
+  # os.services.xserver = {
+  #   enable = false;
+  #   desktopManager.plasma5.mobile.enable = false;
+  # };
 
   networking.enable = true;
   networking.allowedPorts.tcp."22" = ["*"];
@@ -28,8 +28,8 @@ in {
     pkgs.moonlight-qt
     pkgs.v4l-utils
     pkgs.nvtop-msm
-    pkgs.firefox
     pkgs.alacritty
+    pkgs.firefox
     pkgs.mpv
     pkgs.btop
     # pkgs.gpu-screen-recorder

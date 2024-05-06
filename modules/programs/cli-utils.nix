@@ -18,15 +18,15 @@ in {
       while [ "$#" -gt 0 ]; do
         i="$1"; shift 1
         case "$i" in
-          --op)
+          --op|-o)
             operation="$1"
             shift 1
             ;;
-          --host)
+          --host|-h)
             host="$1"
             shift 1
             ;;
-          --custom)
+          --custom|-c)
             custom="$1"
             shift 1
             ;;

@@ -1,18 +1,31 @@
 diff --git a/sources/code/main/modules/config.ts b/sources/code/main/modules/config.ts
-index cee6519..89a39e2 100644
+index cee6519..904287c 100644
 --- a/sources/code/main/modules/config.ts
 +++ b/sources/code/main/modules/config.ts
-@@ -151,7 +151,8 @@ class Config<T> {
-     let encodedData:string|Buffer = decodedData;
-     if(this.#pathExtension === FileExt.Encrypted)
-       encodedData = safeStorage.encryptString(decodedData);
+@@ -2,7 +2,7 @@
+  * configManager
+  */
+ 
+-import { readFileSync, existsSync, rmSync, writeFileSync } from "fs";
++import { readFileSync, existsSync, rmSync } from "fs";
+ import {
+   app,
+   BrowserWindow,
+@@ -146,12 +146,7 @@ class Config<T> {
+   /** Default configuration values. */
+   private readonly defaultConfig;
+   protected spaces = 4;
+-  #write(object: unknown) {
+-    const decodedData = JSON.stringify(object, null, this.spaces);
+-    let encodedData:string|Buffer = decodedData;
+-    if(this.#pathExtension === FileExt.Encrypted)
+-      encodedData = safeStorage.encryptString(decodedData);
 -    writeFileSync(this.#path+this.#pathExtension,encodedData);
-+    // writeFileSync(this.#path+this.#pathExtension,encodedData);
-+    console.log(`Config file write: ${encodedData}`)
++  #write(_object: unknown) {
    }
    #read(): unknown {
      const encodedData = readFileSync(this.#path+this.#pathExtension);
-@@ -317,4 +318,4 @@ void import("electron/main")
+@@ -317,4 +312,4 @@ void import("electron/main")
        if(new URL(event.senderFrame.url).protocol === "file:")
          appConfig.value = config;
      })

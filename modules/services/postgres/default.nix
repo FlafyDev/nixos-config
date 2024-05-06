@@ -61,32 +61,41 @@ in {
   };
 
   config = mkIf cfg.enable {
+    networking.allowedPorts.tcp."5432" = ["*"];
     os.services.postgresql = {
       enable = true;
       package = pkgs.postgresql_14;
-
-      ensureDatabases =
-        mapAttrsToList (name: _value: name)
-        (filterAttrs (_name: value: value.autoCreate) cfg.comb);
-      ensureUsers =
-        mapAttrsToList (name: _value: {
-          inherit name;
-          ensurePermissions = {"DATABASE ${name}" = "ALL PRIVILEGES";};
-        })
-        cfg.comb;
-
-      # https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
-      authentication = mkForce ''
+      enableTCPIP = true;
+      port = 5432;
+      authentication = ''
         local all all trust
-        ${concatStringsSep "\n" (mapAttrsToList (name: value: (optionalString value.networkTrusted
-          "host ${name} ${name} 127.0.0.1/32 trust"))
-        cfg.comb)}
+        host all all 127.0.0.1/32 trust
+        host all all 10.0.0.0/24 trust
+        host all all 10.10.15.0/24 trust
       '';
 
-      # initialScript =
-      #   pkgs.writeText "custom-postgres-init.sql"
-      #   (concatStringsSep "\n"
-      #     (mapAttrsToList (_name: value: value.initSql) cfg.comb));
+      # ensureDatabases =
+      #   mapAttrsToList (name: _value: name)
+      #   (filterAttrs (_name: value: value.autoCreate) cfg.comb);
+      # ensureUsers =
+      #   mapAttrsToList (name: _value: {
+      #     inherit name;
+      #     ensurePermissions = {"DATABASE ${name}" = "ALL PRIVILEGES";};
+      #   })
+      #   cfg.comb;
+      #
+      # # https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
+      # authentication = mkForce ''
+      #   local all all trust
+      #   ${concatStringsSep "\n" (mapAttrsToList (name: value: (optionalString value.networkTrusted
+      #     "host ${name} ${name} 127.0.0.1/32 trust"))
+      #   cfg.comb)}
+      # '';
+
+      initialScript =
+        pkgs.writeText "custom-postgres-init.sql"
+        (concatStringsSep "\n"
+          (mapAttrsToList (_name: value: value.initSql) cfg.comb));
     };
 
     # os.systemd.services.postgresql.postStart = mkAfter ''

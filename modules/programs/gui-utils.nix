@@ -31,7 +31,7 @@ in {
       unfree.allowed = ["unityhub"];
       hmModules = [inputs.guifetch.homeManagerModules.default];
       hm.xdg.configFile."flarrent/config.json".text = builtins.toJSON {
-        color = "ff69bcff";
+        color = theme.borderColor.active.toHexARGB;
         backgroundColor = theme.backgroundColor.toHexARGB;
         connection = "transmission:http://localhost:9091/transmission/rpc";
         smoothScroll = false;
@@ -44,7 +44,7 @@ in {
         };
       };
       os.environment.systemPackages = with pkgs; [
-        # (utils.flPkgs inputs.flarrent) # TODO: Uncomment when updating Nixpkgs
+        (utils.flPkgs inputs.flarrent)
         kdenlive
         chromium
         gnome.eog
@@ -58,7 +58,22 @@ in {
         gimp
         gparted
         pavucontrol
-        obs-studio
+
+        gst_all_1.gstreamer
+        gst_all_1.gst-plugins-base
+        gst_all_1.gst-plugins-good
+        gst_all_1.gst-plugins-bad
+        gst_all_1.gst-plugins-ugly
+        gst_all_1.gst-vaapi
+        libva
+
+        (pkgs.wrapOBS {
+          plugins = with pkgs.obs-studio-plugins; [
+            obs-vaapi
+            obs-gstreamer
+          ];
+        })
+
         lxde.lxrandr
         syncplay
         prismlauncher

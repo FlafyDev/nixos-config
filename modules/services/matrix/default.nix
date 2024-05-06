@@ -22,48 +22,6 @@ in {
       ./mautrix-gmessages/service.nix
     ];
 
-    services.postgres = {
-      enable = true;
-      comb = {
-        mautrix_gmessages = {
-          # networkTrusted =
-          #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
-          autoCreate = false;
-          initSql = ''
-            CREATE DATABASE "mautrix_gmessages" WITH
-              TEMPLATE template0
-              ENCODING = "UTF8"
-              LC_COLLATE = "C"
-              LC_CTYPE = "C";
-          '';
-        };
-
-        mautrix_whatsapp = {
-          # networkTrusted =
-          #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
-          autoCreate = false;
-          initSql = ''
-            CREATE DATABASE "mautrix_whatsapp" WITH
-              TEMPLATE template0
-              ENCODING = "UTF8"
-              LC_COLLATE = "C"
-              LC_CTYPE = "C";
-          '';
-        };
-        synapse = {
-          # networkTrusted =
-          #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
-          autoCreate = false;
-          initSql = ''
-            CREATE DATABASE "synapse" WITH
-              TEMPLATE template0
-              ENCODING = "UTF8"
-              LC_COLLATE = "C"
-              LC_CTYPE = "C";
-          '';
-        };
-      };
-    };
 
     os.services.matrix-synapse = {
       enable = true;
@@ -76,8 +34,9 @@ in {
         database = {
           name = "psycopg2";
           args = {
-            database = "synapse";
-            user = "synapse";
+            database = "matrix-synapse";
+            user = "matrix-synapse";
+            host = "10.10.15.10";
           };
         };
 
@@ -89,14 +48,14 @@ in {
         listeners = [
           {
             port = 8008;
-            bind_addresses = ["::1"];
+            bind_addresses = ["10.10.15.10"];
             type = "http";
             tls = false;
             x_forwarded = true;
             resources = [
               {
                 names = ["client" "federation"];
-                compress = false;
+                compress = true;
               }
             ];
           }
@@ -134,199 +93,200 @@ in {
           # chown matrix-synapse:matrix-synapse \
           #   /var/lib/matrix-synapse/telegram-registration.yaml
           # "/var/lib/matrix-synapse/telegram-registration.yaml"
-          "/var/lib/mautrix-whatsapp/whatsapp-registration.yaml"
-          "/var/lib/mautrix-gmessages/gmessages-registration.yaml"
-          doublePuppetingAppserviceYaml
+          # "/var/lib/mautrix-whatsapp/whatsapp-registration.yaml"
+          # "/var/lib/mautrix-gmessages/gmessages-registration.yaml"
+          # doublePuppetingAppserviceYaml
         ];
       };
       # ...
     };
 
-    os.users.users.matrix-synapse.extraGroups = [
-      "mautrix-whatsapp"
-      "mautrix-gmessages"
-    ];
+    # os.users.users.matrix-synapse.extraGroups = [
+    #   "mautrix-whatsapp"
+    #   "mautrix-gmessages"
+    # ];
 
-    os.services.nginx.virtualHosts = {
-      ${cfg.host}.locations = {
-        "= /.well-known/matrix/server".extraConfig = let
-          # use 443 instead of the default 8008 port to unite
-          # the client-server and server-server port for simplicity
-          server = {"m.server" = "matrix.${cfg.host}:443";};
-        in ''
-          add_header Content-Type application/json;
-          return 200 '${builtins.toJSON server}';
-        '';
-        "= /.well-known/matrix/client".extraConfig =
-          # ACAO required to allow element-web on any URL to request this json file
-          ''
-            access_log /var/log/nginx/matrix.access.log;
-            add_header Content-Type application/json;
-            add_header Access-Control-Allow-Origin *;
-            return 200 '${builtins.toJSON {
-              "m.homeserver".base_url = "https://matrix.${cfg.host}";
-              "m.identity_server".base_url = "https://vector.im";
-              "org.matrix.msc3575.proxy".url = "https://matrix.${cfg.host}";
-            }}';
-          '';
-      };
-      "matrix.${cfg.host}" = {
-        addSSL = true;
-        # log for prom
-        extraConfig = ''
-          access_log /var/log/nginx/matrix.access.log;
-        '';
-        locations = {
-          "/admin".root = pkgs.linkFarm "synapse-admin-routing" [
-            {
-              name = "admin";
-              path = "${pkgs.synapse-admin}";
-            }
-          ];
-          # "/".root = "${pkgs.callPackage aaaa}";
+    # os.services.nginx.virtualHosts = {
+    #   ${cfg.host}.locations = {
+    #     "= /.well-known/matrix/server".extraConfig = let
+    #       # use 443 instead of the default 8008 port to unite
+    #       # the client-server and server-server port for simplicity
+    #       server = {"m.server" = "matrix.${cfg.host}:443";};
+    #     in ''
+    #       add_header Content-Type application/json;
+    #       return 200 '${builtins.toJSON server}';
+    #     '';
+    #     "= /.well-known/matrix/client".extraConfig =
+    #       # ACAO required to allow element-web on any URL to request this json file
+    #       ''
+    #         access_log /var/log/nginx/matrix.access.log;
+    #         add_header Content-Type application/json;
+    #         add_header Access-Control-Allow-Origin *;
+    #         return 200 '${builtins.toJSON {
+    #           "m.homeserver".base_url = "https://matrix.${cfg.host}";
+    #           "m.identity_server".base_url = "https://vector.im";
+    #           "org.matrix.msc3575.proxy".url = "https://matrix.${cfg.host}";
+    #         }}';
+    #       '';
+    #   };
+    #   "matrix.${cfg.host}" = {
+    #     addSSL = true;
+    #     # log for prom
+    #     extraConfig = ''
+    #       access_log /var/log/nginx/matrix.access.log;
+    #     '';
+    #     locations = {
+    #       "/admin".root = pkgs.linkFarm "synapse-admin-routing" [
+    #         {
+    #           name = "admin";
+    #           path = "${pkgs.synapse-admin}";
+    #         }
+    #       ];
+    #       # "/".root = "${pkgs.callPackage aaaa}";
+    #
+    #       # forward all Matrix API calls to synapse
+    #       "/_matrix" = {
+    #         proxyPass = "http://10.10.15.10:8008"; # without a trailing /
+    #         extraConfig = ''
+    #           proxy_send_timeout 100;
+    #           client_max_body_size 50M;
+    #         '';
+    #       };
+    #       "/_synapse".proxyPass = "http://10.10.15.10:8008";
+    #       "~ ^/(client/|_matrix/client/unstable/org.matrix.msc3575/sync)" = {
+    #         proxyPass = "http://${osConfig.services.matrix-sliding-sync.settings.SYNCV3_BINDADDR}";
+    #       };
+    #     };
+    #   };
+    # };
 
-          # forward all Matrix API calls to synapse
-          "/_matrix" = {
-            proxyPass = "http://[::1]:8008"; # without a trailing /
-            extraConfig = ''
-              proxy_send_timeout 100;
-              client_max_body_size 50M;
-            '';
-          };
-          "/_synapse".proxyPass = "http://[::1]:8008";
-          "~ ^/(client/|_matrix/client/unstable/org.matrix.msc3575/sync)" = {
-            proxyPass = "http://${osConfig.services.matrix-sliding-sync.settings.SYNCV3_BINDADDR}";
-          };
-        };
-      };
-    };
+    # os.services.mautrix-gmessages = {
+    #   enable = true;
+    #
+    #   # file containing the appservice and telegram tokens
+    #   # environmentFile = "/etc/secrets/mautrix-telegram.env";
+    #
+    #   # The appservice is pre-configured to use SQLite by default.
+    #   # It's also possible to use PostgreSQL.
+    #   settings = {
+    #     homeserver = {
+    #       # address = "https://matrix.${cfg.host}";
+    #       address = "http://[::1]:8008";
+    #       domain = cfg.host;
+    #     };
+    #     appservice = {
+    #       # hostname = "[::1]";
+    #       database = {
+    #         type = "postgres";
+    #         uri = "postgres:///mautrix_gmessages?sslmode=disable&host=/run/postgresql";
+    #       };
+    #     };
+    #     bridge = {
+    #       displayname_template = "{{or .FullName .PhoneNumber}} (SMS)";
+    #       personal_filtering_spaces = true;
+    #       delivery_receipts = true;
+    #       message_error_notices = true;
+    #       # hystory_sync = {
+    #       #   backfill = true;
+    #       #   request_full_sync = true;
+    #       # };
+    #       login_shared_secret_map = {
+    #         "flafy.dev" = "as_token:meow";
+    #       };
+    #       # user_avatar_sync = true;
+    #       # sync_with_custom_puppets = true;
+    #       sync_direct_chat_list = true;
+    #       sync_manual_marked_unread = true;
+    #       private_chat_portal_meta = "always";
+    #       mute_bridging = true;
+    #       # parallel_member_sync = true;
+    #       pinned_tag = "m.favourite";
+    #       archive_tag = "m.lowpriority";
+    #       # allow_user_invite = true;
+    #       # url_previews = true;
+    #       # extev_polls = true;
+    #       # cross_room_replies = true;
+    #       encryption = {
+    #         allow = true;
+    #         default = true;
+    #         appservice = false;
+    #         require = true;
+    #         allow_key_sharing = true;
+    #       };
+    #       permissions = {
+    #         ${cfg.host} = "user";
+    #         "@admin:${cfg.host}" = "admin";
+    #       };
+    #     };
+    #   };
+    # };
 
-    os.services.mautrix-gmessages = {
-      enable = true;
-
-      # file containing the appservice and telegram tokens
-      # environmentFile = "/etc/secrets/mautrix-telegram.env";
-
-      # The appservice is pre-configured to use SQLite by default.
-      # It's also possible to use PostgreSQL.
-      settings = {
-        homeserver = {
-          # address = "https://matrix.${cfg.host}";
-          address = "http://[::1]:8008";
-          domain = cfg.host;
-        };
-        appservice = {
-          # hostname = "[::1]";
-          database = {
-            type = "postgres";
-            uri = "postgres:///mautrix_gmessages?sslmode=disable&host=/run/postgresql";
-          };
-        };
-        bridge = {
-          displayname_template = "{{or .FullName .PhoneNumber}} (SMS)";
-          personal_filtering_spaces = true;
-          delivery_receipts = true;
-          message_error_notices = true;
-          # hystory_sync = {
-          #   backfill = true;
-          #   request_full_sync = true;
-          # };
-          login_shared_secret_map = {
-            "flafy.dev" = "as_token:meow";
-          };
-          # user_avatar_sync = true;
-          # sync_with_custom_puppets = true;
-          sync_direct_chat_list = true;
-          sync_manual_marked_unread = true;
-          private_chat_portal_meta = "always";
-          mute_bridging = true;
-          # parallel_member_sync = true;
-          pinned_tag = "m.favourite";
-          archive_tag = "m.lowpriority";
-          # allow_user_invite = true;
-          # url_previews = true;
-          # extev_polls = true;
-          # cross_room_replies = true;
-          encryption = {
-            allow = true;
-            default = true;
-            appservice = false;
-            require = true;
-            allow_key_sharing = true;
-          };
-          permissions = {
-            ${cfg.host} = "user";
-            "@admin:${cfg.host}" = "admin";
-          };
-        };
-      };
-    };
-
-    os.services.mautrix-whatsapp = {
-      enable = true;
-
-      # file containing the appservice and telegram tokens
-      # environmentFile = "/etc/secrets/mautrix-telegram.env";
-
-      # The appservice is pre-configured to use SQLite by default.
-      # It's also possible to use PostgreSQL.
-      settings = {
-        homeserver = {
-          # address = "https://matrix.${cfg.host}";
-          address = "http://[::1]:8008";
-          domain = cfg.host;
-        };
-        appservice = {
-          # hostname = "[::1]";
-          database = {
-            type = "postgres";
-            uri = "postgres:///mautrix_whatsapp?sslmode=disable&host=/run/postgresql";
-          };
-        };
-        bridge = {
-          displayname_template = "{{or .FullName .PushName .Phone .BusinessName .JID}} (WA)";
-          personal_filtering_spaces = true;
-          delivery_receipts = true;
-          message_error_notices = true;
-          identity_change_notices = true;
-          hystory_sync = {
-            backfill = true;
-            request_full_sync = true;
-          };
-          login_shared_secret_map = {
-            "flafy.dev" = "as_token:meow";
-          };
-          user_avatar_sync = true;
-          sync_with_custom_puppets = true;
-          sync_direct_chat_list = true;
-          sync_manual_marked_unread = true;
-          private_chat_portal_meta = "always";
-          mute_bridging = true;
-          parallel_member_sync = true;
-          pinned_tag = "m.favourite";
-          archive_tag = "m.lowpriority";
-          allow_user_invite = true;
-          url_previews = true;
-          extev_polls = true;
-          cross_room_replies = true;
-          encryption = {
-            allow = true;
-            default = true;
-            appservice = false;
-            require = true;
-            allow_key_sharing = true;
-          };
-          permissions = {
-            ${cfg.host} = "user";
-            "@admin:${cfg.host}" = "admin";
-          };
-          relay.enabled = true;
-        };
-      };
-    };
+    # os.services.mautrix-whatsapp = {
+    #   enable = true;
+    #
+    #   # file containing the appservice and telegram tokens
+    #   # environmentFile = "/etc/secrets/mautrix-telegram.env";
+    #
+    #   # The appservice is pre-configured to use SQLite by default.
+    #   # It's also possible to use PostgreSQL.
+    #   settings = {
+    #     homeserver = {
+    #       # address = "https://matrix.${cfg.host}";
+    #       address = "http://[::1]:8008";
+    #       domain = cfg.host;
+    #     };
+    #     appservice = {
+    #       # hostname = "[::1]";
+    #       database = {
+    #         type = "postgres";
+    #         uri = "postgres:///mautrix_whatsapp?sslmode=disable&host=/run/postgresql";
+    #       };
+    #     };
+    #     bridge = {
+    #       displayname_template = "{{or .FullName .PushName .Phone .BusinessName .JID}} (WA)";
+    #       personal_filtering_spaces = true;
+    #       delivery_receipts = true;
+    #       message_error_notices = true;
+    #       identity_change_notices = true;
+    #       hystory_sync = {
+    #         backfill = true;
+    #         request_full_sync = true;
+    #       };
+    #       login_shared_secret_map = {
+    #         "flafy.dev" = "as_token:meow";
+    #       };
+    #       user_avatar_sync = true;
+    #       sync_with_custom_puppets = true;
+    #       sync_direct_chat_list = true;
+    #       sync_manual_marked_unread = true;
+    #       private_chat_portal_meta = "always";
+    #       mute_bridging = true;
+    #       parallel_member_sync = true;
+    #       pinned_tag = "m.favourite";
+    #       archive_tag = "m.lowpriority";
+    #       allow_user_invite = true;
+    #       url_previews = true;
+    #       extev_polls = true;
+    #       cross_room_replies = true;
+    #       encryption = {
+    #         allow = true;
+    #         default = true;
+    #         appservice = false;
+    #         require = true;
+    #         allow_key_sharing = true;
+    #       };
+    #       permissions = {
+    #         ${cfg.host} = "user";
+    #         "@admin:${cfg.host}" = "admin";
+    #       };
+    #       relay.enabled = true;
+    #     };
+    #   };
+    # };
 
     os.services.matrix-sliding-sync = {
       enable = true;
+      createDatabase = false;
       settings.SYNCV3_SERVER = "https://matrix.${cfg.host}";
       settings.SYNCV3_BINDADDR = "127.0.0.1:8009";
       environmentFile = secrets.matrix-sliding-sync;
