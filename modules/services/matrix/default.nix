@@ -284,12 +284,12 @@ in {
     #   };
     # };
 
-    os.services.matrix-sliding-sync = {
-      enable = true;
-      createDatabase = false;
-      settings.SYNCV3_SERVER = "https://matrix.${cfg.host}";
-      settings.SYNCV3_BINDADDR = "127.0.0.1:8009";
-      environmentFile = secrets.matrix-sliding-sync;
-    };
+    # os.services.matrix-sliding-sync = {
+    #   enable = true;
+    #   createDatabase = false;
+    #   settings.SYNCV3_SERVER = "https://matrix.${cfg.host}";
+    #   settings.SYNCV3_BINDADDR = "127.0.0.1:8009";
+    #   environmentFile = secrets.matrix-sliding-sync;
+    # };
   };
 }

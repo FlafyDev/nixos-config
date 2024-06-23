@@ -46,10 +46,4 @@ in {
       ];
     };
   };
-  os.programs.ssh.extraConfig = ''
-    Host mac1-guest
-    Hostname 127.0.0.1
-    Port 2222
-    Compression yes
-  '';
 }

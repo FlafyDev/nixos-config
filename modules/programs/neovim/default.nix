@@ -91,7 +91,7 @@ in {
           tokyonight-nvim
           vim-wayland-clipboard
           vim-surround
-          rust-tools-nvim
+          rustaceanvim
           copilot-vim
           {
             type = "lua";
@@ -119,11 +119,16 @@ in {
               vim.opt.list = true
               -- vim.opt.listchars:append "eol:↴"
 
-              -- require("ibl").setup {
-              require("indent_blankline").setup {
+              require("ibl").setup {
+                scope = {
+                  show_start = false,
+                  show_end = false,
+                },
+              }
+              -- require("indent_blankline").setup {
                 -- show_end_of_line = true,
                 -- show_current_context = true,
-              }
+              -- }
             '';
           }
           {

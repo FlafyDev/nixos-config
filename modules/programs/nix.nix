@@ -16,7 +16,7 @@
     if !cfg.cm-patch
     then inputs.nix-super.packages.${pkgs.system}.default
     else
-      pkgs.nixVersions.nix_2_16.overrideAttrs (old: {
+      pkgs.nixVersions.nix_2_18.overrideAttrs (old: {
         patches =
           (old.patches or [])
           ++ (
@@ -70,17 +70,6 @@ in {
         enable = true;
         package = mkIf cfg.patch package;
 
-        # buildMachines = [
-        #   {
-        #     system = "x86_64-darwin";
-        #     sshUser = "root";
-        #     sshKey = "/root/.ssh/ope_to_mac";
-        #     maxJobs = 4;
-        #     hostName = "mac1-guest";
-        #     # protocol = "ssh-ng";
-        #     # supportedFeatures = ["nixos-test" "benchmark" "kvm" "big-parallel"];
-        #   }
-        # ];
         distributedBuilds = true;
 
         registry = mapAttrs (_name: value: {flake = value;}) (with inputs; {

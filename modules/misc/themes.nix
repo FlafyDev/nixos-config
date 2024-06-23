@@ -25,9 +25,10 @@ in {
       wallpaperTop = wallpapers.windows11-flower-monochrome.default;
       wallpaperBlurred = wallpapers.windows11-flower-monochrome.default;
       # backgroundColor = mkColor 0 0 0 153;
-      backgroundColor = mkColor 0 0 0 51;
+      backgroundColor = mkColor 0 0 0 157;
       popupBackgroundColor = mkColor 0 0 0 50;
-      borderColor.active = mkColor 255 255 255 255;
+      # 03a9f4ff
+      borderColor.active = mkColor 3 169 244 255;
       borderColor.inactive = mkColor 68 68 68 255;
     })
     (mkIf (cfg.themeName == "amoled-blue") {

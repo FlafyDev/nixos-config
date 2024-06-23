@@ -72,10 +72,10 @@
       open = false;
       modesetting.enable = true;
       powerManagement = {
-        enable = true;
-        finegrained = true;
+        enable = false;
+        # finegrained = true;
       };
-      nvidiaSettings = false;
+      nvidiaSettings = true;
       nvidiaPersistenced = true;
       forceFullCompositionPipeline = true;
       package = osConfig.boot.kernelPackages.nvidiaPackages.stable;

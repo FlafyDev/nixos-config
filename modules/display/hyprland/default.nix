@@ -33,6 +33,13 @@ in {
         '';
       };
     };
+    fromNixpkgs = mkOption {
+      type = with types; bool;
+      default = false;
+      description = ''
+        Get hyprland from nixpkgs
+      '';
+    };
   };
 
   config = mkMerge [
@@ -44,7 +51,8 @@ in {
         # url = "github:hyprwm/Hyprland/v0.34.0";
         # url = "github:hyprwm/Hyprland/045c3fbd854090b2b60ca025fedd3e62498ed1ec";
         # url = "github:hyprwm/Hyprland/53afa0bb62888aa3580a1e0d9e3bce5d05b9af80?submodules=1";
-        url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+        url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=fe7b748eb668136dd0558b7c8279bfcd7ab4d759";
+        # url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
         # inputs.nixpkgs.follows = "nixpkgs";
       };
     }
@@ -57,8 +65,8 @@ in {
         xdg.portal.enable = true;
         programs.hyprland = {
           enable = true;
-          package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-          portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+          package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
+          portalPackage = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
         };
         nix.settings = {
           substituters = ["https://hyprland.cachix.org"];
@@ -69,7 +77,7 @@ in {
       hm.wayland.windowManager.hyprland = {
         enable = true;
         xwayland.enable = true;
-        package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+        package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
         # plugins = with plugins; [
         #   hyprlens
         # ];
@@ -122,7 +130,7 @@ in {
             vfr = true;
             enable_swallow = true;
             swallow_regex = "^(foot)$";
-            animate_manual_resizes = true;
+            animate_manual_resizes = false;
             force_default_wallpaper = 0;
           };
           input = {
@@ -159,7 +167,7 @@ in {
           decoration = {
             rounding = 0;
             dim_inactive = true;
-            dim_strength = 0.2;
+            dim_strength = 0.0;
             drop_shadow = 1;
             shadow_range = 20;
             shadow_render_power = 2;
@@ -179,13 +187,13 @@ in {
           animations = {
             enabled = 1;
             animation = [
-              "windowsMove,0,4,expoOut"
-              "windowsIn,0,4,expoOut"
+              "windowsMove,1,4,expoOut"
+              "windowsIn,1,4,expoOut"
               "windowsOut,0,4,mycurve"
               "fadeIn,0,3,mycurve"
-              "fadeOut,1,3,mycurve"
+              "fadeOut,0,3,mycurve"
               "fadeDim,1,1,expoOut"
-              "border,1,4,expoOut"
+              "border,0,4,expoOut"
               "workspaces,0,2,expoOut,fade"
             ];
           };
@@ -296,7 +304,7 @@ in {
             # Specific window rules
             ++ (rulesForWindow "title:^()$,class:^(steam)$" ["stayfocused" "minsize 1 1"])
             ++ (rulesForWindow "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"])
-            ++ (rulesForWindow "class:^(looking-glass-client)$" ["immediate"])
+            # ++ (rulesForWindow "class:^(looking-glass-client)$" ["immediate"])
             ++ (rulesForWindow "class:^(middleterm)$" ["float" "size 750 550" "animation slide"])
             ++ (rulesForWindow "class:^(guifetch)$" ["float" "animation slide" "move 10 10"])
             ++ (rulesForWindow "class:^(listen_blue)$" ["size 813 695" "float" "center"])

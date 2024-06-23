@@ -3,20 +3,122 @@
   utils,
   pkgs,
   inputs,
+  secrets,
   ...
 }: let
-  inherit (utils) getHostname domains;
+  inherit (utils) getHostname domains resolveHostname;
 in {
   inputs.tempnixpkgs.url = "github:nixos/nixpkgs/f480f9d09e4b4cf87ee6151eba068197125714de";
-  os.environment.systemPackages = let
-    tempnixpkgs = import inputs.tempnixpkgs {inherit (pkgs) system;};
-  in [
-    tempnixpkgs.devenv
+  inputs.kwin-effects-forceblur = {
+    url = "github:taj-ny/kwin-effects-forceblur";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  # os.environment.systemPackages = let
+  #   tempnixpkgs = import inputs.tempnixpkgs {inherit (pkgs) system;};
+  # in [
+  #   tempnixpkgs.devenv
+  # ];
+  imports = [
+    ./hardware
+    {
+      os = {
+        services.desktopManager.plasma6.enable = true;
+        environment.systemPackages = [
+          inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
+        ];
+        environment.plasma6.excludePackages = with pkgs.kdePackages; [
+          plasma-browser-integration
+          konsole
+          oxygen
+        ];
+      };
+    }
   ];
-  imports = [./hardware];
 
   users.main = "flafy";
   users.host = "ope";
+
+  macos.enable = true;
+
+  containers.showcaseBot = {
+    autoStart = true;
+
+    bindMounts = {
+      "/home/flafy/Games" = {
+        isReadOnly = false;
+      };
+      "/home/flafy/repos/flafydev/showcase-bot" = {
+        isReadOnly = false;
+      };
+      "/dev/dri" = {
+        isReadOnly = false;
+      };
+      "/run/opengl-driver" = {
+        isReadOnly = true;
+      };
+    };
+
+    allowedDevices = [
+      {
+        modifier = "rw";
+        node = "/dev/dri/renderD128";
+      }
+      {
+        modifier = "rw";
+        node = "/dev/dri/renderD129";
+      }
+      {
+        modifier = "rw";
+        node = "/dev/dri/card0";
+      }
+      {
+        modifier = "rw";
+        node = "/dev/dri/card1";
+      }
+    ];
+
+    # ephemeral = false;
+
+    specialArgs = {
+      inherit secrets;
+    };
+    # allowedDevices = [
+    #   {
+    #     modifier = "rw";
+    #     node = "/dev/dri/renderD128";
+    #   }
+    #   {
+    #     modifier = "rw";
+    #     node = "/dev/dri/card0";
+    #   }
+    # ];
+
+    config = {lib, ...}: {
+      users.main = "showcasebot";
+      networking.enable = true;
+      os = {
+        system.stateVersion = "23.11";
+        services = {
+          pipewire = {
+            # systemWide = true;
+            enable = true;
+            alsa.enable = true;
+            alsa.support32Bit = true;
+            pulse.enable = true;
+          };
+        };
+        environment.systemPackages = with pkgs; [
+          dart
+          wineWowPackages.unstable
+          cage
+          wf-recorder
+          wlr-randr
+          pulseaudio
+        ];
+      };
+    };
+  };
 
   # os.services.pipewire.wireplumber.extraLuaConfig.bluetooth."headphones-no-switch" = ''
   #   wireplumber.settings = {
@@ -101,14 +203,49 @@ in {
 
   os = {
     services = {
-      # TODO: enable when updating
-      # pipewire.wireplumber.extraConfig = {
-      #   "no-bluetooth-headphones-switch" = {
-      #     "wireplumber.settings" = {
-      #       bluetooth.autoswitch-to-headset-profile = false;
-      #     };
-      #   };
-      # };
+      pipewire = {
+        wireplumber = {
+          configPackages = [
+            (pkgs.writeTextFile {
+              name = "wireplumber-bluez-config";
+              text = ''
+                monitor.bluez.rules = [
+                  {
+                    matches = [
+                      {
+                        ## This matches all bluetooth devices.
+                        device.name = "~bluez_card.*"
+                      }
+                    ]
+                    actions = {
+                      update-props = {
+                        bluez5.auto-connect = [ a2dp_sink ]
+                        bluez5.hw-volume = [ a2dp_sink ]
+                      }
+                    }
+                  }
+                ]
+
+                monitor.bluez.properties = {
+                  bluez5.roles = [ a2dp_sink ]
+                  bluez5.hfphsp-backend = "none"
+                }
+              '';
+              destination = "/share/wireplumber/bluetooth.lua.d/51-bluez-config.lua";
+            })
+          ];
+          extraConfig = {
+            "no-bluetooth-headphones-switch" = {
+              "wireplumber.settings" = {
+                bluetooth.autoswitch-to-headset-profile = false;
+              };
+            };
+          };
+        };
+        extraConfig.pipewire = {
+          "module-allow-priority" = false;
+        };
+      };
 
       teamviewer.enable = true;
       prometheus = {
@@ -168,9 +305,21 @@ in {
   # TCP: 47984, 47989, 48010
   # UDP: 47998-48000, 48002, 48010
 
-  networking.allowedPorts.tcp."47984,47989,48010" = [(getHostname "ope.wg_private")];
-  networking.allowedPorts.udp."47998-48000" = [(getHostname "ope.wg_private")];
-  networking.allowedPorts.udp."48002,48010" = [(getHostname "ope.wg_private")];
+  networking.allowedPorts.tcp."5556" = ["ope.lan1" "0.0.0.0"];
+  networking.forwardPorts = {
+    "127.0.0.1" = {
+      tcp = ["5556"];
+      masquerade = true;
+    };
+  };
+  networking.allowedPorts.tcp."51797" = ["0.0.0.0"];
+  networking.allowedPorts.udp."51797" = ["0.0.0.0"];
+  networking.vpnNamespace.vpn.ports.tcp = ["51797"];
+  networking.vpnNamespace.vpn.ports.udp = ["51797"];
+
+  # networking.allowedPorts.tcp."47984,47989,48010" = [(getHostname "ope.wg_private")];
+  # networking.allowedPorts.udp."47998-48000" = [(getHostname "ope.wg_private")];
+  # networking.allowedPorts.udp."48002,48010" = [(getHostname "ope.wg_private")];
 
   display.hyprland = {
     enable = true;

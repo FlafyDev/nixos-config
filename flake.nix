@@ -12,6 +12,7 @@ in
 
     initialInputs = {
       nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+      # nixpkgs-temp.url = "github:nixos/nixpkgs/b06025f1533a1e07b6db3e75151caa155d1c7eb3";
       home-manager = {
         url = "github:nix-community/home-manager";
         inputs.nixpkgs.follows = "nixpkgs";
@@ -25,7 +26,24 @@ in
       mera.system = "x86_64-linux";
       mane.system = "x86_64-linux";
       bara.system = "aarch64-linux";
+      # bara.inputOverrides = inputs: {
+      #   nixpkgs = inputs.nixpkgs-temp;
+      # };
     };
+    # // {
+    #   test = {
+    #     system = "x86_64-linux";
+    #     inputOverrides = inputs: {
+    #       nixpkgs = inputs.nixpkgs-bara;
+    #     };
+    #     modules = [
+    #       ({lib, ...}: {
+    #         hm.home.stateVersion = "23.05";
+    #         os.users.users.user.isNormalUser = true;
+    #       })
+    #     ];
+    #   };
+    # };
 
     outputs = inputs @ {
       self,

@@ -8,6 +8,9 @@
   ...
 }: let
   inherit (utils) domains getHostname;
+  pkgsBara = import inputs.nixpkgs-bara {
+    inherit (pkgs) system;
+  };
 in {
   imports = [
     ./hardware
@@ -21,6 +24,9 @@ in {
     enable = true;
     desktopManager.plasma5.mobile.enable = true;
   };
+
+
+  # os.hardware.opengl.package = pkgsBara.mesa;
 
   networking.enable = true;
   networking.allowedPorts.tcp."22" = ["*"];
@@ -157,12 +163,13 @@ in {
     monitors = [
       "DSI-1,1080x2280@60,0x0,2.5,transform,1"
     ];
+    fromNixpkgs = true;
   };
 
   assets.enable = true;
 
   themes.themeName = "amoled";
-  fonts.enable = true;
+  # fonts.enable = true;
 
   os.system.stateVersion = "23.11";
 }

@@ -19,61 +19,53 @@ in {
           user = "root";
           group = "root";
         }
-        {
-          directory = "/var/lib/postgresql";
-          user = "root";
-          group = "root";
-        }
       ];
     };
   };
 
-  services.postgres = {
-    enable = true;
-    comb = {
-      mautrix_gmessages = {
-        # networkTrusted =
-        #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
-        # autoCreate = false;
-        initSql = ''
-          CREATE ROLE "mautrix_gmessages" WITH LOGIN PASSWORD 'synapse';
-          CREATE DATABASE "mautrix_gmessages" WITH
-            OWNER "mautrix_gmessages"
-            TEMPLATE template0
-            ENCODING = "UTF8"
-            LC_COLLATE = "C"
-            LC_CTYPE = "C";
-        '';
-      };
+  services.postgres.comb = {
+    mautrix_gmessages = {
+      # networkTrusted =
+      #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
+      # autoCreate = false;
+      initSql = ''
+        CREATE ROLE "mautrix_gmessages" WITH LOGIN PASSWORD 'synapse';
+        CREATE DATABASE "mautrix_gmessages" WITH
+          OWNER "mautrix_gmessages"
+          TEMPLATE template0
+          ENCODING = "UTF8"
+          LC_COLLATE = "C"
+          LC_CTYPE = "C";
+      '';
+    };
 
-      mautrix_whatsapp = {
-        # networkTrusted =
-        #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
-        # autoCreate = false;
-        initSql = ''
-          CREATE ROLE "mautrix_whatsapp" WITH LOGIN PASSWORD 'synapse';
-          CREATE DATABASE "mautrix_whatsapp" WITH
-            OWNER "mautrix_whatsapp"
-            TEMPLATE template0
-            ENCODING = "UTF8"
-            LC_COLLATE = "C"
-            LC_CTYPE = "C";
-        '';
-      };
-      synapse = {
-        # networkTrusted =
-        #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
-        # autoCreate = false;
-        initSql = ''
-          CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
-          CREATE DATABASE "matrix-synapse" WITH
-            OWNER "matrix-synapse"
-            TEMPLATE template0
-            ENCODING = "UTF8"
-            LC_COLLATE = "C"
-            LC_CTYPE = "C";
-        '';
-      };
+    mautrix_whatsapp = {
+      # networkTrusted =
+      #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
+      # autoCreate = false;
+      initSql = ''
+        CREATE ROLE "mautrix_whatsapp" WITH LOGIN PASSWORD 'synapse';
+        CREATE DATABASE "mautrix_whatsapp" WITH
+          OWNER "mautrix_whatsapp"
+          TEMPLATE template0
+          ENCODING = "UTF8"
+          LC_COLLATE = "C"
+          LC_CTYPE = "C";
+      '';
+    };
+    synapse = {
+      # networkTrusted =
+      #   true; # FIXME: Really really don't like this but the janitor doesn't actually support UNIX sockets unlike what it says..
+      # autoCreate = false;
+      initSql = ''
+        CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
+        CREATE DATABASE "matrix-synapse" WITH
+          OWNER "matrix-synapse"
+          TEMPLATE template0
+          ENCODING = "UTF8"
+          LC_COLLATE = "C"
+          LC_CTYPE = "C";
+      '';
     };
   };
 

@@ -35,7 +35,7 @@ in {
       profiles.default = {
         settings = {};
         isDefault = true;
-        inherit userChrome;
+        # inherit userChrome;
         extensions = with pkgs.nur.repos.rycee.firefox-addons;
         with pkgs.firefox-addons; [
           vimium-c

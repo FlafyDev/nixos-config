@@ -67,6 +67,8 @@ in {
         gst_all_1.gst-vaapi
         libva
 
+        libreoffice
+
         (pkgs.wrapOBS {
           plugins = with pkgs.obs-studio-plugins; [
             obs-vaapi

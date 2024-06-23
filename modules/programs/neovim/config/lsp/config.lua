@@ -1,6 +1,6 @@
 local lspconfig = require("lspconfig")
 local null = require("null-ls")
-local rust_tools = require("rust-tools")
+-- local rust_tools = require("rust-tools")
 local flutter_tools = require('flutter-tools')
 local pid = vim.fn.getpid()
 local cmp = require('cmp')
@@ -16,6 +16,7 @@ null.setup({
     nb.diagnostics.eslint,
   },
 })
+
 
 require("lspsaga").setup({
   preview = {
@@ -135,6 +136,7 @@ local on_attach = function(client, bufnr)
   -- vim.keymap.set('n', 'L', ':Lspsaga code_action<CR>', bufopts)
   vim.keymap.set('n', 'L', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gh', ':Lspsaga lsp_finder<CR>', bufopts)
+  vim.keymap.set('n', 'gj', vim.lsp.buf.references, bufopts)
 
   -- vim.keymap.set('n', 'L', ':CodeActionMenu', bufopts)
 
@@ -299,7 +301,7 @@ end
 
 
 -- C/C++
-lspconfig["clangd"].setup { {
+lspconfig["clangd"].setup {
   cmd = {
     "clangd",
     "--index",
@@ -318,7 +320,7 @@ lspconfig["clangd"].setup { {
   on_attach = on_attach,
   capabilities = capabilities,
   flags = { debounce_text_changes = 150 }
-} }
+}
 
 
 -- Flutter
@@ -358,13 +360,30 @@ flutter_tools.setup {
 
 
 -- Rust
-rust_tools.setup({
+vim.g.rustaceanvim = {
+  -- Plugin configuration
+  tools = {
+  },
+  -- LSP configuration
   server = {
     on_attach = on_attach,
-    capabilities = capabilities,
-    flags = lsp_flags,
+    default_settings = {
+      -- rust-analyzer language server configuration
+      ['rust-analyzer'] = {
+      },
+    },
   },
-})
+  -- DAP configuration
+  dap = {
+  },
+}
+-- rust_tools.setup({
+--   server = {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+--     flags = lsp_flags,
+--   },
+-- })
 
 
 -- CSharp

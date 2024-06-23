@@ -268,17 +268,11 @@ in {
               data = "windows/geometry-dash";
               winePrefix = "geometry-dash";
               script = {data, ...}: ''
-                export WINEDLLOVERRIDES="XInput9_1_0.dll=n,b"
-                env -C ${data} wine64 GeometryDash.exe
+                export WINEDLLOVERRIDES="XInput1_4.dll=n,b"
+                env -C ${data} gamescope -W 1920 -H 1080 --  wine64 GeometryDash.exe
               '';
               networking = true;
-              pathPackages = [(flPkgs' inputs.nix-gaming ["wine-osu"])];
-              extraRW = {
-                envSuffix,
-                sloth,
-              }: [
-                (sloth.concat' sloth.homeDir ''/undertalestuff'')
-              ];
+              pathPackages = [pkgs.wineWowPackages.unstable pkgs.gamescope];
             };
             # geometry-dash = bubbleWrapGame {
             #   data = "windows/geometry-dash";

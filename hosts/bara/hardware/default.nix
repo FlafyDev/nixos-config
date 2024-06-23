@@ -10,12 +10,23 @@
       # url = "github:nixos/mobile-nixos/master";
       flake = false;
     };
+    nixpkgs-bara.url = "github:nixos/nixpkgs/684c17c429c42515bafb3ad775d2a710947f3d67";
     # mobile-nixos-nixpkgs.url = "github:nixos/nixpkgs/684c17c429c42515bafb3ad775d2a710947f3d67";
     # mobile-nixos-home-manager = {
     #   url = "github:nix-community/home-manager/8c350c2069ac3eed6344fa62e3249afa0ce2728c";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
   };
+
+  # os.nixpkgs.overlays = [
+  #   (_final: prev: let
+  #     baraPkgs = import inputs.nixpkgs-bara {
+  #       inherit (prev) system;
+  #     };
+  #   in {
+  #     inherit (baraPkgs) mesa;
+  #   })
+  # ];
 
   osModules = [
     (import "${inputs.mobile-nixos}/lib/configuration.nix" {device = "oneplus-enchilada";})

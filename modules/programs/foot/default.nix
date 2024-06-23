@@ -38,6 +38,10 @@ in {
           hide-when-typing = "yes";
         };
 
+        scrollback = {
+          lines = 100000;
+        };
+
         cursor.color = "c0caf5 ffffff";
 
         colors = {

@@ -26,16 +26,16 @@ in {
 
         # Patch vencord
         vencord-web-extension = pkgs.vencord-web-extension.overrideAttrs (old: {
-          patches =
-            (old.patches or [])
-            ++ [
-              (pkgs.runCommand "vencord-settings-patch" {
-                  nativeBuildInputs = with pkgs; [jq];
-                } ''
-                  export settings=$(jq -c '.settings' < ${./vencord/exported-settings.json})
-                  substituteAll ${./vencord/declarative-settings.patch} $out
-                '')
-            ];
+          # patches =
+          #   (old.patches or [])
+          #   ++ [
+          #     (pkgs.runCommand "vencord-settings-patch" {
+          #         nativeBuildInputs = with pkgs; [jq];
+          #       } ''
+          #         export settings=$(jq -c '.settings' < ${./vencord/exported-settings.json})
+          #         substituteAll ${./vencord/declarative-settings.patch} $out
+          #       '')
+          #   ];
         });
       };
     in [

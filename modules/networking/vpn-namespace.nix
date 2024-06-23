@@ -161,7 +161,7 @@
                 ${ip} netns exec ${namespace} ip addr add 10.10.15.11/24 dev vethvpn0 || true
                 ${ip} link set vethhost0 up || true
                 ${ip} netns exec ${namespace} ip link set vethvpn0 up || true
-                ${ip} netns exec vpn ip route add ${resolveHostname domains.personal} via 10.10.15.10
+                ${ip} netns exec vpn ip route add ${resolveHostname domains.personal} via 10.10.15.10 || true
               '';
               postSetup = ''
                 # I don't know why without delay Wireguard doesn't work
@@ -178,7 +178,7 @@
         udp = udpPorts;
         masquerade =  true;
       };
-      allowedPorts = {
+      allowedPorts = { # Make this also only if it has lanCfgs?
         tcp = foldl' (acc: port:
           acc
           // {

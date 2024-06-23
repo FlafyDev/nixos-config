@@ -51,17 +51,21 @@ in {
         privateKeyFile = ssh.mane.mane_wg_private.private;
         peers = [
           {
-            publicKey = builtins.readFile ssh.ope.ope_wg_vps.public;
+            publicKey = builtins.readFile ssh.ope.ope_wg_private.public;
             allowedIPs = ["10.10.11.10/32"];
           }
           {
-            publicKey = builtins.readFile ssh.mera.bara_wg_vps.public;
-            allowedIPs = ["10.10.11.12/32"];
+            publicKey = builtins.readFile ssh.mera.mera_wg_private.public;
+            allowedIPs = ["10.10.11.11/32"];
           }
-          {
-            publicKey = builtins.readFile ssh.mera.noro_wg_vps.public;
-            allowedIPs = ["10.10.11.13/32"];
-          }
+          # {
+          #   publicKey = builtins.readFile ssh.mera.bara_wg_vps.public;
+          #   allowedIPs = ["10.10.11.12/32"];
+          # }
+          # {
+          #   publicKey = builtins.readFile ssh.mera.noro_wg_vps.public;
+          #   allowedIPs = ["10.10.11.13/32"];
+          # }
         ];
       };
       wg_vps = {
@@ -82,5 +86,8 @@ in {
     };
   };
 
-  networking.allowedPorts.udp."51820" = [domains.personal];
+  networking.allowedPorts.udp = {
+    "51820" = [domains.personal];
+    "51821" = [domains.personal];
+  };
 }

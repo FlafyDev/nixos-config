@@ -20,7 +20,7 @@ in {
 
   networking.enable = true;
 
-  # networking.allowedPorts.tcp."22" = ["*"];
+  networking.allowedPorts.tcp."5900-5999" = ["*"];
   # programs.ssh = {
   #   enable = true;
   #   sftp.enable = true;

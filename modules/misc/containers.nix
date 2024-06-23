@@ -63,7 +63,7 @@ in {
                                     };
                                   };
                                   config = {
-                                    users.main = "";
+                                    users.main = mkDefault "";
                                     users.host = mkDefault name;
                                     os = {
                                       # nixpkgs = if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined
