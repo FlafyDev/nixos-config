@@ -49,6 +49,7 @@ in {
       # dejavu_fonts
       # source-code-pro # Default monospace font in 3.32
       # source-sans
+      maple-mono
       google-fonts
       # noto-fonts
       # noto-fonts-cjk

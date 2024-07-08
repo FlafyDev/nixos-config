@@ -205,46 +205,46 @@ in {
     services = {
       pipewire = {
         wireplumber = {
-          configPackages = [
-            (pkgs.writeTextFile {
-              name = "wireplumber-bluez-config";
-              text = ''
-                monitor.bluez.rules = [
-                  {
-                    matches = [
-                      {
-                        ## This matches all bluetooth devices.
-                        device.name = "~bluez_card.*"
-                      }
-                    ]
-                    actions = {
-                      update-props = {
-                        bluez5.auto-connect = [ a2dp_sink ]
-                        bluez5.hw-volume = [ a2dp_sink ]
-                      }
-                    }
-                  }
-                ]
-
-                monitor.bluez.properties = {
-                  bluez5.roles = [ a2dp_sink ]
-                  bluez5.hfphsp-backend = "none"
-                }
-              '';
-              destination = "/share/wireplumber/bluetooth.lua.d/51-bluez-config.lua";
-            })
-          ];
-          extraConfig = {
-            "no-bluetooth-headphones-switch" = {
-              "wireplumber.settings" = {
-                bluetooth.autoswitch-to-headset-profile = false;
-              };
-            };
-          };
+          # configPackages = [
+          #   (pkgs.writeTextFile {
+          #     name = "wireplumber-bluez-config";
+          #     text = ''
+          #       monitor.bluez.rules = [
+          #         {
+          #           matches = [
+          #             {
+          #               ## This matches all bluetooth devices.
+          #               device.name = "~bluez_card.*"
+          #             }
+          #           ]
+          #           actions = {
+          #             update-props = {
+          #               bluez5.auto-connect = [ a2dp_sink ]
+          #               bluez5.hw-volume = [ a2dp_sink ]
+          #             }
+          #           }
+          #         }
+          #       ]
+          #
+          #       monitor.bluez.properties = {
+          #         bluez5.roles = [ a2dp_sink ]
+          #         bluez5.hfphsp-backend = "none"
+          #       }
+          #     '';
+          #     destination = "/share/wireplumber/bluetooth.lua.d/51-bluez-config.lua";
+          #   })
+          # ];
+          # extraConfig = {
+          #   "no-bluetooth-headphones-switch" = {
+          #     "wireplumber.settings" = {
+          #       bluetooth.autoswitch-to-headset-profile = false;
+          #     };
+          #   };
+          # };
         };
-        extraConfig.pipewire = {
-          "module-allow-priority" = false;
-        };
+        # extraConfig.pipewire = {
+        #   "module-allow-priority" = false;
+        # };
       };
 
       teamviewer.enable = true;

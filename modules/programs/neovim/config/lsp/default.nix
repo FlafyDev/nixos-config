@@ -20,6 +20,8 @@ in [
   flutter-tools-nvim
   null-ls-nvim
   nvim-code-action-menu
+  tailwind-tools-nvim
+
   # coq_nvim
   # coq-thirdparty
   # coq-artifacts

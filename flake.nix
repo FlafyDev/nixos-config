@@ -11,7 +11,7 @@ in
     lockFile = ./flake.lock;
 
     initialInputs = {
-      nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+      nixpkgs.url = "github:nixos/nixpkgs/24.05";
       # nixpkgs-temp.url = "github:nixos/nixpkgs/b06025f1533a1e07b6db3e75151caa155d1c7eb3";
       home-manager = {
         url = "github:nix-community/home-manager";

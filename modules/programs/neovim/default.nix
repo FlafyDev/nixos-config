@@ -48,7 +48,9 @@ in {
         cppcheck
         deadnix
         alejandra
-        nodePackages.pyright
+        tailwindcss-language-server
+        vscode-langservers-extracted
+        pyright
         # nodejs-16_x
         tree-sitter
         nil
@@ -76,7 +78,7 @@ in {
           ./config/lualine-nvim
           (import ./config/lsp {
             snippets = with inputs; [
-              flutter-riverpod-snippets
+              # flutter-riverpod-snippets
               flutter-hooks-snippets
             ];
           })
@@ -90,9 +92,15 @@ in {
           vim-parinfer
           tokyonight-nvim
           vim-wayland-clipboard
-          vim-surround
           rustaceanvim
           copilot-vim
+          {
+            type = "lua";
+            plugin = nvim-surround;
+            config = ''
+              require('nvim-surround').setup({ })
+            '';
+          }
           {
             type = "lua";
             plugin = fidget-nvim;

@@ -20,9 +20,9 @@ in {
     networking.allowedPorts.udp."631,5353" = ["*"];
 
     os = {
-      system.nssModules = pkgs.lib.optional (!osConfig.services.avahi.nssmdns) pkgs.nssmdns;
+      system.nssModules = pkgs.lib.optional (!osConfig.services.avahi.nssmdns4) pkgs.nssmdns;
       system.nssDatabases.hosts = with pkgs.lib;
-        optionals (!osConfig.services.avahi.nssmdns) (mkMerge [
+        optionals (!osConfig.services.avahi.nssmdns4) (mkMerge [
           (mkBefore ["mdns4_minimal [NOTFOUND=return]"]) # before resolve
           (mkAfter ["mdns4"]) # after dns
         ]);
@@ -40,7 +40,7 @@ in {
       services = {
         avahi = {
           enable = true;
-          nssmdns = false;
+          nssmdns4 = false;
           publish = {
             enable = true;
             userServices = true;

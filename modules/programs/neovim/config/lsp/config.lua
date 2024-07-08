@@ -299,6 +299,19 @@ for _, lsp in ipairs(servers) do
   })
 end
 
+require("tailwind-tools").setup {
+
+}
+
+lspconfig["tailwindcss"].setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+lspconfig["cssls"].setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
 
 -- C/C++
 lspconfig["clangd"].setup {

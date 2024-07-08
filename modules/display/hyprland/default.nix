@@ -4,11 +4,14 @@
   inputs,
   pkgs,
   theme,
+  utils,
   ...
 }: let
   cfg = config.display.hyprland;
   plugins = pkgs.callPackage ./plugins {};
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types mapAttrsToList;
+  inherit (utils) flPkgs';
+
 
   powerButtonScript = pkgs.writeShellScript "power-button" ''
     hyprctl dispatch dpms toggle
@@ -44,16 +47,23 @@ in {
 
   config = mkMerge [
     {
-      # inputs.flutter_background_bar = {
-      #   url = "github:flafydev/flutter_background_bar";
-      # };
-      inputs.hyprland = {
-        # url = "github:hyprwm/Hyprland/v0.34.0";
-        # url = "github:hyprwm/Hyprland/045c3fbd854090b2b60ca025fedd3e62498ed1ec";
-        # url = "github:hyprwm/Hyprland/53afa0bb62888aa3580a1e0d9e3bce5d05b9af80?submodules=1";
-        url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=fe7b748eb668136dd0558b7c8279bfcd7ab4d759";
-        # url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
-        # inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        # inputs.flutter_background_bar = {
+        #   url = "github:flafydev/flutter_background_bar";
+        # };
+        hypr-dynamic-cursors = {
+          url = "github:VirtCode/hypr-dynamic-cursors";
+          inputs.hyprland.follows = "hyprland"; # to make sure that the plugin is built for the correct version of hyprland
+        };
+        hyprland = {
+          # url = "github:hyprwm/Hyprland/v0.34.0";
+          # url = "github:hyprwm/Hyprland/045c3fbd854090b2b60ca025fedd3e62498ed1ec";
+          # url = "github:hyprwm/Hyprland/53afa0bb62888aa3580a1e0d9e3bce5d05b9af80?submodules=1";
+
+          # url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=fe7b748eb668136dd0558b7c8279bfcd7ab4d759";
+          url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+          # inputs.nixpkgs.follows = "nixpkgs";
+        };
       };
     }
     (mkIf cfg.enable {
@@ -78,9 +88,9 @@ in {
         enable = true;
         xwayland.enable = true;
         package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
-        # plugins = with plugins; [
-        #   hyprlens
-        # ];
+        plugins = with plugins; [
+          (flPkgs' inputs.hypr-dynamic-cursors ["hypr-dynamic-cursors"])
+        ];
         settings = let
           playerctl = "${pkgs.playerctl}/bin/playerctl";
           pactl = "${pkgs.pulseaudio}/bin/pactl";
@@ -204,7 +214,7 @@ in {
             default_split_ratio = 1.3;
           };
           master = {
-            new_is_master = false;
+            # new_is_master = false;
             new_on_top = false;
             no_gaps_when_only = false;
             orientation = "top";
@@ -228,63 +238,63 @@ in {
           ];
           bind = [
             '',Print,exec,${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy -t image/png''
-            "ALT,S,fullscreen"
-            "ALT,F,exec,${pkgs.foot}/bin/foot"
-            "ALT,V,exec,${pkgs.foot}/bin/footclient --app-id sideterm"
-            "ALT,BACKSPACE,exec,${pkgs.foot}/bin/footclient --app-id middleterm"
-            "ALT,D,killactive,"
-            "ALT,G,togglefloating,"
+            "SUPER,S,fullscreen"
+            "SUPER,F,exec,${pkgs.foot}/bin/foot"
+            "SUPER,V,exec,${pkgs.foot}/bin/footclient --app-id sideterm"
+            "SUPER,BACKSPACE,exec,${pkgs.foot}/bin/footclient --app-id middleterm"
+            "SUPER,D,killactive,"
+            "SUPER,G,togglefloating,"
             ",Menu,exec,hyprctl switchxkblayout kmonad-kb-laptop next && hyprctl switchxkblayout kmonad-kb-hyperx next"
 
             ",XF86PowerOff,exec,${powerButtonScript}"
 
-            "ALT,SEMICOLON,exec,anyrun"
+            "SUPER,SEMICOLON,exec,anyrun"
 
-            "SHIFTALT,SEMICOLON,exit,"
-            "ALT,A,togglesplit,"
+            "SHIFTSUPER,SEMICOLON,exit,"
+            "SUPER,A,togglesplit,"
 
             ",XF86AudioPlay,exec,${playerctl} play-pause"
             ",XF86AudioPrev,exec,${playerctl} previous"
             ",XF86AudioNext,exec,${playerctl} next"
 
-            "ALT,H,movefocus,l"
-            "ALT,J,movefocus,d"
-            "ALT,K,movefocus,u"
-            "ALT,L,movefocus,r"
+            "SUPER,H,movefocus,l"
+            "SUPER,J,movefocus,d"
+            "SUPER,K,movefocus,u"
+            "SUPER,L,movefocus,r"
 
-            "ALTCTRL,L,swapwindow,r"
-            "ALTCTRL,H,swapwindow,l"
-            "ALTCTRL,K,swapwindow,u"
-            "ALTCTRL,J,swapwindow,d"
+            "SUPERCTRL,L,swapwindow,r"
+            "SUPERCTRL,H,swapwindow,l"
+            "SUPERCTRL,K,swapwindow,u"
+            "SUPERCTRL,J,swapwindow,d"
 
-            "SUPER,U,workspace,previous"
-            "ALT,Q,workspace,1"
-            "ALT,W,workspace,2"
-            "ALT,E,workspace,3"
-            "ALT,R,workspace,4"
-            "ALT,T,workspace,5"
-            "ALT,Y,workspace,6"
-            "ALT,U,workspace,7"
-            "ALT,I,workspace,8"
-            "ALT,O,workspace,9"
-            "ALT,P,workspace,10"
+            "SUPER,M,workspace,previous"
+            "SUPER,Q,workspace,1"
+            "SUPER,W,workspace,2"
+            "SUPER,E,workspace,3"
+            "SUPER,R,workspace,4"
+            "SUPER,T,workspace,5"
+            "SUPER,Y,workspace,6"
+            "SUPER,U,workspace,7"
+            "SUPER,I,workspace,8"
+            "SUPER,O,workspace,9"
+            "SUPER,P,workspace,10"
 
-            "ALTSHIFT,Q,movetoworkspace,1"
-            "ALTSHIFT,W,movetoworkspace,2"
-            "ALTSHIFT,E,movetoworkspace,3"
-            "ALTSHIFT,R,movetoworkspace,4"
-            "ALTSHIFT,T,movetoworkspace,5"
-            "ALTSHIFT,Y,movetoworkspace,6"
-            "ALTSHIFT,U,movetoworkspace,7"
-            "ALTSHIFT,I,movetoworkspace,8"
-            "ALTSHIFT,O,movetoworkspace,9"
-            "ALTSHIFT,P,movetoworkspace,10"
+            "SUPERSHIFT,Q,movetoworkspace,1"
+            "SUPERSHIFT,W,movetoworkspace,2"
+            "SUPERSHIFT,E,movetoworkspace,3"
+            "SUPERSHIFT,R,movetoworkspace,4"
+            "SUPERSHIFT,T,movetoworkspace,5"
+            "SUPERSHIFT,Y,movetoworkspace,6"
+            "SUPERSHIFT,U,movetoworkspace,7"
+            "SUPERSHIFT,I,movetoworkspace,8"
+            "SUPERSHIFT,O,movetoworkspace,9"
+            "SUPERSHIFT,P,movetoworkspace,10"
           ];
           binde = [
-            "ALTSHIFT,H,resizeactive,-150 0"
-            "ALTSHIFT,J,resizeactive,0 150"
-            "ALTSHIFT,K,resizeactive,0 -150"
-            "ALTSHIFT,L,resizeactive,150 0"
+            "SUPERSHIFT,H,resizeactive,-150 0"
+            "SUPERSHIFT,J,resizeactive,0 150"
+            "SUPERSHIFT,K,resizeactive,0 -150"
+            "SUPERSHIFT,L,resizeactive,150 0"
 
             ",XF86AudioRaiseVolume,exec,${pactl} set-sink-volume @DEFAULT_SINK@ +5% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK"
             ",XF86AudioLowerVolume,exec,${pactl} set-sink-volume @DEFAULT_SINK@ -5% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK"
@@ -294,8 +304,8 @@ in {
             ",XF86MonBrightnessDown,exec,${pkgs.lib.getExe pkgs.brightnessctl} set 5%-"
           ];
           bindm = [
-            "ALT,mouse:272,movewindow"
-            "ALT,mouse:273,resizewindow"
+            "SUPER,mouse:272,movewindow"
+            "SUPER,mouse:273,resizewindow"
           ];
           windowrulev2 = let
             rulesForWindow = window: map (rule: "${rule},${window}");

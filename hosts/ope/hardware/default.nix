@@ -207,7 +207,7 @@ in {
       opengl = {
         # package = newMesa.drivers;
         enable = true;
-        driSupport = true;
+        # driSupport = true;
         driSupport32Bit = true;
         extraPackages = with pkgs; [
           vaapiVdpau

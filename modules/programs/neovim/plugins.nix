@@ -28,6 +28,10 @@
       url = "github:nvimdev/lspsaga.nvim";
       flake = false;
     };
+    tailwind-tools = {
+      url = "github:luckasRanarison/tailwind-tools.nvim";
+      flake = false;
+    };
   };
   os.nixpkgs.overlays = [
     (_final: prev: {
@@ -48,6 +52,11 @@
                 version = "git";
                 src = bufresize-nvim;
               };
+              tailwind-tools-nvim = buildVimPluginFrom2Nix {
+                pname = "tailwind-tools.nvim";
+                version = "git";
+                src = tailwind-tools;
+              };
               flutter-tools-nvim = buildVimPluginFrom2Nix {
                 pname = "flutter-tools.nvim";
                 version = "git";
@@ -61,6 +70,7 @@
                 version = "git";
                 src = transparent-nvim;
               };
+
             }
         );
     })
