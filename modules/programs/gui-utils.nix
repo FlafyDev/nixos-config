@@ -5,6 +5,7 @@
   inputs,
   utils,
   theme,
+  upkgs,
   ...
 }: let
   cfg = config.programs.gui-utils;
@@ -45,6 +46,7 @@ in {
       };
       os.environment.systemPackages = with pkgs; [
         (utils.flPkgs inputs.flarrent)
+        upkgs.zed-editor
         kdenlive
         chromium
         gnome.eog

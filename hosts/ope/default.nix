@@ -2,6 +2,7 @@
   lib,
   utils,
   pkgs,
+  upkgs,
   inputs,
   secrets,
   ...
@@ -14,26 +15,29 @@ in {
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  # os.environment.systemPackages = let
-  #   tempnixpkgs = import inputs.tempnixpkgs {inherit (pkgs) system;};
-  # in [
-  #   tempnixpkgs.devenv
-  # ];
   imports = [
     ./hardware
+    # flatpak
     {
-      os = {
-        services.desktopManager.plasma6.enable = true;
-        environment.systemPackages = [
-          inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
-        ];
-        environment.plasma6.excludePackages = with pkgs.kdePackages; [
-          plasma-browser-integration
-          konsole
-          oxygen
-        ];
-      };
+      os.services.flatpak.enable = true;
+      hm.home.packages = with pkgs; [
+        flatpak
+        gnome.gnome-software
+      ];
     }
+    # {
+    #   os = {
+    #     services.desktopManager.plasma6.enable = true;
+    #     environment.systemPackages = [
+    #       inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
+    #     ];
+    #     environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    #       plasma-browser-integration
+    #       konsole
+    #       oxygen
+    #     ];
+    #   };
+    # }
   ];
 
   users.main = "flafy";

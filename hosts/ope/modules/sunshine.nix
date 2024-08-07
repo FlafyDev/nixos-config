@@ -11,8 +11,8 @@ in {
   };
 
   programs.sunshine = {
-    enable = true;
-    hyprlandIntegration.enable = true;
+    enable = false;
+    hyprlandIntegration.enable = false;
   };
 
   # networking.vpsForwarding.mane.tcp = ["47984" "47989" "48010"];

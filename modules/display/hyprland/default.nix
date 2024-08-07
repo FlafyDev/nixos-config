@@ -38,7 +38,7 @@ in {
     };
     fromNixpkgs = mkOption {
       type = with types; bool;
-      default = false;
+      default = true;
       description = ''
         Get hyprland from nixpkgs
       '';
@@ -51,17 +51,17 @@ in {
         # inputs.flutter_background_bar = {
         #   url = "github:flafydev/flutter_background_bar";
         # };
-        hypr-dynamic-cursors = {
-          url = "github:VirtCode/hypr-dynamic-cursors";
-          inputs.hyprland.follows = "hyprland"; # to make sure that the plugin is built for the correct version of hyprland
-        };
+        # hypr-dynamic-cursors = {
+        #   url = "github:VirtCode/hypr-dynamic-cursors";
+        #   inputs.hyprland.follows = "hyprland"; # to make sure that the plugin is built for the correct version of hyprland
+        # };
         hyprland = {
           # url = "github:hyprwm/Hyprland/v0.34.0";
           # url = "github:hyprwm/Hyprland/045c3fbd854090b2b60ca025fedd3e62498ed1ec";
           # url = "github:hyprwm/Hyprland/53afa0bb62888aa3580a1e0d9e3bce5d05b9af80?submodules=1";
 
-          # url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=fe7b748eb668136dd0558b7c8279bfcd7ab4d759";
-          url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+          url = "github:hyprwm/Hyprland";
+          # url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
           # inputs.nixpkgs.follows = "nixpkgs";
         };
       };
@@ -78,7 +78,7 @@ in {
           package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
           portalPackage = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
         };
-        nix.settings = {
+        nix.settings = mkIf (!cfg.fromNixpkgs) {
           substituters = ["https://hyprland.cachix.org"];
           trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
         };
@@ -89,7 +89,7 @@ in {
         xwayland.enable = true;
         package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
         plugins = with plugins; [
-          (flPkgs' inputs.hypr-dynamic-cursors ["hypr-dynamic-cursors"])
+          # (flPkgs' inputs.hypr-dynamic-cursors ["hypr-dynamic-cursors"])
         ];
         settings = let
           playerctl = "${pkgs.playerctl}/bin/playerctl";

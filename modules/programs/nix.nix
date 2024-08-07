@@ -30,6 +30,7 @@ in {
     enable = mkEnableOption "nix";
     patch = mkEnableOption "patch";
     cm-patch = mkEnableOption "combined-manager-patch" // {default = true;};
+
   };
 
   config = mkMerge [
@@ -42,6 +43,10 @@ in {
         nix-index-database = {
           url = "github:Mic92/nix-index-database";
           inputs.nixpkgs.follows = "nixpkgs";
+        };
+        flake-registry = {
+          url = "github:nixos/flake-registry";
+          flake = false;
         };
       };
     }
@@ -84,6 +89,7 @@ in {
           experimental-features = nix-command flakes
         '';
         settings = {
+          flake-registry = "${inputs.flake-registry}/flake-registry.json";
           auto-optimise-store = true;
           trusted-public-keys = [
             "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="

@@ -62,6 +62,7 @@ in {
       '';
 
       boot.extraModulePackages = [
+        
         (osConfig.boot.kernelPackages.kvmfr.overrideAttrs (old: {
           inherit (pkgs.looking-glass-client) version src;
           patches = [
@@ -80,6 +81,38 @@ in {
       virtualisation.docker.enable = true;
       virtualisation.libvirtd = {
         enable = true;
+        # hooks.qemu = {
+        #   "passthrough" = lib.getExe (
+        #     pkgs.writeShellApplication {
+        #       name = "qemu-hook";
+        #
+        #       runtimeInputs = with pkgs; [
+        #         libvirt
+        #         systemd
+        #         kmod
+        #       ];
+        #
+        #       text = ''
+        #         GUEST_NAME="$1"
+        #         OPERATION="$2"
+        #
+        #         if [ "$GUEST_NAME" != "win-gpu" ]; then
+        #           exit 0;
+        #         fi
+        #
+        #         if [ "$OPERATION" == "prepare" ]; then
+        #           echo "0000:03:00.0" > /sys/bus/pci/drivers/amdgpu/unbind || true
+        #           echo "0000:03:00.0" > /sys/bus/pci/drivers/vfio-pci/bind || true
+        #         fi
+        #
+        #         if [ "$OPERATION" == "release" ]; then
+        #           echo "0000:03:00.0" > /sys/bus/pci/drivers/vfio-pci/unbind || true
+        #           echo "0000:03:00.0" > /sys/bus/pci/drivers/amdgpu/bind || true
+        #         fi
+        #       '';
+        #     }
+        #   );
+        # };
         qemu = {
           package = pkgs.qemu_kvm;
           ovmf.enable = true;

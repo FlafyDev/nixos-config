@@ -288,6 +288,7 @@ local servers = {
   "pyright",                -- Python
   "kotlin_language_server", -- Kotlin
   "lua_ls",                 -- Lua
+  'jsonls',                 -- JSON
 };
 
 

@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }: let
   inherit
@@ -34,6 +35,7 @@ in {
 
   config = mkIf cfg.enable {
     _module.args.utils = utils';
+    _module.args.upkgs = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
     # os.nixpkgs.overlays = [
     #   (_final: _prev: {
     #     utils = utils';

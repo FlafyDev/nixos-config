@@ -162,7 +162,7 @@ in {
     };
 
     boot = {
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.linuxPackages_6_9;
       supportedFilesystems = ["ntfs"];
       loader = {
         # systemd-boot.enable = true;
