@@ -1,22 +1,22 @@
 {
-  buildGo120Module,
+  buildGo123Module,
   fetchFromGitHub,
   olm,
 }:
-buildGo120Module rec {
+buildGo123Module rec {
   pname = "mautrix-gmessages";
-  version = "0.2.4";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "gmessages";
     rev = "v${version}";
-    hash = "sha256-xKOHJU2QBdzdjeXGTk+WCF7JteknVhIgfyRyQP+oy8Y=";
+    hash = "sha256-Qh5jlvHOEtEt1IKfSYQsSWzfCrCoo8zVDCZDUZlPKEw=";
   };
 
   buildInputs = [olm];
 
-  vendorHash = "sha256-n766FoR2QJaKpaohz66948Mp0ZUu9O68EMzhXyAhA5o=";
+  vendorHash = "sha256-VA+PC7TCEGTXG9yRcroPIVQlA5lzq9GlNRgMNPWTMSg=";
 
   excludedPackages = ["./libgm"];
 

@@ -122,6 +122,16 @@
             // {
               ${containerName} = {
                 extraFlags = ["--network-namespace-path=/run/netns/${namespace}"] ++ (acc.${containerName}.extraFlags or []);
+                bindMounts = {
+                  "/etc/resolv.conf" = {
+                    hostPath = toString (pkgs.writeText "resolv.conf" ''
+                      nameserver 9.9.9.9
+                      nameserver 1.1.1.1
+                      nameserver 8.8.8.8
+                    '');
+                    isReadOnly = true;
+                  };
+                };
               };
             })
           acc
@@ -195,29 +205,36 @@
     };
 
     containers = containerConfigs;
+    os = {
+      environment.etc."netns/vpn/resolv.conf".text = ''
+        nameserver 9.9.9.9
+        nameserver 1.1.1.1
+        nameserver 8.8.8.8
+      '';
 
-    os.networking.wireguard.interfaces = wireguardConfigs;
+      networking.wireguard.interfaces = wireguardConfigs;
 
-    os.networking.nftables = {
-      enable = true;
-      tables = {
-        containers_local_internet_access = {
-          name = "containers_local_internet_access";
-          family = "ip";
-          enable = false;
+      networking.nftables = {
+        enable = true;
+        tables = {
+          containers_local_internet_access = {
+            name = "containers_local_internet_access";
+            family = "ip";
+            enable = false;
 
-          content = ''
-            chain postrouting {
-                type nat hook postrouting priority 100; policy accept;
-                ip saddr 10.10.15.11/24 masquerade
-            }
+            content = ''
+              chain postrouting {
+                  type nat hook postrouting priority 100; policy accept;
+                  ip saddr 10.10.15.11/24 masquerade
+              }
 
-            chain forward {
-                type filter hook forward priority 0; policy drop;
-                oifname "vethhost0" accept
-                iifname "vethhost0" accept
-            }
-          '';
+              chain forward {
+                  type filter hook forward priority 0; policy drop;
+                  oifname "vethhost0" accept
+                  iifname "vethhost0" accept
+              }
+            '';
+          };
         };
       };
     };

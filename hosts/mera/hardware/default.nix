@@ -51,7 +51,8 @@
       interfaces = {
         wlp3s0.useDHCP = false; # No WiFi !
         enp4s0 = {
-          useDHCP = true;
+          wakeOnLan.enable = true;
+          useDHCP = false;
           ipv4.addresses = [
             {
               address = "10.0.0.41";
@@ -60,7 +61,16 @@
           ];
         };
       };
+      defaultGateway = {
+        interface = "enp4s0";
+        address = "10.0.0.138";
+      };
     };
+    environment.etc."resolv.conf".text = ''
+      nameserver 9.9.9.9
+      nameserver 1.1.1.1
+      nameserver 8.8.8.8
+    '';
 
     boot.kernelParams = [
       # "nouveau.modeset=1"
@@ -70,29 +80,29 @@
 
     hardware.nvidia = {
       open = false;
-      modesetting.enable = true;
+      modesetting.enable = false;
       powerManagement = {
         enable = false;
         # finegrained = true;
       };
-      nvidiaSettings = true;
-      nvidiaPersistenced = true;
-      forceFullCompositionPipeline = true;
+      nvidiaSettings = false;
+      nvidiaPersistenced = false;
+      forceFullCompositionPipeline = false;
       package = osConfig.boot.kernelPackages.nvidiaPackages.stable;
       prime = {
-        offload.enable = true;
-        offload.enableOffloadCmd = true;
+        offload.enable = false;
+        offload.enableOffloadCmd = false;
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
       };
     };
-    services.xserver = {
-      videoDrivers = ["nvidia"];
-      # deviceSection = ''
-      #   Option "DRI" "2"
-      #   Option "TearFree" "true"
-      # '';
-    };
+    # services.xserver = {
+    #   videoDrivers = ["nvidia"];
+    #   # deviceSection = ''
+    #   #   Option "DRI" "2"
+    #   #   Option "TearFree" "true"
+    #   # '';
+    # };
 
     # specialisation = {
     #   nvidiaSync.configuration = {
@@ -114,14 +124,14 @@
           };
         };
       };
-      opentabletdriver.enable = true;
+      # opentabletdriver.enable = true;
 
       opengl = {
         enable = true;
-        driSupport = true;
-        driSupport32Bit = true;
-        extraPackages = with pkgs; [nvidia-vaapi-driver];
-        extraPackages32 = with pkgs.pkgsi686Linux; [nvidia-vaapi-driver];
+        # driSupport = true;
+        # driSupport32Bit = true;
+        # extraPackages = with pkgs; [nvidia-vaapi-driver];
+        # extraPackages32 = with pkgs.pkgsi686Linux; [nvidia-vaapi-driver];
         # extraPackages = with pkgs; [
         #   intel-media-driver
         #   # vaapiIntel

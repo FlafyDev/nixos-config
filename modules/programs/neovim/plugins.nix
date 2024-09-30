@@ -39,25 +39,25 @@
         prev.vimPlugins
         // (
           let
-            inherit (prev.vimUtils) buildVimPluginFrom2Nix;
+            inherit (prev.vimUtils) buildVimPlugin;
           in
             with inputs; {
-              lspsaga-nvim = buildVimPluginFrom2Nix {
+              lspsaga-nvim = buildVimPlugin {
                 pname = "lspsaga.nvim";
                 version = "git";
                 src = lspsaga-nvim;
               };
-              bufresize-nvim = buildVimPluginFrom2Nix {
+              bufresize-nvim = buildVimPlugin {
                 pname = "bufresize.nvim";
                 version = "git";
                 src = bufresize-nvim;
               };
-              tailwind-tools-nvim = buildVimPluginFrom2Nix {
+              tailwind-tools-nvim = buildVimPlugin {
                 pname = "tailwind-tools.nvim";
                 version = "git";
                 src = tailwind-tools;
               };
-              flutter-tools-nvim = buildVimPluginFrom2Nix {
+              flutter-tools-nvim = buildVimPlugin {
                 pname = "flutter-tools.nvim";
                 version = "git";
                 src = flutter-tools-nvim;
@@ -65,7 +65,7 @@
                 #   ./flutter-tools-no-resolve.patch
                 # ];
               };
-              transparent-nvim = buildVimPluginFrom2Nix {
+              transparent-nvim = buildVimPlugin {
                 pname = "transparent-nvim";
                 version = "git";
                 src = transparent-nvim;

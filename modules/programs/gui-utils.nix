@@ -81,7 +81,6 @@ in {
         lxde.lxrandr
         syncplay
         prismlauncher
-        unityhub
         thunderbird
         icu
         glib

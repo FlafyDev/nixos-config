@@ -20,7 +20,7 @@
   # TODO: Make it decentralized between configurations?
   hostnames = {
     "bara.lan1.${cfg.domains.personal}" = "10.0.0.35";
-    "mera.lan1.${cfg.domains.personal}" = "10.0.0.2";
+    "mera.lan1.${cfg.domains.personal}" = "10.0.0.41";
     "ope.lan1.${cfg.domains.personal}" = "10.0.0.15";
 
     "ope.wg_private.${cfg.domains.personal}" = "10.10.11.10";
@@ -31,8 +31,8 @@
     "mane.wg_vps.${cfg.domains.personal}" = "10.10.10.1";
     "mera.wg_vps.${cfg.domains.personal}" = "10.10.10.11";
 
-    "flafy.dev" = "167.71.36.213";
-    "flafy.me" = "167.71.36.213";
+    "flafy.dev" = "64.176.169.184";
+    "flafy.me" = "64.176.169.184";
   };
 in {
   options.localhosts = {
@@ -44,7 +44,7 @@ in {
       mapAttrsToList (name: value: "${value} ${name}")
       {
         "bara.lan1.${cfg.domains.personal}" = "10.0.0.35";
-        "mera.lan1.${cfg.domains.personal}" = "10.0.0.2";
+        "mera.lan1.${cfg.domains.personal}" = "10.0.0.41";
         "ope.lan1.${cfg.domains.personal}" = "10.0.0.15";
 
         "mane.wg_private.${cfg.domains.personal}" = "10.10.11.1";

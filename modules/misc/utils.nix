@@ -35,7 +35,8 @@ in {
 
   config = mkIf cfg.enable {
     _module.args.utils = utils';
-    _module.args.upkgs = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
+    # _module.args.upkgs = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
+    _module.args.upkgs = pkgs;
     # os.nixpkgs.overlays = [
     #   (_final: _prev: {
     #     utils = utils';

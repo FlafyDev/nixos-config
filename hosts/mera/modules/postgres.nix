@@ -1,6 +1,6 @@
 {...}: {
   os.environment.persistence = {
-    "/persist" = {
+    "/persist2" = {
       directories = [
         {
           directory = "/var/lib/postgresql";

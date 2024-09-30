@@ -9,15 +9,24 @@
   inherit (utils) domains;
   inherit (lib) optional pathExists;
 in {
+  # osModules = [
+  #   ({modulesPath, ...}: {
+  #     imports =
+  #       optional (pathExists ./do-userdata.nix) ./do-userdata.nix
+  #       ++ [
+  #         (modulesPath + "/virtualisation/digital-ocean-config.nix")
+  #       ];
+  #   })
+  # ];
   osModules = [
-    ({modulesPath, ...}: {
-      imports =
-        optional (pathExists ./do-userdata.nix) ./do-userdata.nix
-        ++ [
-          (modulesPath + "/virtualisation/digital-ocean-config.nix")
-        ];
-    })
+    ./hardware
   ];
+
+  os.boot.loader.grub = {
+    enable = true;
+    efiSupport = false;
+    device = "/dev/vda";
+  };
 
   os.networking.nftables = {
     enable = true;
@@ -82,8 +91,6 @@ in {
       };
     };
   };
-
-  os.virtualisation.digitalOcean.setSshKeys = false;
 
   os.system.stateVersion = "23.05";
   hm.home.stateVersion = "23.05";

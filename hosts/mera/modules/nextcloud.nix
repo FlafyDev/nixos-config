@@ -12,10 +12,6 @@
           user = "root";
           group = "root";
         }
-      ];
-    };
-    "/persist" = {
-      directories = [
         {
           directory = "/var/lib/redis-nextcloud";
           user = "root";

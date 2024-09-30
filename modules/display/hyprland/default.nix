@@ -38,7 +38,7 @@ in {
     };
     fromNixpkgs = mkOption {
       type = with types; bool;
-      default = true;
+      default = false;
       description = ''
         Get hyprland from nixpkgs
       '';
@@ -60,7 +60,7 @@ in {
           # url = "github:hyprwm/Hyprland/045c3fbd854090b2b60ca025fedd3e62498ed1ec";
           # url = "github:hyprwm/Hyprland/53afa0bb62888aa3580a1e0d9e3bce5d05b9af80?submodules=1";
 
-          url = "github:hyprwm/Hyprland";
+          url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
           # url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
           # inputs.nixpkgs.follows = "nixpkgs";
         };
@@ -73,6 +73,9 @@ in {
 
       os = {
         xdg.portal.enable = true;
+        xdg.portal.extraPortals = with pkgs; [
+          xdg-desktop-portal-gtk
+        ];
         programs.hyprland = {
           enable = true;
           package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
@@ -103,16 +106,15 @@ in {
             "easeInOut,.5,0,.5,1"
           ];
           env = mapAttrsToList (name: value: "${name},${toString value}") {
-            WLR_NO_HARDWARE_CURSORS = 1; # For Sunshine... Let's see if I notice anything...
+            # WLR_NO_HARDWARE_CURSORS = 1; # For Sunshine... Let's see if I notice anything...
             SDL_VIDEODRIVER = "wayland";
             _JAVA_AWT_WM_NONREPARENTING = 1;
-            WLR_DRM_NO_ATOMIC = 1;
+            # WLR_DRM_NO_ATOMIC = 1;
             XCURSOR_SIZE = 24;
             CLUTTER_BACKEND = "wayland";
             XDG_SESSION_TYPE = "wayland";
             QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
             MOZ_ENABLE_WAYLAND = "1";
-            WLR_BACKEND = "vulkan";
             QT_QPA_PLATFORM = "wayland";
             GDK_BACKEND = "wayland";
             TERM = "foot";

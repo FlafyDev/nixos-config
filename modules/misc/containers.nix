@@ -114,6 +114,7 @@ in {
                   hostPath = toString (pkgs.writeText "resolv.conf" ''
                     nameserver 9.9.9.9
                     nameserver 1.1.1.1
+                    nameserver 8.8.8.8
                   '');
                   isReadOnly = true;
                 };

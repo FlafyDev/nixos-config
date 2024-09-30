@@ -32,11 +32,13 @@ in {
       offload-gpu = pkgs.writeShellScriptBin "offload-gpu" ''
         export DRI_PRIME="pci-0000_03_00_0"
         export WLR_DRM_DEVICES=$(readlink -f "/dev/dri/by-path/pci-0000:03:00.0-card")
+        export AQ_DRM_DEVICES=$(readlink -f "/dev/dri/by-path/pci-0000:03:00.0-card")
         exec "$@"
       '';
       offload-igpu = pkgs.writeShellScriptBin "offload-igpu" ''
         export DRI_PRIME="pci-0000_12_00_0"
         export WLR_DRM_DEVICES=$(readlink -f "/dev/dri/by-path/pci-0000:12:00.0-card")
+        export AQ_DRM_DEVICES=$(readlink -f "/dev/dri/by-path/pci-0000:12:00.0-card")
         exec "$@"
       '';
       gpu-rebind = pkgs.writeShellScriptBin "gpu-rebind" ''
@@ -136,19 +138,27 @@ in {
     # Networking
     networking = {
       interfaces.enp14s0 = {
-        # ipv4.addresses = [
-        #   {
-        #     address = "10.0.0.42";
-        #     prefixLength = 24;
-        #   }
-        # ];
+        ipv4.addresses = [
+          {
+            address = "10.0.0.42";
+            prefixLength = 24;
+          }
+        ];
         wakeOnLan.enable = true;
+      };
+      defaultGateway = {
+        interface = "enp14s0";
+        address = "10.0.0.138";
       };
       networkmanager = {
         enable = true;
-        # insertNameservers = ["1.1.1.1"];
       };
     };
+    environment.etc."resolv.conf".text = ''
+      nameserver 9.9.9.9
+      nameserver 1.1.1.1
+      nameserver 8.8.8.8
+    '';
 
     # Audio
     hardware.pulseaudio.enable = false;

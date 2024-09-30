@@ -24,13 +24,6 @@
         # '');
         isReadOnly = true;
       };
-      "/etc/resolv.conf" = {
-        hostPath = toString (pkgs.writeText "resolv.conf" ''
-          nameserver 9.9.9.9
-          nameserver 1.1.1.1
-        '');
-        isReadOnly = true;
-      };
     };
 
     config = {lib, ...}: {
