@@ -21,7 +21,7 @@ in {
     port = 58846;
   };
 
-  os.nixpkgs.config.permittedInsecurePackages = [
+  insecure.allowed = [
     "nodejs-16.20.2"
   ];
 

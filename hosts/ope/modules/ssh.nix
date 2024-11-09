@@ -36,6 +36,10 @@ in {
         identitiesOnly = true;
         identityFile = [ssh.ope.ope_flafydev_github.private];
       };
+      "u432478.your-storagebox.de" = {
+        identitiesOnly = true;
+        identityFile = [ssh.ope.ope_to_sb1.private];
+      };
     };
 
     server = {

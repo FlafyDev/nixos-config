@@ -16,7 +16,7 @@ in {
   # boot.enableContainers = false;
 
   secrets.enable = true;
-  printers.enable = true;
+  # printers.enable = true;
 
   networking.enable = true;
 

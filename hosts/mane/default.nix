@@ -57,6 +57,8 @@ in {
   users.host = "mane";
 
   networking.allowedPorts.tcp."4000" = ["*"];
+  networking.allowedPorts.tcp."25" = ["*"];
+  networking.allowedPorts.udp."25" = ["*"];
   os = {
     services = {
       grafana = {

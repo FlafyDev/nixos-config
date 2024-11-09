@@ -82,6 +82,10 @@ in
       mera.user
       master
     ];
+    "other/restic-sb1-backups-password".publicKeys = [
+      mera.user
+      master
+    ];
 
     # sshKeys.publicKeys = [
     #   ope.user

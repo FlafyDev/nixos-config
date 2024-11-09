@@ -141,6 +141,12 @@ in {
               owner = "slskd";
               group = "root";
             };
+            restic-sb1-backups-password = {
+              file = concatPaths [secretsDir "other" "restic-sb1-backups-password"];
+              mode = "440";
+              owner = "restic";
+              group = "restic";
+            };
           };
 
         os.age.identityPaths = [

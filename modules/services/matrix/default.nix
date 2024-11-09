@@ -18,6 +18,10 @@ in {
   };
 
   config = mkIf cfg.enable {
+    insecure.allowed = [
+      "olm-3.2.16"
+    ];
+
     osModules = [
       ./mautrix-gmessages/service.nix
     ];
@@ -166,8 +170,8 @@ in {
           # chown matrix-synapse:matrix-synapse \
           #   /var/lib/matrix-synapse/telegram-registration.yaml
           # "/var/lib/matrix-synapse/telegram-registration.yaml"
-          "/var/lib/matrix-appservice-irc/registration.yml"
-          "/var/lib/mautrix-whatsapp/whatsapp-registration.yaml"
+          # "/var/lib/matrix-appservice-irc/registration.yml"
+          # "/var/lib/mautrix-whatsapp/whatsapp-registration.yaml"
           "/var/lib/mautrix-gmessages/gmessages-registration.yaml"
           # automatically does that: (registerToSynapse)
           # "/var/lib/mautrix-meta-instagram/meta-registration.yaml"
@@ -331,72 +335,85 @@ in {
       };
     };
 
-    os.services.matrix-appservice-irc = {
-      enable = true;
-      needBindingCap = true; # to bind to ident on 113
-
-      settings = {
-        homeserver = {
-          url = "http://[::1]:8008";
-          domain = cfg.host;
-        };
-        database = {
-          engine = "postgres";
-          connectionString = "postgres://10.10.15.10:5432/matrix-irc?sslmode=disable";
-        };
-        ircService = {
-          mediaProxy = {
-            bindPort = 8007;
-            publicUrl = "https://matrix.${cfg.host}/_irc-media/";
-            ttl = 0;
-          };
-          ident.enabled = true;
-          permissions = {
-            ${cfg.host} = "admin";
-            "@admin:${cfg.host}" = "admin";
-          };
-        };
-        # bridge = {
-        #   displayname_template = "{{or .FullName .PushName .Phone .BusinessName .JID}} (IRC)";
-        #   personal_filtering_spaces = true;
-        #   delivery_receipts = true;
-        #   message_error_notices = true;
-        #   identity_change_notices = true;
-        #   hystory_sync = {
-        #     backfill = true;
-        #     request_full_sync = true;
-        #   };
-        #   login_shared_secret_map = {
-        #     "flafy.dev" = "as_token:meow";
-        #   };
-        #   user_avatar_sync = true;
-        #   sync_with_custom_puppets = true;
-        #   sync_direct_chat_list = true;
-        #   sync_manual_marked_unread = true;
-        #   private_chat_portal_meta = "always";
-        #   mute_bridging = true;
-        #   parallel_member_sync = true;
-        #   pinned_tag = "m.favourite";
-        #   archive_tag = "m.lowpriority";
-        #   allow_user_invite = true;
-        #   url_previews = true;
-        #   extev_polls = true;
-        #   cross_room_replies = true;
-        #   encryption = {
-        #     allow = true;
-        #     default = true;
-        #     appservice = false;
-        #     require = true;
-        #     allow_key_sharing = true;
-        #   };
-        #   permissions = {
-        #     ${cfg.host} = "user";
-        #     "@admin:${cfg.host}" = "admin";
-        #   };
-        #   relay.enabled = true;
-        # };
-      };
-    };
+    # os.services.matrix-appservice-irc = {
+    #   enable = true;
+    #   needBindingCap = true; # to bind to ident on 113
+    #
+    #   settings = {
+    #     homeserver = {
+    #       url = "http://[::1]:8008";
+    #       domain = cfg.host;
+    #     };
+    #     database = {
+    #       engine = "postgres";
+    #       connectionString = "postgres://10.10.15.10:5432/matrix-irc?sslmode=disable";
+    #     };
+    #     ircService = {
+    #       servers = {
+    #         "irc.libera.chat" = {
+    #           name = "Libera.Chat";
+    #           address = "irc.libera.chat";
+    #           port = 6667;
+    #           tls = false;
+    #           password = "";
+    #           nick = "matrixbot";
+    #           username = "matrixbot";
+    #           realname = "Matrix IRC Bridge";
+    #           joinChannels = ["#matrix"];
+    #         };
+    #       };
+    #       mediaProxy = {
+    #         bindPort = 8007;
+    #         publicUrl = "https://matrix.${cfg.host}/_irc-media/";
+    #         ttl = 0;
+    #       };
+    #       ident.enabled = true;
+    #       permissions = {
+    #         ${cfg.host} = "admin";
+    #         "@admin:${cfg.host}" = "admin";
+    #       };
+    #     };
+    #     # bridge = {
+    #     #   displayname_template = "{{or .FullName .PushName .Phone .BusinessName .JID}} (IRC)";
+    #     #   personal_filtering_spaces = true;
+    #     #   delivery_receipts = true;
+    #     #   message_error_notices = true;
+    #     #   identity_change_notices = true;
+    #     #   hystory_sync = {
+    #     #     backfill = true;
+    #     #     request_full_sync = true;
+    #     #   };
+    #     #   login_shared_secret_map = {
+    #     #     "flafy.dev" = "as_token:meow";
+    #     #   };
+    #     #   user_avatar_sync = true;
+    #     #   sync_with_custom_puppets = true;
+    #     #   sync_direct_chat_list = true;
+    #     #   sync_manual_marked_unread = true;
+    #     #   private_chat_portal_meta = "always";
+    #     #   mute_bridging = true;
+    #     #   parallel_member_sync = true;
+    #     #   pinned_tag = "m.favourite";
+    #     #   archive_tag = "m.lowpriority";
+    #     #   allow_user_invite = true;
+    #     #   url_previews = true;
+    #     #   extev_polls = true;
+    #     #   cross_room_replies = true;
+    #     #   encryption = {
+    #     #     allow = true;
+    #     #     default = true;
+    #     #     appservice = false;
+    #     #     require = true;
+    #     #     allow_key_sharing = true;
+    #     #   };
+    #     #   permissions = {
+    #     #     ${cfg.host} = "user";
+    #     #     "@admin:${cfg.host}" = "admin";
+    #     #   };
+    #     #   relay.enabled = true;
+    #     # };
+    #   };
+    # };
 
     os.services.mautrix-whatsapp = {
       enable = true;

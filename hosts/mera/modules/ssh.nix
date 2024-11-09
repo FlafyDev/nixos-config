@@ -13,6 +13,10 @@
         identitiesOnly = true;
         identityFile = [ssh.mera.mera_to_ope.private];
       };
+      "u432478.your-storagebox.de" = {
+        identitiesOnly = true;
+        identityFile = [ssh.mera.mera_to_sb1.private];
+      };
     };
 
     server = {

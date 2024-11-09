@@ -147,7 +147,7 @@ in {
           };
           input = {
             follow_mouse = 1;
-            force_no_accel = 1;
+            # force_no_accel = 1;
             repeat_delay = 200;
             repeat_rate = 40;
 
@@ -155,12 +155,12 @@ in {
               natural_scroll = false;
             };
 
+            sensitivity = -1.0;
             # kb_layout = us,il
             # kb_options = grp:sclk_toggle
             kb_file = toString ./keyboard.xkb;
           };
           general = {
-            sensitivity = 0.2;
 
             gaps_in = 1;
             gaps_out = 2;
@@ -309,6 +309,18 @@ in {
             "SUPER,mouse:272,movewindow"
             "SUPER,mouse:273,resizewindow"
           ];
+          # device = [
+          #   {
+          #     name = "logitech-g502-hero-gaming-mouse";
+          #     accel_profile = "flat";
+          #     sensitivity = 0.2;
+          #   }
+          #   {
+          #     name = "logitech-g502-hero-gaming-mouse-keyboard-1";
+          #     accel_profile = "flat";
+          #     sensitivity = 0.2;
+          #   }
+          # ];
           windowrulev2 = let
             rulesForWindow = window: map (rule: "${rule},${window}");
           in
