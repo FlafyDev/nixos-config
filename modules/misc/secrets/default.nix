@@ -123,12 +123,6 @@ in {
               owner = "virtualMail";
               group = "virtualMail";
             };
-            matrix-sliding-sync = {
-              file = concatPaths [secretsDir "other" "matrix_sliding_sync_secret.age"];
-              mode = "440";
-              owner = "matrix-sliding-sync";
-              group = "matrix-sliding-sync";
-            };
             lastfm-flafydev = {
               file = concatPaths [secretsDir "other" "lastfm-flafydev.age"];
               mode = "440";

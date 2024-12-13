@@ -99,6 +99,12 @@ in {
                 proxyPass = "http://127.0.0.1:40004";
               };
             };
+            "showcase.${domains.personal}" = {
+              addSSL = true;
+              locations."/" = {
+                proxyPass = "http://127.0.0.1:8080";
+              };
+            };
             "emoji.${domains.personal}" = {
               addSSL = true;
               locations."/" = {

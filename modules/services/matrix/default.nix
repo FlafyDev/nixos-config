@@ -242,37 +242,37 @@ in {
       };
     };
 
-    os.services.mautrix-meta = {
-      instances = {
-        instagram = {
-          enable = true;
-          registerToSynapse = true;
-          settings = {
-            homeserver = {
-              address = "http://[::1]:8008";
-              domain = cfg.host;
-            };
-            appservice = {
-              database = {
-                type = "postgres";
-                uri = "postgres://10.10.15.10:5432/mautrix-meta-instagram?sslmode=disable";
-              };
-            };
-            bridge = {
-              displayname_template = "{{or .DisplayName .Username \"Unknown user\"}} (IG)";
-              delivery_receipts = true;
-              login_shared_secret_map = {
-                "flafy.dev" = "as_token:meow";
-              };
-              permissions = {
-                ${cfg.host} = "user";
-                "@admin:${cfg.host}" = "admin";
-              };
-            };
-          };
-        };
-      };
-    };
+    # os.services.mautrix-meta = {
+    #   instances = {
+    #     instagram = {
+    #       enable = true;
+    #       registerToSynapse = true;
+    #       settings = {
+    #         homeserver = {
+    #           address = "http://[::1]:8008";
+    #           domain = cfg.host;
+    #         };
+    #         appservice = {
+    #           database = {
+    #             type = "postgres";
+    #             uri = "postgres://10.10.15.10:5432/mautrix-meta-instagram?sslmode=disable";
+    #           };
+    #         };
+    #         bridge = {
+    #           displayname_template = "{{or .DisplayName .Username \"Unknown user\"}} (IG)";
+    #           delivery_receipts = true;
+    #           login_shared_secret_map = {
+    #             "flafy.dev" = "as_token:meow";
+    #           };
+    #           permissions = {
+    #             ${cfg.host} = "user";
+    #             "@admin:${cfg.host}" = "admin";
+    #           };
+    #         };
+    #       };
+    #     };
+    #   };
+    # };
 
     os.services.mautrix-gmessages = {
       enable = true;
@@ -476,14 +476,6 @@ in {
           relay.enabled = true;
         };
       };
-    };
-
-    os.services.matrix-sliding-sync = {
-      enable = true;
-      createDatabase = false;
-      settings.SYNCV3_SERVER = "https://matrix.${cfg.host}";
-      settings.SYNCV3_BINDADDR = "127.0.0.1:8009";
-      environmentFile = secrets.matrix-sliding-sync;
     };
   };
 }

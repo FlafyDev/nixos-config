@@ -69,11 +69,6 @@ in
       mera.user
       master
     ];
-    # SYNCV3_SECRET=$(openssl rand -base64 32)
-    "other/matrix_sliding_sync_secret.age".publicKeys = [
-      mera.user
-      master
-    ];
     "other/lastfm-flafydev.age".publicKeys = [
       mera.user
       master

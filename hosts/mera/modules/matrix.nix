@@ -47,7 +47,6 @@ in {
       "/var/lib/mautrix-gmessages".isReadOnly = false;
       "/var/lib/mautrix-meta-instagram".isReadOnly = false;
       "/var/lib/matrix-appservice-irc".isReadOnly = false;
-      ${secrets.matrix-sliding-sync}.isReadOnly = true;
     };
     config = _: {
       services.matrix = {
