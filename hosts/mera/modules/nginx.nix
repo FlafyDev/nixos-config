@@ -9,7 +9,7 @@
   inherit (utils) resolveHostname getHostname domains;
   inherit (lib) mkOption types mkDefault;
 in {
-  networking.vpnNamespace.vpn.ports.tcp = ["80" "443"];
+  # networking.vpnNamespace.vpn.ports.tcp = ["80" "443"];
 
   os.environment.persistence = {
     "/persist2" = {
@@ -23,12 +23,12 @@ in {
     };
   };
 
-  networking.forwardPorts = {
-    "10.0.0.15" = {
-      tcp = ["5556"];
-      masquerade = true;
-    };
-  };
+  # networking.forwardPorts = {
+  #   "10.0.0.15" = {
+  #     tcp = ["5556"];
+  #     masquerade = true;
+  #   };
+  # };
 
   containers.maneVpn2 = {
     bindMounts = {

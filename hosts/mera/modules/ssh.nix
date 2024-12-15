@@ -3,7 +3,7 @@
   config,
   ...
 }: {
-  networking.allowedPorts.tcp."22" = ["*"];
+  # networking.allowedPorts.tcp."22" = ["*"];
   programs.ssh = {
     enable = true;
     sftp.enable = true;

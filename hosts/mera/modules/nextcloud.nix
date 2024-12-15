@@ -25,7 +25,7 @@
       ];
     };
   };
-  networking.allowedPorts.tcp."5000" = ["*"];
+  # networking.allowedPorts.tcp."5000" = ["*"];
   unfree.allowed = ["corefonts"];
   os.environment.etc."temp-nextcloud-admin-pass".text = "PWD";
   os.services = {

@@ -21,9 +21,11 @@
   hostnames = {
     "bara.lan1.${cfg.domains.personal}" = "10.0.0.35";
     "mera.lan1.${cfg.domains.personal}" = "10.0.0.41";
-    "ope.lan1.${cfg.domains.personal}" = "10.0.0.15";
+    "ope.lan1.${cfg.domains.personal}" = "10.0.0.42";
 
+    "mane.wg_private.${cfg.domains.personal}" = "10.10.11.1";
     "ope.wg_private.${cfg.domains.personal}" = "10.10.11.10";
+    "mera.wg_private.${cfg.domains.personal}" = "10.10.11.11";
     "bara.wg_private.${cfg.domains.personal}" = "10.10.11.12";
     "noro.wg_private.${cfg.domains.personal}" = "10.10.11.13";
 
@@ -31,8 +33,7 @@
     "mane.wg_vps.${cfg.domains.personal}" = "10.10.10.1";
     "mera.wg_vps.${cfg.domains.personal}" = "10.10.10.11";
 
-    "flafy.dev" = "64.176.169.184";
-    "flafy.me" = "64.176.169.184";
+    ${cfg.domains.personal} = "64.176.167.110";
   };
 in {
   options.localhosts = {
@@ -41,25 +42,11 @@ in {
 
   config = mkIf cfg.enable {
     os.networking.extraHosts = concatStringsSep "\n" (
-      mapAttrsToList (name: value: "${value} ${name}")
-      {
-        "bara.lan1.${cfg.domains.personal}" = "10.0.0.35";
-        "mera.lan1.${cfg.domains.personal}" = "10.0.0.41";
-        "ope.lan1.${cfg.domains.personal}" = "10.0.0.15";
-
-        "mane.wg_private.${cfg.domains.personal}" = "10.10.11.1";
-        "ope.wg_private.${cfg.domains.personal}" = "10.10.11.10";
-        "mera.wg_private.${cfg.domains.personal}" = "10.10.11.11";
-        "bara.wg_private.${cfg.domains.personal}" = "10.10.11.12";
-
-        "ope.wg_vps.${cfg.domains.personal}" = "10.10.10.10";
-        "mane.wg_vps.${cfg.domains.personal}" = "10.10.10.1";
-        "mera.wg_vps.${cfg.domains.personal}" = "10.10.10.11";
-      }
+      mapAttrsToList (name: value: "${value} ${name}") (removeAttrs hostnames [cfg.domains.personal])
     );
 
     utils.extraUtils = rec {
-      resolveHostname = hostname: hostnames.${hostname} or hostnames.${getHostname hostname} or hostname;
+      resolveHostname = hostname: hostnames.${hostname} or hostnames.${getHostname hostname};
       getHostname = hostname: let
         possibleHostnames = ["${hostname}.${cfg.domains.personal}"];
       in

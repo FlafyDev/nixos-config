@@ -25,5 +25,5 @@ in {
     "nodejs-16.20.2"
   ];
 
-  networking.allowedPorts.tcp."58846" = [(getHostname "ope.wg_private")];
+  # networking.allowedPorts.tcp."58846" = [(getHostname "ope.wg_private")];
 }

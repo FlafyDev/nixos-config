@@ -6,14 +6,14 @@
 }: let
   inherit (lib) mkForce;
 in {
-  networking.vpnNamespace = {
-    vpn = {
-      containers = ["maneVpn2"];
-      vpnHost = "mane";
-      vpnWgInterface = "wg_vps";
-      lanForward = true;
-    };
-  };
+  # networking.vpnNamespace = {
+  #   vpn = {
+  #     containers = ["maneVpn2"];
+  #     vpnHost = "mane";
+  #     vpnWgInterface = "wg_vps";
+  #     lanForward = true;
+  #   };
+  # };
 
   
   services.postgres.comb = config.containers.maneVpn2.config.cmConfig.services.postgres.comb;

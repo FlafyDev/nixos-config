@@ -28,37 +28,37 @@ in {
     device = "/dev/vda";
   };
 
-  os.networking.nftables = {
-    enable = true;
-    tables = {
-      traceall = {
-        name = "traceall";
-        family = "ip";
-        enable = true;
+  # os.networking.nftables = {
+  #   enable = true;
+  #   tables = {
+  #     traceall = {
+  #       name = "traceall";
+  #       family = "ip";
+  #       enable = true;
+  #
+  #       content = ''
+  #         chain prerouting {
+  #             type filter hook prerouting priority -350; policy accept;
+  #             meta nftrace set 1
+  #         }
+  #
+  #         chain output {
+  #             type filter hook output priority -350; policy accept;
+  #             meta nftrace set 1
+  #         }
+  #       '';
+  #     };
+  #   };
+  # };
 
-        content = ''
-          chain prerouting {
-              type filter hook prerouting priority -350; policy accept;
-              meta nftrace set 1
-          }
-
-          chain output {
-              type filter hook output priority -350; policy accept;
-              meta nftrace set 1
-          }
-        '';
-      };
-    };
-  };
-
-  networking.enable = true;
+  # networking.enable = true;
 
   users.main = "vps";
   users.host = "mane";
 
-  networking.allowedPorts.tcp."4000" = ["*"];
-  networking.allowedPorts.tcp."25" = ["*"];
-  networking.allowedPorts.udp."25" = ["*"];
+  # networking.allowedPorts.tcp."4000" = ["*"];
+  # networking.allowedPorts.tcp."25" = ["*"];
+  # networking.allowedPorts.udp."25" = ["*"];
   os = {
     services = {
       grafana = {

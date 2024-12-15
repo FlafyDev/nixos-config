@@ -45,84 +45,84 @@ in {
 
   macos.enable = true;
 
-  containers.showcaseBot = {
-    autoStart = true;
-
-    bindMounts = {
-      "/home/flafy/Games" = {
-        isReadOnly = false;
-      };
-      "/home/flafy/repos/flafydev/showcase-bot" = {
-        isReadOnly = false;
-      };
-      "/dev/dri" = {
-        isReadOnly = false;
-      };
-      "/run/opengl-driver" = {
-        isReadOnly = true;
-      };
-    };
-
-    allowedDevices = [
-      {
-        modifier = "rw";
-        node = "/dev/dri/renderD128";
-      }
-      {
-        modifier = "rw";
-        node = "/dev/dri/renderD129";
-      }
-      {
-        modifier = "rw";
-        node = "/dev/dri/card0";
-      }
-      {
-        modifier = "rw";
-        node = "/dev/dri/card1";
-      }
-    ];
-
-    # ephemeral = false;
-
-    specialArgs = {
-      inherit secrets;
-    };
-    # allowedDevices = [
-    #   {
-    #     modifier = "rw";
-    #     node = "/dev/dri/renderD128";
-    #   }
-    #   {
-    #     modifier = "rw";
-    #     node = "/dev/dri/card0";
-    #   }
-    # ];
-
-    config = {lib, ...}: {
-      users.main = "showcasebot";
-      networking.enable = true;
-      os = {
-        system.stateVersion = "23.11";
-        services = {
-          pipewire = {
-            # systemWide = true;
-            enable = true;
-            alsa.enable = true;
-            alsa.support32Bit = true;
-            pulse.enable = true;
-          };
-        };
-        environment.systemPackages = with pkgs; [
-          dart
-          wineWowPackages.unstable
-          cage
-          wf-recorder
-          wlr-randr
-          pulseaudio
-        ];
-      };
-    };
-  };
+  # containers.showcaseBot = {
+  #   autoStart = true;
+  #
+  #   bindMounts = {
+  #     "/home/flafy/Games" = {
+  #       isReadOnly = false;
+  #     };
+  #     "/home/flafy/repos/flafydev/showcase-bot" = {
+  #       isReadOnly = false;
+  #     };
+  #     "/dev/dri" = {
+  #       isReadOnly = false;
+  #     };
+  #     "/run/opengl-driver" = {
+  #       isReadOnly = true;
+  #     };
+  #   };
+  #
+  #   allowedDevices = [
+  #     {
+  #       modifier = "rw";
+  #       node = "/dev/dri/renderD128";
+  #     }
+  #     {
+  #       modifier = "rw";
+  #       node = "/dev/dri/renderD129";
+  #     }
+  #     {
+  #       modifier = "rw";
+  #       node = "/dev/dri/card0";
+  #     }
+  #     {
+  #       modifier = "rw";
+  #       node = "/dev/dri/card1";
+  #     }
+  #   ];
+  #
+  #   # ephemeral = false;
+  #
+  #   specialArgs = {
+  #     inherit secrets;
+  #   };
+  #   # allowedDevices = [
+  #   #   {
+  #   #     modifier = "rw";
+  #   #     node = "/dev/dri/renderD128";
+  #   #   }
+  #   #   {
+  #   #     modifier = "rw";
+  #   #     node = "/dev/dri/card0";
+  #   #   }
+  #   # ];
+  #
+  #   config = {lib, ...}: {
+  #     users.main = "showcasebot";
+  #     networking.enable = true;
+  #     os = {
+  #       system.stateVersion = "23.11";
+  #       services = {
+  #         pipewire = {
+  #           # systemWide = true;
+  #           enable = true;
+  #           alsa.enable = true;
+  #           alsa.support32Bit = true;
+  #           pulse.enable = true;
+  #         };
+  #       };
+  #       environment.systemPackages = with pkgs; [
+  #         dart
+  #         wineWowPackages.unstable
+  #         cage
+  #         wf-recorder
+  #         wlr-randr
+  #         pulseaudio
+  #       ];
+  #     };
+  #   };
+  # };
 
   # os.services.pipewire.wireplumber.extraLuaConfig.bluetooth."headphones-no-switch" = ''
   #   wireplumber.settings = {
@@ -309,17 +309,17 @@ in {
   # TCP: 47984, 47989, 48010
   # UDP: 47998-48000, 48002, 48010
 
-  networking.allowedPorts.tcp."5556" = ["ope.lan1" "0.0.0.0"];
-  networking.forwardPorts = {
-    "127.0.0.1" = {
-      tcp = ["5556"];
-      masquerade = true;
-    };
-  };
-  networking.allowedPorts.tcp."51797" = ["0.0.0.0"];
-  networking.allowedPorts.udp."51797" = ["0.0.0.0"];
-  networking.vpnNamespace.vpn.ports.tcp = ["51797"];
-  networking.vpnNamespace.vpn.ports.udp = ["51797"];
+  # networking.allowedPorts.tcp."5556" = ["ope.lan1" "0.0.0.0"];
+  # networking.forwardPorts = {
+  #   "127.0.0.1" = {
+  #     tcp = ["5556"];
+  #     masquerade = true;
+  #   };
+  # };
+  # networking.allowedPorts.tcp."51797" = ["0.0.0.0"];
+  # networking.allowedPorts.udp."51797" = ["0.0.0.0"];
+  # networking.vpnNamespace.vpn.ports.tcp = ["51797"];
+  # networking.vpnNamespace.vpn.ports.udp = ["51797"];
 
   # networking.allowedPorts.tcp."47984,47989,48010" = [(getHostname "ope.wg_private")];
   # networking.allowedPorts.udp."47998-48000" = [(getHostname "ope.wg_private")];
@@ -343,7 +343,7 @@ in {
 
   assets.enable = true;
 
-  networking.enable = true;
+  # networking.enable = true;
 
   secrets.enable = true;
 

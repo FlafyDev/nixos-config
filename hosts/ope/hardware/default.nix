@@ -136,24 +136,6 @@ in {
     # };
 
     # Networking
-    networking = {
-      interfaces.enp14s0 = {
-        ipv4.addresses = [
-          {
-            address = "10.0.0.42";
-            prefixLength = 24;
-          }
-        ];
-        wakeOnLan.enable = true;
-      };
-      defaultGateway = {
-        interface = "enp14s0";
-        address = "10.0.0.138";
-      };
-      networkmanager = {
-        enable = true;
-      };
-    };
     environment.etc."resolv.conf".text = ''
       nameserver 9.9.9.9
       nameserver 1.1.1.1

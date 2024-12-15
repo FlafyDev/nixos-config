@@ -1,5 +1,5 @@
 _: {
-  networking.vpnNamespace.vpn.ports.tcp = ["40004" "3001"];
+  # networking.vpnNamespace.vpn.ports.tcp = ["40004" "3001"];
   os.environment.persistence = {
     "/persist2" = {
       hideMounts = true;

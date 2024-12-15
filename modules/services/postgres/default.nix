@@ -61,7 +61,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.allowedPorts.tcp."5432" = ["*"];
+    # networking.allowedPorts.tcp."5432" = ["*"];
     os.services.postgresql = {
       enable = true;
       package = pkgs.postgresql_14;

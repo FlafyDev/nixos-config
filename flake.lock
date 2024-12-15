@@ -1364,6 +1364,19 @@
         "type": "github"
       }
     },
+    "nixpkgs_8": {
+      "locked": {
+        "lastModified": 1686412476,
+        "narHash": "sha256-inl9SVk6o5h75XKC79qrDCAobTD1Jxh6kVYTZKHzewA=",
+        "path": "/nix/store/5s6rf5223pjb0bhp6v7i1x0w3y1k56fq-source",
+        "rev": "21951114383770f96ae528d0ae68824557768e81",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
     "nixtheplanet": {
       "inputs": {
         "flake-parts": "flake-parts_7",
@@ -1382,6 +1395,25 @@
       "original": {
         "owner": "matthewcroughan",
         "repo": "nixtheplanet",
+        "type": "github"
+      }
+    },
+    "notnft": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_8"
+      },
+      "locked": {
+        "lastModified": 1726605850,
+        "narHash": "sha256-bm6d/P/xRefnxD2tQwTfli/PByvqIQOZREvIcP0NZQY=",
+        "owner": "chayleaf",
+        "repo": "notnft",
+        "rev": "7d72e0b5c268921da51388fe1e4180637c3ae97d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chayleaf",
+        "repo": "notnft",
+        "rev": "7d72e0b5c268921da51388fe1e4180637c3ae97d",
         "type": "github"
       }
     },
@@ -1505,6 +1537,7 @@
         "nixpkgs-bara": "nixpkgs-bara",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixtheplanet": "nixtheplanet",
+        "notnft": "notnft",
         "nur": "nur",
         "tailwind-tools": "tailwind-tools",
         "tempnixpkgs": "tempnixpkgs",

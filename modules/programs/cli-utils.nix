@@ -7,7 +7,7 @@
 }: let
   cfg = config.programs.cli-utils;
   inherit (lib) mkEnableOption mkIf;
-  inherit (utils) getHostname domains;
+  inherit (utils) getHostname domains resolveHostname;
 in {
   options.programs.cli-utils = {
     enable = mkEnableOption "cli-utils";
@@ -42,7 +42,7 @@ in {
             ssh_host="${getHostname "mera.lan1"}"
             ;;
           "mane")
-            ssh_host="${domains.personal}"
+            ssh_host="${resolveHostname domains.personal}"
             ;;
           "ope")
             exit 1

@@ -1,5 +1,5 @@
 _: {
-  networking.allowedPorts.tcp."8096" = ["*"];
+  # networking.allowedPorts.tcp."8096" = ["*"];
 
   os.services.jellyfin = {
     enable = true;

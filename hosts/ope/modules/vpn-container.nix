@@ -4,14 +4,14 @@
   lib,
   ...
 }: {
-  networking.vpnNamespace = {
-    vpn = {
-      containers = ["maneVpn"];
-      vpnHost = "mane";
-      vpnWgInterface = "wg_vps";
-      lanForward = true;
-    };
-  };
+  # networking.vpnNamespace = {
+  #   vpn = {
+  #     containers = ["maneVpn"];
+  #     vpnHost = "mane";
+  #     vpnWgInterface = "wg_vps";
+  #     lanForward = true;
+  #   };
+  # };
 
   containers.maneVpn = {
     autoStart = true;

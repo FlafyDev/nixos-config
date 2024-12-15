@@ -29,7 +29,7 @@ in {
   # os.hardware.opengl.package = pkgsBara.mesa;
 
   networking.enable = true;
-  networking.allowedPorts.tcp."22" = ["*"];
+  # networking.allowedPorts.tcp."22" = ["*"];
   os.environment.systemPackages = [
     pkgs.moonlight-qt
     pkgs.v4l-utils

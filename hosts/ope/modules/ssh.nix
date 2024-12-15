@@ -7,11 +7,11 @@
   inherit (utils) getHostname;
 
 in {
-  networking.allowedPorts.tcp."22" = ["*"];
+  # networking.allowedPorts.tcp."22" = ["*"];
 
-  networking.vpnNamespace.vpn.ports = {
-    tcp = ["4444->22"];
-  };
+  # networking.vpnNamespace.vpn.ports = {
+  #   tcp = ["4444->22"];
+  # };
 
   programs.ssh = {
     enable = true;
