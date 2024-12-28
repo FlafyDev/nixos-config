@@ -35,42 +35,11 @@
 
     services.upower.enable = true;
     services.logind.lidSwitch = "ignore";
-
-    networking = {
-      networkmanager = {
-        enable = true;
-        insertNameservers = ["1.1.1.1"];
-      };
-
-      dhcpcd = {
-        wait = "background";
-        extraConfig = "noarp";
-      };
-
-      useDHCP = false;
-      interfaces = {
-        wlp3s0.useDHCP = false; # No WiFi !
-        enp4s0 = {
-          wakeOnLan.enable = true;
-          useDHCP = false;
-          ipv4.addresses = [
-            {
-              address = "10.0.0.41";
-              prefixLength = 24;
-            }
-          ];
-        };
-      };
-      defaultGateway = {
-        interface = "enp4s0";
-        address = "10.0.0.138";
-      };
-    };
-    environment.etc."resolv.conf".text = ''
-      nameserver 9.9.9.9
-      nameserver 1.1.1.1
-      nameserver 8.8.8.8
-    '';
+    # environment.etc."resolv.conf".text = ''
+    #   nameserver 9.9.9.9
+    #   nameserver 1.1.1.1
+    #   nameserver 8.8.8.8
+    # '';
 
     boot.kernelParams = [
       # "nouveau.modeset=1"

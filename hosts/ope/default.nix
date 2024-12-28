@@ -9,12 +9,6 @@
 }: let
   inherit (utils) getHostname domains resolveHostname;
 in {
-  inputs.tempnixpkgs.url = "github:nixos/nixpkgs/f480f9d09e4b4cf87ee6151eba068197125714de";
-  inputs.kwin-effects-forceblur = {
-    url = "github:taj-ny/kwin-effects-forceblur";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
-
   imports = [
     ./hardware
     # flatpak

@@ -12,7 +12,8 @@ in
 
     initialInputs = {
       # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-      nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+      # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+      nixpkgs.url = "github:flafydev/nixpkgs/feat/add-request-address";
       nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
       # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
       # nixpkgs-temp.url = "github:nixos/nixpkgs/b06025f1533a1e07b6db3e75151caa155d1c7eb3";

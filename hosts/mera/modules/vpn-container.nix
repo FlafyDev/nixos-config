@@ -19,8 +19,14 @@ in {
   services.postgres.comb = config.containers.maneVpn2.config.cmConfig.services.postgres.comb;
   services.postgres.extraSql = config.containers.maneVpn2.config.cmConfig.services.postgres.extraSql;
 
+  # os.systemd.services."container@maneVpn2.service" = {
+  #   # after = ["create-rules.service"];
+  #   # requires = ["create-rules.service"];
+  # };
+
   containers.maneVpn2 = {
     autoStart = true;
+    extraFlags = ["--network-namespace-path=/run/netns/vpn"];
 
     bindMounts = {
       "/dev/dri".isReadOnly = false;

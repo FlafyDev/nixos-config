@@ -12,7 +12,8 @@ in {
 
       prerouting = add chain { type = f: f.nat; hook = f: f.prerouting; prio = -100; policy = f: f.accept; }
         [(is.eq meta.iifname "ens3") (is.eq ip.daddr (resolveHostname domains.personal)) (is.eq tcp.dport (set [
-          80 433 # Nginx on mera
+          80 443 # Nginx on mera
+          8000
         ])) (dnat.ip (resolveHostname "mera.wg_vps"))]
         [(is.eq meta.iifname "ens3") (is.eq ip.daddr (resolveHostname domains.personal)) (is.eq tcp.dport (set [
           8080 # Test on ope

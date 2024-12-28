@@ -148,6 +148,9 @@
   };
 in {
   options.networking.notnft = {
+    enable = mkEnableOption "notnft" // {
+      default = true;
+    };
     namespaces = mkOption {
       type = types.attrsOf (types.submodule notnftNamespace);
       default = {};
@@ -160,7 +163,7 @@ in {
         notnft.url = "github:chayleaf/notnft/7d72e0b5c268921da51388fe1e4180637c3ae97d";
       };
     }
-    (mkIf config.networking.enable {
+    (mkIf (config.networking.enable && cfg.enable) {
       _module.args = {notnft = inputs.notnft.lib.${pkgs.stdenv.system};};
       os = {
         boot.blacklistedKernelModules = ["ip_tables"];

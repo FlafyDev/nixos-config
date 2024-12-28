@@ -33,7 +33,7 @@
     "mane.wg_vps.${cfg.domains.personal}" = "10.10.10.1";
     "mera.wg_vps.${cfg.domains.personal}" = "10.10.10.11";
 
-    ${cfg.domains.personal} = "64.176.167.110";
+    ${cfg.domains.personal} = "64.176.169.184";
   };
 in {
   options.localhosts = {

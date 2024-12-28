@@ -29,21 +29,31 @@ in {
   config = mkIf (config.networking.enable && cfg.enable) {
     os.systemd.services = {
       wireguard-wg_vps = {
-        wantedBy = ["network-online.target" "multi-user.target"];
+        enable = true;
+        after = lib.mkForce ["systemd-networkd-wait-online.service" "create-rules.service" "notnftables-vpn.service"];
+        requires = lib.mkForce ["systemd-networkd-wait-online.service" "create-rules.service" "notnftables-vpn.service"];
+        wantedBy = lib.mkForce ["multi-user.target"];
+        before = lib.mkForce [];
+        wants = lib.mkForce [];
       };
       notnftables-vpn = {
-        after = ["network-online.target" "notnftables-vpn.service"];
-        before = ["wireguard-wg_vps.service"];
-        wantedBy = ["network-online.target" "multi-user.target"];
-        requiredBy = ["wireguard-wg_vps.service"];
+        enable = true;
+        # after = lib.mkForce ["systemd-networkd-wait-online.service" "create-rules.service"];
+        # requires = lib.mkForce ["systemd-networkd-wait-online.service" "create-rules.service" ];
+        after = lib.mkForce ["create-rules.service"];
+        before = lib.mkForce ["wireguard-wg_vps.service"];
+        # wants = lib.mkForce [];
+
+        wants = lib.mkForce ["network-pre.target"];
       };
       create-rules = {
+        enable = true;
         description = "Create rules";
-        after = ["network-online.target"];
-        wants = ["network-online.target"];
+        # after = ["systemd-networkd-wait-online.service"];
+        # requires = ["systemd-networkd-wait-online.service"];
         before = ["wireguard-wg_vps.service" "notnftables-vpn.service"];
-        wantedBy = ["network-online.target" "multi-user.target"];
-        requiredBy = ["notnftables-vpn.service"];
+        wants = ["network-pre.target"];
+
         serviceConfig = {
           Type = "oneshot";
           ExecStart = let
