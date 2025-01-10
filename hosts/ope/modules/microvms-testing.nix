@@ -6,27 +6,6 @@
 
   os.systemd.network = {
     networks = {
-      # "10-lan" = {
-      #   matchConfig.Name = ["enp14s0" "vm-*-lan"];
-      #   networkConfig = {
-      #     Bridge = "br-lan";
-      #   };
-      # };
-
-      # "10-vpn" = {
-      #   matchConfig.Name = ["wg_vps" "vm-*-vpn"];
-      #   networkConfig = {
-      #     Bridge = "br-vpn";
-      #   };
-      # };
-
-      # "06-wg-vps-gretap" = {
-      #   matchConfig.Name = "wg-vps-gretap";
-      #   networkConfig = {
-      #     Bridge = "br-vpn";
-      #   };
-      # };
-
       "50-vm0" = {
         matchConfig.Name = "vm0";
         networkConfig = {
@@ -35,29 +14,6 @@
           DHCP = "no";
         };
       };
-
-      # "10-lan-bridge" = {
-      #   matchConfig.Name = "br-lan";
-      #   networkConfig = {
-      #     Address = ["10.0.0.42/24"];
-      #     Gateway = "10.0.0.138";
-      #     DNS = ["10.0.0.138"];
-      #     IPv6AcceptRA = true;
-      #     DHCP = "no";
-      #   };
-      #   linkConfig.RequiredForOnline = "routable";
-      # };
-
-      # "10-vpn-bridge" = {
-      #   matchConfig.Name = "br-vpn";
-      #   networkConfig = {
-      #     Address = ["10.10.10.10/24"];
-      #     # Gateway = "10.10.10.1";
-      #     IPv6AcceptRA = false;
-      #     DHCP = "no";
-      #   };
-      #   linkConfig.RequiredForOnline = "routable";
-      # };
     };
   };
 
@@ -116,4 +72,34 @@
       };
     };
   };
+
+  os.networking.nftables.tables.vm0 = {
+    family = "inet";
+    content = ''
+      chain input {
+        type filter hook input priority 0 policy accept;
+
+        # tcp dport 22 meta mark set 88
+      }
+
+      # Allow all outgoing connections.
+      chain output {
+        type filter hook output priority 0 policy accept;
+        accept
+      }
+
+      chain forward {
+        type filter hook forward priority 0 policy accept;
+        accept
+      }
+
+      chain postrouting {
+        type nat hook postrouting priority -100;
+
+        iif vm0 ip daddr { 10.0.0.41 } dport { 5000 } snat to 10.0.0.42
+        # iif vm0 snat to 10.0.0.42
+      }
+    '';
+  };
+
 }

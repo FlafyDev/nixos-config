@@ -3,7 +3,7 @@
   lib,
   config,
   utils,
-  notnft,
+  # notnft,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf mkOption;
@@ -14,7 +14,8 @@ in {
     vpnClient = {
       enable = mkEnableOption "vpnClient";
       forwardPortsOutOfNS = mkOption {
-        type = with lib.types; listOf notnft.types.expression;
+        # type = with lib.types; listOf notnft.types.expression;
+        type = with lib.types; listOf str;
         default = [];
         description = "Requests with these interfaces will be forwarded from the VPN to here but not to the interface";
       };
@@ -93,7 +94,7 @@ in {
     #   };
     #   vpn.rules = ruleset {
     #     routing = add table { family = f: f.inet; } {
-    #       input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; } 
+    #       input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
     #         [accept]
     #         ;
     #

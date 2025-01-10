@@ -1603,10 +1603,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "dirtyRev": "2aaff6d9eb3d101fd2799e659701414178de4d79-dirty",
-        "dirtyShortRev": "2aaff6d-dirty",
-        "lastModified": 1734730877,
-        "narHash": "sha256-fsEomCUt0QtRJZvQMm6rn3ZP9cCLbJawr3XGK8t2S9w=",
+        "lastModified": 1735431837,
+        "narHash": "sha256-oveD+5k91aH1qaHnkOtyTrXnoiZei7vElz0nEMHj0cU=",
+        "ref": "refs/heads/main",
+        "rev": "370c9f092a877cfb185dce7da30b0ecaba4e2d0c",
+        "revCount": 24,
         "type": "git",
         "url": "file:///home/flafy/repos/flafydev/showcase2"
       },

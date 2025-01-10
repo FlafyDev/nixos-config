@@ -1,30 +1,30 @@
-{ssh, utils, notnft, ...}: let
+{ssh, utils, ...}: let
   inherit (utils) domains resolveHostname;
 in {
   networking.enable = true;
 
-  networking.notnft.namespaces.default.rules = with notnft.dsl; with payload; ruleset {
-    filter = add table { family = f: f.inet; } {
-      input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
-        [(is.eq tcp.dport 22) (mangle meta.mark 88)] # SSH
-        [(is.eq udp.dport 51820) (mangle meta.mark 88)] # Wireguard
-        ;
+  # networking.notnft.namespaces.default.rules = with notnft.dsl; with payload; ruleset {
+  #   filter = add table { family = f: f.inet; } {
+  #     input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
+  #       [(is.eq tcp.dport 22) (mangle meta.mark 88)] # SSH
+  #       [(is.eq udp.dport 51820) (mangle meta.mark 88)] # Wireguard
+  #       ;
 
-      prerouting = add chain { type = f: f.nat; hook = f: f.prerouting; prio = -100; policy = f: f.accept; }
-        [(is.eq meta.iifname "ens3") (is.eq ip.daddr (resolveHostname domains.personal)) (is.eq tcp.dport (set [
-          80 443 # Nginx on mera
-          8000
-        ])) (dnat.ip (resolveHostname "mera.wg_vps"))]
-        [(is.eq meta.iifname "ens3") (is.eq ip.daddr (resolveHostname domains.personal)) (is.eq tcp.dport (set [
-          8080 # Test on ope
-        ])) (dnat.ip (resolveHostname "ope.wg_vps"))]
-        ;
+  #     prerouting = add chain { type = f: f.nat; hook = f: f.prerouting; prio = -100; policy = f: f.accept; }
+  #       [(is.eq meta.iifname "ens3") (is.eq ip.daddr (resolveHostname domains.personal)) (is.eq tcp.dport (set [
+  #         80 443 # Nginx on mera
+  #         8000
+  #       ])) (dnat.ip (resolveHostname "mera.wg_vps"))]
+  #       [(is.eq meta.iifname "ens3") (is.eq ip.daddr (resolveHostname domains.personal)) (is.eq tcp.dport (set [
+  #         8080 # Test on ope
+  #       ])) (dnat.ip (resolveHostname "ope.wg_vps"))]
+  #       ;
 
-      postrouting = add chain { type = f: f.nat; hook = f: f.postrouting; prio = -100; policy = f: f.accept; }
-        [(is.eq meta.iifname "wg_vps") (snat.ip (resolveHostname domains.personal))]
-        ;
-    };
-  };
+  #     postrouting = add chain { type = f: f.nat; hook = f: f.postrouting; prio = -100; policy = f: f.accept; }
+  #       [(is.eq meta.iifname "wg_vps") (snat.ip (resolveHostname domains.personal))]
+  #       ;
+  #   };
+  # };
 
   os.networking.wireguard = {
     enable = true;
@@ -70,4 +70,3 @@ in {
     };
   };
 }
-
