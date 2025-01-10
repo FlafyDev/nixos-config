@@ -36,7 +36,7 @@ in {
         peers = [
           {
             publicKey = builtins.readFile ssh.ope.ope_wg_vps.public;
-            allowedIPs = ["10.10.10.10/32"];
+            allowedIPs = ["10.10.10.10/32" "10.10.10.12/32"];
           }
           {
             publicKey = builtins.readFile ssh.mera.mera_wg_vps.public;

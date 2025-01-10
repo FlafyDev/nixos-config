@@ -11,9 +11,9 @@
 with lib; let
   cfg = config.secrets;
   secretsDir = ../../../secrets;
-  inherit (lib) mkOption types foldl';
+  inherit (lib) mkOption types foldl' strings;
   inherit (utils) concatPaths;
-  inherit (builtins) readDir;
+  inherit (builtins) readDir pathExists readFile;
 in {
   options.secrets = {
     enable = mkEnableOption "secrets";
@@ -94,11 +94,13 @@ in {
               // (foldl' (acc: key:
                 acc
                 // {
-                  "${host}-${key}" = {
+                  "${host}-${key}" = let
+                    ownerFile = concatPaths [secretsDir "ssh-keys" host key "owner"];
+                  in {
                     file = concatPaths [secretsDir "ssh-keys" host key "private.age"];
                     mode = "400";
-                    owner = config.users.main;
-                    group = "users";
+                    owner = if pathExists ownerFile then strings.trim (readFile ownerFile) else config.users.main;
+                    group = "root";
                   };
                 }) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys" host]))))
           ) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys"])));

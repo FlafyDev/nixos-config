@@ -4,43 +4,65 @@
 
   osModules = [inputs.microvm.nixosModules.host];
 
-  # os.systemd.services."microvm-tap-interfaces@test-microvm.service" = {
-  #   # set network namespace
-  #   serviceConfig = {
-  #     NetworkNamespacePath = "vpn";
-  #   };
-  # };
+  os.systemd.network = {
+    networks = {
+      # "10-lan" = {
+      #   matchConfig.Name = ["enp14s0" "vm-*-lan"];
+      #   networkConfig = {
+      #     Bridge = "br-lan";
+      #   };
+      # };
 
+      # "10-vpn" = {
+      #   matchConfig.Name = ["wg_vps" "vm-*-vpn"];
+      #   networkConfig = {
+      #     Bridge = "br-vpn";
+      #   };
+      # };
 
-  os.systemd.network.networks."10-lan" = {
-    matchConfig.Name = ["enp14s0" "vm-*"];
-    networkConfig = {
-      Bridge = "br0";
+      # "06-wg-vps-gretap" = {
+      #   matchConfig.Name = "wg-vps-gretap";
+      #   networkConfig = {
+      #     Bridge = "br-vpn";
+      #   };
+      # };
+
+      "50-vm0" = {
+        matchConfig.Name = "vm0";
+        networkConfig = {
+          Address = ["10.10.15.1/30"];
+          IPv6AcceptRA = false;
+          DHCP = "no";
+        };
+      };
+
+      # "10-lan-bridge" = {
+      #   matchConfig.Name = "br-lan";
+      #   networkConfig = {
+      #     Address = ["10.0.0.42/24"];
+      #     Gateway = "10.0.0.138";
+      #     DNS = ["10.0.0.138"];
+      #     IPv6AcceptRA = true;
+      #     DHCP = "no";
+      #   };
+      #   linkConfig.RequiredForOnline = "routable";
+      # };
+
+      # "10-vpn-bridge" = {
+      #   matchConfig.Name = "br-vpn";
+      #   networkConfig = {
+      #     Address = ["10.10.10.10/24"];
+      #     # Gateway = "10.10.10.1";
+      #     IPv6AcceptRA = false;
+      #     DHCP = "no";
+      #   };
+      #   linkConfig.RequiredForOnline = "routable";
+      # };
     };
   };
-
-  os.systemd.network.netdevs."br0" = {
-    netdevConfig = {
-      Name = "br0";
-      Kind = "bridge";
-    };
-  };
-
-  os.systemd.network.networks."10-lan-bridge" = {
-    matchConfig.Name = "br0";
-    networkConfig = {
-      Address = ["10.0.0.42/24"];
-      Gateway = "10.0.0.138";
-      DNS = ["10.0.0.138"];
-      IPv6AcceptRA = true;
-    };
-    linkConfig.RequiredForOnline = "routable";
-  };
-
 
   os.microvm = {
-    # host.useNotifySockets = true;
-    vms.test-microvm = {
+    vms.vm0 = {
       autostart = true;
       restartIfChanged = true;
       config = {
@@ -55,48 +77,33 @@
           startWhenNeeded = true;
           settings.PermitRootLogin = "yes";
         };
-        # systemd.sockets.sshd = {
-        #   socketConfig = {
-        #     ListenStream = [
-        #       "vsock:1337:22"
-        #     ];
-        #   };
-        # };
-        systemd.network.enable = true;
+
         networking.useNetworkd = false;
         networking.firewall.enable = false;
+        systemd.network = {
+          enable = true;
 
-        systemd.network.networks."20-lan" = {
-          matchConfig.Type = "ether";
-          networkConfig = {
-            Address = ["10.0.0.11/24"];
-            Gateway = "10.0.0.138";
-            DNS = ["10.0.0.138"];
-            IPv6AcceptRA = true;
-            DHCP = "no";
+          networks."20-lan" = {
+            matchConfig.MACAddress = ["02:00:00:00:00:01"];
+            matchConfig.Type = "ether";
+            networkConfig = {
+              Address = "10.10.15.2/30";
+              Gateway = "10.10.15.1";
+              DNS = "10.10.15.1";
+              IPv6AcceptRA = true;
+              DHCP = "no";
+            };
           };
         };
 
         microvm = {
-          # vsock.cid = 1337;
-          interfaces = [ 
+          interfaces = [
             {
               type = "tap";
-              id = "vm-test1";
+              id = "vm0";
               mac = "02:00:00:00:00:01";
             }
-          #   {
-          #   type = "tap";
-          #
-          #   # interface name on the host
-          #   id = "vm-a1";
-          #
-          #   # Ethernet address of the MicroVM's interface, not the host's
-          #   #
-          #   # Locally administered have one of 2/6/A/E in the second nibble.
-          #   mac = "02:00:00:00:00:01";
-          # }
-          ]; 
+          ];
           shares = [
             {
               source = "/nix/store";
