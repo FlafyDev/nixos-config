@@ -119,11 +119,6 @@ in {
             GDK_BACKEND = "wayland";
             TERM = "foot";
             NIXOS_OZONE_WL = "1";
-
-            # TODO: Temporary until Flutter Background Bar has a config file
-            FB_DESKTOP_BACKGROUND = theme.wallpaper;
-            FB_OS_LOGO = ./icon.png;
-            FB_DESKTOP_BACKGROUND_TOP = theme.wallpaperTop;
           };
           layerrule = [
             "noanim, ^(selection)$"

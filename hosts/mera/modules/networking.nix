@@ -1,6 +1,6 @@
-{utils, ssh, notnft, ...}: let
+{utils, ssh, ...}: let
   inherit (utils) domains resolveHostname;
-in 
+in
 {
   networking = {
     enable = true;
@@ -10,13 +10,24 @@ in
     };
   };
 
-  networking.notnft.namespaces.default.rules = with notnft.dsl; with payload; ruleset {
-    filter = add table { family = f: f.inet; } {
-      input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
-        [(is.eq tcp.dport 22) (mangle meta.mark 88)] # SSH
-        [(is.eq tcp.dport 5000) (mangle meta.mark 88)] # Nextcloud
-        ;
-    };
+  # networking.notnft.namespaces.default.rules = with notnft.dsl; with payload; ruleset {
+  #   filter = add table { family = f: f.inet; } {
+  #     input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
+  #       [(is.eq tcp.dport 22) (mangle meta.mark 88)] # SSH
+  #       [(is.eq tcp.dport 5000) (mangle meta.mark 88)] # Nextcloud
+  #       ;
+  #   };
+  # };
+
+  os.networking.nftables.tables.allow-services = {
+    family = "inet";
+    content = ''
+      chain input {
+        type filter hook input priority 0; policy accept;
+        tcp dport 22 meta mark set 88    # SSH
+        tcp dport 5000 meta mark set 88  # Nextcloud
+      }
+    '';
   };
 
   os.systemd.network = {
@@ -31,6 +42,7 @@ in
       "50-enp4s0" = {
         matchConfig.Name = "enp4s0";
         networkConfig.DHCP = "yes";
+        address = ["10.0.0.41/24"];
         dhcpV4Config = {
           RequestAddress = "10.0.0.41";
         };
@@ -107,38 +119,38 @@ in
   #       # Block all incoming connections traffic except SSH and "ping".
   #       chain input {
   #         type filter hook input priority 0;
-  #       
+  #
   #         # accept any localhost traffic
   #         iifname lo accept
-  #       
+  #
   #         # accept traffic originated from us
   #         ct state {established, related} accept
-  #       
+  #
   #         # ICMP
   #         # routers may also want: mld-listener-query, nd-router-solicit
   #         ip6 nexthdr icmpv6 icmpv6 type { destination-unreachable, packet-too-big, time-exceeded, parameter-problem, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
   #         ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem } accept
-  #       
+  #
   #         # allow "ping"
   #         ip6 nexthdr icmpv6 icmpv6 type echo-request accept
   #         ip protocol icmp icmp type echo-request accept
-  #       
+  #
   #         # accept incoming ports
   #         tcp dport 22 accept # SSH
   #         ## UNUSED: 5000-5999
   #         ## Nextcloud Lan
   #         ip saddr ${lan1Mask} tcp dport 5000 accept
-  #       
+  #
   #         # count and drop any other traffic
   #         counter drop
   #       }
-  #       
+  #
   #       # Allow all outgoing connections.
   #       chain output {
   #         type filter hook output priority 0;
   #         accept
   #       }
-  #       
+  #
   #       chain forward {
   #         type filter hook forward priority 0;
   #         accept
@@ -146,7 +158,7 @@ in
   #
   #       chain postrouting {
   #         type nat hook postrouting priority -100;
-  #         
+  #
   #         # Forwarding incoming trafic from VPN interface to ISP networking
   #         iifname "vethhost0" snat ip to ${resolveHostname "mera.lan1"}
   #       }
@@ -155,5 +167,3 @@ in
   #   };
   # };
 }
-
-

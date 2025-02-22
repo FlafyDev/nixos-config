@@ -43,9 +43,17 @@ in {
       "50-enp14s0" = {
         matchConfig.Name = "enp14s0";
         networkConfig.DHCP = "yes";
+        address = ["10.0.0.42/24"];
         dhcpV4Config = {
           RequestAddress = "10.0.0.42";
         };
+        routes = [
+          {
+            Destination = "10.0.0.0/24";
+            Table = 2;
+            Scope = "link";
+          }
+        ];
       };
       "50-wg_vps" = {
         matchConfig.Name = "wg_vps";
@@ -54,6 +62,13 @@ in {
           IPv6AcceptRA = false;
           DHCP = "no";
         };
+        routes = [
+          {
+            Destination = "0.0.0.0/0";
+            Table = 2;
+            Scope = "link";
+          }
+        ];
       };
     };
     netdevs = {
@@ -68,7 +83,7 @@ in {
         wireguardPeers = [
           {
             PublicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
-            AllowedIPs = ["10.10.10.1/32"];
+            AllowedIPs = ["0.0.0.0/0"];
             Endpoint = "${resolveHostname domains.personal}:51820";
             PersistentKeepalive = 25;
           }

@@ -34,7 +34,7 @@ in {
       family = "inet";
       content = ''
         chain input {
-          type filter hook input priority 100 policy accept;
+          type filter hook input priority 100; policy accept;
 
           # accept any traffic marked as accepted(which is mark 88)
           meta mark 88 accept
@@ -60,13 +60,18 @@ in {
 
         # Allow all outgoing connections.
         chain output {
-          type filter hook output priority 0 policy accept;
-          accept
+          type filter hook output priority 0; policy accept;
         }
 
         chain forward {
-          type filter hook forward priority 0 policy accept;
-          accept
+          type filter hook forward priority 100; policy accept;
+
+          # accept any traffic marked as accepted(which is mark 89)
+          meta nftrace set 1
+          meta mark 89 accept
+
+          # count and drop any other traffic
+          counter drop
         }
       '';
     };

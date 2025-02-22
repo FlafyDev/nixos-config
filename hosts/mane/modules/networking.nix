@@ -26,6 +26,33 @@ in {
   #   };
   # };
 
+  os.networking.nftables.tables.filter = {
+    family = "inet";
+    content = ''
+      chain input {
+        type filter hook input priority 0; policy accept;
+        meta nftrace set 1
+        tcp dport 22 meta mark set 88  # SSH
+        udp dport 51820 meta mark set 88  # Wireguard
+      }
+      
+      chain prerouting {
+        type nat hook prerouting priority -100; policy accept;
+        meta nftrace set 1
+        iifname "ens3" ip daddr ${resolveHostname domains.personal} tcp dport {
+          80, 443,  # Nginx on mera
+          8000
+        } dnat ip to 10.10.10.11
+        iifname "ens3" ip daddr ${resolveHostname domains.personal} tcp dport 8080 dnat ip to 10.10.10.10
+      }
+
+      chain postrouting {
+        type nat hook postrouting priority -100; policy accept;
+        iifname "wg_vps" snat ip to ${resolveHostname domains.personal}
+      }
+    '';
+  };
+
   os.networking.wireguard = {
     enable = true;
     interfaces = {
@@ -36,7 +63,7 @@ in {
         peers = [
           {
             publicKey = builtins.readFile ssh.ope.ope_wg_vps.public;
-            allowedIPs = ["10.10.10.10/32" "10.10.10.12/32"];
+            allowedIPs = ["10.10.10.10/32"];
           }
           {
             publicKey = builtins.readFile ssh.mera.mera_wg_vps.public;

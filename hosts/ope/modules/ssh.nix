@@ -18,12 +18,12 @@ in {
 
     matchBlocks = {
       mera-lan = {
-        hostname = getHostname "mera.lan1";
+        hostname = getHostname "mera.home";
         identitiesOnly = true;
         identityFile = [ssh.ope.ope_to_mera.private];
       };
       bara-lan = {
-        hostname = getHostname "bara.lan1";
+        hostname = getHostname "bara.home";
         identitiesOnly = true;
         identityFile = [ssh.ope.ope_to_bara.private];
       };

@@ -29,7 +29,7 @@
 
     config = {lib, ...}: {
       networking.enable = true;
-      networking.notnft.enable = false;
+      # networking.notnft.enable = false;
 
       os.system.stateVersion = "23.11";
       os.networking.useHostResolvConf = lib.mkForce false;

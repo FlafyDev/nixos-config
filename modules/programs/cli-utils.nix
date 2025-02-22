@@ -36,10 +36,10 @@ in {
       if [ ! -z "$host" ]; then
         case $host in
           "bara")
-            ssh_host="${getHostname "bara.lan1"}"
+            ssh_host="${getHostname "bara.home"}"
             ;;
           "mera")
-            ssh_host="${getHostname "mera.lan1"}"
+            ssh_host="${getHostname "mera.home"}"
             ;;
           "mane")
             ssh_host="${resolveHostname domains.personal}"
