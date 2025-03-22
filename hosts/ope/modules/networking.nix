@@ -9,21 +9,22 @@ in {
     };
   };
 
-  # networking.notnft.namespaces.default.rules = with notnft.dsl; with payload; ruleset {
-  #   filter = add table { family = f: f.inet; } {
-  #     input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
-  #       [(is.eq tcp.dport 22) (mangle meta.mark 88)] # SSH
-  #       ;
-  #   };
-  # };
+  os.networking.nftables.tables.allow-services = {
+    family = "inet";
+    content = ''
+      chain input {
+        type filter hook input priority 0; policy accept;
+        meta nftrace set 1
+        tcp dport 22 meta mark set 88 # SSH
+        tcp dport 8080 meta mark set 88 # Testing
+      }
+      chain output {
+        type filter hook output priority 0; policy accept;
+        meta nftrace set 1
+      }
+    '';
+  };
 
-  # networking.notnft.namespaces.default.rules = with notnft.dsl; with payload; ruleset {
-  #   filter = add table { family = f: f.inet; } {
-  #     input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
-  #       [(is.eq tcp.dport 22) (mangle meta.mark 88)] # SSH
-  #       ;
-  #   };
-  # };
 
   os.systemd.services."systemd-networkd".environment.SYSTEMD_LOG_LEVEL = "debug";
   os.systemd.network = {
@@ -48,6 +49,13 @@ in {
           RequestAddress = "10.0.0.42";
         };
         routes = [
+          # Route traffic destined to the vps's IP not through the vps (for example, through home router).
+          {
+            Destination = "${resolveHostname domains.personal}";
+            Table = 2;
+            Gateway = "_dhcp4";
+          }
+          # Don't route traffic destined to LAN through the vps.
           {
             Destination = "10.0.0.0/24";
             Table = 2;
@@ -67,6 +75,14 @@ in {
             Destination = "0.0.0.0/0";
             Table = 2;
             Scope = "link";
+          }
+        ];
+        routingPolicyRules = [
+          # Make sure all traffic that comes from 10.10.10.10/24 goes to table 2 (to get oif wg_vps)
+          {
+            Family = "ipv4";
+            From = "10.10.10.10/24";
+            Table = 2;
           }
         ];
       };

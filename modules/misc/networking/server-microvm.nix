@@ -5,18 +5,22 @@
   utils,
   inputs,
   combinedManager,
+  osConfig,
   ...
 }: let
   inherit (builtins) mapAttrs tail elemAt;
   inherit (lib) mkEnableOption mkIf mkOption optionals mapAttrs' __curPos types mkForce mkDefault;
   inherit (utils) resolveHostname getModules;
-  cfg = config.networking.setupVM;
+  cfg = config.setupVM;
 in {
-  options.networking = {
+  options = {
     setupVM = {
       enable = mkEnableOption "setupVM";
       vms = mkOption {
-        type = with types; attrsOf (submodule (_: {
+        type = with types; attrsOf (submodule ({name, ...}@modArgs: let 
+          modConfig = modArgs.config;
+          vmName = name;
+        in {
           options = {
             gateway = mkOption {
               type = nullOr (enum ["vps" "home" "custom"]);
@@ -55,6 +59,85 @@ in {
               '';
               description = "Extra postrouting";
             };
+            specialArgs = mkOption {
+              type = types.attrsOf types.unspecified;
+              default = {};
+            };
+            config = mkOption {
+              description = lib.mdDoc ''
+                A specification of the desired configuration of this
+                VM as a Combined Manager module.
+              '';
+              default = {};
+              type = lib.mkOptionType {
+                name = "Toplevel Combined Manager config";
+                merge = _loc: defs: ((import combinedManager).nixosSystem {
+                  inherit inputs;
+                  configuration = {
+                    modules = [{
+                      _file = "module at ${__curPos.file}:${toString __curPos.line}";
+                      config = {
+                        users.main = mkDefault vmName;
+                        users.host = mkDefault vmName;
+                        microvm.host = false;
+                        osModules = [inputs.microvm.nixosModules.microvm];
+                        os = {
+                          services.openssh = {
+                            enable = true;
+                            startWhenNeeded = true;
+                            settings.PermitRootLogin = "yes";
+                          };
+
+                          networking.useNetworkd = false;
+                          networking.firewall.enable = false;
+                          systemd.services.dhcpcd.enable = false;
+
+                          systemd.network = {
+                            enable = true;
+
+                            networks."20-lan" = {
+                              matchConfig.MACAddress = ["02:00:00:00:00:01"];
+                              matchConfig.Type = "ether";
+                              networkConfig = {
+                                Address = "${resolveHostname "vm.${vmName}"}/30";
+                                Gateway = resolveHostname "gateway.${vmName}";
+                                DNS = resolveHostname "gateway.${vmName}";
+                                IPv6AcceptRA = false;
+                                LinkLocalAddressing = false;
+                                DHCP = false;
+                              };
+                            };
+                          };
+
+                          microvm = {
+                            interfaces = [
+                              {
+                                type = "tap";
+                                id = vmName;
+                                mac = "02:00:00:00:00:01";
+                              }
+                            ];
+                            shares = [
+                              {
+                                source = "/nix/store";
+                                mountPoint = "/nix/.ro-store";
+                                tag = "ro-store";
+                                proto = "virtiofs";
+                              }
+                            ];
+                          };
+                        };
+                      };
+                    }] ++ (getModules (toString ../..)) ++ (map (x: x.value) defs);
+                    prefix = ["setupVM" "vms" vmName "config"];
+
+                    specialArgs = {configs = {};} // modConfig.specialArgs;
+
+                    inherit (pkgs) system;
+                  };
+                });
+              };
+            };
           };
         }));
       };
@@ -73,6 +156,13 @@ in {
         IPv6AcceptRA = false;
         DHCP = "no";
       };
+      routes = [
+        {
+          Destination = "${resolveHostname "vm.${vmName}"}";
+          Table = 2;
+          Scope = "link";
+        }
+      ];
       routingPolicyRules = optionals (vmCfg.gateway == "vps") [
         {
           Family = "ipv4";
@@ -82,116 +172,10 @@ in {
       ];
     }) cfg.vms;
 
-    os.microvm.vms = mapAttrs (vmName: _vmCfg: {
+    os.microvm.vms = mapAttrs (vmName: vmCfg: {
       autostart = true;
       restartIfChanged = true;
-      configEvalFunc = args: ((import combinedManager).nixosSystem {
-        inherit inputs;
-        configuration = {
-          modules = [
-            (_: {
-              hm = {home.stateVersion = "23.11";};
-            })
-          # modules = (tail (tail args.modules)) ++ [
-            # (getModules (toString ../.)) ++ [
-              # (_: {
-              #   # _file = "module at ${__curPos.file}:${toString __curPos.line}";
-              #   options = {
-              #     hm = mkOption {
-              #       type = with types; attrsOf anything;
-              #       default = {};
-              #     };
-              #     hmModules = mkOption {
-              #       type = with types; listOf anything;
-              #       default = [];
-              #     };
-              #     hmUsername = mkOption {
-              #       type = with types; str;
-              #       default = "";
-              #     };
-              #   };
-              #   config = {
-              #     osModules = [inputs.microvm.nixosModules.microvm];
-              #     # users.main = mkDefault "";
-              #     # users.host = mkDefault vmName;
-              #     # microvm.host = false;
-              #     os.passthru = null;
-              #     # os.sound.enable = false;
-              #
-              #     os.system.stateVersion = "23.11";
-              #     hm.home.stateVersion = "23.11";
-              #   #   os = {
-              #   #     # nixpkgs = if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined
-              #   #     #           then { inherit (host.osConfig.nixpkgs) hostPlatform; }
-              #   #     #           else { inherit (host.osConfig.nixpkgs) localSystem; }
-              #   #     # ;
-              #   #   };
-              #   };
-              # })
-            ];
-          inherit (args) prefix;
-
-          # useHomeManager = false;
-
-          # The system is inherited from the host above.
-          # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
-          inherit (pkgs) system;
-        };
-      });
-      config = {
-        os = {
-          users.users.root = {
-            group = "root";
-            password = "itsfine";
-            isSystemUser = true;
-          };
-
-          services.openssh = {
-            enable = true;
-            startWhenNeeded = true;
-            settings.PermitRootLogin = "yes";
-          };
-
-          networking.useNetworkd = false;
-          networking.firewall.enable = false;
-          systemd.services.dhcpcd.enable = false;
-
-          systemd.network = {
-            enable = true;
-
-            networks."20-lan" = {
-              matchConfig.MACAddress = ["02:00:00:00:00:01"];
-              matchConfig.Type = "ether";
-              networkConfig = {
-                Address = "${resolveHostname "vm.${vmName}"}/30";
-                Gateway = resolveHostname "gateway.${vmName}";
-                DNS = resolveHostname "gateway.${vmName}";
-                IPv6AcceptRA = false;
-                LinkLocalAddressing = false;
-                DHCP = false;
-              };
-            };
-          };
-
-          microvm = {
-            interfaces = [
-              {
-                type = "tap";
-                id = vmName;
-                mac = "02:00:00:00:00:01";
-              }
-            ];
-            shares = [
-              {
-                source = "/nix/store";
-                mountPoint = "/nix/.ro-store";
-                tag = "ro-store";
-                proto = "virtiofs";
-              }
-            ];
-          };
-        };
-      };
+      evaluatedConfig = vmCfg.config;
     }) cfg.vms;
 
     os.networking.nftables.tables = mapAttrs' (vmName: vmCfg: {
@@ -222,10 +206,10 @@ in {
 
             ${vmCfg.extraPostrouting}
 
-            ${if vmCfg.gateway == null then '''' else ''
+            ${if vmCfg.gateway == null then "" else ''
               iifname != ${vmName} return
               oifname wg_vps snat ip to ${resolveHostname "${config.os.networking.hostName}.wg_vps"}
-              snat ip to ${resolveHostname "${config.os.networking.hostName}.home"}
+              oifname enp14s0 snat ip to ${resolveHostname "${config.os.networking.hostName}.home"}
             ''}
           }
         '';

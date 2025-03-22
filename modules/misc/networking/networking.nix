@@ -67,8 +67,10 @@ in {
           type filter hook forward priority 100; policy accept;
 
           # accept any traffic marked as accepted(which is mark 89)
-          meta nftrace set 1
           meta mark 89 accept
+
+          # TODO
+          accept
 
           # count and drop any other traffic
           counter drop

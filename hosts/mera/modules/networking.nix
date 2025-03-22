@@ -10,15 +10,6 @@ in
     };
   };
 
-  # networking.notnft.namespaces.default.rules = with notnft.dsl; with payload; ruleset {
-  #   filter = add table { family = f: f.inet; } {
-  #     input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
-  #       [(is.eq tcp.dport 22) (mangle meta.mark 88)] # SSH
-  #       [(is.eq tcp.dport 5000) (mangle meta.mark 88)] # Nextcloud
-  #       ;
-  #   };
-  # };
-
   os.networking.nftables.tables.allow-services = {
     family = "inet";
     content = ''

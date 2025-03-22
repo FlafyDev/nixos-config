@@ -36,6 +36,9 @@
     "gateway.vm0.${cfg.domains.personal}" = "10.10.15.1";
     "vm.vm0.${cfg.domains.personal}" = "10.10.15.2";
 
+    "gateway.vm1.${cfg.domains.personal}" = "10.10.15.5";
+    "vm.vm1.${cfg.domains.personal}" = "10.10.15.6";
+
     ${cfg.domains.personal} = "64.176.169.184";
   };
 in {

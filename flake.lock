@@ -989,8 +989,8 @@
         "spectrum": "spectrum"
       },
       "locked": {
-        "lastModified": 1740157068,
-        "narHash": "sha256-H03DWA4w99+in/ZLUG59A9PiUQPwy7l+OSmFgo8koBE=",
+        "lastModified": 1740239220,
+        "narHash": "sha256-PUmV8lTuk+TGJkmuzgo05XFkn1OKt3ovujFQwTNPO3s=",
         "path": "/home/flafy/repos/astro/microvm.nix",
         "type": "path"
       },
