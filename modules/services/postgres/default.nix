@@ -1,7 +1,8 @@
 {
   lib,
-  config,
   pkgs,
+  config,
+  osConfig,
   ...
 }: let
   inherit
@@ -48,6 +49,12 @@ in {
   options.services.postgres = {
     enable = mkEnableOption "Postgres database";
 
+    dataDir = mkOption {
+      type = types.str;
+      description = "Where to save the database";
+      default = "/var/lib/postgresql";
+    };
+
     extraSql = mkOption {
       type = types.lines;
       description = "Extra SQL commands to run every DB start";
@@ -65,6 +72,7 @@ in {
     os.services.postgresql = {
       enable = true;
       package = pkgs.postgresql_14;
+      dataDir = "${cfg.dataDir}/${osConfig.services.postgresql.package.psqlSchema}";
       enableTCPIP = true;
       port = 5432;
       authentication = ''

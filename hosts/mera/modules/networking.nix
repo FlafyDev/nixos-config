@@ -4,10 +4,16 @@ in
 {
   networking = {
     enable = true;
-    vpnClient = {
-      enable = true;
-      forwardPortsOutOfNS = [ 8081 ];
-    };
+    wireguard = true;
+  };
+
+  setupVM = {
+    enable = true;
+    homeInterface = "enp4s0";
+    homeSubnet = "10.0.0.0/24";
+    vpnInterface = "wg_vps";
+    vpnSubnet = "10.10.10.0/24";
+    forceHomeIPs = [(resolveHostname domains.personal)];
   };
 
   os.networking.nftables.tables.allow-services = {
@@ -21,6 +27,7 @@ in
     '';
   };
 
+  os.systemd.services."systemd-networkd".environment.SYSTEMD_LOG_LEVEL = "debug";
   os.systemd.network = {
     enable = true;
     wait-online.enable = true;
@@ -43,64 +50,89 @@ in
         #   WakeOnLan = "magic";
         # };
       };
-    };
-  };
-
-  os.networking = {
-    useNetworkd = false;
-
-    networkmanager = {
-      enable = false;
-    };
-
-    # I think can be deleted because of systemd.network
-    dhcpcd = {
-      wait = "background";
-      extraConfig = "noarp";
-    };
-
-    # I think can be deleted because of systemd.network
-    defaultGateway = {
-      interface = "enp4s0";
-      address = "10.0.0.138";
-    };
-
-    wireguard = {
-      enable = true;
-      interfaces = {
-        wg_vps = {
-          ips = ["10.10.10.11/32"];
-          privateKeyFile = ssh.mera.mera_wg_vps.private;
-          interfaceNamespace = "vpn";
-          socketNamespace = "init";
-          peers = [
-            {
-              publicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
-              allowedIPs = ["0.0.0.0/0"];
-              endpoint = "${resolveHostname domains.personal}:51820";
-              persistentKeepalive = 25;
-            }
-          ];
+      "50-wg_vps" = {
+        matchConfig.Name = "wg_vps";
+        networkConfig = {
+          Address = ["10.10.10.11/24"];
+          IPv6AcceptRA = false;
+          DHCP = "no";
         };
       };
-      # wg_private = {
-      #   ips = ["10.10.11.11/24"];
-      #   privateKeyFile = ssh.mera.mera_wg_private.private;
-      #   listenPort = 51821;
-      #   peers = [
-      #     {
-      #       publicKey = builtins.readFile ssh.mane.mane_wg_private.public;
-      #       allowedIPs = ["10.10.11.1/32"];
-      #       endpoint = "${domains.personal}:51821";
-      #     }
-      #     {
-      #       publicKey = builtins.readFile ssh.ope.ope_wg_private.public;
-      #       allowedIPs = ["10.10.11.10/32"];
-      #     }
-      #   ];
-      # };
+    };
+    netdevs = {
+      "50-wg_vps" = {
+        netdevConfig = {
+          Name = "wg_vps";
+          Kind = "wireguard";
+        };
+        wireguardConfig = {
+          PrivateKeyFile = ssh.mera.mera_wg_vps.private;
+        };
+        wireguardPeers = [
+          {
+            PublicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
+            AllowedIPs = ["0.0.0.0/0"];
+            Endpoint = "${resolveHostname domains.personal}:51820";
+            PersistentKeepalive = 25;
+          }
+        ];
+      };
     };
   };
+
+  # os.networking = {
+  #   useNetworkd = false;
+
+  #   networkmanager = {
+  #     enable = false;
+  #   };
+
+  #   # I think can be deleted because of systemd.network
+  #   dhcpcd = {
+  #     wait = "background";
+  #     extraConfig = "noarp";
+  #   };
+
+  #   # I think can be deleted because of systemd.network
+  #   defaultGateway = {
+  #     interface = "enp4s0";
+  #     address = "10.0.0.138";
+  #   };
+
+  #   wireguard = {
+  #     enable = true;
+  #     interfaces = {
+  #       wg_vps = {
+  #         ips = ["10.10.10.11/32"];
+  #         privateKeyFile = ssh.mera.mera_wg_vps.private;
+  #         peers = [
+  #           {
+  #             publicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
+  #             allowedIPs = ["0.0.0.0/0"];
+  #             endpoint = "${resolveHostname domains.personal}:51820";
+  #             persistentKeepalive = 25;
+  #           }
+  #         ];
+  #       };
+  #     };
+  #     # wg_private = {
+  #     #   ips = ["10.10.11.11/24"];
+  #     #   privateKeyFile = ssh.mera.mera_wg_private.private;
+  #     #   listenPort = 51821;
+  #     #   peers = [
+  #     #     {
+  #     #       publicKey = builtins.readFile ssh.mane.mane_wg_private.public;
+  #     #       allowedIPs = ["10.10.11.1/32"];
+  #     #       endpoint = "${domains.personal}:51821";
+  #     #     }
+  #     #     {
+  #     #       publicKey = builtins.readFile ssh.ope.ope_wg_private.public;
+  #     #       allowedIPs = ["10.10.11.10/32"];
+  #     #     }
+  #     #   ];
+  #     # };
+  #   };
+  # };
 
   # os.networking.nftables.tables = {
   #   filter = {

@@ -23,19 +23,19 @@ in {
     users.groups = ["libvirtd"];
     os = {
       nixpkgs.overlays = [
-        (_final: prev: {
-          looking-glass-client = prev.looking-glass-client.overrideAttrs (_old: rec {
-            version = "B6";
-            patches = [];
-            src = prev.fetchFromGitHub {
-              owner = "gnif";
-              repo = "LookingGlass";
-              rev = version;
-              sha256 = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
-              fetchSubmodules = true;
-            };
-          });
-        })
+        # (_final: prev: {
+        #   looking-glass-client = prev.looking-glass-client.overrideAttrs (_old: rec {
+        #     version = "B6";
+        #     patches = [];
+        #     src = prev.fetchFromGitHub {
+        #       owner = "gnif";
+        #       repo = "LookingGlass";
+        #       rev = version;
+        #       sha256 = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
+        #       fetchSubmodules = true;
+        #     };
+        #   });
+        # })
       ];
       boot.initrd.kernelModules = [
         "vfio_pci"
@@ -64,10 +64,10 @@ in {
       boot.extraModulePackages = [
         
         (osConfig.boot.kernelPackages.kvmfr.overrideAttrs (old: {
-          inherit (pkgs.looking-glass-client) version src;
-          patches = [
-            ./vm-temp.patch
-          ];
+          # inherit (pkgs.looking-glass-client) version src;
+          # patches = [
+          #   ./vm-temp.patch
+          # ];
           # patches = []; # UPDATE-TODO: https://github.com/NixOS/nixpkgs/pull/305018
         }))
       ];

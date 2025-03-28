@@ -16,14 +16,35 @@ in {
   options = {
     setupVM = {
       enable = mkEnableOption "setupVM";
+      homeInterface = mkOption {
+        type = types.str;
+        description = "Name of the home interface";
+      };
+      homeSubnet = mkOption {
+        type = types.str;
+        description = "Subnet of the home network";
+      };
+      vpnInterface = mkOption {
+        type = types.str;
+        description = "Name of the VPN interface";
+      };
+      vpnSubnet = mkOption {
+        type = types.str;
+        description = "Subnet of the VPN network";
+      };
+      forceHomeIPs = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = "IPs that should always go through the home interface even if the gateway is the VPN";
+      };
       vms = mkOption {
-        type = with types; attrsOf (submodule ({name, ...}@modArgs: let 
+        type = with types; attrsOf (submodule ({name, ...}@modArgs: let
           modConfig = modArgs.config;
           vmName = name;
         in {
           options = {
             gateway = mkOption {
-              type = nullOr (enum ["vps" "home" "custom"]);
+              type = nullOr (enum ["vpn" "home"]);
               default = null;
               description = "Name";
             };
@@ -48,6 +69,10 @@ in {
             extraPrerouting = mkOption {
               type = str;
               default = "";
+              example = ''
+                # Redirect to vm0 all tcp 80 packets the host receives
+                iifname != "vm0" tcp dport 80 dnat ip to 10.10.15.2
+              '';
               description = "Extra prerouting";
             };
             extraPostrouting = mkOption {
@@ -81,6 +106,7 @@ in {
                         users.host = mkDefault vmName;
                         microvm.host = false;
                         osModules = [inputs.microvm.nixosModules.microvm];
+                        networking.enable = true;
                         os = {
                           services.openssh = {
                             enable = true;
@@ -88,8 +114,6 @@ in {
                             settings.PermitRootLogin = "yes";
                           };
 
-                          networking.useNetworkd = false;
-                          networking.firewall.enable = false;
                           systemd.services.dhcpcd.enable = false;
 
                           systemd.network = {
@@ -149,7 +173,7 @@ in {
       DNSStubListenerExtra=0.0.0.0
     '';
 
-    os.systemd.network.networks = mapAttrs (vmName: vmCfg: {
+    os.systemd.network.networks = (mapAttrs (vmName: vmCfg: {
       matchConfig.Name = vmName;
       networkConfig = {
         Address = "${resolveHostname "gateway.${vmName}"}/30";
@@ -163,14 +187,50 @@ in {
           Scope = "link";
         }
       ];
-      routingPolicyRules = optionals (vmCfg.gateway == "vps") [
+      routingPolicyRules = optionals (vmCfg.gateway == "vpn") [
         {
           Family = "ipv4";
           IncomingInterface = vmName;
           Table = 2;
         }
       ];
-    }) cfg.vms;
+    }) cfg.vms) // {
+      "50-${cfg.homeInterface}" = {
+        matchConfig.Name = cfg.homeInterface;
+        routes = [
+          # Don't route traffic destined to home network through the vpn.
+          {
+            Destination = cfg.homeSubnet;
+            Table = 2;
+            Scope = "link";
+          }
+        ] ++ (map (ip: {
+          # Route traffic to these IPs through the home interface. Even if the gateway is the VPN.
+          Destination = ip;
+          Table = 2;
+          Gateway = "_dhcp4";
+        }) cfg.forceHomeIPs);
+      };
+      "50-${cfg.vpnInterface}" = {
+        matchConfig.Name = cfg.vpnInterface;
+        routes = [
+          # Default route for table 2
+          {
+            Destination = "0.0.0.0/0";
+            Table = 2;
+            Scope = "link";
+          }
+        ];
+        routingPolicyRules = [
+          # Make sure all traffic that comes from vpnSubnet goes to table 2 (to get oif cfg.vpnInterface)
+          {
+            Family = "ipv4";
+            From = cfg.vpnSubnet;
+            Table = 2;
+          }
+        ];
+      };
+    };
 
     os.microvm.vms = mapAttrs (vmName: vmCfg: {
       autostart = true;
@@ -208,8 +268,8 @@ in {
 
             ${if vmCfg.gateway == null then "" else ''
               iifname != ${vmName} return
-              oifname wg_vps snat ip to ${resolveHostname "${config.os.networking.hostName}.wg_vps"}
-              oifname enp14s0 snat ip to ${resolveHostname "${config.os.networking.hostName}.home"}
+              oifname ${cfg.vpnInterface} snat ip to ${resolveHostname "${config.os.networking.hostName}.${cfg.vpnInterface}"}
+              oifname ${cfg.homeInterface} snat ip to ${resolveHostname "${config.os.networking.hostName}.home"}
             ''}
           }
         '';

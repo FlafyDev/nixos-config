@@ -4,55 +4,47 @@
   pkgs,
   ...
 }: let
-  inherit (utils) domains;
+  inherit (utils) resolveHostname domains;
 in {
-  os.environment.persistence = {
-    "/persist2" = {
-      directories = [
-        {
-          directory = "/var/lib/matrix-synapse";
-          user = "root";
-          group = "root";
-        }
-        {
-          directory = "/var/lib/mautrix-whatsapp";
-          user = "root";
-          group = "root";
-        }
-        {
-          directory = "/var/lib/mautrix-gmessages";
-          user = "root";
-          group = "root";
-        }
-        {
-          directory = "/var/lib/mautrix-meta-instagram";
-          user = "root";
-          group = "root";
-        }
-        {
-          directory = "/var/lib/matrix-appservice-irc";
-          user = "root";
-          group = "root";
-        }
-      ];
-    };
-  };
-
-  services.postgres.enable = true;
-
-  containers.maneVpn2 = {
-    bindMounts = {
-      "/var/lib/matrix-synapse".isReadOnly = false;
-      "/var/lib/mautrix-whatsapp".isReadOnly = false;
-      "/var/lib/mautrix-gmessages".isReadOnly = false;
-      "/var/lib/mautrix-meta-instagram".isReadOnly = false;
-      "/var/lib/matrix-appservice-irc".isReadOnly = false;
-    };
-    config = _: {
+  setupVM.vms.vm0.config = {
+    config = {
       services.matrix = {
         enable = true;
+        postgresIP = resolveHostname "gateway.vm0";
         host = domains.personal;
       };
+      os.microvm.shares = [
+        {
+          source = "/persist2/var/lib/matrix-synapse";
+          mountPoint = "/var/lib/matrix-synapse";
+          tag = "matrix-synapse";
+          proto = "virtiofs";
+        }
+        {
+          source = "/persist2/var/lib/mautrix-whatsapp";
+          mountPoint = "/var/lib/mautrix-whatsapp";
+          tag = "mautrix-whatsapp";
+          proto = "virtiofs";
+        }
+        {
+          source = "/persist2/var/lib/mautrix-gmessages";
+          mountPoint = "/var/lib/mautrix-gmessages";
+          tag = "mautrix-gmessages";
+          proto = "virtiofs";
+        }
+        {
+          source = "/persist2/var/lib/mautrix-meta-instagram";
+          mountPoint = "/var/lib/mautrix-meta-instagram";
+          tag = "mautrix-meta-instagram";
+          proto = "virtiofs";
+        }
+        {
+          source = "/persist2/var/lib/matrix-appservice-irc";
+          mountPoint = "/var/lib/matrix-appservice-irc";
+          tag = "matrix-appservice-irc";
+          proto = "virtiofs";
+        }
+      ];
     };
   };
 }

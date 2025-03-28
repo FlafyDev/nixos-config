@@ -1,73 +1,97 @@
-let
-  combinedManager = import /home/flafy/repos/flafydev/combined-manager;
-  # combinedManager = import (builtins.fetchTarball {
-  #   url = "https://github.com/flafydev/combined-manager/archive/725f45b519187d6e1a49fe4d92b75d32b0d05687.tar.gz";
-  #   sha256 = "sha256:0kkwx01m5a28sd0v41axjypmiphqfhnivl8pwk9skf3c1aarghfb";
-  # });
-in
-  combinedManager.mkFlake {
-    description = "NixOS configuration";
+# Do not modify! This file is generated.
 
-    lockFile = ./flake.lock;
-
-    initialInputs = {
-      # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-      # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-      nixpkgs.url = "github:flafydev/nixpkgs/feat/add-request-address";
-      nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-      # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-      # nixpkgs-temp.url = "github:nixos/nixpkgs/b06025f1533a1e07b6db3e75151caa155d1c7eb3";
-      home-manager = {
-        url = "github:nix-community/home-manager";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
-      flake-parts.url = "github:hercules-ci/flake-parts";
+{
+  description = "NixOS configuration";
+  inputs = {
+    agenix = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:ryantm/agenix";
     };
-
-    configurations = builtins.mapAttrs (host: cfg:
-      cfg // {modules = [({lib, ...}: {imports = (import ./utils {inherit lib;}).getModulesForHost host;})];}) {
-      ope.system = "x86_64-linux";
-      mera.system = "x86_64-linux";
-      mane.system = "x86_64-linux";
-      bara.system = "aarch64-linux";
-      # bara.inputOverrides = inputs: {
-      #   nixpkgs = inputs.nixpkgs-temp;
-      # };
+    anyrun = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:kirottu/anyrun";
     };
-    # // {
-    #   test = {
-    #     system = "x86_64-linux";
-    #     inputOverrides = inputs: {
-    #       nixpkgs = inputs.nixpkgs-bara;
-    #     };
-    #     modules = [
-    #       ({lib, ...}: {
-    #         hm.home.stateVersion = "23.05";
-    #         os.users.users.user.isNormalUser = true;
-    #       })
-    #     ];
-    #   };
-    # };
-
-    outputs = inputs @ {
-      self,
-      flake-parts,
-      ...
-    }:
-      flake-parts.lib.mkFlake {inherit inputs;} {
-        systems = [
-          "x86_64-linux"
-          "aarch64-linux"
-        ];
-        perSystem = {
-          pkgs,
-          lib,
-          ...
-        }: {
-          formatter = pkgs.alejandra;
-          packages = {
-            bara-iso = self.nixosConfigurations.bara.config.mobile.outputs.default;
-          };
-        };
-      };
-  }
+    anyrun-nixos-options = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:n3oney/anyrun-nixos-options/v1.0.1";
+    };
+    assets.url = "github:FlafyDev/assets";
+    bad-time-simulator = {
+      flake = false;
+      url = "github:flafydev/bad-time-simulator-compiled";
+    };
+    bufresize-nvim = {
+      flake = false;
+      url = "github:kwkarlwang/bufresize.nvim";
+    };
+    emoji-drawing.url = "github:flafydev/emoji-drawing";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-registry = {
+      flake = false;
+      url = "github:nixos/flake-registry";
+    };
+    flakegen.url = "github:jorsn/flakegen";
+    flarrent = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:flafydev/flarrent";
+    };
+    flutter-hooks-snippets = {
+      flake = false;
+      url = "github:devmuaz/flutter-hooks-snippets";
+    };
+    flutter-riverpod-snippets = {
+      flake = false;
+      url = "github:RobertBrunhage/flutter-riverpod-snippets";
+    };
+    guifetch.url = "github:flafydev/guifetch";
+    home-manager = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager";
+    };
+    hypr-dynamic-cursors = {
+      inputs.hyprland.follows = "hyprland";
+      url = "github:VirtCode/hypr-dynamic-cursors";
+    };
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    impermanence.url = "github:nix-community/impermanence";
+    microvm = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "path:/home/flafy/repos/astro/microvm.nix";
+    };
+    mobile-nixos = {
+      flake = false;
+      url = "github:nixos/mobile-nixos/8f9ce9d7e7e71b2d018039332e04c5be78f0a6b7";
+    };
+    nix-gaming = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:fufexan/nix-gaming";
+    };
+    nix-index-database = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:Mic92/nix-index-database";
+    };
+    nix-minecraft.url = "github:infinidoge/nix-minecraft";
+    nix-super = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:privatevoid-net/nix-super";
+    };
+    nixpak = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nixpak/nixpak";
+    };
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-bara.url = "github:nixos/nixpkgs/684c17c429c42515bafb3ad775d2a710947f3d67";
+    nixtheplanet.url = "github:matthewcroughan/nixtheplanet";
+    nur.url = "github:nix-community/NUR";
+    showcase.url = "git+file:///home/flafy/repos/flafydev/showcase2";
+    tailwind-tools = {
+      flake = false;
+      url = "github:luckasRanarison/tailwind-tools.nvim";
+    };
+    transparent-nvim = {
+      flake = false;
+      url = "github:xiyaowong/transparent.nvim";
+    };
+  };
+  outputs = inputs: inputs.flakegen ./flake.in.nix inputs;
+}

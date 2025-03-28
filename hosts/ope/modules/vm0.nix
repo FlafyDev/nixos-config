@@ -1,11 +1,10 @@
 {utils, ...}: let
-  inherit (utils) resolveHostname;
+  inherit (utils) resolveHostname domains;
 in {
   setupVM = {
-    enable = true;
     vms = {
       vm0 = {
-        gateway = "vps";
+        gateway = "vpn";
         inputRules = ''
           # Accept all packets from vm0 to host
           iifname vm0 meta mark set 88
@@ -26,7 +25,7 @@ in {
         };
       };
       vm1 = {
-        gateway = "vps";
+        gateway = "home";
         inputRules = ''
           # Accept all packets from vm1 to host
           iifname vm1 meta mark set 88

@@ -1,8 +1,7 @@
 let
-  # combinedManager = import /home/flafy/repos/flafydev/combined-manager;
   combinedManager = import (builtins.fetchTarball {
-    url = "https://github.com/flafydev/combined-manager/archive/c9cc0428a15d01417f96015f88fd874233b9cc42.tar.gz";
-    sha256 = "sha256:188nwnr9vg4wwd98zm0fvwqwyraisaqqkxxlx1qm0x02pnbr904h";
+    url = "https://github.com/flafydev/combined-manager/archive/18fb4f6fd42bb6cceb9fc095897c1deb43f20c37.tar.gz";
+    sha256 = "sha256:122m10sw1pm8zn6p4qyz7k4zrylibb4yvnsmyp6w23yy79zmrdhk";
   });
 in
   combinedManager.mkFlake {
@@ -25,16 +24,32 @@ in
       mera.system = "x86_64-linux";
       mane.system = "x86_64-linux";
       bara.system = "aarch64-linux";
+      # bara.inputOverrides = inputs: {
+      #   nixpkgs = inputs.nixpkgs-temp;
+      # };
     };
 
-    outputs = inputs @ {flake-parts, ...}:
+    outputs = inputs @ {
+      self,
+      flake-parts,
+      ...
+    }:
       flake-parts.lib.mkFlake {inherit inputs;} {
         systems = [
           "x86_64-linux"
           "aarch64-linux"
         ];
-        perSystem = {pkgs, ...}: {
+        perSystem = {
+          pkgs,
+          ...
+        }: {
           formatter = pkgs.alejandra;
+          packages = {
+            bara-iso = self.nixosConfigurations.bara.config.mobile.outputs.default;
+          };
+          devShells.default = pkgs.mkShell {
+            packages = [pkgs.nixd pkgs.nil];
+          };
         };
       };
   }

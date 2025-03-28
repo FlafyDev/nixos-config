@@ -3,28 +3,24 @@
   lib,
   config,
   pkgs,
+  combinedManager,
   ...
 }: let
-
-  combinedManager = (builtins.fetchTarball {
-    url = "https://github.com/flafydev/combined-manager/archive/c9cc0428a15d01417f96015f88fd874233b9cc42.tar.gz";
-    sha256 = "sha256:188nwnr9vg4wwd98zm0fvwqwyraisaqqkxxlx1qm0x02pnbr904h";
-  });
   cfg = config.programs.nix;
   inherit (lib) mkEnableOption mkIf mkMerge mapAttrs;
-  package =
-    if !cfg.cm-patch
-    then inputs.nix-super.packages.${pkgs.system}.default
-    else
-      pkgs.nixVersions.nix_2_18.overrideAttrs (old: {
-        patches =
-          (old.patches or [])
-          ++ (
-            map
-            (file: "${combinedManager}/nix-patches/${file}")
-            (lib.attrNames (lib.filterAttrs (_: type: type == "regular") (builtins.readDir "${combinedManager}/nix-patches")))
-          );
-      });
+  # package =
+  #   if !cfg.cm-patch
+  #   then inputs.nix-super.packages.${pkgs.system}.default
+  #   else
+  #     pkgs.nix.overrideAttrs (old: {
+  #       patches =
+  #         (old.patches or [])
+  #         ++ (
+  #           map
+  #           (file: "${combinedManager}/nix-patches/${file}")
+  #           (lib.attrNames (lib.filterAttrs (_: type: type == "regular") (builtins.readDir "${combinedManager}/nix-patches")))
+  #         );
+  #     });
 in {
   options.programs.nix = {
     enable = mkEnableOption "nix";
@@ -73,7 +69,7 @@ in {
       ];
       os.nix = {
         enable = true;
-        package = mkIf cfg.patch package;
+        # package = mkIf cfg.patch package;
 
         distributedBuilds = true;
 

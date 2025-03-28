@@ -28,7 +28,7 @@ _: {
 
     config = {lib, ...}: {
       os = {
-        hardware.opengl.enable = true;
+        hardware.graphics.enable = true;
         networking.firewall.enable = lib.mkForce false;
 
         services.showcaseServer = {

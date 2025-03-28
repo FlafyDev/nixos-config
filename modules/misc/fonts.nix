@@ -13,15 +13,8 @@ in {
 
   config = let
     fonts = with pkgs; [
-      (nerdfonts.override {
-        fonts = [
-          # "AurulentSansMono"
-          # "Iosevka"
-          # "JetBrainsMono"
-          "FiraCode"
-          # "DroidSansMono"
-        ];
-      })
+      nerd-fonts.droid-sans-mono
+      nerd-fonts.fira-code
 
       (pkgs.runCommand "rubik-doodle-shadow-font" {
         FONT = fetchurl {

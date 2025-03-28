@@ -16,7 +16,7 @@ in {
       os.services.flatpak.enable = true;
       hm.home.packages = with pkgs; [
         flatpak
-        gnome.gnome-software
+        gnome-software
       ];
     }
     # {
@@ -195,10 +195,6 @@ in {
   #   };
   # };
 
-  unfree.allowed = [
-    "teamviewer-15.38.3"
-  ];
-
   os = {
     services = {
       pipewire = {
@@ -245,7 +241,6 @@ in {
         # };
       };
 
-      teamviewer.enable = true;
       prometheus = {
         enable = true;
         port = 4000;

@@ -15,7 +15,7 @@ in {
   #   };
   # };
 
-  
+
   services.postgres.comb = config.containers.maneVpn2.config.cmConfig.services.postgres.comb;
   services.postgres.extraSql = config.containers.maneVpn2.config.cmConfig.services.postgres.extraSql;
 
@@ -45,7 +45,7 @@ in {
     };
 
     config = {lib, ...}: {
-      os.hardware.opengl.enable = true;
+      os.hardware.graphics.enable = true;
       services.postgres.enable = mkForce false;
       networking.enable = true;
       os.networking.nftables.enable = lib.mkForce true;

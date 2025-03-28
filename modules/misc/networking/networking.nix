@@ -1,7 +1,7 @@
 {
   lib,
   config,
-  # notnft,
+  pkgs,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf mkOption;
@@ -9,6 +9,7 @@
 in {
   options.networking = {
     enable = mkEnableOption "networking";
+    wireguard = mkEnableOption "wireguard";
     domains = mkOption {
       type = with lib.types; attrsOf str;
       default = {
@@ -22,10 +23,23 @@ in {
     utils.extraUtils = {
       inherit (cfg) domains;
     };
+
+    os.systemd.network.enable = true;
     os.networking = {
       nftables.enable = true;
       firewall.enable = false;
+      useNetworkd = true;
+      networkmanager = {
+        enable = false;
+      };
+      useDHCP = false;
     };
+
+    os.networking.wireguard.enable = mkIf cfg.wireguard true;
+    os.networking.wireguard.useNetworkd = true;
+    os.boot.kernelModules = mkIf cfg.wireguard ["wireguard"];
+    os.environment.systemPackages = mkIf cfg.wireguard [pkgs.wireguard-tools];
+
     os.boot.kernel.sysctl = {
       "net.ipv4.conf.all.route_localnet" = 1;
       "net.ipv4.ip_forward" = 1;

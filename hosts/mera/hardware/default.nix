@@ -81,7 +81,7 @@
 
     hardware = {
       # bumblebee.enable = true;
-      pulseaudio.enable = lib.mkForce false;
+      pulseaudio.enable = false;
       # pulseaudio.enable = true;
       bluetooth = {
         enable = true;
@@ -95,10 +95,10 @@
       };
       # opentabletdriver.enable = true;
 
-      opengl = {
+      graphics = {
         enable = true;
         # driSupport = true;
-        # driSupport32Bit = true;
+        # enable32Bit = true;
         # extraPackages = with pkgs; [nvidia-vaapi-driver];
         # extraPackages32 = with pkgs.pkgsi686Linux; [nvidia-vaapi-driver];
         # extraPackages = with pkgs; [

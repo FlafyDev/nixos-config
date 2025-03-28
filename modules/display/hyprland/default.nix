@@ -51,10 +51,10 @@ in {
         # inputs.flutter_background_bar = {
         #   url = "github:flafydev/flutter_background_bar";
         # };
-        # hypr-dynamic-cursors = {
-        #   url = "github:VirtCode/hypr-dynamic-cursors";
-        #   inputs.hyprland.follows = "hyprland"; # to make sure that the plugin is built for the correct version of hyprland
-        # };
+        hypr-dynamic-cursors = {
+          url = "github:VirtCode/hypr-dynamic-cursors";
+          inputs.hyprland.follows = "hyprland"; # to make sure that the plugin is built for the correct version of hyprland
+        };
         hyprland = {
           # url = "github:hyprwm/Hyprland/v0.34.0";
           # url = "github:hyprwm/Hyprland/045c3fbd854090b2b60ca025fedd3e62498ed1ec";
@@ -92,7 +92,7 @@ in {
         xwayland.enable = true;
         package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
         plugins = with plugins; [
-          # (flPkgs' inputs.hypr-dynamic-cursors ["hypr-dynamic-cursors"])
+          (flPkgs' inputs.hypr-dynamic-cursors ["hypr-dynamic-cursors"])
         ];
         settings = let
           playerctl = "${pkgs.playerctl}/bin/playerctl";
@@ -126,7 +126,10 @@ in {
             "ignorealpha ${toString (theme.popupBackgroundColor.toNormA - 0.01)},^(anyrun)$"
           ];
           monitor = cfg.monitors;
-          plugins = {
+          plugin = {
+            dynamic-cursors = {
+              mode = "stretch";
+            };
             # hyprlens = {
             #   background = toString theme.wallpaperBlurred;
             #   nearest = 0;
@@ -175,11 +178,13 @@ in {
             rounding = 0;
             dim_inactive = true;
             dim_strength = 0.0;
-            drop_shadow = 1;
-            shadow_range = 20;
-            shadow_render_power = 2;
-            "col.shadow" = "rgba(00000044)";
-            shadow_offset = "0 0";
+            shadow = {
+              enabled = true;
+              range = 20;
+              render_power = 2;
+              color = "rgba(00000044)";
+              offset = "0 0";
+            };
             blur = {
               enabled = 1;
               size = 4;
@@ -209,14 +214,6 @@ in {
             force_split = 2;
             preserve_split = 1;
             default_split_ratio = 1.3;
-          };
-          master = {
-            # new_is_master = false;
-            new_on_top = false;
-            no_gaps_when_only = false;
-            orientation = "top";
-            mfact = 0.6;
-            always_center_master = false;
           };
           exec-once = [
             "${pkgs.mako}/bin/mako"

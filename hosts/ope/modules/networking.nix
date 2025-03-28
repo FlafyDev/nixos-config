@@ -3,10 +3,16 @@
 in {
   networking = {
     enable = true;
-    vpnClient = {
-      enable = true;
-      forwardPortsOutOfNS = [ 8080 ];
-    };
+    wireguard = true;
+  };
+
+  setupVM = {
+    enable = true;
+    homeInterface = "enp14s0";
+    homeSubnet = "10.0.0.0/24";
+    vpnInterface = "wg_vps";
+    vpnSubnet = "10.10.10.0/24";
+    forceHomeIPs = [(resolveHostname domains.personal)];
   };
 
   os.networking.nftables.tables.allow-services = {
@@ -48,20 +54,6 @@ in {
         dhcpV4Config = {
           RequestAddress = "10.0.0.42";
         };
-        routes = [
-          # Route traffic destined to the vps's IP not through the vps (for example, through home router).
-          {
-            Destination = "${resolveHostname domains.personal}";
-            Table = 2;
-            Gateway = "_dhcp4";
-          }
-          # Don't route traffic destined to LAN through the vps.
-          {
-            Destination = "10.0.0.0/24";
-            Table = 2;
-            Scope = "link";
-          }
-        ];
       };
       "50-wg_vps" = {
         matchConfig.Name = "wg_vps";
@@ -70,21 +62,6 @@ in {
           IPv6AcceptRA = false;
           DHCP = "no";
         };
-        routes = [
-          {
-            Destination = "0.0.0.0/0";
-            Table = 2;
-            Scope = "link";
-          }
-        ];
-        routingPolicyRules = [
-          # Make sure all traffic that comes from 10.10.10.10/24 goes to table 2 (to get oif wg_vps)
-          {
-            Family = "ipv4";
-            From = "10.10.10.10/24";
-            Table = 2;
-          }
-        ];
       };
     };
     netdevs = {
@@ -105,13 +82,6 @@ in {
           }
         ];
       };
-    };
-  };
-
-  os.networking = {
-    useNetworkd = false;
-    networkmanager = {
-      enable = false;
     };
   };
 }

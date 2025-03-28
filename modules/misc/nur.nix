@@ -19,7 +19,7 @@ in {
     }
     (
       mkIf cfg.enable {
-        os.nixpkgs.overlays = [inputs.nur.overlay];
+        os.nixpkgs.overlays = [inputs.nur.overlays.default];
       }
     )
   ];

@@ -143,7 +143,7 @@ in {
     # '';
 
     # Audio
-    hardware.pulseaudio.enable = false;
+    services.pulseaudio.enable = false;
     services.pipewire = {
       enable = true;
       alsa.enable = true;
@@ -196,11 +196,11 @@ in {
         };
       };
       opentabletdriver.enable = true;
-      opengl = {
+      graphics = {
         # package = newMesa.drivers;
         enable = true;
         # driSupport = true;
-        driSupport32Bit = true;
+        enable32Bit = true;
         extraPackages = with pkgs; [
           vaapiVdpau
           libvdpau-va-gl

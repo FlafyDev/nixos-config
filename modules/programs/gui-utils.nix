@@ -5,7 +5,6 @@
   inputs,
   utils,
   theme,
-  upkgs,
   ...
 }: let
   cfg = config.programs.gui-utils;
@@ -46,17 +45,17 @@ in {
       };
       os.environment.systemPackages = with pkgs; [
         (utils.flPkgs inputs.flarrent)
-        upkgs.zed-editor
-        kdenlive
+        zed-editor
+        kdePackages.kdenlive
         chromium
-        gnome.eog
+        eog # eye of gnome - image viewer
         mate.engrampa
-        gnome.nautilus
+        nautilus # file manager
         scrcpy
-        gnome.simple-scan
-        gnome.evince
-        gnome.gnome-system-monitor
-        gnome.gnome-font-viewer
+        simple-scan # scanner
+        evince # document viewer
+        gnome-system-monitor
+        gnome-font-viewer
         gimp
         gparted
         pavucontrol

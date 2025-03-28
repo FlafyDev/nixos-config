@@ -11,6 +11,15 @@
 in {
   options.services.matrix = {
     enable = mkEnableOption "matrix";
+    postgresIP = mkOption {
+      type = types.str;
+      description = "The IP of the PostgreSQL server";
+    };
+    postgresPort = mkOption {
+      type = types.str;
+      default = "5432";
+      description = "The port of the PostgreSQL server";
+    };
     host = mkOption {
       type = types.str;
       description = "The domain name of the Matrix server";
@@ -112,7 +121,8 @@ in {
           args = {
             database = "matrix-synapse";
             user = "matrix-synapse";
-            host = "10.10.15.10";
+            host = cfg.postgresIP;
+            port = cfg.postgresPort;
           };
         };
 
@@ -255,7 +265,7 @@ in {
     #         appservice = {
     #           database = {
     #             type = "postgres";
-    #             uri = "postgres://10.10.15.10:5432/mautrix-meta-instagram?sslmode=disable";
+    #             uri = "postgres://${cfg.postgresIP}:${cfg.postgresPort}/mmmautrix-meta-instagram?sslmode=disable";
     #           };
     #         };
     #         bridge = {
@@ -292,7 +302,7 @@ in {
           # hostname = "[::1]";
           database = {
             type = "postgres";
-            uri = "postgres://10.10.15.10:5432/mautrix-gmessages?sslmode=disable";
+            uri = "postgres://${cfg.postgresIP}:${cfg.postgresPort}/mautrix-gmessages?sslmode=disable";
           };
         };
         bridge = {
@@ -346,7 +356,7 @@ in {
     #     };
     #     database = {
     #       engine = "postgres";
-    #       connectionString = "postgres://10.10.15.10:5432/matrix-irc?sslmode=disable";
+    #       connectionString = "postgres://${cfg.postgresIP}:${cfg.postgresPort}/mmatrix-irc?sslmode=disable";
     #     };
     #     ircService = {
     #       servers = {
@@ -433,7 +443,7 @@ in {
           # hostname = "[::1]";
           database = {
             type = "postgres";
-            uri = "postgres://10.10.15.10:5432/mautrix-whatsapp?sslmode=disable";
+            uri = "postgres://${cfg.postgresIP}:${cfg.postgresPort}/mautrix-whatsapp?sslmode=disable";
           };
         };
         bridge = {
