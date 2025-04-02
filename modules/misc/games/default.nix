@@ -269,7 +269,7 @@ in {
               winePrefix = "geometry-dash";
               script = {data, ...}: ''
                 export WINEDLLOVERRIDES="XInput1_4.dll=n,b"
-                env -C ${data} wine64 GeometryDash.exe
+                env -C ${data} wine GeometryDash.exe
               '';
               networking = true;
               pathPackages = [pkgs.wineWowPackages.unstable pkgs.gamescope];

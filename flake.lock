@@ -1085,14 +1085,18 @@
         "spectrum": "spectrum"
       },
       "locked": {
-        "lastModified": 1740239220,
-        "narHash": "sha256-PUmV8lTuk+TGJkmuzgo05XFkn1OKt3ovujFQwTNPO3s=",
-        "path": "/home/flafy/repos/astro/microvm.nix",
-        "type": "path"
+        "lastModified": 1743256103,
+        "narHash": "sha256-3OBaDWRKUV/ZhzwNJYJC7K6HGQFZRlVFz6mIsAet7h8=",
+        "owner": "FlafyDev",
+        "repo": "microvm.nix",
+        "rev": "2dd8d4559aae92880ddc7d6367015f970b16455c",
+        "type": "github"
       },
       "original": {
-        "path": "/home/flafy/repos/astro/microvm.nix",
-        "type": "path"
+        "owner": "FlafyDev",
+        "ref": "flafy-main",
+        "repo": "microvm.nix",
+        "type": "github"
       }
     },
     "mobile-nixos": {

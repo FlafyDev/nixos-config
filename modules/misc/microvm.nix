@@ -3,7 +3,7 @@
   lib,
   config,
   ...
-}: let 
+}: let
   inherit (lib) mkOption types mkIf;
 in {
   options = {
@@ -17,10 +17,9 @@ in {
   };
   config = {
     inputs = {
-      microvm.url = "path:/home/flafy/repos/astro/microvm.nix";
+      microvm.url = "github:FlafyDev/microvm.nix/flafy-main";
       microvm.inputs.nixpkgs.follows = "nixpkgs";
     };
     osModules = mkIf config.microvm.host [inputs.microvm.nixosModules.host];
   };
 }
-

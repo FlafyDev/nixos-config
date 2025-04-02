@@ -56,7 +56,7 @@
     impermanence.url = "github:nix-community/impermanence";
     microvm = {
       inputs.nixpkgs.follows = "nixpkgs";
-      url = "path:/home/flafy/repos/astro/microvm.nix";
+      url = "github:FlafyDev/microvm.nix/flafy-main";
     };
     mobile-nixos = {
       flake = false;

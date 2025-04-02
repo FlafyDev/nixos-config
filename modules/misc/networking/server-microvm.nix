@@ -48,6 +48,11 @@ in {
               default = null;
               description = "Name";
             };
+            # package = mkOption {
+            #   type = types.anything;
+            #   default = cfg.vms.${vmName}.config.config.microvm.declaredRunner;
+            #   description = "Package";
+            # };
             inputRules = mkOption {
               type = str;
               default = "";
@@ -146,7 +151,7 @@ in {
                                 source = "/nix/store";
                                 mountPoint = "/nix/.ro-store";
                                 tag = "ro-store";
-                                proto = "virtiofs";
+                                proto = "9p";
                               }
                             ];
                           };
@@ -233,8 +238,8 @@ in {
     };
 
     os.microvm.vms = mapAttrs (vmName: vmCfg: {
-      autostart = true;
-      restartIfChanged = true;
+      autostart = lib.mkDefault true;
+      restartIfChanged = lib.mkDefault true;
       evaluatedConfig = vmCfg.config;
     }) cfg.vms;
 
