@@ -28,7 +28,6 @@ in {
       };
     }
     (mkIf cfg.enable {
-      unfree.allowed = ["unityhub"];
       hmModules = [inputs.guifetch.homeManagerModules.default];
       hm.xdg.configFile."flarrent/config.json".text = builtins.toJSON {
         color = theme.borderColor.active.toHexARGB;

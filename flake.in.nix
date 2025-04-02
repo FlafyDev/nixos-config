@@ -24,6 +24,7 @@ in
       mera.system = "x86_64-linux";
       mane.system = "x86_64-linux";
       bara.system = "aarch64-linux";
+      glint.system = "x86_64-linux";
       # bara.inputOverrides = inputs: {
       #   nixpkgs = inputs.nixpkgs-temp;
       # };
