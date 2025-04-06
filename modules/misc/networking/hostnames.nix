@@ -28,6 +28,7 @@
     "mera.wg_private.${cfg.domains.personal}" = "10.10.11.11";
     "bara.wg_private.${cfg.domains.personal}" = "10.10.11.12";
     "noro.wg_private.${cfg.domains.personal}" = "10.10.11.13";
+    "glint.wg_private.${cfg.domains.personal}" = "10.10.11.14";
 
     "ope.wg_vps.${cfg.domains.personal}" = "10.10.10.10";
     "mane.wg_vps.${cfg.domains.personal}" = "10.10.10.1";

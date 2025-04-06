@@ -3,6 +3,7 @@ _: {
 
   os.services.jellyfin = {
     enable = true;
+    group = "transmission";
   };
 
   os.users.users.jellyfin = {

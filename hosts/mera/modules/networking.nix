@@ -23,6 +23,7 @@ in
         type filter hook input priority 0; policy accept;
         tcp dport 22 meta mark set 88    # SSH
         tcp dport 5000 meta mark set 88  # Nextcloud
+        iifname enp4s0 tcp dport 5432 meta mark set 88  # Postgres
       }
     '';
   };
@@ -81,24 +82,6 @@ in
   };
 
   # os.networking = {
-  #   useNetworkd = false;
-
-  #   networkmanager = {
-  #     enable = false;
-  #   };
-
-  #   # I think can be deleted because of systemd.network
-  #   dhcpcd = {
-  #     wait = "background";
-  #     extraConfig = "noarp";
-  #   };
-
-  #   # I think can be deleted because of systemd.network
-  #   defaultGateway = {
-  #     interface = "enp4s0";
-  #     address = "10.0.0.138";
-  #   };
-
   #   wireguard = {
   #     enable = true;
   #     interfaces = {

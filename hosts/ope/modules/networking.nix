@@ -23,10 +23,17 @@ in {
         meta nftrace set 1
         tcp dport 22 meta mark set 88 # SSH
         tcp dport 8080 meta mark set 88 # Testing
+        udp dport 51822 meta mark set 88 # Wireguard private endpoint
+        iifname wg_private meta mark set 88
       }
       chain output {
         type filter hook output priority 0; policy accept;
         meta nftrace set 1
+      }
+      chain prerouting {
+        type nat hook prerouting priority -100; policy accept;
+        meta nftrace set 1
+        tcp dport 8080 redirect to 22
       }
     '';
   };
@@ -37,11 +44,11 @@ in {
     enable = true;
     wait-online.enable = true;
     networks = {
-      "50-vethhost0" = {
-        matchConfig.Name = "vethhost0";
-        # networkConfig.DHCP = "no";
-        linkConfig.Unmanaged = "yes";
-      };
+      # "50-vethhost0" = {
+      #   matchConfig.Name = "vethhost0";
+      #   # networkConfig.DHCP = "no";
+      #   linkConfig.Unmanaged = "yes";
+      # };
       "50-wlp15s0" = {
         matchConfig.Name = "wlp15s0";
         networkConfig.DHCP = "no";
@@ -63,6 +70,14 @@ in {
           DHCP = "no";
         };
       };
+      "50-wg_private" = {
+        matchConfig.Name = "wg_private";
+        networkConfig = {
+          Address = [[''${resolveHostname "ope.wg_private"}/24'']];
+          IPv6AcceptRA = false;
+          DHCP = "no";
+        };
+      };
     };
     netdevs = {
       "50-wg_vps" = {
@@ -78,6 +93,29 @@ in {
             PublicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
             AllowedIPs = ["0.0.0.0/0"];
             Endpoint = "${resolveHostname domains.personal}:51820";
+            PersistentKeepalive = 25;
+          }
+        ];
+      };
+      "50-wg_private" = {
+        netdevConfig = {
+          Name = "wg_private";
+          Kind = "wireguard";
+        };
+        wireguardConfig = {
+          ListenPort = 51822;
+          PrivateKeyFile = ssh.ope.ope_wg_private.private;
+        };
+        wireguardPeers = [
+          {
+            PublicKey = builtins.readFile ssh.mane.mane_wg_private.public;
+            AllowedIPs = [''${resolveHostname "mane.wg_private"}/32''];
+            Endpoint = "${resolveHostname domains.personal}:51821";
+            PersistentKeepalive = 25;
+          }
+          {
+            PublicKey = builtins.readFile ssh.glint.glint_wg_private.public;
+            AllowedIPs = [''${resolveHostname "glint.wg_private"}/32''];
             PersistentKeepalive = 25;
           }
         ];

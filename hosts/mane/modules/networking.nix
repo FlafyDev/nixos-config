@@ -3,6 +3,18 @@
 in {
   networking.enable = true;
 
+  os.systemd.services."systemd-networkd".environment.SYSTEMD_LOG_LEVEL = "debug";
+  os.systemd.network = {
+    enable = true;
+    wait-online.enable = true;
+    networks = {
+      "50-ens3" = {
+        matchConfig.Name = "ens3";
+        networkConfig.DHCP = "yes";
+      };
+    };
+  };
+
   # networking.notnft.namespaces.default.rules = with notnft.dsl; with payload; ruleset {
   #   filter = add table { family = f: f.inet; } {
   #     input = add chain { type = f: f.filter; hook = f: f.input; prio = 0; policy = f: f.accept; }
@@ -33,9 +45,10 @@ in {
         type filter hook input priority 0; policy accept;
         meta nftrace set 1
         tcp dport 22 meta mark set 88  # SSH
-        udp dport 51820 meta mark set 88  # Wireguard
+        udp dport 51820 meta mark set 88  # Wireguard wg_vps
+        udp dport 51821 meta mark set 88  # Wireguard wg_private
       }
-      
+
       chain prerouting {
         type nat hook prerouting priority -100; policy accept;
         meta nftrace set 1
@@ -44,6 +57,7 @@ in {
           8000
         } dnat ip to 10.10.10.11
         iifname "ens3" ip daddr ${resolveHostname domains.personal} tcp dport 8080 dnat ip to 10.10.10.10
+        iifname "ens3" ip daddr ${resolveHostname domains.personal} udp dport 51822 dnat ip to 10.10.10.10
       }
 
       chain postrouting {
@@ -71,29 +85,33 @@ in {
           }
         ];
       };
-      # wg_private = {
-      #   ips = ["10.10.11.1/24"];
-      #   listenPort = 51821;
-      #   privateKeyFile = ssh.mane.mane_wg_private.private;
-      #   peers = [
-      #     {
-      #       publicKey = builtins.readFile ssh.ope.ope_wg_private.public;
-      #       allowedIPs = ["10.10.11.10/32"];
-      #     }
-      #     {
-      #       publicKey = builtins.readFile ssh.mera.mera_wg_private.public;
-      #       allowedIPs = ["10.10.11.11/32"];
-      #     }
-      #     # {
-      #     #   publicKey = builtins.readFile ssh.mera.bara_wg_vps.public;
-      #     #   allowedIPs = ["10.10.11.12/32"];
-      #     # }
-      #     # {
-      #     #   publicKey = builtins.readFile ssh.mera.noro_wg_vps.public;
-      #     #   allowedIPs = ["10.10.11.13/32"];
-      #     # }
-      #   ];
-      # };
+      wg_private = {
+        ips = [''${resolveHostname "mane.wg_private"}/24''];
+        listenPort = 51821;
+        privateKeyFile = ssh.mane.mane_wg_private.private;
+        peers = [
+          {
+            publicKey = builtins.readFile ssh.ope.ope_wg_private.public;
+            allowedIPs = [''${resolveHostname "ope.wg_private"}/32''];
+          }
+          {
+            publicKey = builtins.readFile ssh.mera.mera_wg_private.public;
+            allowedIPs = [''${resolveHostname "mera.wg_private"}/32''];
+          }
+          {
+            publicKey = builtins.readFile ssh.glint.glint_wg_private.public;
+            allowedIPs = [''${resolveHostname "glint.wg_private"}/32''];
+          }
+          # {
+          #   publicKey = builtins.readFile ssh.mera.bara_wg_vps.public;
+          #   allowedIPs = ["10.10.11.12/32"];
+          # }
+          # {
+          #   publicKey = builtins.readFile ssh.mera.noro_wg_vps.public;
+          #   allowedIPs = ["10.10.11.13/32"];
+          # }
+        ];
+      };
     };
   };
 }

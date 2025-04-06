@@ -89,7 +89,7 @@ in {
             "showcase.${domains.personal}" = {
               addSSL = true;
               locations."/" = {
-                proxyPass = "http://127.0.0.1:8080";
+                proxyPass = "http://10.10.15.1:8080";
               };
             };
             "emoji.${domains.personal}" = {

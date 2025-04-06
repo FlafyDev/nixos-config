@@ -17,6 +17,9 @@ let
     noro = {
       user = "";
     };
+    glint = {
+      user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILj3eTZ2RZ4hLty8trulo1Z5TeRc3KzfYX0a4ZpMm0zZ flafy@glint";
+    };
   };
 
   # Can edit all secrets;

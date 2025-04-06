@@ -47,6 +47,7 @@ in {
       users.${config.users.main}.keyFiles = [
         ssh.bara.bara_to_ope.public
         ssh.noro.noro_to_ope.public
+        ssh.glint.glint_to_ope.public
       ];
     };
   };

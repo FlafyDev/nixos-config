@@ -1,3 +1,4 @@
+# TODO: glint rename to pika
 { config, pkgs, ssh, ... }:
 
 {
@@ -37,6 +38,8 @@
     gnome-software
   ];
 
+  games.enable = true;
+
   fonts.enable = true;
   printers.enable = true;
 
@@ -56,7 +59,7 @@
     vscode.enable = true;
     neovim.enable = true;
     cli-utils.enable = false;
-    transmission.enable = true;
+    transmission.enable = false;
     direnv.enable = true;
     fish.enable = true;
     foot.enable = true;
