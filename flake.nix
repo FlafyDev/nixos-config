@@ -81,7 +81,6 @@
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-bara.url = "github:nixos/nixpkgs/684c17c429c42515bafb3ad775d2a710947f3d67";
-    nixtheplanet.url = "github:matthewcroughan/nixtheplanet";
     nur.url = "github:nix-community/NUR";
     showcase.url = "git+file:///home/flafy/repos/flafydev/showcase2";
     tailwind-tools = {

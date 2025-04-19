@@ -1,5 +1,5 @@
 # TODO: glint rename to pika
-{ config, pkgs, ssh, ... }:
+{ config, pkgs, secrets, ... }:
 
 {
   # SSH
@@ -21,7 +21,7 @@
     server = {
       enable = true;
       users.${config.users.main}.keyFiles = [
-        ssh.ope.ope_to_glint.public
+        secrets.ssh-keys.ope.ope_to_glint.public.filePath
       ];
     };
   };
@@ -56,9 +56,8 @@
     firefox.enable = true;
     gnome.enable = true;
     mpv.enable = true;
-    vscode.enable = true;
     neovim.enable = true;
-    cli-utils.enable = false;
+    cli-utils.enable = true;
     transmission.enable = false;
     direnv.enable = true;
     fish.enable = true;
@@ -74,6 +73,9 @@
   };
 
   os.programs.corectrl.enable = true;
+
+  # services.waypipe.client.enable = true;
+  # services.waypipe.client.ip = "10.10.11.10";
 
   os.security = {
     rtkit.enable = true;

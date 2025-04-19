@@ -2,14 +2,13 @@
   lib,
   config,
   hmConfig,
-  inputs,
-  options,
+  secrets,
   osOptions,
   ...
 }: let
   cfg = config.programs.ssh;
   inherit (lib) mkEnableOption mkOption types mkIf mkMerge;
-  inherit (builtins) mapAttrs;
+  inherit (builtins) mapAttrs foldl' attrNames;
 in {
   options.programs.ssh = {
     enable = mkEnableOption "ssh";
@@ -102,6 +101,19 @@ in {
       # hm.home.sessionVariables = {
       #   SSH_AUTH_SOCK = "/run/user/1000/keyring/ssh";
       # };
+
+      hm.home.file = let
+        inherit (config.users) host;
+      in
+        foldl' (acc: keyName:
+          acc
+          // {
+            ".ssh/${keyName}".source = hmConfig.lib.file.mkOutOfStoreSymlink secrets.ssh-keys.${host}.${keyName}.private;
+          }) {} (
+            if (secrets.ssh-keys ? ${host})
+            then (attrNames secrets.ssh-keys.${host})
+            else []
+          );
     })
     (mkIf (cfg.enable && cfg.sftp.enable) {
       users.groups = ["sftpuser"];

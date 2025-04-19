@@ -68,6 +68,8 @@ in {
           ip6 nexthdr icmpv6 icmpv6 type echo-request accept
           ip protocol icmp icmp type echo-request accept
 
+          accept
+
           # count and drop any other traffic
           counter drop
         }

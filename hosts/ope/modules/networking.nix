@@ -1,4 +1,4 @@
-{ssh, utils, ...}: let
+{secrets, utils, ...}: let
   inherit (utils) resolveHostname domains;
 in {
   networking = {
@@ -25,6 +25,7 @@ in {
         tcp dport 8080 meta mark set 88 # Testing
         udp dport 51822 meta mark set 88 # Wireguard private endpoint
         iifname wg_private meta mark set 88
+        iifname enp14s0 meta mark set 88
       }
       chain output {
         type filter hook output priority 0; policy accept;
@@ -33,7 +34,7 @@ in {
       chain prerouting {
         type nat hook prerouting priority -100; policy accept;
         meta nftrace set 1
-        tcp dport 8080 redirect to 22
+        # tcp dport 8080 redirect to 22
       }
     '';
   };
@@ -86,11 +87,11 @@ in {
           Kind = "wireguard";
         };
         wireguardConfig = {
-          PrivateKeyFile = ssh.ope.ope_wg_vps.private;
+          PrivateKeyFile = secrets.ssh-keys.ope.ope_wg_vps.private;
         };
         wireguardPeers = [
           {
-            PublicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
+            PublicKey = secrets.ssh-keys.mane.mane_wg_vps.public.content;
             AllowedIPs = ["0.0.0.0/0"];
             Endpoint = "${resolveHostname domains.personal}:51820";
             PersistentKeepalive = 25;
@@ -104,17 +105,17 @@ in {
         };
         wireguardConfig = {
           ListenPort = 51822;
-          PrivateKeyFile = ssh.ope.ope_wg_private.private;
+          PrivateKeyFile = secrets.ssh-keys.ope.ope_wg_private.private;
         };
         wireguardPeers = [
           {
-            PublicKey = builtins.readFile ssh.mane.mane_wg_private.public;
+            PublicKey = secrets.ssh-keys.mane.mane_wg_private.public.content;
             AllowedIPs = [''${resolveHostname "mane.wg_private"}/32''];
             Endpoint = "${resolveHostname domains.personal}:51821";
             PersistentKeepalive = 25;
           }
           {
-            PublicKey = builtins.readFile ssh.glint.glint_wg_private.public;
+            PublicKey = secrets.ssh-keys.glint.glint_wg_private.public.content;
             AllowedIPs = [''${resolveHostname "glint.wg_private"}/32''];
             PersistentKeepalive = 25;
           }

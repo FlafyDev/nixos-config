@@ -1,7 +1,7 @@
 # Not a module!
 {lib, ...}: let
   inherit (builtins) readDir;
-  inherit (lib) foldlAttrs optional hasSuffix;
+  inherit (lib) foldlAttrs hasSuffix;
 
   inherit ((import ./concat-paths.nix {inherit lib;})) concatPaths;
 

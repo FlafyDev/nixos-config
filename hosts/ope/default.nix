@@ -34,10 +34,28 @@ in {
     # }
   ];
 
+  os.services.davfs2.enable = true;
+  os.services.autofs = {
+    enable = true;
+    autoMaster = let
+      davfsConfig = pkgs.writeText "davfs-config" ''
+        secrets ${secrets.nextcloud.ope.davfs}
+      '';
+      mapConf = pkgs.writeText "auto" ''
+        nextcloud -fstype=davfs,conf=${davfsConfig},file_mode=600,dir_mode=700,uid=1000,rw :http\://10.0.0.41:5000/remote.php/webdav/
+      '';
+    in ''
+      /mnt/nextcloud file:${mapConf}
+    '';
+  };
+
+  os.environment.systemPackages = [
+    pkgs.waypipe
+  ];
+  # services.waypipe.server.enable = true;
+
   users.main = "flafy";
   users.host = "ope";
-
-  macos.enable = true;
 
   # containers.showcaseBot = {
   #   autoStart = true;
@@ -347,7 +365,7 @@ in {
     firefox.enable = true;
     gnome.enable = false;
     mpv.enable = true;
-    vscode.enable = true;
+    # vscode.enable = true;
     neovim.enable = true;
     cli-utils.enable = true;
     transmission.enable = true;

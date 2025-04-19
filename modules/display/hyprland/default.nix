@@ -128,7 +128,7 @@ in {
           monitor = cfg.monitors;
           plugin = {
             dynamic-cursors = {
-              mode = "stretch";
+              mode = "tilt";
             };
             # hyprlens = {
             #   background = toString theme.wallpaperBlurred;

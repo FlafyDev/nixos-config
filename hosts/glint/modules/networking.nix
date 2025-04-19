@@ -1,4 +1,4 @@
-{ssh, utils, lib, ...}: let
+{secrets, utils, lib, ...}: let
   inherit (utils) domains resolveHostname;
 in {
   networking.enable = true;
@@ -42,17 +42,17 @@ in {
           Kind = "wireguard";
         };
         wireguardConfig = {
-          PrivateKeyFile = ssh.glint.glint_wg_private.private;
+          PrivateKeyFile = secrets.ssh-keys.glint.glint_wg_private.private;
         };
         wireguardPeers = [
           {
-            PublicKey = builtins.readFile ssh.mane.mane_wg_private.public;
+            PublicKey = secrets.ssh-keys.mane.mane_wg_private.public.content;
             AllowedIPs = [''${resolveHostname "mane.wg_private"}/32''];
             Endpoint = "${resolveHostname domains.personal}:51821";
             PersistentKeepalive = 25;
           }
           {
-            PublicKey = builtins.readFile ssh.ope.ope_wg_private.public;
+            PublicKey = secrets.ssh-keys.ope.ope_wg_private.public.content;
             AllowedIPs = [''${resolveHostname "ope.wg_private"}/32''];
             Endpoint = "${resolveHostname domains.personal}:51822";
             PersistentKeepalive = 25;

@@ -3,17 +3,21 @@
   lib,
   config,
   osConfig,
-  hmConfig,
+  secrets,
   pkgs,
   utils,
   ...
 }:
 with lib; let
   cfg = config.secrets;
-  secretsDir = ../../../secrets;
-  inherit (lib) mkOption types foldl' strings;
-  inherit (utils) concatPaths;
-  inherit (builtins) readDir pathExists readFile;
+  inherit (lib) mkOption types filterAttrs;
+  inherit (utils) getAllSecrets transformToNestedPaths;
+  inherit (builtins) mapAttrs;
+
+  allSecrets = getAllSecrets {
+    host = config.users.main;
+  };
+  hostSecrets = filterAttrs (_filePath: secret: elem config.users.host secret.hosts) allSecrets.secrets;
 in {
   options.secrets = {
     enable = mkEnableOption "secrets";
@@ -43,7 +47,7 @@ in {
           serviceConfig.ExecStart = let
             bw = "${pkgs.bitwarden-cli}/bin/bw";
             script = pkgs.writeShellScript "bw-session" ''
-              source ${osConfig.age.secrets.bitwarden.path}
+              source ${secrets.bitwarden.credentials}
 
               ${bw} login --apikey --nointeraction
               export BW_SESSION="$(${bw} unlock --raw --passwordenv BW_PASSWORD --nointeraction)"
@@ -58,120 +62,26 @@ in {
       mkIf cfg.enable {
         osModules = [inputs.agenix.nixosModules.default];
 
-        _module.args.secrets = lib.mapAttrs (_name: value: value.path) osConfig.age.secrets;
-        _module.args.ssh = foldl' (
-          acc: host:
-            acc
-            // {
-              ${host} = foldl' (acc: key:
-                acc
-                // {
-                  ${key} = {
-                    private = osConfig.age.secrets."${host}-${key}".path;
-                    public = concatPaths [secretsDir "ssh-keys" host key "public"];
-                  };
-                }) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys" host])));
-            }
-        ) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys"])));
+        _module.args.secrets =
+          transformToNestedPaths ((mapAttrs (filePath: _secret: osConfig.age.secrets.${filePath}.path) hostSecrets) // allSecrets.other);
+        os = {
+          age.secrets = let
+            secrets = mapAttrs (_relFilePath: secret: {
+              file = /. + secret.filePath;
+              inherit (secret) mode owner group;
+            }) hostSecrets;
+          in
+            secrets;
 
-        hm.home.file = let
-          inherit (config.users) host;
-        in
-          foldl' (acc: key:
-            acc
-            // {
-              ".ssh/${key}".source = hmConfig.lib.file.mkOutOfStoreSymlink osConfig.age.secrets."${host}-${key}".path;
-            }) {} (
-            if (pathExists (concatPaths [secretsDir "ssh-keys" host]))
-            then (attrNames (readDir (concatPaths [secretsDir "ssh-keys" host])))
-            else []
-          );
+          age.identityPaths = [
+            "/persist/home/${config.users.main}/.ssh/agenix"
+            "/home/${config.users.main}/.ssh/agenix"
+          ];
 
-        os.age.secrets = let
-          sshKeys = foldl' (
-            acc: host:
-              acc
-              // (foldl' (acc: key:
-                acc
-                // {
-                  "${host}-${key}" = let
-                    ownerFile = concatPaths [secretsDir "ssh-keys" host key "owner"];
-                  in {
-                    file = concatPaths [secretsDir "ssh-keys" host key "private.age"];
-                    mode = "400";
-                    owner = if pathExists ownerFile then strings.trim (readFile ownerFile) else config.users.main;
-                    group = "root";
-                  };
-                }) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys" host]))))
-          ) {} (attrNames (readDir (concatPaths [secretsDir "ssh-keys"])));
-        in
-          sshKeys
-          // {
-            bitwarden = {
-              file = concatPaths [secretsDir "other" "bitwarden.age"];
-              mode = "400";
-              owner = config.users.main;
-              group = "users";
-            };
-            porkbun = {
-              file = concatPaths [secretsDir "other" "porkbun.age"];
-              mode = "440";
-              owner = "acme";
-              group = "acme";
-            };
-            "mail.flafy_dev.flafy" = {
-              file = concatPaths [secretsDir "other" "mail" "flafy_dev" "flafy.age"];
-              mode = "440";
-              owner = "virtualMail";
-              group = "virtualMail";
-            };
-            lastfm-flafydev = {
-              file = concatPaths [secretsDir "other" "lastfm-flafydev.age"];
-              mode = "440";
-              owner = "mpdscribble";
-              group = "mpdscribble";
-            };
-            slskd = {
-              file = concatPaths [secretsDir "other" "slskd.age"];
-              mode = "440";
-              owner = "slskd";
-              group = "root";
-            };
-            restic-sb1-backups-password = {
-              file = concatPaths [secretsDir "other" "restic-sb1-backups-password"];
-              mode = "440";
-              owner = "restic";
-              group = "restic";
-            };
-          };
-
-        os.age.identityPaths = [
-          "/persist/home/${config.users.main}/.ssh/agenix"
-          "/home/${config.users.main}/.ssh/agenix"
-        ];
-
-        os.environment.systemPackages = [
-          (utils.flPkgs inputs.agenix)
-        ];
-
-        # hm.systemd.user.services.bitwarden-session = {
-        #   Unit = {
-        #     Description = "Generate a new session for Bitwarden CLI";
-        #     After = ["run-agenix.d.mount"];
-        #     # PartOf = ["graphical-session.target"];
-        #   };
-        #
-        #   Service = {
-        #     # WantedBy = ["default.target"];
-        #     # Type = "oneshot";
-        #     # RemainAfterExit = true;
-        #     ExecStart = ;
-        #   };
-        #
-        #   # Install = {WantedBy = ["graphical-session.target"];};
-        # };
-
-        # os.environment.sessionVariables.BW_SESSION =;
+          environment.systemPackages = [
+            (utils.flPkgs inputs.agenix)
+          ];
+        };
       }
     )
   ];

@@ -51,6 +51,7 @@ in {
             "lp"
             "docker"
             "dialout"
+            "davfs2"
             "nextcloud"
           ]
           ++ cfg.groups;

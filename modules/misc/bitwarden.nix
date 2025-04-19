@@ -3,7 +3,7 @@
   config,
   pkgs,
   hmConfig,
-  ssh,
+  secrets,
   ...
 }: let
   cfg = config.bitwarden;
@@ -76,7 +76,7 @@ in {
           export "$(systemctl --user show-environment | grep '^XDG_RUNTIME_DIR=')"
           export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
 
-          ${lib.concatStringsSep "\n" (map (key: "${pkgs.openssh}/bin/ssh-add ${key.private} || true") (builtins.attrValues ssh."${config.users.host}" ))}
+          ${lib.concatStringsSep "\n" (map (key: "${pkgs.openssh}/bin/ssh-add ${key.private} || true") (builtins.attrValues secrets.ssh-keys."${config.users.host}" ))}
         ''} &";
         Environment = [
           "PATH=${lib.makeBinPath (with pkgs; [
