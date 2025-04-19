@@ -77,7 +77,7 @@ in {
 
           if [[ "$2" == "waypipe" ]]; then
             rm /tmp/waypipe.sock || true
-            ${pkgs.socat}/bin/socat UNIX-LISTEN:/tmp/waypipe.sock,reuseaddr,fork TCP:10.10.11.14:12345
+            ${pkgs.socat}/bin/socat UNIX-LISTEN:/tmp/waypipe.sock,reuseaddr,fork TCP:10.10.11.14:12345 &
             ${pkgs.waypipe}/bin/waypipe -s /tmp/waypipe.sock server -- ${pkgs.code-server}/bin/code-server --bind-addr 0.0.0.0:$PORT --auth none $PWD
           else
             ${pkgs.code-server}/bin/code-server --bind-addr 0.0.0.0:$PORT --auth none $PWD
@@ -90,7 +90,7 @@ in {
 
           if [[ "$4" == "waypipe" ]]; then
             rm /tmp/waypipe.sock || true
-            ${pkgs.socat}/bin/socat TCP-LISTEN:12345,reuseaddr,fork UNIX-CONNECT:/tmp/waypipe.sock
+            ${pkgs.socat}/bin/socat TCP-LISTEN:12345,reuseaddr,fork UNIX-CONNECT:/tmp/waypipe.sock &
             ${pkgs.waypipe}/bin/waypipe -s /tmp/waypipe.sock client &
           fi
 
