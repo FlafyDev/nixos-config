@@ -1,6 +1,6 @@
 _: {
-  owner = "999"; # acme
+  owner = "systemd-network";
   group = "nogroup";
   mode = "600";
-  hosts = ["mera"];
 }
+

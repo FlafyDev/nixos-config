@@ -1,4 +1,4 @@
-{utils, ssh, ...}: let
+{utils, secrets, ...}: let
   inherit (utils) domains resolveHostname;
 in
 {
@@ -67,11 +67,11 @@ in
           Kind = "wireguard";
         };
         wireguardConfig = {
-          PrivateKeyFile = ssh.mera.mera_wg_vps.private;
+          PrivateKeyFile = secrets.ssh-keys.mera.mera_wg_vps.private;
         };
         wireguardPeers = [
           {
-            PublicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
+            PublicKey = secrets.ssh-keys.mane.mane_wg_vps.public.content;
             AllowedIPs = ["0.0.0.0/0"];
             Endpoint = "${resolveHostname domains.personal}:51820";
             PersistentKeepalive = 25;

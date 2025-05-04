@@ -26,6 +26,14 @@ in {
       #     DHCP = "yes";
       #   };
       # };
+      "50-wg_vps" = {
+        matchConfig.Name = "wg_vps";
+        networkConfig = {
+          Address = [[''${resolveHostname "glint.wg_vps"}/24'']];
+          IPv6AcceptRA = false;
+          DHCP = "no";
+        };
+      };
       "50-wg_private" = {
         matchConfig.Name = "wg_private";
         networkConfig = {
@@ -36,6 +44,26 @@ in {
       };
     };
     netdevs = {
+      "50-wg_vps" = {
+        netdevConfig = {
+          Name = "wg_vps";
+          Kind = "wireguard";
+        };
+        wireguardConfig = {
+          PrivateKeyFile = secrets.ssh-keys.glint.glint_wg_vps.private;
+        };
+        wireguardPeers = [
+          {
+            PublicKey = secrets.ssh-keys.mane.mane_wg_vps.public.content;
+            AllowedIPs = [
+              ''${resolveHostname "mane.wg_vps"}/32''
+              ''${resolveHostname "ope.wg_vps"}/32''
+            ];
+            Endpoint = "${resolveHostname domains.personal}:51820";
+            PersistentKeepalive = 25;
+          }
+        ];
+      };
       "50-wg_private" = {
         netdevConfig = {
           Name = "wg_private";

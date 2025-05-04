@@ -1,6 +1,7 @@
 _: {
-  owner = "999"; # acme
+  owner = "flafy";
   group = "nogroup";
   mode = "600";
-  hosts = ["mera"];
+  hosts = ["mane"];
 }
+

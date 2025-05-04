@@ -1,5 +1,5 @@
 _: {
-  owner = "root";
+  owner = "slskd";
   group = "nogroup";
   mode = "600";
   hosts = ["mera"];

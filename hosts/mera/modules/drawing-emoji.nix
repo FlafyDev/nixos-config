@@ -13,22 +13,22 @@ _: {
     };
   };
 
-  containers.maneVpn2 = {
-    bindMounts."/var/lib/emoji-drawing".isReadOnly = false;
-    config.services.emojiDrawing = {
-      enable = true;
-      webPort = 40002;
-      serverPort = 40003;
-      dataDir = "/var/lib/emoji-drawing";
-    };
-    config.services = {
-      games = {
-        badTimeSimulator = {
-          enable = true;
-          port = 40004;
-        };
-        minecraft.enable = false;
-      };
-    };
-  };
+  # containers.maneVpn2 = {
+  #   bindMounts."/var/lib/emoji-drawing".isReadOnly = false;
+  #   config.services.emojiDrawing = {
+  #     enable = true;
+  #     webPort = 40002;
+  #     serverPort = 40003;
+  #     dataDir = "/var/lib/emoji-drawing";
+  #   };
+  #   config.services = {
+  #     games = {
+  #       badTimeSimulator = {
+  #         enable = true;
+  #         port = 40004;
+  #       };
+  #       minecraft.enable = false;
+  #     };
+  #   };
+  # };
 }

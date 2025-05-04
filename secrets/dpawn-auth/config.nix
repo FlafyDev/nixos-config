@@ -1,5 +1,5 @@
 _: {
-  owner = "999"; # acme
+  owner = "root";
   group = "nogroup";
   mode = "600";
   hosts = ["mera"];

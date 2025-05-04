@@ -86,7 +86,7 @@ in {
         ocode)
           export PORT=$2
           export CODE_DIR=$3
-          export CODE_URL=http://10.10.11.10:$PORT/?folder=$CODE_DIR
+          export CODE_URL=http://10.10.10.10:$PORT/?folder=$CODE_DIR
 
           if [[ "$4" == "waypipe" ]]; then
             rm /tmp/waypipe.sock || true
@@ -105,8 +105,25 @@ in {
           f scode &
           f ocode $PORT $PWD
           ;;
+        p)
+          export NAME=$2
+          ${pkgs.screen}/bin/screen -R $NAME
+          ;;
+        pls)
+          ${pkgs.screen}/bin/screen -list
+          ;;
+        pdel)
+          export NAME=$2
+          ${pkgs.screen}/bin/screen -S $NAME -X quit
+          ;;
+        pdelall)
+          ${pkgs.screen}/bin/screen -ls | awk '/\t/ {print $1}' | xargs -r -n 1 ${pkgs.screen}/bin/screen -S {} -X quit
+          ;;
+        pdelall-hard)
+          ${pkgs.screen}/bin/screen -ls | awk '/\t/ {split($1, a, "."); print a[1]}' | xargs -n 1 kill
+          ;;
         *)
-          echo "Usage: $0 {rb|secret|scode|ocode|lcode}"
+          echo "Usage: $0 {rb|secret|scode|ocode|lcode|p|pls|pdel|pdelall|pdelall-hard}"
           exit 1
           ;;
       esac

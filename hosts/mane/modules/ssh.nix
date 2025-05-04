@@ -1,5 +1,5 @@
 {
-  ssh,
+  secrets,
   config,
   ...
 }: {
@@ -10,10 +10,10 @@
     server = {
       enable = true;
       users.${config.users.main}.keyFiles = [
-        ssh.ope.ope_to_mane.public
+        secrets.ssh-keys.ope.ope_to_mane.public.filePath
       ];
       users.root.keyFiles = [
-        ssh.ope.ope_to_mane.public
+        secrets.ssh-keys.ope.ope_to_mane.public.filePath
       ];
     };
   };

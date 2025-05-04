@@ -25,6 +25,7 @@ in {
     };
 
     os.systemd.network.enable = true;
+    os.systemd.services.systemd-rfkill.enable = false;
     os.networking = {
       nftables.enable = true;
       firewall.enable = false;

@@ -1,4 +1,4 @@
-{ssh, utils, ...}: let
+{secrets, utils, ...}: let
   inherit (utils) domains resolveHostname;
 in {
   networking.enable = true;
@@ -73,33 +73,37 @@ in {
       wg_vps = {
         ips = ["10.10.10.1/24"];
         listenPort = 51820;
-        privateKeyFile = ssh.mane.mane_wg_vps.private;
+        privateKeyFile = secrets.ssh-keys.mane.mane_wg_vps.private;
         peers = [
           {
-            publicKey = builtins.readFile ssh.ope.ope_wg_vps.public;
+            publicKey = secrets.ssh-keys.ope.ope_wg_vps.public.content;
             allowedIPs = ["10.10.10.10/32"];
           }
           {
-            publicKey = builtins.readFile ssh.mera.mera_wg_vps.public;
+            publicKey = secrets.ssh-keys.mera.mera_wg_vps.public.content;
             allowedIPs = ["10.10.10.11/32"];
+          }
+          {
+            publicKey = secrets.ssh-keys.glint.glint_wg_vps.public.content;
+            allowedIPs = [''${resolveHostname "glint.wg_vps"}/32''];
           }
         ];
       };
       wg_private = {
         ips = [''${resolveHostname "mane.wg_private"}/24''];
         listenPort = 51821;
-        privateKeyFile = ssh.mane.mane_wg_private.private;
+        privateKeyFile = secrets.ssh-keys.mane.mane_wg_private.private;
         peers = [
           {
-            publicKey = builtins.readFile ssh.ope.ope_wg_private.public;
+            publicKey = secrets.ssh-keys.ope.ope_wg_private.public.content;
             allowedIPs = [''${resolveHostname "ope.wg_private"}/32''];
           }
           {
-            publicKey = builtins.readFile ssh.mera.mera_wg_private.public;
+            publicKey = secrets.ssh-keys.mera.mera_wg_private.public.content;
             allowedIPs = [''${resolveHostname "mera.wg_private"}/32''];
           }
           {
-            publicKey = builtins.readFile ssh.glint.glint_wg_private.public;
+            publicKey = secrets.ssh-keys.glint.glint_wg_private.public.content;
             allowedIPs = [''${resolveHostname "glint.wg_private"}/32''];
           }
           # {

@@ -1,6 +1,5 @@
 {
   config,
-  ssh,
   pkgs,
   utils,
   osConfig,

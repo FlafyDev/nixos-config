@@ -225,13 +225,19 @@ in {
             Table = 2;
             Scope = "link";
           }
+          # Default route for table 3
+          {
+            Destination = "0.0.0.0/0";
+            Table = 3;
+            Scope = "link";
+          }
         ];
         routingPolicyRules = [
-          # Make sure all traffic that comes from vpnSubnet goes to table 2 (to get oif cfg.vpnInterface)
+          # Make sure all traffic that comes from vpnSubnet goes to table 3 (to get oif cfg.vpnInterface)
           {
             Family = "ipv4";
             From = cfg.vpnSubnet;
-            Table = 2;
+            Table = 3;
           }
         ];
       };

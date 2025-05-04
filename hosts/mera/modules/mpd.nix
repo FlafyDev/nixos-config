@@ -51,18 +51,18 @@
   #   };
   # };
   #
-  # services.slskd = {
-  #   enable = true;
-  #   group = "mpd";
-  #   domain = null;
-  #   environmentFile = secrets.slskd;
-  #   settings = {
-  #     shares.directories = [
-  #       "/var/lib/mpd/music"
-  #     ];
-  #     directories.downloads = "/var/lib/mpd/music";
-  #   };
-  # };
+  os.systemd.services.slskd.serviceConfig.ReadOnlyPaths = lib.mkForce null;
+  os.services.slskd = {
+    enable = true;
+    domain = null;
+    environmentFile = secrets.slskd.credentials;
+    settings = {
+      shares.directories = [
+        "/persist2/usr/share/music"
+      ];
+      directories.downloads = "/persist2/usr/share/music";
+    };
+  };
   # os.systemd.services.slskd.serviceConfig.ReadOnlyPaths = lib.mkForce [];
   # os.systemd.services.slskd.serviceConfig.NetworkNamespacePath = "/var/run/netns/vpn";
   #

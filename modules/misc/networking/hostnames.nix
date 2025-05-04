@@ -33,6 +33,7 @@
     "ope.wg_vps.${cfg.domains.personal}" = "10.10.10.10";
     "mane.wg_vps.${cfg.domains.personal}" = "10.10.10.1";
     "mera.wg_vps.${cfg.domains.personal}" = "10.10.10.11";
+    "glint.wg_vps.${cfg.domains.personal}" = "10.10.10.14";
 
     "gateway.vm0.${cfg.domains.personal}" = "10.10.15.1";
     "vm.vm0.${cfg.domains.personal}" = "10.10.15.2";

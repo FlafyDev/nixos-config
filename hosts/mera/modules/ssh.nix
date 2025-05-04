@@ -1,5 +1,5 @@
 {
-  ssh,
+  secrets,
   config,
   ...
 }: {
@@ -11,11 +11,11 @@
     matchBlocks = {
       ope = {
         identitiesOnly = true;
-        identityFile = [ssh.mera.mera_to_ope.private];
+        identityFile = [secrets.ssh-keys.mera.mera_to_ope.private];
       };
       "u432478.your-storagebox.de" = {
         identitiesOnly = true;
-        identityFile = [ssh.mera.mera_to_sb1.private];
+        identityFile = [secrets.ssh-keys.mera.mera_to_sb1.private];
       };
     };
 
@@ -23,10 +23,10 @@
       enable = true;
 
       users.${config.users.main}.keyFiles = [
-        ssh.ope.ope_to_mera.public
+        secrets.ssh-keys.ope.ope_to_mera.public.filePath
       ];
       users.root.keyFiles = [
-        ssh.ope.ope_to_mera.public
+        secrets.ssh-keys.ope.ope_to_mera.public.filePath
       ];
     };
   };

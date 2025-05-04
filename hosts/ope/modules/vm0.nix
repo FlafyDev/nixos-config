@@ -118,7 +118,7 @@ in {
       #   };
       # };
       vm1 = {
-        gateway = "home";
+        gateway = "vpn";
         inputRules = ''
           # Accept all packets from vm1 to host
           iifname vm1 meta mark set 88

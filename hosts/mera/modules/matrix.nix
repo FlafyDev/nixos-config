@@ -1,7 +1,5 @@
 {
   utils,
-  secrets,
-  pkgs,
   ...
 }: let
   inherit (utils) resolveHostname domains;

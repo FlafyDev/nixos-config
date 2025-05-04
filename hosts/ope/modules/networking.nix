@@ -1,4 +1,4 @@
-{secrets, utils, ...}: let
+{secrets, utils, lib, ...}: let
   inherit (utils) resolveHostname domains;
 in {
   networking = {
@@ -15,6 +15,11 @@ in {
     forceHomeIPs = [(resolveHostname domains.personal)];
   };
 
+  os.networking.networkmanager.enable = lib.mkForce true;
+  os.networking.networkmanager.unmanaged = [
+    "except-interface-name:wl*"
+  ];
+
   os.networking.nftables.tables.allow-services = {
     family = "inet";
     content = ''
@@ -24,7 +29,7 @@ in {
         tcp dport 22 meta mark set 88 # SSH
         tcp dport 8080 meta mark set 88 # Testing
         udp dport 51822 meta mark set 88 # Wireguard private endpoint
-        iifname wg_private meta mark set 88
+        ip saddr 10.10.10.14 iifname "wg_vps" meta mark set 88
         iifname enp14s0 meta mark set 88
       }
       chain output {

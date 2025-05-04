@@ -30,6 +30,12 @@ in {
             tag = "acme";
             proto = "virtiofs";
           }
+          {
+            source = builtins.dirOf secrets.porkbun.api_key;
+            mountPoint = builtins.dirOf secrets.porkbun.api_key;
+            tag = "porkbun-api-key";
+            proto = "virtiofs";
+          }
         ];
 
         # systemd.services.acme.restartIfChanged = false;
@@ -41,14 +47,14 @@ in {
             group = "nginx";
             dnsProvider = "porkbun";
             # env file with PORKBUN_SECRET_API_KEY PORKBUN_API_KEY
-            credentialsFile = secrets.porkbun;
+            credentialsFile = secrets.porkbun.api_key;
           };
           certs."_.flafy.dev" = {
             domain = "*.flafy.dev";
             group = "nginx";
             dnsProvider = "porkbun";
             # env file with PORKBUN_SECRET_API_KEY PORKBUN_API_KEY
-            credentialsFile = secrets.porkbun;
+            credentialsFile = secrets.porkbun.api_key;
           };
         };
 
@@ -105,6 +111,12 @@ in {
               addSSL = true;
               locations."/" = {
                 proxyPass = "http://10.10.15.10:5556";
+              };
+            };
+            "dpawn-auth.${domains.personal}" = {
+              addSSL = true;
+              locations."/" = {
+                proxyPass = "http://127.0.0.1:6001";
               };
             };
             "fallback-https" = {

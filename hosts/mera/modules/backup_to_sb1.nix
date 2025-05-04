@@ -1,11 +1,11 @@
-{pkgs, ssh, lib, secrets, ...}: let
+{pkgs, secrets, lib, ...}: let
   pathsToBackup = [
     "/persist2/var/lib/nextcloud-data/data/"
   ];
 
   command = ''${pkgs.restic}/bin/restic backup /persist2/var/lib/nextcloud-data/data/ '' +
-    ''-o sftp.args="-i ${ssh.mera.mera_to_sb1.private} -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" '' +
-    ''--password-command "cat ${secrets.restic-sb1-backups-password}" --repo sftp:u432478@u432478.your-storagebox.de:/home/backups'';
+    ''-o sftp.args="-i ${secrets.ssh-keys.mera.mera_to_sb1.private} -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" '' +
+    ''--password-command "cat ${secrets.restic.sb1_backups.password}" --repo sftp:u432478@u432478.your-storagebox.de:/home/backups'';
 in {
   containers.sb1Backup = {
     autoStart = true;
@@ -15,8 +15,8 @@ in {
           isReadOnly = true;
         };
       }) {} (pathsToBackup ++ [
-        ssh.mera.mera_to_sb1.private
-        secrets.restic-sb1-backups-password
+        secrets.ssh-keys.mera.mera_to_sb1.private
+        secrets.restic.sb1_backups.password
       ]);
     ephemeral = false;
 
@@ -48,8 +48,8 @@ in {
 
             DynamicUser = false;
             ReadOnlyPaths = pathsToBackup ++ [
-              ssh.mera.mera_to_sb1.private
-              secrets.restic-sb1-backups-password
+              secrets.ssh-keys.mera.mera_to_sb1.private
+              secrets.restic.sb1_backups.password
             ];
           };
         };
