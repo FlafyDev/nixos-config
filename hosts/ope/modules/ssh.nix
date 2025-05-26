@@ -49,6 +49,9 @@ in {
         secrets.ssh-keys.noro.noro_to_ope.public.filePath
         secrets.ssh-keys.glint.glint_to_ope.public.filePath
       ];
+      users.root.keyFiles = [
+        secrets.ssh-keys.glint.glint_to_ope.public.filePath
+      ];
     };
   };
 }

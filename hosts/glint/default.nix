@@ -13,6 +13,12 @@
     ./hardware
   ];
 
+  os.environment.systemPackages = [
+    pkgs.qemu
+    pkgs.quickemu
+  ];
+  os.services.spice-vdagentd.enable = true;
+
   os.nixpkgs.config.allowUnfree = true;
 
   programs.ssh = {
@@ -76,6 +82,18 @@
 
   # services.waypipe.client.enable = true;
   # services.waypipe.client.ip = "10.10.11.10";
+
+  display.hyprland = {
+    enable = true;
+    headlessXorg.enable = false;
+    monitors = [
+      ",preferred,auto,auto"
+      # "HDMI-A-1,1920x1080@60,0x0,1"
+      # "HDMI-A-1,addreserved,0,24,0,0"
+      # "HDMI-A-2,1920x1080@60,0x0,1"
+      # "HDMI-A-2,addreserved,0,24,0,0"
+    ];
+  };
 
   os.security = {
     rtkit.enable = true;

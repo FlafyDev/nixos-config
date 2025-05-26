@@ -34,6 +34,8 @@ in {
     # }
   ];
 
+  os.virtualisation.vmware.host.enable = true;
+
   os.services.davfs2.enable = true;
   os.services.autofs = {
     enable = true;
