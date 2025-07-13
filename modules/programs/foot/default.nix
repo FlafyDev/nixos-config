@@ -18,7 +18,7 @@ in {
           patches =
             (old.patches or [])
             ++ [
-              ./transparent.patch
+              # ./transparent.patch
             ];
         });
       })

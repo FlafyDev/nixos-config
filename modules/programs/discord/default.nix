@@ -42,10 +42,10 @@ in {
       webcord-vencord
     ];
 
-    hm.xdg.configFile."WebCord/Themes/amoled-cord".source = pkgs.substituteAll {
-      src = ./themes/amoled-cord.css;
-      backgroundColor = "#${theme.backgroundColor.toHexRGBA}";
-    };
-    hm.xdg.configFile."WebCord/config.json".source = ./webcord/config.json;
+    # hm.xdg.configFile."WebCord/Themes/amoled-cord".source = pkgs.substituteAll {
+    #   src = ./themes/amoled-cord.css;
+    #   backgroundColor = "#${theme.backgroundColor.toHexRGBA}";
+    # };
+    # hm.xdg.configFile."WebCord/config.json".source = ./webcord/config.json;
   };
 }

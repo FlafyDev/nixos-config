@@ -22,12 +22,10 @@ in {
     nur.enable = true;
 
     hm.programs.firefox = let
-      startpage = pkgs.substituteAll {
-        src = ./startpage.html;
+      startpage = pkgs.replaceVars ./startpage.html {
         inherit (theme) wallpaper;
       };
-      userChrome = builtins.readFile (pkgs.substituteAll {
-        src = ./userChrome.css;
+      userChrome = builtins.readFile (pkgs.replaceVars ./userChrome.css {
         backgroundColor = "#${theme.backgroundColor.toHexRGBA}";
       });
     in {
@@ -128,7 +126,7 @@ in {
               "geo.enabled" = false;
               "browser.region.network.url" = "";
               "browser.region.update.enabled" = false;
-              "intl.accept_languages" = "en-US = en";
+              "intl.accept_languages" = "en-US, en";
               "javascript.use_us_english_locale" = true;
               "extensions.getAddons.showPane" = false;
               "extensions.htmlaboutaddons.recommendations.enabled" = false;

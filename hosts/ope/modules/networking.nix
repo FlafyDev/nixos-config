@@ -62,8 +62,21 @@ in {
       };
       "50-enp14s0" = {
         matchConfig.Name = "enp14s0";
+        networkConfig = {
+          DHCP = "no";
+          Bridge = "br0";
+        };
+      };
+      "50-br0" = {
+        # matchConfig.Name = "enp14s0";
+        # networkConfig.DHCP = "yes";
+        # address = ["10.0.0.42/24"];
+        # dhcpV4Config = {
+        #   RequestAddress = "10.0.0.42";
+        # };
+        matchConfig.Name = "br0";
         networkConfig.DHCP = "yes";
-        address = ["10.0.0.42/24"];
+        # address = [ "10.0.0.42/24" ];
         dhcpV4Config = {
           RequestAddress = "10.0.0.42";
         };
@@ -125,6 +138,12 @@ in {
             PersistentKeepalive = 25;
           }
         ];
+      };
+      "50-br0" = {
+        netdevConfig = {
+          Name = "br0";
+          Kind = "bridge";
+        };
       };
     };
   };

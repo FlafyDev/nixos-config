@@ -218,6 +218,7 @@ in {
   os = {
     services = {
       pipewire = {
+        enable = true;
         wireplumber = {
           # configPackages = [
           #   (pkgs.writeTextFile {
@@ -363,7 +364,7 @@ in {
   gtk.enable = true;
 
   programs = {
-    anyrun.enable = true;
+    # anyrun.enable = true;
     firefox.enable = true;
     gnome.enable = false;
     mpv.enable = true;
@@ -380,7 +381,7 @@ in {
       enable = true;
       patch = true;
     };
-    discord.enable = true;
+    # discord.enable = true;
     gui-utils.enable = true;
   };
 }

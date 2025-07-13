@@ -34,8 +34,7 @@ in [
   {
     type = "lua";
     plugin = nvim-lspconfig;
-    config = builtins.readFile (pkgs.substituteAll {
-      src = ./config.lua;
+    config = builtins.readFile (pkgs.replaceVars ./config.lua {
       snippets = pkgs.lib.concatStringsSep "," (map preprocessSnippetsPath snippets);
     });
   }

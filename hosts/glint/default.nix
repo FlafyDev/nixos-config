@@ -74,7 +74,7 @@
       enable = true;
       patch = true;
     };
-    discord.enable = true;
+    # discord.enable = true;
     gui-utils.enable = true;
   };
 

@@ -64,6 +64,10 @@ in {
           # url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
           # inputs.nixpkgs.follows = "nixpkgs";
         };
+        hyprland-plugins = {
+          url = "github:hyprwm/hyprland-plugins";
+          inputs.hyprland.follows = "hyprland";
+        };
       };
     }
     (mkIf cfg.enable {
@@ -93,6 +97,7 @@ in {
         package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
         plugins = with plugins; [
           (flPkgs' inputs.hypr-dynamic-cursors ["hypr-dynamic-cursors"])
+          # (flPkgs' inputs.hyprland-plugins ["hyprscrolling"])
         ];
         settings = let
           playerctl = "${pkgs.playerctl}/bin/playerctl";

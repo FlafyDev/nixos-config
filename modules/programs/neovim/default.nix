@@ -27,8 +27,7 @@ in {
       extraConfig = ''
         lua<<EOF
         ${builtins.readFile (
-          pkgs.substituteAll {
-            src = ./config/init.lua;
+          pkgs.replaceVars ./config/init.lua {
             activeBorder = "29A4BD";
             # activeBorder = config.theme.colors.activeBorder.col;
           }

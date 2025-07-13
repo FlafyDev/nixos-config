@@ -7,14 +7,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:ryantm/agenix";
     };
-    anyrun = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:kirottu/anyrun";
-    };
-    anyrun-nixos-options = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:n3oney/anyrun-nixos-options/v1.0.1";
-    };
     assets.url = "github:FlafyDev/assets";
     bad-time-simulator = {
       flake = false;
@@ -53,6 +45,10 @@
       url = "github:VirtCode/hypr-dynamic-cursors";
     };
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    hyprland-plugins = {
+      inputs.hyprland.follows = "hyprland";
+      url = "github:hyprwm/hyprland-plugins";
+    };
     impermanence.url = "github:nix-community/impermanence";
     microvm = {
       inputs.nixpkgs.follows = "nixpkgs";
@@ -82,7 +78,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-bara.url = "github:nixos/nixpkgs/684c17c429c42515bafb3ad775d2a710947f3d67";
     nur.url = "github:nix-community/NUR";
-    showcase.url = "git+file:///home/flafy/repos/flafydev/showcase2";
+    showcase.url = "path:/home/flafy/repos/flafydev/showcase2";
     tailwind-tools = {
       flake = false;
       url = "github:luckasRanarison/tailwind-tools.nvim";

@@ -77,6 +77,15 @@ in {
                 index = "index.html";
                 tryFiles = "$uri $uri/ =404";
               };
+              locations."/cyberchef_lol" = let
+                cyberchefUrl = "https://gchq.github.io/CyberChef/#recipe=HTTP_request('GET','https://flafy.dev/cyberchef_lol','','Cross-Origin%20Resource%20Sharing',false)&oenc=65001";
+              in {
+                  return = "200 \"${cyberchefUrl}\"";
+                  extraConfig = ''
+                    add_header Access-Control-Allow-Origin *;
+                    default_type text/plain;
+                  '';
+              };
             };
             "www.${domains.personal}" = {
               addSSL = true;
@@ -84,6 +93,13 @@ in {
                 root = "/persist/temp-site";
                 index = "index.html";
                 tryFiles = "$uri $uri/ =404";
+              };
+              locations."/cyberchef_lol" = {
+                  return = ''200 "testing"'';
+                  extraConfig = ''
+                    add_header Access-Control-Allow-Origin *;
+                    default_type text/plain;
+                  '';
               };
             };
             "sans.${domains.personal}" = {
