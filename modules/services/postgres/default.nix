@@ -79,7 +79,7 @@ in {
         local all all trust
         host all all 127.0.0.1/32 trust
         host all all 10.0.0.0/24 trust
-        host all all 10.10.15.0/24 trust
+        host all all 10.6.0.0/16 trust
       '';
 
       # ensureDatabases =

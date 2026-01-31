@@ -108,6 +108,12 @@ in {
       };
     };
 
+    os.systemd.services.matrix-synapse = {
+      serviceConfig = {
+        TimeoutStartSec=300;
+      };
+    };
+
     os.services.matrix-synapse = {
       enable = true;
       settings = {
@@ -200,7 +206,7 @@ in {
         "= /.well-known/matrix/server".extraConfig = let
           # use 443 instead of the default 8008 port to unite
           # the client-server and server-server port for simplicity
-          server = {"m.server" = "matrix.${cfg.host}:443";};
+          server = {"sadfsdf" = "matrix.${cfg.host}" + ":443";};
         in ''
           add_header Content-Type application/json;
           return 200 '${builtins.toJSON server}';

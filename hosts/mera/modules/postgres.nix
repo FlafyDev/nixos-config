@@ -16,6 +16,6 @@
     dataDir = "/persist2/var/lib/postgresql";
   };
 
-  services.postgres.comb = config.setupVM.vms.vm0.config.config.cmConfig.services.postgres.comb;
-  services.postgres.extraSql = config.setupVM.vms.vm0.config.config.cmConfig.services.postgres.extraSql;
+  services.postgres.comb = config.microvm.vms.vm0.config.config.cmConfig.services.postgres.comb;
+  services.postgres.extraSql = config.microvm.vms.vm0.config.config.cmConfig.services.postgres.extraSql;
 }

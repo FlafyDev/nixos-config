@@ -1,0 +1,16 @@
+cilium:
+  config:
+    # Use strict kube-proxy replacement (eBPF-based service LB)
+    kube-proxy-replacement: "strict"
+    # Disable Cilium-managed tunnel; rely on host routing / your WireGuard
+    tunnel: "disabled"
+    # Do not enable Cilium's WireGuard encryption because you already operate host-WG
+    # If you later want Cilium to manage WireGuard keys, set encryption to wireguard.
+    encryption: "disabled"
+    # Enable the egress gateway feature set (API CRDs must be available)
+    enable-egress-gateway: "true"
+  # Hubble/observability (recommended, optional)
+  hubble:
+    enabled: true
+    ui:
+      enabled: false

@@ -4,10 +4,10 @@
   secrets,
   ...
 }: let
-  inherit (utils) resolveHostname domains;
+  inherit (utils) resolveHostname domains gpIP;
   inherit (lib) mkOption types mkDefault;
 in {
-  setupVM.vms.vm0.config = {
+  microvm.vms.vm0.config = {
     config.os = {
       options.services.nginx.virtualHosts = mkOption {
         type = types.attrsOf (types.submodule (_: {
@@ -111,7 +111,7 @@ in {
             "showcase.${domains.personal}" = {
               addSSL = true;
               locations."/" = {
-                proxyPass = "http://10.10.15.1:8080";
+                proxyPass = "http://${(gpIP 1).guest}:3333";
               };
             };
             "emoji.${domains.personal}" = {

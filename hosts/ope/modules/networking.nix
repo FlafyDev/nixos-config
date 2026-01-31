@@ -6,7 +6,7 @@ in {
     wireguard = true;
   };
 
-  setupVM = {
+  setupGroups = {
     enable = true;
     homeInterface = "enp14s0";
     homeSubnet = "10.0.0.0/24";

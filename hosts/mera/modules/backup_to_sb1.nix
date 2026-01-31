@@ -8,7 +8,7 @@
     ''--password-command "cat ${secrets.restic.sb1_backups.password}" --repo sftp:u432478@u432478.your-storagebox.de:/home/backups'';
 in {
   containers.sb1Backup = {
-    autoStart = true;
+    autoStart = false;
 
     bindMounts = lib.foldl' (acc: path: acc // {
         "${path}" = {

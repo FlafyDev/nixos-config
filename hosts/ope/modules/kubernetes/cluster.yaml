@@ -1,0 +1,10 @@
+apiVersion: k0s.k0sproject.io/v1beta1
+kind: ConfigMap
+metadata:
+  namespace: flux-system
+  name: cluster-settings
+data:
+  CONFIG_CLUSTER_PODS_NETWORK_IP_POOL: "10.42.0.0/16"
+  CONFIG_CLUSTER_SERVICE_NETWORK_IP_POOL: "10.43.0.0/16"
+  CONFIG_TIMEZONE: "Asia/Jerusalem"
+  CONFIG_WG_DNS: "10.0.1.1"

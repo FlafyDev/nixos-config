@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf mkOption;
+  inherit (lib) mkEnableOption mkIf mkOption mkForce;
   cfg = config.networking;
 in {
   options.networking = {
@@ -43,7 +43,7 @@ in {
 
     os.boot.kernel.sysctl = {
       "net.ipv4.conf.all.route_localnet" = 1;
-      "net.ipv4.ip_forward" = 1;
+      "net.ipv4.ip_forward" = mkForce 1;
     };
     os.networking.nftables.tables.default-filter = {
       family = "inet";

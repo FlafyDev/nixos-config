@@ -4,11 +4,11 @@
 }: let
   inherit (utils) resolveHostname domains;
 in {
-  setupVM.vms.vm0.config = {
+  microvm.vms.vm0.config = {
     config = {
       services.matrix = {
         enable = true;
-        postgresIP = resolveHostname "gateway.vm0";
+        postgresIP = resolveHostname "mera.home";
         host = domains.personal;
       };
       os.microvm.shares = [

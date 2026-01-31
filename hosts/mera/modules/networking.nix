@@ -7,7 +7,17 @@ in
     wireguard = true;
   };
 
-  setupVM = {
+  # os.virtualisation.docker = {
+  #   enable = true;
+  #   daemon.settings.iptables = false;
+  # };
+
+  os.virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
+
+  setupGroups = {
     enable = true;
     homeInterface = "enp4s0";
     homeSubnet = "10.0.0.0/24";
@@ -27,6 +37,15 @@ in
       }
     '';
   };
+
+  # containers.testing = {
+  #   privateNetwork = true;
+  #   # hostBridge = "testing"; # Specify the bridge name
+  #   # localAddress = "192.168.100.5/24";
+  #   config = {lib, ...}: {
+  #     os.networking.useDHCP = lib.mkForce true;
+  #   };
+  # };
 
   os.systemd.services."systemd-networkd".environment.SYSTEMD_LOG_LEVEL = "debug";
   os.systemd.network = {

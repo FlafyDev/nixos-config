@@ -1,25 +1,28 @@
-{utils, config, ...}: let
-  inherit (utils) resolveHostname;
-in {
-  setupVM = {
+{...}: {
+  setupGroups.groups."0" = {
+    gateway = "vpn";
+    helpers.microvm = "vm0";
+    inputRules = {interface, ...}: ''
+      # Accept all packets from gp0 to host
+      iifname ${interface} meta mark set 88
+    '';
+    forwardRules = {interface, ...}: ''
+      # Accept all packets from host to gp0
+      oifname ${interface} meta mark set 89
+      # Accept all packets from gp0 to the host
+      iifname ${interface} meta mark set 89
+    '';
+    extraPrerouting = {interface, ips}: ''
+      # Redirect to gp0 all tcp 80 packets the host receives
+      iifname wg_vps tcp dport 80 dnat ip to ${ips.guest}
+      iifname wg_vps tcp dport 443 dnat ip to ${ips.guest}
+    '';
+  };
+
+  microvm = {
+    enable = false;
     vms = {
       vm0 = {
-        gateway = "vpn";
-        inputRules = ''
-          # Accept all packets from vm0 to host
-          iifname vm0 meta mark set 88
-        '';
-        forwardRules = ''
-          # Accept all packets from host to vm0
-          oifname vm0 meta mark set 89
-          # Accept all packets from vm0 to the host
-          iifname vm0 meta mark set 89
-        '';
-        extraPrerouting = ''
-          # Redirect to vm0 all tcp 80 packets the host receives
-          iifname != "vm0" tcp dport 80 dnat ip to ${resolveHostname "vm.vm0"}
-          iifname != "vm0" tcp dport 443 dnat ip to ${resolveHostname "vm.vm0"}
-        '';
         config = {
           os.networking.nftables.tables.allow = {
             family = "inet";
@@ -31,7 +34,7 @@ in {
             '';
           };
 
-          os.microvm.mem = 1024; # 1024 MB
+          os.microvm.mem = 4096; # 4096 MB
           os.microvm.vcpu = 2;
           os.system.stateVersion = "23.11";
           hm.home.stateVersion = "23.11";

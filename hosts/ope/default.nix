@@ -33,7 +33,7 @@ in {
     #   };
     # }
   ];
-
+  os.services.desktopManager.cosmic.enable = false;
   os.virtualisation.vmware.host.enable = true;
 
   os.services.davfs2.enable = true;
@@ -53,6 +53,8 @@ in {
 
   os.environment.systemPackages = [
     pkgs.waypipe
+    pkgs.icu
+    pkgs.unityhub
   ];
   # services.waypipe.server.enable = true;
 
@@ -342,8 +344,9 @@ in {
       "eDP-1,disable"
       "HDMI-A-1,1920x1080@60,0x0,1"
       "HDMI-A-1,addreserved,0,24,0,0"
-      "HDMI-A-2,1920x1080@60,0x0,1"
-      "HDMI-A-2,addreserved,0,24,0,0"
+      "HDMI-A-2,disable"
+      # "HDMI-A-2,1920x1080@60,0x0,1"
+      # "HDMI-A-2,addreserved,0,24,0,0"
     ];
   };
   fonts.enable = true;

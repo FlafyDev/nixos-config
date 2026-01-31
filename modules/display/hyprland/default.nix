@@ -51,10 +51,6 @@ in {
         # inputs.flutter_background_bar = {
         #   url = "github:flafydev/flutter_background_bar";
         # };
-        hypr-dynamic-cursors = {
-          url = "github:VirtCode/hypr-dynamic-cursors";
-          inputs.hyprland.follows = "hyprland"; # to make sure that the plugin is built for the correct version of hyprland
-        };
         hyprland = {
           # url = "github:hyprwm/Hyprland/v0.34.0";
           # url = "github:hyprwm/Hyprland/045c3fbd854090b2b60ca025fedd3e62498ed1ec";
@@ -96,7 +92,7 @@ in {
         xwayland.enable = true;
         package = mkIf (!cfg.fromNixpkgs) inputs.hyprland.packages.${pkgs.system}.hyprland;
         plugins = with plugins; [
-          (flPkgs' inputs.hypr-dynamic-cursors ["hypr-dynamic-cursors"])
+          # (flPkgs' inputs.hypr-dynamic-cursors ["hypr-dynamic-cursors"])
           # (flPkgs' inputs.hyprland-plugins ["hyprscrolling"])
         ];
         settings = let

@@ -87,6 +87,10 @@ in {
             publicKey = secrets.ssh-keys.glint.glint_wg_vps.public.content;
             allowedIPs = [''${resolveHostname "glint.wg_vps"}/32''];
           }
+          {
+            publicKey = secrets.ssh-keys.ito.ito_wg_vps.public.content;
+            allowedIPs = [''${resolveHostname "ito.wg_vps"}/32''];
+          }
         ];
       };
       wg_private = {

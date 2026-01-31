@@ -12,12 +12,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    os.nixpkgs.overlays = [
-      (_final: prev: {
-        adwaita-dark-amoled = prev.callPackage ./adwaita-dark-amoled.nix {};
-        colloid-dark-edit = prev.callPackage ./colloid-dark-edit.nix {};
-      })
-    ];
+    # os.nixpkgs.overlays = [
+    #   (_final: prev: {
+    #     adwaita-dark-amoled = prev.callPackage ./adwaita-dark-amoled.nix {};
+    #     colloid-dark-edit = prev.callPackage ./colloid-dark-edit.nix {};
+    #   })
+    # ];
     hm = {
       home.packages = [pkgs.dconf];
       dconf.enable = true;
@@ -45,14 +45,14 @@ in {
           package = pkgs.papirus-icon-theme;
         };
 
-        theme = {
-          # name = "Tokyonight-Moon-BL"; # Moon = Night ?
-          # package = pkgs.tokyo-night-gtk;
-          # name = "Adwaita-dark-amoled"; # Moon = Night ?
-          # package = pkgs.adwaita-dark-amoled;
-          name = "Colloid-Dark-Edit"; # Moon = Night ?
-          package = pkgs.colloid-dark-edit;
-        };
+        # theme = {
+        #   # name = "Tokyonight-Moon-BL"; # Moon = Night ?
+        #   # package = pkgs.tokyo-night-gtk;
+        #   # name = "Adwaita-dark-amoled"; # Moon = Night ?
+        #   # package = pkgs.adwaita-dark-amoled;
+        #   name = "Colloid-Dark-Edit"; # Moon = Night ?
+        #   package = pkgs.colloid-dark-edit;
+        # };
       };
     };
   };

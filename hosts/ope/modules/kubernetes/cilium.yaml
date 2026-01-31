@@ -1,0 +1,10 @@
+apiVersion: k0s.k0sproject.io/v1beta1
+kind: Kustomization
+metadata:
+  name: cilium
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: traefik-crds
+    - name: prometheus-crds
+    - name: cert-manager

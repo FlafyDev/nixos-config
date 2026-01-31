@@ -57,7 +57,7 @@ in {
 
       boot.extraModprobeConfig = ''
         options kvm ignore_msrs=1
-        options kvmfr static_size_mb=32
+        options kvmfr static_size_mb=128
         options snd_hda_intel power_save=0
       '';
 

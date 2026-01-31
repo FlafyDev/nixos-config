@@ -2,6 +2,6 @@
   osModules = [inputs.showcase.nixosModules.default];
 
   inputs = {
-    showcase.url = "github:flafydev/showcase";
+    showcase.url = "git+file:/home/flafy/repos/flafydev/showcasev3";
   };
 }
