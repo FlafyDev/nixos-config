@@ -54,7 +54,6 @@ in {
   os.environment.systemPackages = [
     pkgs.waypipe
     pkgs.icu
-    pkgs.unityhub
   ];
   # services.waypipe.server.enable = true;
 

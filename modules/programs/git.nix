@@ -13,9 +13,14 @@ in {
 
   config = mkIf cfg.enable {
     os.environment.systemPackages = with pkgs; [
-      git
+      # git
       gh
     ];
+
+    os.programs.git = {
+      enable = true;
+      lfs.enable = true;
+    };
 
     hm.programs.git = {
       enable = true;
