@@ -36,14 +36,14 @@ in {
         smoothScroll = false;
         animateOnlyOnFocus = false;
       };
-      hm.programs.guifetch = {
-        enable = true;
-        config = {
-          backgroundColor = "${theme.backgroundColor.toHexARGB}";
-        };
-      };
+      # hm.programs.guifetch = {
+      #   enable = true;
+      #   config = {
+      #     backgroundColor = "${theme.backgroundColor.toHexARGB}";
+      #   };
+      # };
       os.environment.systemPackages = with pkgs; [
-        (utils.flPkgs inputs.flarrent)
+        # (utils.flPkgs inputs.flarrent)
         zed-editor
         kdePackages.kdenlive
         chromium
@@ -76,7 +76,7 @@ in {
           ];
         })
 
-        lxde.lxrandr
+        lxrandr
         syncplay
         prismlauncher
         thunderbird

@@ -2,6 +2,7 @@
   inputs,
   lib,
   config,
+  pkgs,
   ...
 }:
 with lib; let
@@ -17,7 +18,10 @@ in {
     }
     (
       mkIf cfg.enable {
-        os.programs.adb.enable = true;
+        # os.programs.adb.enable = true;
+        os.environment.systemPackages = [
+          pkgs.android-tools
+        ];
       }
     )
   ];

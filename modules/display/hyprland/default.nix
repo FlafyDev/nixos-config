@@ -101,10 +101,10 @@ in {
           pamixer = "${pkgs.pamixer}/bin/pamixer";
         in {
           bezier = [
-            "mycurve,.32,.97,.53,.98"
+            "mycurve,0.32,0.97,0.53,0.98"
             "expoOut,0.19,1.0,0.22,1.0"
-            "overshot,.32,.97,.37,1.16"
-            "easeInOut,.5,0,.5,1"
+            "overshot,0.32,0.97,0.37,1.16"
+            "easeInOut,0.5,0,0.5,1"
           ];
           env = mapAttrsToList (name: value: "${name},${toString value}") {
             # WLR_NO_HARDWARE_CURSORS = 1; # For Sunshine... Let's see if I notice anything...
@@ -121,11 +121,11 @@ in {
             TERM = "foot";
             NIXOS_OZONE_WL = "1";
           };
-          layerrule = [
-            "noanim, ^(selection)$"
-            "blur,^(anyrun)$"
-            "ignorealpha ${toString (theme.popupBackgroundColor.toNormA - 0.01)},^(anyrun)$"
-          ];
+          # layerrule = [
+          #   "noanim, ^(selection)$"
+          #   "blur,^(anyrun)$"
+          #   "ignorealpha ${toString (theme.popupBackgroundColor.toNormA - 0.01)},^(anyrun)$"
+          # ];
           monitor = cfg.monitors;
           plugin = {
             dynamic-cursors = {
@@ -314,23 +314,23 @@ in {
           #     sensitivity = 0.2;
           #   }
           # ];
-          windowrulev2 = let
-            rulesForWindow = window: map (rule: "${rule},${window}");
-          in
-            []
-            # Specific window rules
-            ++ (rulesForWindow "title:^()$,class:^(steam)$" ["stayfocused" "minsize 1 1"])
-            ++ (rulesForWindow "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"])
-            # ++ (rulesForWindow "class:^(looking-glass-client)$" ["immediate"])
-            ++ (rulesForWindow "class:^(middleterm)$" ["float" "size 750 550" "animation slide"])
-            ++ (rulesForWindow "class:^(guifetch)$" ["float" "animation slide" "move 10 10"])
-            ++ (rulesForWindow "class:^(listen_blue)$" ["size 813 695" "float" "center"])
-            ++ (rulesForWindow "class:^(neovide)$" ["tile"])
-            ++ (rulesForWindow "class:^(firefox)$" ["opacity 0.999 0.999"])
-            # General window rules
-            ++ (rulesForWindow "floating:0" ["rounding 0"])
-            ++ (rulesForWindow "floating:1" ["rounding 5"])
-            ++ (rulesForWindow "floating:0" ["noshadow"]);
+          # windowrulev2 = let
+          #   rulesForWindow = window: map (rule: "${rule},${window}");
+          # in
+          #   []
+          #   # Specific window rules
+          #   ++ (rulesForWindow "title:^()$,class:^(steam)$" ["stayfocused" "minsize 1 1"])
+          #   ++ (rulesForWindow "class:^(sideterm)$" ["float" "move 60% 10" "size 750 350" "animation slide"])
+          #   # ++ (rulesForWindow "class:^(looking-glass-client)$" ["immediate"])
+          #   ++ (rulesForWindow "class:^(middleterm)$" ["float" "size 750 550" "animation slide"])
+          #   ++ (rulesForWindow "class:^(guifetch)$" ["float" "animation slide" "move 10 10"])
+          #   ++ (rulesForWindow "class:^(listen_blue)$" ["size 813 695" "float" "center"])
+          #   ++ (rulesForWindow "class:^(neovide)$" ["tile"])
+          #   ++ (rulesForWindow "class:^(firefox)$" ["opacity 0.999 0.999"])
+          #   # General window rules
+          #   ++ (rulesForWindow "floating:0" ["rounding 0"])
+          #   ++ (rulesForWindow "floating:1" ["rounding 5"])
+          #   ++ (rulesForWindow "floating:0" ["noshadow"]);
         };
       };
     })

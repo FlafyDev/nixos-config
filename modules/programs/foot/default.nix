@@ -42,9 +42,9 @@ in {
           lines = 100000;
         };
 
-        cursor.color = "c0caf5 ffffff";
 
         colors = {
+          cursor = "c0caf5 ffffff";
           background = theme.backgroundColor.toHexRGB;
           alpha = theme.backgroundColor.toNormA;
           # alpha = 0.0;

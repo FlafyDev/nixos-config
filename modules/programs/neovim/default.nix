@@ -39,7 +39,7 @@ in {
         # msbuild
         dotnet-sdk
         omnisharp-roslyn
-        sumneko-lua-language-server
+        lua-language-server
         ripgrep
         # kotlin-language-server
         fd
