@@ -33,6 +33,7 @@ in
         type filter hook input priority 0; policy accept;
         tcp dport 22 meta mark set 88    # SSH
         tcp dport 5000 meta mark set 88  # Nextcloud
+        tcp dport 3000 meta mark set 88  # Nextcloud
         iifname enp4s0 tcp dport 5432 meta mark set 88  # Postgres
       }
     '';
@@ -106,10 +107,10 @@ in
   #     interfaces = {
   #       wg_vps = {
   #         ips = ["10.10.10.11/32"];
-  #         privateKeyFile = ssh.mera.mera_wg_vps.private;
+  #         privateKeyFile = secrets.ssh-keys.mera.mera_wg_vps.private;
   #         peers = [
   #           {
-  #             publicKey = builtins.readFile ssh.mane.mane_wg_vps.public;
+  #             publicKey = secrets.ssh-keys.mane.mane_wg_vps.public;
   #             allowedIPs = ["0.0.0.0/0"];
   #             endpoint = "${resolveHostname domains.personal}:51820";
   #             persistentKeepalive = 25;

@@ -138,11 +138,13 @@ in {
             # };
           };
           misc = {
-            vfr = true;
             enable_swallow = true;
             swallow_regex = "^(foot)$";
             animate_manual_resizes = false;
             force_default_wallpaper = 0;
+          };
+          debug = {
+            vfr = true;
           };
           input = {
             follow_mouse = 1;
@@ -246,7 +248,7 @@ in {
             "SUPER,SEMICOLON,exec,anyrun"
 
             "SHIFTSUPER,SEMICOLON,exit,"
-            "SUPER,A,togglesplit,"
+            "SUPER,A,layoutmsg,togglesplit,"
 
             ",XF86AudioPlay,exec,${playerctl} play-pause"
             ",XF86AudioPrev,exec,${playerctl} previous"

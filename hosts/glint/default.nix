@@ -84,7 +84,7 @@
   # services.waypipe.client.ip = "10.10.11.10";
 
   display.hyprland = {
-    enable = true;
+    enable = false;
     headlessXorg.enable = false;
     monitors = [
       ",preferred,auto,auto"

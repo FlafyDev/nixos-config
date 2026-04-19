@@ -19,15 +19,15 @@ in {
     #   })
     # ];
     hm = {
-      home.packages = [pkgs.dconf];
-      dconf.enable = true;
+      # home.packages = [pkgs.dconf];
+      # dconf.enable = true;
       gtk = {
         enable = true;
 
-        gtk3.extraConfig = {
-          gtk-decoration-layout = ":menu"; # disable title bar buttons
-          gtk-application-prefer-dark-theme = 1;
-        };
+        # gtk3.extraConfig = {
+        #   gtk-decoration-layout = ":menu"; # disable title bar buttons
+        #   gtk-application-prefer-dark-theme = 1;
+        # };
 
         cursorTheme = {
           name = "Bibata-Modern-Ice";
@@ -35,15 +35,15 @@ in {
           package = pkgs.bibata-cursors;
         };
 
-        font = {
-          name = "Roboto";
-          package = pkgs.google-fonts;
-        };
+        # font = {
+        #   name = "Roboto";
+        #   package = pkgs.google-fonts;
+        # };
 
-        iconTheme = {
-          name = "Papirus-Dark";
-          package = pkgs.papirus-icon-theme;
-        };
+        # iconTheme = {
+        #   name = "Papirus-Dark";
+        #   package = pkgs.papirus-icon-theme;
+        # };
 
         # theme = {
         #   # name = "Tokyonight-Moon-BL"; # Moon = Night ?

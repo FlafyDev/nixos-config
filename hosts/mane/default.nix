@@ -94,6 +94,14 @@ in {
     };
   };
 
+  os.system.nssDatabases.hosts = lib.mkForce [
+    "files"
+    "mymachines"
+    "resolve"
+    "myhostname"
+    "dns"
+  ];
+
   os.system.stateVersion = "23.05";
   hm.home.stateVersion = "23.05";
 

@@ -1,6 +1,6 @@
 // XKB layout for English and Hebrew.
 // Usually the Hebrew layouts changes where symbols like `; , . /` < etc are located.
-// This layout prevents that by moving `ת ץ ף` to differnt positions.
+// This layout prevents that by moving `ת ץ ף` to differnt positions. 
 
 xkb_keymap {
   xkb_keycodes { include "evdev+aliases(qwerty)" };

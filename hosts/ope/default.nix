@@ -5,6 +5,7 @@
   upkgs,
   inputs,
   secrets,
+  config,
   ...
 }: let
   inherit (utils) getHostname domains resolveHostname;
@@ -33,7 +34,6 @@ in {
     #   };
     # }
   ];
-  os.services.desktopManager.cosmic.enable = false;
   os.virtualisation.vmware.host.enable = true;
 
   os.services.davfs2.enable = true;
@@ -52,8 +52,24 @@ in {
   };
 
   os.environment.systemPackages = [
+    pkgs.rocmPackages.rocm-smi
+    pkgs.rocmPackages.rocminfo
+
     pkgs.waypipe
     pkgs.icu
+    (
+      (pkgs.flutter341.override ({ flutter, ... }: {
+          flutter = flutter.override {
+          flutterTools = flutter.tools.overrideAttrs ({ postPatch ? "", ... }: {
+              postPatch = postPatch + ''
+              substituteInPlace lib/src/features.dart \
+                  --replace-quiet 'const windowingFeature = Feature(' 'const windowingFeature = Feature.fullyEnabled(' \
+                  --replace-quiet 'master: FeatureChannelSetting(available: true),' ""
+              '';
+          });
+          };
+      }))
+    )
   ];
   # services.waypipe.server.enable = true;
 
@@ -314,8 +330,17 @@ in {
   };
 
   android.enable = true;
-  display.greetd.enable = true;
-  display.greetd.command = "offload-igpu Hyprland";
+  display.greetd.enable = false;
+  display.greetd.command = lib.mkMerge [
+    (lib.mkIf (builtins.hasAttr "vmgpu" config.os.specialisation) "offload-igpu Hyprland")
+    (lib.mkIf (!builtins.hasAttr "vmgpu" config.os.specialisation) "offload-gpu Hyprland")
+  ];
+
+  # # Enable the COSMIC login manager
+  # os.services.displayManager.cosmic-greeter.enable = true;
+
+  # # Enable the COSMIC desktop environment
+  # os.services.desktopManager.cosmic.enable = true;
 
   # TCP: 47984, 47989, 48010
   # UDP: 47998-48000, 48002, 48010
@@ -337,15 +362,16 @@ in {
   # networking.allowedPorts.udp."48002,48010" = [(getHostname "ope.wg_private")];
 
   display.hyprland = {
-    enable = true;
+    enable = false;
     headlessXorg.enable = true;
-    monitors = [
-      "eDP-1,disable"
-      "HDMI-A-1,1920x1080@60,0x0,1"
-      "HDMI-A-1,addreserved,0,24,0,0"
-      "HDMI-A-2,disable"
-      # "HDMI-A-2,1920x1080@60,0x0,1"
-      # "HDMI-A-2,addreserved,0,24,0,0"
+    monitors = lib.mkMerge [
+      [
+        "eDP-1,disable"
+        "HDMI-A-1,1920x1080@60,0x0,1"
+        "HDMI-A-1,addreserved,0,24,0,0"
+      ]
+      (lib.mkIf (builtins.hasAttr "vmgpu" config.os.specialisation) ["HDMI-A-2,disable"])
+      (lib.mkIf (!builtins.hasAttr "vmgpu" config.os.specialisation) ["HDMI-A-2,1920x1080@60,0x0,1" "HDMI-A-2,addreserved,0,24,0,0"])
     ];
   };
   fonts.enable = true;
@@ -368,7 +394,7 @@ in {
   programs = {
     # anyrun.enable = true;
     firefox.enable = true;
-    gnome.enable = false;
+    gnome.enable = true;
     mpv.enable = true;
     # vscode.enable = true;
     neovim.enable = true;
@@ -386,4 +412,48 @@ in {
     # discord.enable = true;
     gui-utils.enable = true;
   };
+
+  os.programs.nix-ld.enable = true;
+  os.programs.nix-ld.libraries = with pkgs; [
+    # List common libraries binaries often look for
+    stdenv.cc.cc
+    zlib
+    fuse3
+    icu
+    nss
+    openssl
+    curl
+    expat
+    # Add GTK/system libs since Electrobun needs them
+    gtk3
+    glib
+    webkitgtk_4_1.out
+    cairo
+    gtk3
+    libayatana-appindicator
+    libsoup_3
+    gdk-pixbuf.out
+  ];
+
+  os.networking.extraHosts = ''
+    ${resolveHostname "mane.wg_vps"} mane
+    ${resolveHostname "mera.home"} mera
+    127.0.0.1 ope
+  '';
+
+  os.hardware.graphics = {
+    enable = true;
+    enable32Bit = true;  # Optional but recommended
+    extraPackages = with pkgs; [
+      rocmPackages.clr          # Core ROCm runtime (HIP)
+      rocmPackages.rocblas
+      rocmPackages.hipblas
+      rocmPackages.rocm-smi     # For monitoring
+      rocmPackages.rocminfo     # For verification
+    ];
+  };
+
+  # os.specialisation.vmgpu = {
+  #
+  # };
 }

@@ -66,6 +66,7 @@ in
 
                 # (envSuffix "XDG_RUNTIME_DIR" "/")
                 "/tmp/.wine-1000"
+                "/dev/shm"
 
                 "/var/lib/alsa"
                 "/proc/asound"

@@ -20,45 +20,38 @@ in {
       # ];
 
       services = {
-        xserver = {
-          enable = true;
-          desktopManager.gnome.enable = true;
-          displayManager.gdm.enable = true;
+        desktopManager.gnome.enable = true;
+        displayManager = {
+          gdm.enable = true;
+          autoLogin.enable = true;
+          autoLogin.user = config.users.main;
+        };
           # videoDrivers = [ "amdgpu" ];
           # autorun = false;
 
-          excludePackages = with pkgs; [
-            xterm
-          ];
-
-          xkb = {
-            layout = "us";
-            variant = "";
-          };
-        };
+          # xkb = {
+          #   layout = "us";
+          #   variant = "";
+          # };
 
         # gnome.core-utilities.enable = false;
         # gnome.core-os-services.enable = lib.mkForce false;
       };
 
-      environment.gnome.excludePackages = with pkgs; [
-        gnome-tour
-      ];
-
-      environment.systemPackages =
-        (with pkgs; [
-          gnome-tweaks
-          gnome-extension-manager
-        ]);
+      # environment.systemPackages =
+      #   (with pkgs; [
+      #     gnome-tweaks
+      #     gnome-extension-manager
+      #   ]);
     };
     # os.environment.systemPackages = with pkgs; [
     #   git
     #   gh
     # ];
     hm = {lib, ...}: {
-      home.file.".xinitrc".text = ''
-        dbus-run-session gnome-session
-      '';
+      # home.file.".xinitrc".text = ''
+      #   dbus-run-session gnome-session
+      # '';
       # dconf = {
       #   enable = true;
       #   settings = let

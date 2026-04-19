@@ -1,6 +1,13 @@
-{secrets, utils, lib, ...}: let
+{
+  secrets,
+  utils,
+  lib,
+  ...
+}:
+let
   inherit (utils) domains resolveHostname;
-in {
+in
+{
   networking.enable = true;
 
   os.networking.networkmanager.enable = lib.mkForce true;
@@ -29,7 +36,7 @@ in {
       "50-wg_vps" = {
         matchConfig.Name = "wg_vps";
         networkConfig = {
-          Address = [[''${resolveHostname "glint.wg_vps"}/24'']];
+          Address = [ [ "${resolveHostname "glint.wg_vps"}/24" ] ];
           IPv6AcceptRA = false;
           DHCP = "no";
         };
@@ -37,7 +44,7 @@ in {
       "50-wg_private" = {
         matchConfig.Name = "wg_private";
         networkConfig = {
-          Address = [[''${resolveHostname "glint.wg_private"}/24'']];
+          Address = [ [ "${resolveHostname "glint.wg_private"}/24" ] ];
           IPv6AcceptRA = false;
           DHCP = "no";
         };
@@ -56,8 +63,9 @@ in {
           {
             PublicKey = secrets.ssh-keys.mane.mane_wg_vps.public.content;
             AllowedIPs = [
-              ''${resolveHostname "mane.wg_vps"}/32''
-              ''${resolveHostname "ope.wg_vps"}/32''
+              "${resolveHostname "mane.wg_vps"}/32"
+              "${resolveHostname "ope.wg_vps"}/32"
+              "${resolveHostname "mera.wg_vps"}/32"
             ];
             Endpoint = "${resolveHostname domains.personal}:51820";
             PersistentKeepalive = 25;
@@ -75,13 +83,13 @@ in {
         wireguardPeers = [
           {
             PublicKey = secrets.ssh-keys.mane.mane_wg_private.public.content;
-            AllowedIPs = [''${resolveHostname "mane.wg_private"}/32''];
+            AllowedIPs = [ "${resolveHostname "mane.wg_private"}/32" ];
             Endpoint = "${resolveHostname domains.personal}:51821";
             PersistentKeepalive = 25;
           }
           {
             PublicKey = secrets.ssh-keys.ope.ope_wg_private.public.content;
-            AllowedIPs = [''${resolveHostname "ope.wg_private"}/32''];
+            AllowedIPs = [ "${resolveHostname "ope.wg_private"}/32" ];
             Endpoint = "${resolveHostname domains.personal}:51822";
             PersistentKeepalive = 25;
           }

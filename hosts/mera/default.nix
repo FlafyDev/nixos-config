@@ -3,9 +3,11 @@
   pkgs,
   utils,
   osConfig,
+  lib,
   ...
 }: let
-  inherit (utils) domains;
+
+  inherit (utils) domains resolveHostname;
 in {
   imports = [./hardware];
 
@@ -64,4 +66,18 @@ in {
     nix.enable = true;
     fish.enable = true;
   };
+
+  os.system.nssDatabases.hosts = lib.mkForce [
+    "files"
+    "mymachines"
+    "resolve"
+    "myhostname"
+    "dns"
+  ];
+
+  os.networking.extraHosts = ''
+    ${resolveHostname "mane.wg_vps"} mane
+    127.0.0.1 mera
+    ${resolveHostname "ope.home"} ope
+  '';
 }

@@ -4,10 +4,18 @@
   config,
   osConfig,
   ...
-}: let
+}:
+let
   cfg = config.vm;
-  inherit (lib) mkEnableOption mkIf types mkOption concatStringsSep;
-in {
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    types
+    mkOption
+    concatStringsSep
+    ;
+in
+{
   options.vm = {
     enable = mkEnableOption "vm";
     gpu = mkOption {
@@ -19,8 +27,8 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    users.groups = ["libvirtd"];
+  config = mkIf (cfg.enable) {
+    users.groups = [ "libvirtd" ];
     os = {
       nixpkgs.overlays = [
         # (_final: prev: {
@@ -37,40 +45,38 @@ in {
         #   });
         # })
       ];
-      boot.initrd.kernelModules = [
-        "vfio_pci"
-        "vfio"
-        "vfio_iommu_type1"
-        "kvmfr"
-      ];
+      boot = mkIf (builtins.hasAttr "vmgpu" config.os.specialisation) {
+        initrd.kernelModules = [
+          "vfio_pci"
+          "vfio"
+          "vfio_iommu_type1"
+          "kvmfr"
+        ];
+        kernelParams = [
+          "amd_iommu=on"
+          "vfio-pci.ids=${concatStringsSep "," cfg.gpu}"
+          "iommu=pt"
+          "video=efifb:off"
+        ];
+        extraModprobeConfig = ''
+          options kvm ignore_msrs=1
+          options kvmfr static_size_mb=128
+          options snd_hda_intel power_save=0
+        '';
+        extraModulePackages = [
+          (osConfig.boot.kernelPackages.kvmfr.overrideAttrs (old: {
+            inherit (pkgs.looking-glass-client) version src;
+            # patches = [
+            #   ./vm-temp.patch
+            # ];
+            patches = [ ]; # UPDATE-TODO: https://github.com/NixOS/nixpkgs/pull/305018
+          }))
+        ];
+      };
 
-      boot.kernelParams = [
-        "amd_iommu=on"
-        "vfio-pci.ids=${concatStringsSep "," cfg.gpu}"
-        "iommu=pt"
-        "video=efifb:off"
-      ];
-
-      services.udev.extraRules = ''
+      services.udev.extraRules = mkIf (builtins.hasAttr "vmgpu" config.os.specialisation) ''
         SUBSYSTEM=="kvmfr", KERNEL=="kvmfr0", OWNER="${config.users.main}", GROUP="kvm", MODE="0660"
       '';
-
-      boot.extraModprobeConfig = ''
-        options kvm ignore_msrs=1
-        options kvmfr static_size_mb=128
-        options snd_hda_intel power_save=0
-      '';
-
-      boot.extraModulePackages = [
-        
-        (osConfig.boot.kernelPackages.kvmfr.overrideAttrs (old: {
-          # inherit (pkgs.looking-glass-client) version src;
-          # patches = [
-          #   ./vm-temp.patch
-          # ];
-          # patches = []; # UPDATE-TODO: https://github.com/NixOS/nixpkgs/pull/305018
-        }))
-      ];
 
       environment.systemPackages = with pkgs; [
         virt-manager
@@ -81,6 +87,11 @@ in {
       virtualisation.docker.enable = true;
       virtualisation.libvirtd = {
         enable = true;
+
+        qemu = {
+          # ovmf.enable = true;
+          # ovmf.packages = [ pkgs.OVMFFull.fd ];
+        };
         # hooks.qemu = {
         #   "passthrough" = lib.getExe (
         #     pkgs.writeShellApplication {
@@ -119,7 +130,7 @@ in {
           # ovmf.packages = [ pkgs.OVMFFull.fd ];
           # TPM emulation
           # swtpm.enable = true;
-          verbatimConfig = ''
+          verbatimConfig = mkIf (builtins.hasAttr "vmgpu" config.os.specialisation) ''
             cgroup_device_acl = [
               "/dev/kvmfr0",
               "/dev/vfio/vfio", "/dev/vfio/11", "/dev/vfio/12",
